@@ -1,0 +1,113 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t06 Collections II (LinkedList)
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t06_collections_2
+
+::t06_Q1:: You have a `LinkedList<Integer>` and need to iterate forward,
+inserting a marker element after every even number encountered.
+Which iterator type allows safe insertion during the traversal?
+{
+  = `ListIterator`, which supports `it.add(element)` to insert after the last returned element.
+    #Correct. `ListIterator` is the only Java iterator that supports both `add` and bidirectional traversal during iteration.
+  ~ A standard `Iterator`, which already supports `add` via its `add` method.
+    #Incorrect. `Iterator` only has `remove`; it does not have an `add` method.
+  ~ An enhanced for-each loop with `list.add` called on the list directly.
+    #Incorrect. Calling `list.add` directly during for-each causes ConcurrentModificationException.
+  ~ An index-based for loop using `list.get(i)` to check each element.
+    #Incorrect. `LinkedList.get(i)` is O(n) per call, making this approach inefficient; also it does not handle concurrent structural modification cleanly.
+}
+
+::t06_Q2:: A `LinkedList` is used as a `Deque`. Code calls `tasks.offer("load")`
+followed by `tasks.offer("parse")` and then `tasks.poll()`. What does `poll()`
+return?
+{
+  = "load", because `offer` enqueues at the tail and `poll` dequeues from the head (FIFO).
+    #Correct. `offer` adds to the tail and `poll` removes from the head, implementing FIFO queue behaviour.
+  ~ "parse", because `offer` enqueues at the head and `poll` dequeues from the head (LIFO).
+    #Incorrect. `offer` adds to the tail, not the head. LIFO behaviour is obtained with `push`/`pop`.
+  ~ null, because `poll` always returns null on a non-empty deque.
+    #Incorrect. `poll` returns null only when the deque is empty; here it returns the first element.
+  ~ An exception, because `Deque` does not support `offer` and `poll`.
+    #Incorrect. `offer` and `poll` are the standard null-safe queue operations defined on `Deque`.
+}
+
+::t06_Q3:: Compared to `ArrayList`, what is the primary performance advantage
+of `LinkedList` when you already hold a `ListIterator` at the point of change?
+{
+  = Insertions and removals at the current iterator position are O(1) because no elements need to shift.
+    #Correct. LinkedList nodes are linked by references, so inserting or removing at a known node is O(1) pointer manipulation.
+  ~ Random access via `get(i)` is O(1) because each node stores its own index.
+    #Incorrect. `LinkedList.get(i)` is O(n); there is no index stored in nodes.
+  ~ Memory usage is lower because LinkedList does not allocate extra capacity like ArrayList.
+    #Incorrect. LinkedList uses more memory per element because each node stores two reference fields (next, previous) in addition to the value.
+  ~ Sorting a LinkedList is faster than sorting an ArrayList.
+    #Incorrect. Sorting a LinkedList is generally slower because it lacks the cache-friendly contiguous memory layout of an array.
+}
+
+::t06_Q4:: Why is it recommended to use `offer`, `poll`, and `peek` instead
+of `add`, `remove`, and `element` when using a `Deque` as a queue?
+{
+  = `offer`, `poll`, and `peek` return null (or false) on failure rather than throwing exceptions, making them safer for queue operations.
+    #Correct. The null-returning variants avoid exceptions when the queue is empty or full, which is more appropriate for conditional processing.
+  ~ `offer`, `poll`, and `peek` operate at the tail of the deque, whereas `add`, `remove`, and `element` operate at the head.
+    #Incorrect. Both sets of methods work with the head for removal/peek; the distinction is about exception behaviour, not position.
+  ~ `add`, `remove`, and `element` are deprecated and should not be used in modern Java.
+    #Incorrect. These methods are not deprecated; the difference is their error-handling behaviour.
+  ~ `offer` and `poll` are faster because they bypass synchronisation checks.
+    #Incorrect. Neither set of methods involves synchronisation; the distinction is about how they handle edge cases.
+}
+
+
+::t06_Q5:: Which operation is genuinely O(1) on a `LinkedList` but O(n) on an `ArrayList`?
+{
+  = Removing the first element.
+    #Correct. LinkedList unlinks the head node directly, whereas ArrayList must shift every remaining element left.
+  ~ Retrieving the element at index 500.
+    #Incorrect. That is O(1) for ArrayList and O(n) for LinkedList, which must walk the chain.
+  ~ Appending to the end.
+    #Incorrect. Both are effectively O(1); ArrayList is amortised O(1) because resizing is rare.
+  ~ Checking whether a value is present.
+    #Incorrect. Both are O(n) linear scans.
+}
+
+::t06_Q6:: Which `ListIterator` capability is unavailable on a plain `Iterator`?
+{
+  = Replacing the current element with `set(...)` and walking backwards with `previous()`.
+    #Correct. ListIterator adds set, add, previous and hasPrevious. A plain Iterator offers only hasNext, next and remove.
+  ~ Removing the current element.
+    #Incorrect. `remove()` exists on the plain Iterator too.
+  ~ Iterating forwards through the collection.
+    #Incorrect. Both do this; it is the basic purpose of an Iterator.
+  ~ Being used in an enhanced for loop.
+    #Incorrect. The enhanced for loop uses a plain Iterator, not a ListIterator.
+}
+
+::t06_Q7:: [Predict the output] A `Deque<String> d \= new LinkedList<>();` receives
+`d.push("a"); d.push("b"); d.push("c");` and then `d.pop()` is printed. What appears?
+{
+  = c
+    #Correct. `push` inserts at the head and `pop` removes from the head, so a Deque used this way behaves as a LIFO stack.
+  ~ a
+    #Incorrect. That would be FIFO behaviour, which you get from `offer` plus `poll`.
+  ~ b
+    #Incorrect. "b" sits in the middle and is not at either end after "c" is pushed.
+  ~ The code throws NoSuchElementException.
+    #Incorrect. The deque holds three elements, so pop succeeds.
+}
+
+::t06_Q8:: Why are two `Deque` objects a cleaner basis for undo/redo than one list
+plus a current-position index?
+{
+  = The most-recent-first access pattern is exactly what a stack provides, so no index invariant has to be maintained by hand.
+    #Correct. Undo pops from one stack and pushes to the other. There is no index that can drift out of range or off by one.
+  ~ A Deque can hold more elements than a List.
+    #Incorrect. Both grow as needed; capacity is not the issue.
+  ~ A List cannot store command objects.
+    #Incorrect. It can. The difference is the bookkeeping the two designs demand.
+  ~ Deque operations are thread-safe by default.
+    #Incorrect. `LinkedList` and `ArrayDeque` are not synchronised.
+}

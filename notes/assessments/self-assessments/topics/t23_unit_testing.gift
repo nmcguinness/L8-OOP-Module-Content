@@ -1,0 +1,107 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t23 Unit Testing
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t23_unit_testing
+
+::t23_Q1:: Why is `assertNotNull(new Player("Ann"))` considered a worthless test?
+{
+  = `new` can never return null, so the assertion passes even if the constructor does nothing.
+    #Correct. It also inflates coverage without adding safety. Assert an observable consequence instead.
+  ~ assertNotNull is deprecated in JUnit 5.
+    #Incorrect. It is current and useful where a value legitimately might be null.
+  ~ Constructors cannot be tested.
+    #Incorrect. They should be, by checking field values and rejected arguments.
+  ~ The test needs a @BeforeEach method to be valid.
+    #Incorrect. Setup is unrelated to the weakness of the assertion.
+}
+
+::t23_Q2:: What do the three sections of the AAA pattern represent?
+{
+  = Arrange the inputs, Act by calling the one thing under test, Assert the outcome.
+    #Correct. Keeping them visually separate makes a test readable and reveals when it is doing too much.
+  ~ Allocate, Analyse, Archive.
+    #Incorrect. Not a testing convention.
+  ~ Assert, Act, Arrange - executed in that order.
+    #Incorrect. The order is reversed; you cannot assert before acting.
+  ~ Assemble, Annotate, Apply.
+    #Incorrect. Not a testing convention.
+}
+
+::t23_Q3:: Are DAO tests that connect to MySQL unit tests or integration tests?
+{
+  = Integration tests, because they exercise several components including an external database.
+    #Correct. The file may be named ...Test.java, but they are slower and depend on the database being available.
+  ~ Unit tests, because each one tests a single DAO method.
+    #Incorrect. A unit test must not depend on an external system.
+  ~ Neither; they are system tests.
+    #Incorrect. System tests exercise the whole application end to end.
+  ~ Unit tests, provided each runs in under a second.
+    #Incorrect. Speed is a symptom of the category, not its definition.
+}
+
+::t23_Q4:: A project reports 80 per cent line coverage and every test passes, yet a
+bug reaches production. How is that possible?
+{
+  = Coverage records which lines ran, not whether their behaviour was actually checked.
+    #Correct. A test that calls a method and asserts nothing still counts as covering it. Untested branches also cluster in error handling.
+  ~ Coverage tools are generally inaccurate.
+    #Incorrect. They measure execution faithfully; the metric simply means less than people assume.
+  ~ 80 per cent is below the minimum useful threshold.
+    #Incorrect. No threshold guarantees correctness.
+  ~ Passing tests prove the absence of bugs, so this cannot happen.
+    #Incorrect. Tests can only demonstrate the presence of the behaviours they check.
+}
+
+::t23_Q5:: [Spot the bug] DAO tests are pointed at the development database and
+`@BeforeEach` truncates the table. What is the consequence?
+{
+  = Every test run destroys the development data, and results are unreliable in both directions.
+    #Correct. Use a dedicated test database. Leftover rows also break count assertions and can mask real failures.
+  ~ Nothing, provided the tests pass.
+    #Incorrect. Irreversible data loss occurs on every run.
+  ~ The tests run more slowly.
+    #Incorrect. Speed is not the concern.
+  ~ JUnit refuses to run tests against a non-test database.
+    #Incorrect. JUnit has no knowledge of which database you connect to.
+}
+
+::t23_Q6:: Why does a JSON round-trip test require `equals` to be overridden on the entity?
+{
+  = `assertEquals` calls equals, and deserialisation produces a new object that default identity equality rejects.
+    #Correct. Without a value-based equals the assertion fails even when every field was preserved perfectly.
+  ~ Because Jackson calls equals during deserialisation.
+    #Incorrect. Jackson does not consult equals when building the object.
+  ~ Because assertEquals compares hash codes only.
+    #Incorrect. It calls equals; hashCode matters for hashed collections.
+  ~ It does not; assertEquals compares field by field automatically.
+    #Incorrect. There is no automatic field comparison for ordinary classes.
+}
+
+::t23_Q7:: Which test name best follows the `method_scenario_expectedBehaviour` convention?
+{
+  = `findById_nonexistentId_returnsEmpty`
+    #Correct. A failure report names the method, the situation and the expectation without opening the file.
+  ~ `testFindById`
+    #Incorrect. It identifies the method but neither the scenario nor the expected outcome.
+  ~ `test1`
+    #Incorrect. It conveys nothing at all.
+  ~ `daoTest`
+    #Incorrect. Too broad, and it suggests the test covers several scenarios at once.
+}
+
+::t23_Q8:: A class is difficult to test because it reads a socket, parses JSON and
+calls a DAO. What does this most likely indicate?
+{
+  = The class has too many responsibilities and should be split so each part is testable alone.
+    #Correct. Testability is a design signal. Extracting the routing logic makes both classes straightforward to test.
+  ~ That integration tests are the only option for any networked code.
+    #Incorrect. Extracting the pure logic allows fast unit tests of the bulk of the behaviour.
+  ~ That the class needs more assertions per test.
+    #Incorrect. More assertions in one test makes failures harder to diagnose.
+  ~ That JUnit cannot test classes using sockets.
+    #Incorrect. It can, but such tests are slow and fragile compared with testing extracted logic.
+}

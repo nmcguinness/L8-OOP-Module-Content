@@ -1,0 +1,27 @@
+# Encoding & line-ending policy for module content.
+#
+# Why this file exists: in April 2026 roughly 30 markdown files had been saved
+# as Windows-1252 rather than UTF-8. Em dashes, curly quotes and the euro sign
+# rendered as U+FFFD on GitHub, Moodle and any UTF-8 editor, and several arrows
+# and box-drawing characters were permanently lost. These rules stop that
+# recurring: Git now refuses a commit whose content is not valid UTF-8.
+
+* text=auto eol=lf
+
+*.md    text working-tree-encoding=UTF-8 eol=lf
+*.java  text working-tree-encoding=UTF-8 eol=lf
+*.gift  text working-tree-encoding=UTF-8 eol=lf
+*.sql   text working-tree-encoding=UTF-8 eol=lf
+*.json  text working-tree-encoding=UTF-8 eol=lf
+*.csv   text working-tree-encoding=UTF-8 eol=lf
+*.txt   text working-tree-encoding=UTF-8 eol=lf
+*.yml   text working-tree-encoding=UTF-8 eol=lf
+*.yaml  text working-tree-encoding=UTF-8 eol=lf
+
+# Binary assets - never touched.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.pdf   binary
+*.svg   text eol=lf

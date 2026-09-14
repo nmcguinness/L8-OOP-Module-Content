@@ -1,0 +1,117 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t03 Ordering
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t03_ordering
+
+::t03_Q1:: A class `Score` implements `Comparable<Score>`. Its `compareTo`
+method returns `Integer.compare(other.value, this.value)` for the primary
+comparison. After calling `list.sort(null)` on an ArrayList of Scores,
+how are the elements ordered?
+{
+  = Scores are sorted in descending order by value (highest first).
+    #Correct. Returning `Integer.compare(other.value, this.value)` reverses the natural order, placing larger values first.
+  ~ Scores are sorted in ascending order by value (lowest first).
+    #Incorrect. To get ascending order you would use `Integer.compare(this.value, other.value)`.
+  ~ The sort order is undefined because `compareTo` returns the wrong sign.
+    #Incorrect. The return value is well-defined; it consistently places higher values earlier.
+  ~ A ClassCastException is thrown because `list.sort(null)` does not use Comparable.
+    #Incorrect. Passing `null` as the comparator to `list.sort` uses the elements' natural order via Comparable.
+}
+
+::t03_Q2:: You have a `List<Product>` and want to sort by price ascending,
+then by rating descending as a tie-breaker, using the Comparator factory API.
+Which expression correctly expresses this?
+{
+  = `Comparator.comparingDouble(Product\:\:price).thenComparing(Comparator.comparingDouble(Product\:\:rating).reversed())`
+    #Correct. `comparingDouble` on price gives ascending price order, and `.reversed()` on the rating comparator gives descending rating.
+  ~ `Comparator.comparingDouble(Product\:\:price).thenComparing(Product\:\:rating)`
+    #Incorrect. `thenComparing(Product\:\:rating)` sorts rating in ascending order, but descending is required.
+  ~ `Comparator.comparingDouble(Product\:\:price).reversed().thenComparing(Product\:\:rating)`
+    #Incorrect. Calling `.reversed()` on the price comparator gives descending price, not ascending.
+  ~ `Comparator.comparing(Product\:\:price, Product\:\:rating)`
+    #Incorrect. `Comparator.comparing` does not accept two key-extractor arguments in this form.
+}
+
+::t03_Q3:: Which statement best describes the difference between `Comparable`
+and `Comparator` in Java?
+{
+  = `Comparable` defines the class's own natural ordering inside the class; `Comparator` defines an external ordering strategy without modifying the class.
+    #Correct. `Comparable` is implemented by the class itself via `compareTo`, while `Comparator` is a separate object defining an alternative order.
+  ~ `Comparable` is used only with arrays; `Comparator` is used only with collections.
+    #Incorrect. Both can be used with arrays and collections; the distinction is about where the ordering logic lives.
+  ~ `Comparator` is always faster than `Comparable` because it avoids casting.
+    #Incorrect. Performance is not the distinction; both can be equally efficient.
+  ~ `Comparable` allows multiple sort orders for the same class; `Comparator` allows only one.
+    #Incorrect. It is the opposite: you can write many `Comparator` implementations for a class, but a class has only one `compareTo`.
+}
+
+::t03_Q4:: Java's `List.sort` is described as a *stable* sort. What does
+stability mean in this context?
+{
+  = Elements that compare as equal keep their original relative order after sorting.
+    #Correct. A stable sort preserves the prior ordering of elements that the comparator considers equal.
+  ~ The sort always produces the same result when called multiple times on the same list.
+    #Incorrect. This describes determinism, not stability; stability is specifically about equal elements preserving their order.
+  ~ The sort does not modify the original list and instead returns a new sorted copy.
+    #Incorrect. `List.sort` sorts in place; it does not return a new list.
+  ~ The sort runs in O(n log n) time regardless of input order.
+    #Incorrect. This describes time-complexity guarantees, which is a separate property from stability.
+}
+
+
+::t03_Q5:: [Predict the output] `List<String> names \= new ArrayList<>(List.of("bob", "Ann", "carl"));`
+followed by `Collections.sort(names);` then printing the list. What is the order?
+{
+  = [Ann, bob, carl]
+    #Correct. String's natural order compares by Unicode value, and all uppercase letters sort before all lowercase ones.
+  ~ [Ann, bob, carl] only if a case-insensitive Comparator is supplied
+    #Incorrect. This IS the default result. A case-insensitive comparator would be needed to get [Ann, bob, carl] from different input, not this.
+  ~ [bob, Ann, carl]
+    #Incorrect. That is the original insertion order, not the sorted order.
+  ~ [carl, bob, Ann]
+    #Incorrect. That is descending order; `Collections.sort` uses ascending natural order.
+}
+
+::t03_Q6:: [Spot the bug] A Comparator is written as
+`(a, b) -> (int) (a.getPrice() - b.getPrice())` where `getPrice()` returns `double`.
+Why is this unreliable?
+{
+  = The cast truncates the difference, so prices differing by less than 1.0 compare as equal.
+    #Correct. A difference of 0.5 casts to 0, meaning "equal". Use `Double.compare(a.getPrice(), b.getPrice())` instead.
+  ~ Lambdas cannot be used as Comparators.
+    #Incorrect. Comparator is a functional interface, so a lambda is the normal way to write one.
+  ~ The parameters must be explicitly typed for the comparator to compile.
+    #Incorrect. Types are inferred from the target Comparator type.
+  ~ Subtraction is not permitted inside a Comparator.
+    #Incorrect. It is permitted but unsafe. With ints it also risks overflow, which is the same category of bug.
+}
+
+::t03_Q7:: You want products sorted by price ascending, then by rating descending.
+Which expression is correct?
+{
+  = `Comparator.comparingDouble(Product::getPrice).thenComparing(Product::getRating, Comparator.reverseOrder())`
+    #Correct. The reversal is applied to the rating key only, leaving the price ordering ascending.
+  ~ `Comparator.comparingDouble(Product::getPrice).thenComparing(Product::getRating).reversed()`
+    #Incorrect. `reversed()` applies to the whole chain, so price would become descending too.
+  ~ `Comparator.comparingDouble(Product::getPrice).reversed().thenComparing(Product::getRating)`
+    #Incorrect. This reverses the price ordering, which is the opposite of what was asked.
+  ~ `Comparator.comparing(Product::getPrice, Product::getRating)`
+    #Incorrect. `comparing` takes a key extractor and optionally a Comparator, not two key extractors.
+}
+
+::t03_Q8:: A class implements `Comparable` such that `compareTo` returns 0 for two
+objects that `equals` reports as different. What is the practical consequence?
+{
+  = A TreeSet will treat the two objects as duplicates and silently keep only one.
+    #Correct. TreeSet and TreeMap use compareTo, not equals, to detect duplicates, so an inconsistent ordering loses elements.
+  ~ The code will not compile.
+    #Incorrect. Consistency with equals is a documented contract, not a compiler rule.
+  ~ A HashSet will store only one of the two objects.
+    #Incorrect. HashSet uses hashCode and equals, so it is unaffected by compareTo.
+  ~ `Collections.sort` will throw IllegalArgumentException.
+    #Incorrect. Sorting works; the inconsistency only causes trouble in sorted set and map implementations.
+}

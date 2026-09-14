@@ -1,0 +1,112 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t20 JSON I (Jackson Basics)
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t20_json_1_jackson_basics
+
+::t20_Q1:: JSON has exactly six value types. Which of the following is NOT a
+valid JSON value type?
+{
+  = Date, used to represent calendar values such as `2026-04-14`.
+    #Correct (it is the NOT answer). JSON has no date type; dates must be encoded as strings or numbers.
+  ~ String, surrounded by double quotes such as `"hello"`.
+    #Incorrect — String IS one of the six valid JSON types.
+  ~ Array, a comma-separated list of values in square brackets such as `[1, 2, 3]`.
+    #Incorrect — Array IS one of the six valid JSON types.
+  ~ Boolean, either `true` or `false` in lowercase.
+    #Incorrect — Boolean IS one of the six valid JSON types.
+}
+
+::t20_Q2:: A developer writes `mapper.readValue(json, List<Player>.class)` but
+it does not compile. What is the root cause and how is it corrected?
+{
+  = Java's type erasure means generic type parameters are not available at runtime, so `List<Player>.class` is invalid syntax; the fix is to use `new TypeReference<List<Player>>()\{\}`.
+    #Correct. `TypeReference` captures the full generic type as an anonymous subclass, preserving it through erasure so Jackson can deserialise correctly.
+  ~ `List<Player>.class` fails because `List` is an interface and interfaces do not have a `.class` literal.
+    #Incorrect. While `List` is an interface, `List.class` is valid; the problem is the generic parameter, not the interface status.
+  ~ The `ObjectMapper` cannot deserialise into a `List` type; an array `Player[]` must be used instead.
+    #Incorrect. Jackson can deserialise into `List<Player>` when given a `TypeReference`; both array and list forms work.
+  ~ `readValue` does not accept a class literal as the second argument; a `JsonParser` must be used.
+    #Incorrect. `readValue(String, Class<T>)` is a valid overload; the issue is specifically with parameterised generic types.
+}
+
+::t20_Q3:: A JSON object key uses the name `"player_score"` but the
+corresponding Java field is named `playerScore`. Deserialisation produces a
+null value for the field. What annotation resolves this mismatch?
+{
+  = `@JsonProperty("player_score")` placed on the field or its getter, mapping the JSON key to the Java field name.
+    #Correct. `@JsonProperty` allows you to specify the exact JSON key name that Jackson should read or write for a given field.
+  ~ `@JsonIgnore("player_score")` to tell Jackson to skip the mismatched field.
+    #Incorrect. `@JsonIgnore` excludes a field from serialisation/deserialisation entirely; it does not rename it.
+  ~ Rename the Java field to `player_score` because Jackson requires exact name matching.
+    #Incorrect. While renaming is one option, `@JsonProperty` is the designed solution for mapping different names without changing field names.
+  ~ `@JsonIgnoreProperties(\{"player_score"\})` to suppress the unknown key warning.
+    #Incorrect. `@JsonIgnoreProperties` silently ignores unknown JSON keys; it does not bind them to a differently named field.
+}
+
+::t20_Q4:: When using JSON as a wire protocol over a TCP socket, which
+`ObjectMapper` method pair is used to convert objects to strings and back,
+and why are file-based overloads not used?
+{
+  = `writeValueAsString` to serialise and `readValue(String, ...)` to deserialise, because socket communication operates on in-memory strings rather than disk files.
+    #Correct. File-based overloads write to or read from disk; socket-based communication keeps everything in memory as strings sent via PrintWriter/BufferedReader.
+  ~ `writeValue(File, ...)` and `readValue(File, ...)`, because TCP sockets are treated as virtual files by the operating system.
+    #Incorrect. While sockets are file descriptors at the OS level, the Jackson API distinction is between `File`/`Path` objects and in-memory strings; you use string methods for socket communication.
+  ~ `writeBytes` and `readBytes`, because TCP transmits raw byte arrays not character strings.
+    #Incorrect. While TCP is byte-based, the idiomatic Java socket pattern wraps the byte streams in `PrintWriter`/`BufferedReader` for line-based text communication; Jackson's `writeValueAsString` produces the text.
+  ~ `prettyPrint(Object)` and `parse(String)`, which are convenience aliases added in Java 17.
+    #Incorrect. These method names do not exist on `ObjectMapper`; this option is fictional.
+}
+
+::t20_Q5:: What does Jackson require of a class in order to deserialise JSON into it?
+{
+  = A no-argument constructor plus setters, or a constructor annotated so Jackson can bind the properties.
+    #Correct. Without a way to construct and populate the object, readValue throws InvalidDefinitionException.
+  ~ Only that the class implements Serializable.
+    #Incorrect. Java serialisation is unrelated to Jackson's JSON binding.
+  ~ Only that every field is public.
+    #Incorrect. Jackson uses getters and setters by default rather than direct field access.
+  ~ That the class extends ObjectMapper.
+    #Incorrect. ObjectMapper is the tool performing the conversion, not a base class.
+}
+
+::t20_Q6:: How does Jackson derive the JSON key from a getter named `getTrackId()`?
+{
+  = It strips the `get` prefix and lower-cases the first letter, producing `trackId`.
+    #Correct. The field name is irrelevant, which is why a field named `_trackId` still serialises as `trackId`.
+  ~ It uses the private field name exactly as declared.
+    #Incorrect. By default Jackson works from the accessor, not the field.
+  ~ It uses the full method name, `getTrackId`.
+    #Incorrect. The prefix is removed as part of the JavaBean naming convention.
+  ~ It converts the name to snake_case as `track_id`.
+    #Incorrect. That requires an explicit naming strategy to be configured.
+}
+
+::t20_Q7:: [Spot the bug] `mapper.readValue(json, List.class)` returns a list whose
+elements turn out to be LinkedHashMap rather than Player, causing a ClassCastException.
+What is the fix?
+{
+  = Supply the full generic type with `new TypeReference<List<Player>>() \{\}`.
+    #Correct. Type erasure removes the element type from `List.class`, so Jackson defaults to maps. TypeReference preserves it.
+  ~ Cast the result to `List<Player>` before use.
+    #Incorrect. The cast compiles with a warning but the elements are genuinely maps, so it still fails.
+  ~ Change the field type to an array and cast afterwards.
+    #Incorrect. `Player[].class` does work, but the underlying issue is the missing generic type information.
+  ~ Add Serializable to the Player class.
+    #Incorrect. Unrelated to Jackson's handling of generics.
+}
+
+::t20_Q8:: Why does a line-delimited JSON protocol require that each message contains no raw newline?
+{
+  = The receiver uses readLine(), so an embedded newline would split one message into two unparseable fragments.
+    #Correct. `writeValueAsString` produces single-line JSON by default, which is why pretty-printing must not be enabled on the wire.
+  ~ JSON does not permit newline characters anywhere.
+    #Incorrect. JSON tolerates whitespace between tokens; the constraint here comes from the framing choice.
+  ~ Newlines increase the message size beyond the socket buffer.
+    #Incorrect. Size is not the issue; message framing is.
+  ~ Jackson cannot parse a string containing a newline.
+    #Incorrect. It can. The problem occurs before parsing, when the line is read.
+}

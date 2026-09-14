@@ -1,0 +1,114 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t16 Functional Interfaces
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t16_functional_interfaces
+
+::t16_Q1:: You need to pass a behaviour to a method that will test each
+element of a list and return `true` or `false` for each one. Which functional
+interface from `java.util.function` is the correct choice?
+{
+  = `Predicate<T>`, whose single abstract method is `boolean test(T t)`.
+    #Correct. `Predicate<T>` is designed for boolean-valued tests on a single input, exactly matching this requirement.
+  ~ `Consumer<T>`, because it processes each element and returns a result.
+    #Incorrect. `Consumer<T>` returns void; it performs a side effect rather than returning a boolean.
+  ~ `Supplier<T>`, because it produces the boolean result for each element.
+    #Incorrect. `Supplier<T>` takes no input; it produces a value without receiving one.
+  ~ `Function<T, Boolean>`, which is equivalent and preferable because it avoids boxing.
+    #Incorrect. `Function<T, Boolean>` boxes the result into `Boolean`; `Predicate<T>` is preferred for boolean tests as it avoids boxing and makes intent clearer.
+}
+
+::t16_Q2:: A list of integers is filtered with `scores.removeIf(s -> s < 10)`.
+What is the role of the lambda here, and what interface does it satisfy?
+{
+  = The lambda is a `Predicate<Integer>` that returns true for scores below 10; `removeIf` removes every element for which the predicate returns true.
+    #Correct. `removeIf` accepts a `Predicate<? super E>` and removes elements where the predicate holds.
+  ~ The lambda is a `Consumer<Integer>` that processes each score and removes it from the list.
+    #Incorrect. `Consumer` returns void; it cannot signal which elements to remove. `removeIf` uses a predicate.
+  ~ The lambda is a `Function<Integer, Integer>` that transforms scores before filtering.
+    #Incorrect. `removeIf` does not transform values; it removes elements based on a boolean test.
+  ~ The lambda is a `Supplier<Boolean>` that provides the removal decision without taking input.
+    #Incorrect. `Supplier` takes no input; the predicate must receive each score to evaluate it.
+}
+
+::t16_Q3:: Two `Predicate<String>` objects, `longEnough` and `hasDigit`, are
+combined with `longEnough.and(hasDigit)`. What does the composed predicate
+return for a string that satisfies `longEnough` but not `hasDigit`?
+{
+  = `false`, because `and` requires both predicates to return true.
+    #Correct. `Predicate.and` is a logical AND\: the composed predicate returns true only when both constituent predicates return true.
+  ~ `true`, because the string passes the first predicate.
+    #Incorrect. `and` requires both predicates to pass; failing either one means the composed predicate returns false.
+  ~ A NullPointerException, because the second predicate is only evaluated when the first returns false.
+    #Incorrect. `and` uses short-circuit evaluation\: if the first predicate returns false, the second is not evaluated. No exception occurs.
+  ~ An IllegalStateException, because predicates cannot be combined with `and` at runtime.
+    #Incorrect. `Predicate.and` is a standard default method available on all `Predicate` instances.
+}
+
+::t16_Q4:: A method reference `Integer\:\:parseInt` is assigned to a variable.
+Which functional interface type is compatible with this assignment?
+{
+  = `Function<String, Integer>`, because `parseInt` takes one `String` input and returns an `Integer`.
+    #Correct. The method reference matches the `apply(T t)` signature of `Function<String, Integer>`.
+  ~ `Consumer<String>`, because `parseInt` consumes a String and produces no output.
+    #Incorrect. `parseInt` returns an `Integer`; `Consumer` is for operations that return void.
+  ~ `Supplier<Integer>`, because `parseInt` supplies an integer value.
+    #Incorrect. `Supplier` takes no input; `parseInt` requires a String argument.
+  ~ `BiFunction<String, Integer, Integer>`, because parsing involves two integers.
+    #Incorrect. `Integer.parseInt(String)` takes exactly one argument; `BiFunction` requires two.
+}
+
+
+::t16_Q5:: Which functional interface matches a lambda that takes one value and returns a boolean?
+{
+  = Predicate<T>
+    #Correct. Its single method is `boolean test(T t)`, which is what filter, removeIf and validation rules require.
+  ~ Function<T, R>
+    #Incorrect. Function returns an arbitrary R. Predicate is the specialised boolean form and avoids boxing.
+  ~ Consumer<T>
+    #Incorrect. Consumer returns void and exists for side effects.
+  ~ Supplier<T>
+    #Incorrect. Supplier takes no input and produces a value.
+}
+
+::t16_Q6:: [Predict the output] A `Predicate<String> notBlank \= s -> !s.isBlank();`
+is combined as `notBlank.and(s -> s.length() > 3)`. What does the combined predicate
+return for the input "abc"?
+{
+  = false, because the second condition fails.
+    #Correct. `and` requires both to hold. "abc" is not blank but its length is 3, which is not greater than 3.
+  ~ true, because the first condition passes.
+    #Incorrect. `and` is a conjunction, so both must pass.
+  ~ true, because `and` returns the first result.
+    #Incorrect. That would be the behaviour of neither `and` nor `or`.
+  ~ The code throws NullPointerException.
+    #Incorrect. The input is a valid non-null string.
+}
+
+::t16_Q7:: Which method reference is equivalent to the lambda `s -> s.toUpperCase()`?
+{
+  = String::toUpperCase
+    #Correct. This is an unbound instance method reference: the single argument becomes the receiver.
+  ~ String::new
+    #Incorrect. That is a constructor reference, matching a Supplier or Function that builds a String.
+  ~ s::toUpperCase
+    #Incorrect. That binds a specific existing instance and takes no argument.
+  ~ String.toUpperCase()
+    #Incorrect. That is a call, not a reference, and toUpperCase is not static.
+}
+
+::t16_Q8:: [Spot the bug] A stream uses `.filter(t -> \{ count++; return t.isDone(); \})`
+to count matches while filtering. Why is this a poor idea?
+{
+  = A predicate must be side-effect-free, since streams may skip, reorder or parallelise calls.
+    #Correct. Short-circuiting means the predicate may not run for every element at all. Use `.filter(Task::isDone).count()` instead.
+  ~ Lambdas cannot contain a statement block.
+    #Incorrect. Block-bodied lambdas with an explicit return are valid.
+  ~ `count++` will not compile inside a lambda.
+    #Incorrect. It will not compile on a local variable, which must be effectively final, but does on a field. The design problem remains either way.
+  ~ filter cannot accept a Predicate.
+    #Incorrect. Predicate is exactly what filter takes.
+}

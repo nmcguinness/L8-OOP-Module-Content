@@ -1,0 +1,109 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t00 OOP Fundamentals
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t00_oop_fundamentals
+
+::t00_Q1:: What is the relationship between a class and an object?
+{
+  = A class describes structure and behaviour; an object is one instance holding its own field values.
+    #Correct. One class can produce any number of objects, each with independent state.
+  ~ They are two words for the same thing.
+    #Incorrect. The class is the template; the object is what exists at runtime.
+  ~ An object describes the structure and a class is one instance of it.
+    #Incorrect. This reverses the two terms.
+  ~ A class holds the data and an object holds the methods.
+    #Incorrect. A class declares both fields and methods; an object holds the field values.
+}
+
+::t00_Q2:: Why should instance fields normally be declared `private`?
+{
+  = So the class controls every change to its own state and its validation cannot be bypassed.
+    #Correct. Public fields allow any code to write an invalid value directly, defeating guard clauses.
+  ~ Because private fields use less memory.
+    #Incorrect. Access modifiers have no effect on memory usage.
+  ~ Because private fields are initialised automatically and public ones are not.
+    #Incorrect. All instance fields receive default values regardless of access modifier.
+  ~ Because Java requires all fields to be private.
+    #Incorrect. Other modifiers are legal; private is a design convention, not a rule.
+}
+
+::t00_Q3:: [Predict the output] `Player p1 \= new Player("Ann"); Player p2 \= p1; p2.setName("Bo");`
+What does `p1.getName()` return?
+{
+  = Bo
+    #Correct. Both variables refer to the same object, so a change through one is visible through the other.
+  ~ Ann
+    #Incorrect. That would require p2 to be a separate copy, which assignment does not create.
+  ~ null
+    #Incorrect. The name was set at construction and then changed; it is never null.
+  ~ The code throws NullPointerException.
+    #Incorrect. Both references point at a valid object.
+}
+
+::t00_Q4:: Why should a guard clause appear at the top of a constructor rather than
+where the field is later used?
+{
+  = So an object can never exist in an invalid state, and the error is reported at the point of the mistake.
+    #Correct. Validating later means a bad object may be stored and passed around before anything complains.
+  ~ Because guard clauses must be the first statement in Java.
+    #Incorrect. There is no such language rule; this is a design convention.
+  ~ Because constructors run faster than methods.
+    #Incorrect. Performance is irrelevant to the reason.
+  ~ Because fields cannot be validated after assignment.
+    #Incorrect. They can; doing so is simply later than it should be.
+}
+
+::t00_Q5:: What is the purpose of `this(...)` in a constructor?
+{
+  = It delegates to another constructor in the same class, so validation lives in one place.
+    #Correct. Copying guard clauses into several constructors invites them to drift apart.
+  ~ It calls the parent class constructor.
+    #Incorrect. That is `super(...)`.
+  ~ It returns the current object to the caller.
+    #Incorrect. Constructors have no return value; `this` alone is a reference to the current object.
+  ~ It creates a second instance of the class.
+    #Incorrect. Only one object is created; the delegated constructor initialises it.
+}
+
+::t00_Q6:: [Spot the bug] A constructor is written as `public Player(String name) \{ name \= name; \}`
+where the field is also called `name`. Why does the field stay null?
+{
+  = The parameter shadows the field, so the assignment copies the parameter onto itself.
+    #Correct. Write `this.name \= name;` to disambiguate, which is one reason many codebases prefix fields.
+  ~ Constructors cannot assign to fields.
+    #Incorrect. Assigning fields is their main purpose.
+  ~ The field must be declared final for the assignment to take effect.
+    #Incorrect. Final fields must be assigned in the constructor, but that is not the problem here.
+  ~ String fields must be initialised with `new String(...)`.
+    #Incorrect. Direct assignment of a String reference is normal.
+}
+
+::t00_Q7:: Which access modifier allows a member to be seen by subclasses and by
+other classes in the same package, but not by unrelated outside classes?
+{
+  = protected
+    #Correct. It is broader than private and narrower than public, and is intended for inheritance hooks.
+  ~ private
+    #Incorrect. Private members are visible only within the declaring class.
+  ~ public
+    #Incorrect. Public members are visible everywhere.
+  ~ No modifier (package-private)
+    #Incorrect. This gives package access but excludes subclasses in other packages.
+}
+
+::t00_Q8:: Which of the four OOP pillars does making fields private and exposing
+methods most directly demonstrate?
+{
+  = Encapsulation
+    #Correct. Internal state is hidden and access is mediated by the class's own methods.
+  ~ Inheritance
+    #Incorrect. Inheritance concerns deriving one class from another.
+  ~ Polymorphism
+    #Incorrect. Polymorphism concerns one reference type having several implementations.
+  ~ Abstraction
+    #Incorrect. Related, but abstraction is about exposing what something does rather than how it does it.
+}

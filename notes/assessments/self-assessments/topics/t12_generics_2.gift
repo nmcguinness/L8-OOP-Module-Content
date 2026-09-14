@@ -1,0 +1,106 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t12 Generics II
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t12_generics_2
+
+::t12_Q1:: Why is `List<Enemy>` not assignable to `List<Entity>` even though Enemy extends Entity?
+{
+  = Generics are invariant, which prevents inserting a different Entity subtype into a list others believe holds only Enemy.
+    #Correct. Allowing it would let a Player be added, and a later get would throw ClassCastException.
+  ~ Because Enemy does not really extend Entity at runtime.
+    #Incorrect. The inheritance relationship holds; it simply does not propagate to the generic types.
+  ~ Because List is an interface rather than a class.
+    #Incorrect. Invariance applies to all generic types.
+  ~ Because type erasure removes the relationship at compile time.
+    #Incorrect. Erasure happens after type checking and is not the reason for invariance.
+}
+
+::t12_Q2:: What does PECS stand for, and what does it govern?
+{
+  = Producer Extends, Consumer Super - it decides which wildcard a parameter should use.
+    #Correct. If you read from the parameter use extends; if you write into it use super.
+  ~ Parameter Extends, Class Super - it governs class declarations.
+    #Incorrect. PECS concerns wildcards on parameters, not class declarations.
+  ~ Public Extends, Complete Super - a visibility rule.
+    #Incorrect. It has nothing to do with access modifiers.
+  ~ Primitive Extends, Collection Super - a boxing rule.
+    #Incorrect. Wildcards do not apply to primitives at all.
+}
+
+::t12_Q3:: A method sums values it reads from a list. Which parameter type is correct?
+{
+  = `List<? extends Number>`
+    #Correct. The list is a producer, so extends allows List<Integer>, List<Double> and List<Long> to be passed.
+  ~ `List<? super Number>`
+    #Incorrect. super is for parameters you write into, and would reject List<Integer>.
+  ~ `List<Number>`
+    #Incorrect. This accepts only an exact List<Number>, rejecting List<Integer>.
+  ~ `List<?>`
+    #Incorrect. Elements would come back as Object, so they could not be summed without casting.
+}
+
+::t12_Q4:: [Spot the bug] A method declared `void addAll(List<? extends T> dest, T... items)`
+fails to compile at `dest.add(item)`. Why?
+{
+  = You cannot add to a `? extends T` list, because the exact element type is unknown.
+    #Correct. The parameter is a consumer here, so it should be `List<? super T>`.
+  ~ Varargs cannot be used with generics at all.
+    #Incorrect. They can, though an unchecked warning about generic array creation may appear.
+  ~ The method must be static.
+    #Incorrect. Irrelevant to the error.
+  ~ `add` does not exist on the List interface.
+    #Incorrect. It does; the wildcard is what makes this call unsafe.
+}
+
+::t12_Q5:: Why is `Collections.copy` declared as
+`copy(List<? super T> dest, List<? extends T> src)` rather than using `List<T>` for both?
+{
+  = So a source of a more specific type can be copied into a destination of a more general one.
+    #Correct. With List<T> for both, copying a List<Integer> into a List<Number> would be rejected despite being entirely safe.
+  ~ Because List<T> does not compile in a static method.
+    #Incorrect. It compiles; it is simply more restrictive than necessary.
+  ~ Because the destination must be immutable.
+    #Incorrect. The destination is written to and must be mutable.
+  ~ Because src and dest must be different classes.
+    #Incorrect. They may be the same implementation type.
+}
+
+::t12_Q6:: What can you safely do with a variable of type `List<?>`?
+{
+  = Read elements as Object, and call methods that do not depend on the element type, such as size().
+    #Correct. You cannot add anything except null, because the actual element type is unknown.
+  ~ Add any object to it.
+    #Incorrect. The compiler cannot verify the type is acceptable, so add is rejected.
+  ~ Add only Strings to it.
+    #Incorrect. No specific type is permitted.
+  ~ Nothing at all; the type is unusable.
+    #Incorrect. It is useful for read-only or type-agnostic operations.
+}
+
+::t12_Q7:: Why do many JDK methods accept `Comparator<? super T>` rather than `Comparator<T>`?
+{
+  = So a comparator written for a supertype can be reused to sort a list of subtypes.
+    #Correct. A Comparator<Entity> can order a List<Enemy>, because a comparator consumes the elements it compares.
+  ~ Because Comparator cannot be parameterised with T directly.
+    #Incorrect. It can; `? super T` simply accepts more callers.
+  ~ Because it allows the comparator to return a subtype.
+    #Incorrect. compare always returns int.
+  ~ Because it makes the sort algorithm faster.
+    #Incorrect. It affects which arguments are accepted, not performance.
+}
+
+::t12_Q8:: Java arrays are covariant, so `Enemy[]` is an `Entity[]`. What is the consequence?
+{
+  = Storing the wrong subtype compiles but throws ArrayStoreException at runtime.
+    #Correct. Generics chose invariance precisely to move this class of error to compile time.
+  ~ The same protection as generics, enforced at compile time.
+    #Incorrect. Arrays defer the check to runtime, which is strictly weaker.
+  ~ Arrays cannot hold subclass instances.
+    #Incorrect. They can, which is what covariance permits.
+  ~ Array assignment between related types fails to compile.
+    #Incorrect. It compiles; that is the problem.
+}

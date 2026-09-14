@@ -1,0 +1,113 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t14 Design Patterns II
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t14_design_patterns_2
+
+::t14_Q1:: The Factory pattern's intent is to "encapsulate object creation so
+clients depend on what they want, not how it is built." What is the primary
+problem it solves?
+{
+  = It removes object creation logic from client code, centralising it so that changes to how objects are built do not ripple through every caller.
+    #Correct. When clients call `factory.createFor(task)` instead of `new ExecuteTaskCommand(task, new ValidatedExecution())`, only the factory needs updating if the construction changes.
+  ~ It makes all objects immutable so they cannot be changed after creation.
+    #Incorrect. The Factory pattern is about controlling creation, not enforcing immutability.
+  ~ It ensures only one instance of each class is ever created throughout the application.
+    #Incorrect. That is the Singleton pattern; Factory creates new instances as requested.
+  ~ It prevents subclasses from overriding the creation logic defined in the parent.
+    #Incorrect. Factory Method pattern actually encourages subclasses to override creation; the goal is decoupling clients from construction details.
+}
+
+::t14_Q2:: In the Observer pattern, an `ObservableTaskQueue` notifies a list
+of `TaskListener` objects after each command executes. What key design property
+does this provide?
+{
+  = The queue does not need to know what listeners do; listeners can be added or removed without modifying the queue.
+    #Correct. Observer decouples the subject (queue) from its observers (listeners), allowing the set of reactions to change independently.
+  ~ All listeners are guaranteed to execute before the next command is dequeued.
+    #Incorrect. The order and timing of notifications depends on implementation; the pattern does not guarantee sequential completion.
+  ~ The queue and listeners share the same thread, preventing concurrency issues.
+    #Incorrect. Thread safety is a separate concern; Observer does not inherently guarantee single-threaded execution.
+  ~ Listeners are notified only if they hold a direct reference to the task that changed.
+    #Incorrect. The subject notifies all registered listeners; they do not need to hold direct references to specific tasks.
+}
+
+::t14_Q3:: An `ExternalJobAdapter` implements the `Command` interface and
+wraps an `ExternalJob` whose only method is `runJob()`. What structural role
+does this class play and why is it used?
+{
+  = It is an Adapter that bridges the incompatible `ExternalJob` interface to the `Command` interface expected by the system.
+    #Correct. The adapter translates `execute()` calls into `runJob()` calls, allowing the external job to work within the existing command infrastructure.
+  ~ It is a Facade that simplifies a complex subsystem into a single unified interface.
+    #Incorrect. A Facade simplifies multiple complex components; an Adapter bridges one incompatible interface to another.
+  ~ It is a Decorator that adds new behaviour around the original `ExternalJob` method.
+    #Incorrect. A Decorator adds responsibilities to an object; an Adapter converts its interface without adding new behaviour.
+  ~ It is a Proxy that controls access to the `ExternalJob` for security purposes.
+    #Incorrect. A Proxy controls or logs access to an object; an Adapter is used purely for interface compatibility.
+}
+
+::t14_Q4:: When comparing the Observer and Command patterns, which statement
+best distinguishes their primary concerns?
+{
+  = Command encapsulates a unit of work as an object so it can be queued or deferred; Observer propagates a state-change notification to multiple dependents automatically.
+    #Correct. Command is about representing work; Observer is about broadcasting events to listeners without tight coupling.
+  ~ Command is used for UI events and Observer is used for database transactions.
+    #Incorrect. Neither pattern is domain-specific; both appear in UI, databases, games, and many other contexts.
+  ~ Observer requires the subject to know all observer types at compile time; Command does not.
+    #Incorrect. Observer depends on an interface (e.g. `TaskListener`), so the subject does not need to know concrete observer types.
+  ~ Both patterns achieve exactly the same decoupling and are interchangeable.
+    #Incorrect. They solve different problems\: one manages work execution, the other manages event propagation.
+}
+
+
+::t14_Q5:: What is the principal benefit of a factory over calling `new` directly at each site?
+{
+  = The concrete class is named in exactly one place, so implementations can be swapped without editing callers.
+    #Correct. Callers depend only on the interface, which also makes substituting a test implementation straightforward.
+  ~ Object creation becomes faster.
+    #Incorrect. There is no performance benefit; the gain is in coupling.
+  ~ It removes the need for constructors.
+    #Incorrect. The factory calls a constructor; it just centralises that call.
+  ~ It guarantees only one instance is ever created.
+    #Incorrect. That is Singleton, a different pattern.
+}
+
+::t14_Q6:: Which problem does Observer solve that Strategy does not?
+{
+  = Notifying an unknown number of interested parties when something happens, without the publisher knowing who they are.
+    #Correct. Observer is one-to-many notification. Strategy is a single interchangeable algorithm chosen by the context.
+  ~ Selecting between alternative algorithms at runtime.
+    #Incorrect. That is precisely what Strategy does.
+  ~ Making an incompatible interface usable.
+    #Incorrect. That is Adapter.
+  ~ Deferring object creation to a subclass.
+    #Incorrect. That is Factory Method.
+}
+
+::t14_Q7:: When is Adapter preferable to refactoring the mismatched class?
+{
+  = When the class cannot be changed, such as third-party or legacy code others depend on.
+    #Correct. The adapter isolates the mismatch in one class, so an external API change affects a single file.
+  ~ Whenever two interfaces differ, since adapters are always cheaper.
+    #Incorrect. Accumulating adapters over code you own hides a design problem you could fix properly.
+  ~ When the two interfaces are already identical.
+    #Incorrect. No adapter is needed in that case.
+  ~ When you want to add new behaviour to the class.
+    #Incorrect. Adapter translates an existing interface; adding behaviour is Decorator.
+}
+
+::t14_Q8:: [Spot the bug] An Observer subject holds subscribers in a plain `ArrayList`,
+and a subscriber unregisters itself while being notified. What is the likely result?
+{
+  = ConcurrentModificationException, because the list is modified during iteration over it.
+    #Correct. Iterate a copy of the list, or use CopyOnWriteArrayList, which is designed for this listener pattern.
+  ~ The subscriber is silently ignored and iteration completes normally.
+    #Incorrect. The iterator detects the structural change and fails fast.
+  ~ The subject deadlocks.
+    #Incorrect. Deadlock requires competing locks; this is a single-threaded structural modification.
+  ~ Nothing, because ArrayList permits modification during iteration.
+    #Incorrect. It explicitly does not, which is what the fail-fast iterator enforces.
+}

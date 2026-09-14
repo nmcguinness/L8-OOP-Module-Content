@@ -1,0 +1,106 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t18 Java I/O
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t18_io
+
+::t18_Q1:: Why is `Files.lines()` preferred over `Files.readAllLines()` for a very large file?
+{
+  = It streams lazily, so memory use stays roughly constant instead of holding every line at once.
+    #Correct. readAllLines on a multi-gigabyte file risks OutOfMemoryError even if you need only a few lines.
+  ~ It reads the file more quickly in all cases.
+    #Incorrect. For small files the difference is negligible; the benefit is memory and short-circuiting.
+  ~ It does not require the file to exist.
+    #Incorrect. Both throw if the path cannot be read.
+  ~ It automatically closes the file without try-with-resources.
+    #Incorrect. It specifically must be closed, because it holds an open file handle.
+}
+
+::t18_Q2:: [Spot the bug] `Files.lines(path)` is used without try-with-resources in a
+long-running program, which eventually fails with "Too many open files". Why?
+{
+  = The stream holds an open file handle that is never released, so descriptors accumulate.
+    #Correct. Unlike a stream over a List, this one is backed by a real file and is AutoCloseable.
+  ~ Files.lines opens the file twice.
+    #Incorrect. It opens it once; the problem is that it is never closed.
+  ~ The operating system limit applies only to writes.
+    #Incorrect. Open descriptors count regardless of direction.
+  ~ The file must be deleted after reading.
+    #Incorrect. Deleting is unrelated to releasing the handle.
+}
+
+::t18_Q3:: Why must `IOException` be caught or declared when calling `Files.readAllLines()`?
+{
+  = It is a checked exception, because file operations fail for reasons outside the program's control.
+    #Correct. Permissions, deletion between check and read, a full disk or a dropped network share are all possible.
+  ~ Because the method is static.
+    #Incorrect. Static has no bearing on exception checking.
+  ~ Because the file might contain invalid characters.
+    #Incorrect. That would surface as a decoding error, and is not why the exception is checked.
+  ~ Because all Java methods that touch disk return an exception object.
+    #Incorrect. They throw rather than return, and not all are checked.
+}
+
+::t18_Q4:: What is the most efficient way to read only the first ten lines of a huge file?
+{
+  = `Files.lines(path)` with `.limit(10)`, inside try-with-resources.
+    #Correct. Laziness means the file is read only far enough to produce ten lines.
+  ~ `Files.readAllLines(path).subList(0, 10)`
+    #Incorrect. This reads the entire file into memory first, which is exactly what should be avoided.
+  ~ Read the whole file into a String and split on newline.
+    #Incorrect. Worse still: it loads everything and then allocates an array of every line.
+  ~ Open the file ten times, reading one line each.
+    #Incorrect. This re-reads from the start each time and is far slower.
+}
+
+::t18_Q5:: Which StandardOpenOption writes a file only if it does not already exist?
+{
+  = CREATE_NEW
+    #Correct. It throws FileAlreadyExistsException if the file is present, and the check is atomic.
+  ~ CREATE
+    #Incorrect. CREATE makes the file if absent but happily opens an existing one.
+  ~ TRUNCATE_EXISTING
+    #Incorrect. This clears an existing file, which is the opposite of the requirement.
+  ~ APPEND
+    #Incorrect. This adds to the end of an existing file.
+}
+
+::t18_Q6:: Why is `CREATE_NEW` better than testing `Files.exists(path)` and then writing?
+{
+  = The check-then-write sequence is a race condition; CREATE_NEW performs the test and creation atomically.
+    #Correct. Between the check and the write, another process or thread could create the file and have it overwritten.
+  ~ Files.exists is deprecated.
+    #Incorrect. It is current and useful in other contexts.
+  ~ Files.exists cannot be used with a Path.
+    #Incorrect. Path is exactly what it takes.
+  ~ CREATE_NEW is faster to execute.
+    #Incorrect. Correctness under concurrency, not speed, is the reason.
+}
+
+::t18_Q7:: What advantage does `BufferedReader` have over reading a file one character at a time?
+{
+  = It reads a block into memory at once, greatly reducing the number of system calls.
+    #Correct. Unbuffered character-by-character reading makes an expensive call per character.
+  ~ It can read files that BufferedReader-less code cannot open.
+    #Incorrect. Both can open the same files.
+  ~ It automatically parses CSV fields.
+    #Incorrect. Splitting lines into fields remains your responsibility.
+  ~ It removes the need to handle IOException.
+    #Incorrect. Its methods still throw IOException.
+}
+
+::t18_Q8:: [Predict the output] A CSV line `"Ann,,25"` is processed with `line.split(",")`.
+What is the resulting array length?
+{
+  = 3, with an empty string in the middle position.
+    #Correct. split preserves empty fields in the middle. Note that trailing empty fields ARE dropped unless a negative limit is passed.
+  ~ 2, because the empty field is skipped.
+    #Incorrect. Only trailing empty strings are removed by default.
+  ~ 4, because the double comma creates an extra element.
+    #Incorrect. Two commas delimit three fields.
+  ~ 1, because split requires a regular expression.
+    #Incorrect. A comma is a valid regex matching itself.
+}

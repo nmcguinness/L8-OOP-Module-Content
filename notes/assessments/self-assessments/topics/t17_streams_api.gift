@@ -1,0 +1,107 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t17 Streams API
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t17_streams_api
+
+::t17_Q1:: [Predict the output] A pipeline is `list.stream().filter(...).map(...)` with no
+terminal operation. What happens when it runs?
+{
+  = Nothing. Intermediate operations are lazy and do no work until a terminal operation is invoked.
+    #Correct. This is why a lone `peek` prints nothing and is a common debugging trap.
+  ~ The filter and map both run over every element.
+    #Incorrect. Without a terminal operation the pipeline is only described, never executed.
+  ~ The code throws IllegalStateException.
+    #Incorrect. It compiles and runs; it simply does nothing observable.
+  ~ The original list is modified in place.
+    #Incorrect. Streams never modify their source.
+}
+
+::t17_Q2:: A stream is `filter`, then `map`, then `findFirst`, and the first element
+passes the filter. How many elements does `map` process?
+{
+  = One, because findFirst short-circuits as soon as it has a result.
+    #Correct. Elements are pulled through the whole pipeline one at a time, not stage by stage over the entire collection.
+  ~ All of them, since map runs before findFirst.
+    #Incorrect. That would be true of eager stage-by-stage evaluation, which is not how streams work.
+  ~ None, because findFirst reads from the source directly.
+    #Incorrect. The element must pass through map to be produced.
+  ~ Two, because findFirst needs to compare candidates.
+    #Incorrect. It returns the first available element without comparison.
+}
+
+::t17_Q3:: When must you use `flatMap` rather than `map`?
+{
+  = When each element yields multiple values that should be flattened into one stream.
+    #Correct. The tell is a nested result type such as Stream<List<T>>, which means map was used where flatMap was needed.
+  ~ When the transformation may return null.
+    #Incorrect. Null handling is a separate concern and is better addressed with a filter.
+  ~ When the stream is parallel.
+    #Incorrect. Both work in parallel streams.
+  ~ When the result type differs from the input type.
+    #Incorrect. That is ordinary map.
+}
+
+::t17_Q4:: Why does re-using a stream throw IllegalStateException?
+{
+  = A stream is a one-pass view over its source, and the terminal operation consumes it.
+    #Correct. Re-create it from the collection instead; `list.stream()` is cheap and should never be cached in a field.
+  ~ Streams are immutable and cannot be assigned twice.
+    #Incorrect. The restriction concerns consumption, not assignment.
+  ~ The garbage collector reclaims the stream immediately.
+    #Incorrect. Collection timing is unrelated.
+  ~ Only parallel streams may be reused.
+    #Incorrect. The restriction applies equally to both.
+}
+
+::t17_Q5:: Which collector produces a count per group rather than a list per group?
+{
+  = `Collectors.groupingBy(Task::getCategory, Collectors.counting())`
+    #Correct. The downstream collector replaces the default toList(). Note that counting() yields Long.
+  ~ `Collectors.groupingBy(Task::getCategory)`
+    #Incorrect. The one-argument form defaults to toList(), giving Map<K, List<Task>>.
+  ~ `Collectors.toMap(Task::getCategory, Task::getId)`
+    #Incorrect. This maps each category to a single id and throws on duplicate keys.
+  ~ `Collectors.partitioningBy(Task::getCategory)`
+    #Incorrect. partitioningBy takes a Predicate and always produces exactly two groups.
+}
+
+::t17_Q6:: [Spot the bug] `stream.forEach(t -> results.add(transform(t)))` on a parallel
+stream produces a list with missing or duplicated entries. Why?
+{
+  = An ordinary ArrayList is not thread-safe, and forEach with a side effect writes to it concurrently.
+    #Correct. Use `.map(this::transform).collect(Collectors.toList())`, which handles the combination safely.
+  ~ forEach cannot be used on a parallel stream.
+    #Incorrect. It can, but its side effects are the caller's responsibility.
+  ~ transform must be declared static.
+    #Incorrect. Unrelated to the failure.
+  ~ Parallel streams silently drop elements.
+    #Incorrect. They do not; the corruption comes from unsynchronised mutation.
+}
+
+::t17_Q7:: When is `reduce` the right choice over `sum()` or `count()`?
+{
+  = When the combining operation is custom, such as multiplying values or folding into an accumulator.
+    #Correct. The operation must be associative and side-effect-free, or parallel execution gives wrong results.
+  ~ Whenever the stream contains numbers.
+    #Incorrect. For plain totals, `mapToInt(...).sum()` is clearer and avoids boxing.
+  ~ Whenever the stream might be empty.
+    #Incorrect. Both handle empty streams; reduce without an identity returns an Optional.
+  ~ Only on parallel streams.
+    #Incorrect. It works on sequential streams too.
+}
+
+::t17_Q8:: What advantage does `IntStream` have over `Stream<Integer>`?
+{
+  = It avoids boxing each value into an Integer object, and offers sum, average and max directly.
+    #Correct. Use mapToInt to switch, which matters most on large numeric datasets.
+  ~ It can be reused after a terminal operation.
+    #Incorrect. All streams are single-use.
+  ~ It is always executed in parallel.
+    #Incorrect. Parallelism is opt-in via parallel().
+  ~ It permits null elements.
+    #Incorrect. A primitive int cannot be null.
+}

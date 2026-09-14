@@ -1,0 +1,101 @@
+id,timestampUtc,source,category,value,unit,notes
+g-001,1700000001,game,ping,95.5,ms,Cached
+g-002,1700000002,game,fps,121.4,fps,GET /api/profile
+s-003,1700000003,server,deaths,3.0,count,GET /api/items
+c-004,1700000004,client,payload_kb,542.2,kb,Arena A
+c-005,1700000005,client,payload_kb,1456.8,kb,Arena A
+s-006,1700000006,server,payload_kb,1278.2,kb,GET /api/items
+c-007,1700000007,client,ping,72.0,ms,Tutorial
+s-008,1700000008,server,response_time,156.8,ms,Arena B
+s-009,1700000009,server,ping,217.3,ms,Tutorial
+s-010,1700000010,server,payload_kb,1484.8,kb,Low-end GPU
+s-011,1700000011,server,deaths,5.0,count,Arena B
+c-012,1700000012,client,ping,192.4,ms,Cached
+c-013,1700000013,client,deaths,5.0,count,Arena B
+s-014,1700000014,server,response_time,249.0,ms,Mobile hotspot
+s-015,1700000015,server,response_time,253.7,ms,Mobile hotspot
+g-016,1700000016,game,fps,56.6,fps,Low-end GPU
+c-017,1700000017,client,ping,211.5,ms,Mobile hotspot
+c-018,1700000018,client,payload_kb,859.1,kb,Arena A
+g-019,1700000019,game,response_time,1011.1,ms,GET /api/items
+g-020,1700000020,game,payload_kb,917.0,kb,Tutorial
+g-021,1700000021,game,ping,100.1,ms,GET /api/items
+g-022,1700000022,game,fps,106.5,fps,Tutorial
+s-023,1700000023,server,ping,48.2,ms,GET /api/items
+bad-024,1700000024,,payload_kb,60.0,kb,Blank source
+s-025,1700000025,server,payload_kb,629.5,kb,Cached
+c-026,1700000026,client,deaths,1.0,count,Arena B
+g-027,1700000027,game,response_time,859.9,ms,Arena B
+g-028,1700000028,game,deaths,5.0,count,GET /api/items
+g-029,1700000029,game,response_time,697.9,ms,GET /api/profile
+c-030,1700000030,client,fps,95.1,fps,Large response
+bad-031,1700000031,server,ping,-10.0,ms,Negative ping
+c-032,1700000032,client,ping,221.0,ms,Low-end GPU
+s-033,1700000033,server,response_time,784.3,ms,Low-end GPU
+c-034,1700000034,client,payload_kb,700.8,kb,WiFi
+s-035,1700000035,server,ping,240.7,ms,Large response
+g-036,1700000036,game,ping,229.5,ms,Low-end GPU
+g-037,1700000037,game,ping,135.6,ms,Low-end GPU
+s-038,1700000038,server,response_time,199.7,ms,Arena A
+c-039,1700000039,client,payload_kb,994.9,kb,Arena A
+g-040,1700000040,game,fps,50.6,fps,GET /api/items
+c-041,1700000041,client,deaths,6.0,count,Arena B
+s-042,1700000042,server,response_time,636.5,ms,WiFi
+c-043,1700000043,client,fps,116.5,fps,Large response
+s-044,1700000044,server,fps,132.8,fps,Mobile hotspot
+g-045,1700000045,game,deaths,7.0,count,Cached
+bad-046,1700000046,,ping,60.0,ms,Blank source
+s-047,1700000047,server,ping,39.4,ms,GET /api/profile
+c-048,1700000048,client,deaths,1.0,count,Arena B
+c-049,1700000049,client,response_time,691.7,ms,Large response
+bad-050,1700000050,game,fps,12.0
+bad-051,not_a_number,game,deaths,12.0,count,Bad timestamp
+g-052,1700000052,game,ping,191.2,ms,WiFi
+g-053,1700000053,game,deaths,3.0,count,Tutorial
+bad-054,1700000054,,payload_kb,60.0,kb,Blank source
+,1700000055,client,fps,123.0,fps,Blank id
+s-056,1700000056,server,response_time,441.0,ms,Tutorial
+g-057,1700000057,game,response_time,647.2,ms,GET /api/profile
+c-058,1700000058,client,ping,142.8,ms,Arena B
+c-059,1700000059,client,response_time,191.1,ms,Large response
+c-060,1700000060,client,payload_kb,68.1,kb,Arena A
+g-061,1700000061,game,fps,152.3,fps,Tutorial
+c-062,1700000062,client,payload_kb,379.6,kb,GET /api/items
+g-063,1700000063,game,ping,50.5,ms,Arena B
+c-064,1700000064,client,payload_kb,1421.4,kb,Large response
+bad-065,1700000065,client,fps,12.0
+c-066,1700000066,client,deaths,0.0,count,WiFi
+c-067,1700000067,client,response_time,996.0,ms,Arena A
+c-068,1700000068,client,ping,190.7,ms,Mobile hotspot
+bad-069,1700000069,game,fps,not_a_number,fps,Bad value
+,1700000070,game,deaths,123.0,count,Blank id
+c-071,1700000071,client,ping,130.5,ms,Mobile hotspot
+bad-072,1700000072,,fps,60.0,fps,Blank source
+s-073,1700000073,server,fps,127.8,fps,Cached
+,1700000074,server,fps,123.0,fps,Blank id
+c-075,1700000075,client,payload_kb,1148.0,kb,Tutorial
+s-076,1700000076,server,deaths,0.0,count,Low-end GPU
+s-077,1700000077,server,payload_kb,1490.8,kb,GET /api/items
+bad-078,not_a_number,game,fps,12.0,fps,Bad timestamp
+c-079,1700000079,client,response_time,679.8,ms,Low-end GPU
+g-080,1700000080,game,payload_kb,75.4,kb,WiFi
+c-081,1700000081,client,ping,70.7,ms,Large response
+c-082,1700000082,client,deaths,7.0,count,Cached
+s-083,1700000083,server,response_time,651.4,ms,GET /api/items
+bad-084,1700000084,,fps,60.0,fps,Blank source
+c-085,1700000085,client,deaths,6.0,count,GET /api/items
+c-086,1700000086,client,response_time,752.0,ms,GET /api/profile
+g-087,1700000087,game,fps,116.7,fps,WiFi
+g-088,1700000088,game,payload_kb,157.8,kb,Large response
+c-089,1700000089,client,fps,97.1,fps,Mobile hotspot
+c-090,1700000090,client,ping,109.7,ms,Large response
+g-091,1700000091,game,payload_kb,402.6,kb,WiFi
+c-092,1700000092,client,response_time,385.7,ms,Large response
+g-093,1700000093,game,ping,33.4,ms,Low-end GPU
+s-094,1700000094,server,response_time,533.9,ms,GET /api/profile
+g-095,1700000095,game,deaths,5.0,count,Low-end GPU
+s-096,1700000096,server,ping,151.9,ms,Arena A
+c-097,1700000097,client,response_time,490.8,ms,GET /api/items
+g-098,1700000098,game,deaths,2.0,count,Arena B
+c-099,1700000099,client,deaths,7.0,count,Arena A
+g-100,1700000100,game,payload_kb,656.5,kb,GET /api/items

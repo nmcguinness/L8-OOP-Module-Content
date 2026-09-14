@@ -1,0 +1,115 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t22 Networking
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t22_networking
+
+::t22_Q1:: In the echo server example, `new PrintWriter(clientSocket.getOutputStream(), true)`
+is used. What does the second argument `true` control?
+{
+  = Auto-flush\: the output buffer is flushed automatically after every `println` call, ensuring data is sent to the client immediately.
+    #Correct. Without auto-flush, data may remain in the PrintWriter buffer and never reach the client until the buffer fills or the stream is closed.
+  ~ Thread-safety\: the PrintWriter locks the stream so multiple threads can write concurrently.
+    #Incorrect. `PrintWriter` is not made thread-safe by this flag; the `true` argument controls auto-flushing.
+  ~ Character encoding\: `true` instructs the writer to use UTF-8 instead of the platform default.
+    #Incorrect. Character encoding is set separately via a charset parameter or `OutputStreamWriter`; `true` here means auto-flush.
+  ~ Error handling\: exceptions thrown by the underlying stream are rethrown rather than suppressed.
+    #Incorrect. `PrintWriter` suppresses exceptions by default; to check for errors you call `checkError()`. The `true` flag controls flush behaviour.
+}
+
+::t22_Q2:: A multi-client server uses `serverSocket.accept()` inside a
+`while (true)` loop and calls `pool.submit(new ClientHandler(clientSocket))`
+for each connection. Why does the server accept a second client before the
+first finishes?
+{
+  = Each `ClientHandler` runs on a separate pool thread, so `accept()` returns to the loop immediately and can accept new connections concurrently.
+    #Correct. `submit` is non-blocking\: the work is handed off to the pool and the accept loop continues without waiting.
+  ~ `accept()` is non-blocking in Java and returns null if no second client is ready.
+    #Incorrect. `accept()` is blocking — it blocks until a client connects. It is the `submit()` call that is non-blocking.
+  ~ The second client waits in a queue inside `ServerSocket` and is accepted only after the first disconnects.
+    #Incorrect. The server accepts the second connection as soon as `accept()` is called again, which happens immediately after submitting the first handler.
+  ~ Java automatically forks a new process for each client connection.
+    #Incorrect. Java does not fork processes for socket connections; thread pools are used within the same JVM process.
+}
+
+::t22_Q3:: The protocol requires each JSON message to be sent as a single line
+terminated by a newline. Why is sending multi-line JSON over a raw socket
+problematic when using `BufferedReader.readLine()` to receive it?
+{
+  = `readLine()` reads exactly one line and stops at the first newline, so only the first line of the multi-line JSON is received, resulting in a parse error.
+    #Correct. The receiver reads one `\n`-terminated line and tries to parse it as complete JSON; a multi-line object split across lines cannot be parsed correctly.
+  ~ `BufferedReader` automatically reassembles multi-line messages because TCP guarantees message boundaries.
+    #Incorrect. TCP is a byte-stream protocol with no concept of message boundaries; `readLine()` splits on `\n` without knowledge of JSON structure.
+  ~ Multi-line JSON is rejected by Jackson's `ObjectMapper` because it requires compact format.
+    #Incorrect. Jackson can parse pretty-printed multi-line JSON; the problem is the socket framing, not Jackson's parser.
+  ~ Sending multi-line JSON causes a ConcurrentModificationException on the server.
+    #Incorrect. ConcurrentModificationException is a Java collections concern; it has nothing to do with JSON framing over sockets.
+}
+
+::t22_Q4:: The `ServerResponse<T>` class uses a generic type parameter. When
+the server serialises a `ServerResponse<List<Task>>` to JSON with Jackson,
+what must the client do to correctly deserialise the JSON back to the same type?
+{
+  = Use a `TypeReference<ServerResponse<List<Task>>>` in the `readValue` call to preserve the full generic type information at runtime.
+    #Correct. Due to type erasure, `ServerResponse.class` loses the generic parameter; `TypeReference` captures it as an anonymous subclass, allowing Jackson to reconstruct the nested generic type.
+  ~ Pass `ServerResponse.class` to `readValue` — Jackson infers the generic parameter automatically.
+    #Incorrect. Type erasure means `ServerResponse.class` carries no information about `List<Task>`; Jackson cannot infer it.
+  ~ Cast the deserialized `Object` to `ServerResponse<List<Task>>` after calling `readValue(json, Object.class)`.
+    #Incorrect. Casting to a generic type produces an unchecked cast warning and does not restore type information; individual element types remain unresolved.
+  ~ Store the tasks in a plain `List` field without generics so that deserialisation works without TypeReference.
+    #Incorrect. Using a raw `List` loses type safety and is the problem that `TypeReference` was designed to solve.
+}
+
+
+::t22_Q5:: Why must a server hand each accepted socket to a separate thread or pool task?
+{
+  = Otherwise the accept loop blocks handling one client and no other client can connect.
+    #Correct. Handler work is mostly blocked on socket reads, so a single-threaded server serves exactly one client at a time.
+  ~ Because ServerSocket.accept() can only be called once.
+    #Incorrect. It is called repeatedly in a loop, once per connection.
+  ~ Because each socket requires its own port number.
+    #Incorrect. All clients connect to the same listening port.
+  ~ Because TCP requires one thread per connection.
+    #Incorrect. TCP imposes no such requirement; this is a design choice about responsiveness.
+}
+
+::t22_Q6:: [Spot the bug] A server writes a response with `out.println(json)` but the
+client blocks forever on `readLine()`. The writer was created as `new PrintWriter(socket.getOutputStream())`.
+What is wrong?
+{
+  = Auto-flush is off, so the response is buffered and never reaches the client.
+    #Correct. Pass `true` as the second argument, or call `out.flush()` after each write. Both sides then block waiting for each other.
+  ~ readLine() cannot read JSON.
+    #Incorrect. It reads any line of text, which is why the protocol is line-delimited.
+  ~ The client must call flush() before reading.
+    #Incorrect. Flushing applies to the side that is writing.
+  ~ PrintWriter cannot be used with sockets.
+    #Incorrect. It is a standard choice for text protocols.
+}
+
+::t22_Q7:: An exception escapes `ClientHandler.run()`. What is the consequence?
+{
+  = That handler thread dies, the client's connection is dropped with no error response, and the socket leaks.
+    #Correct. With `submit`, the exception is also captured silently in the Future. Catch inside run, reply with an error, and close in a finally block.
+  ~ The server process terminates immediately.
+    #Incorrect. Only the affected thread ends; the server keeps accepting.
+  ~ The exception propagates to the accept loop, which can handle it.
+    #Incorrect. Exceptions do not cross thread boundaries.
+  ~ The pool automatically retries the task.
+    #Incorrect. ExecutorService performs no retries.
+}
+
+::t22_Q8:: You must add a new entity to an existing protocol without breaking deployed clients. What is the safe approach?
+{
+  = Add new request types and leave every existing type's name, payload and response shape unchanged.
+    #Correct. Adding is backward-compatible; renaming, removing or retyping a field is not.
+  ~ Rename existing request types to a consistent new scheme at the same time.
+    #Incorrect. Every deployed client sending the old names would break immediately.
+  ~ Change the response wrapper to include the new entity in every reply.
+    #Incorrect. Altering an existing response shape risks breaking clients that parse it strictly.
+  ~ Require all clients to upgrade before the server is deployed.
+    #Incorrect. Sometimes unavoidable in practice, but it is the opposite of a backward-compatible change.
+}

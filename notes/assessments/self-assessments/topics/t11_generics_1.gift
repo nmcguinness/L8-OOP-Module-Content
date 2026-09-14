@@ -1,0 +1,114 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t11 Generics I
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t11_generics_1
+
+::t11_Q1:: A class stores its value as `private Object value`. A caller
+retrieves the value and casts it to `Integer` but the stored object is actually
+a `String`. What happens and when?
+{
+  = A ClassCastException is thrown at runtime when the cast is attempted.
+    #Correct. Without generics, the compiler cannot verify the cast, so the type mismatch is only detected when the JVM executes the cast.
+  ~ A compile error prevents this code from being written.
+    #Incorrect. Casting to a specific type is always permitted at compile time; the compiler cannot know what the Object actually holds.
+  ~ The String value is silently converted to an Integer.
+    #Incorrect. Java does not implicitly convert between unrelated types.
+  ~ The program returns null rather than throwing an exception.
+    #Incorrect. A failed cast throws ClassCastException; it does not return null.
+}
+
+::t11_Q2:: A generic class is declared as `class Slot<T extends Item>`.
+An instance is created as `Slot<Potion> potionSlot`. Which statement is true?
+{
+  = Attempting to call `potionSlot.put(new Sword(...))` causes a compile error, not a runtime error.
+    #Correct. The type parameter `T` is resolved to `Potion` at compile time, so passing a `Sword` is rejected by the compiler.
+  ~ The compiler permits `potionSlot.put(new Sword(...))` because `Sword` is also an `Item`.
+    #Incorrect. The slot is parameterised as `Slot<Potion>`, so only `Potion` instances are accepted.
+  ~ A runtime ClassCastException occurs when `put` is called with the wrong item type.
+    #Incorrect. Generics catch type mismatches at compile time, preventing the ClassCastException from occurring at runtime.
+  ~ The bound `T extends Item` means the slot can store any object, not just Items.
+    #Incorrect. The bound restricts T to Item subtypes; it does not widen the accepted types.
+}
+
+::t11_Q3:: A generic method signature reads `public static <T> T first(List<T> items)`.
+A caller invokes `first(List.of("A", "B"))`. What type does the method return,
+and is a cast required?
+{
+  = The method returns a `String` and no cast is required because the type parameter is inferred as `String`.
+    #Correct. The compiler infers `T` as `String` from the argument, so the return type is `String` and no cast is needed.
+  ~ The method returns an `Object` and a cast to `String` is required.
+    #Incorrect. Type inference allows the compiler to resolve `T` to `String`, eliminating the need for a cast.
+  ~ A compile error occurs because generic methods cannot infer a return type from a list.
+    #Incorrect. Java performs type inference automatically for generic method calls.
+  ~ The method throws a ClassCastException at runtime when the result is used as a String.
+    #Incorrect. With correct generics and type inference, no cast is involved and no ClassCastException can occur.
+}
+
+::t11_Q4:: Why is `new T()` not allowed inside a generic class body in Java?
+{
+  = Java generics use type erasure\: the type parameter T is replaced by `Object` at runtime, so the JVM has no information about which class to construct.
+    #Correct. Type erasure removes generic type information at runtime, making `new T()` impossible because the JVM does not know T's concrete type.
+  ~ Generic type parameters can only be used as method return types, not as constructor targets.
+    #Incorrect. Type parameters can be used in many positions; the restriction on `new T()` is specifically due to type erasure.
+  ~ It is a design decision to force developers to use abstract factories instead.
+    #Incorrect. While a Supplier/factory is a common workaround, the underlying reason is the technical constraint of type erasure.
+  ~ `new T()` is allowed when T extends a concrete class with a no-arg constructor.
+    #Incorrect. Even with a bound, `new T()` is not permitted; a `Supplier<T>` or reflective approach is required.
+}
+
+
+::t11_Q5:: Why does `List<String>` and `List<Integer>` share a single class file at runtime?
+{
+  = Type erasure removes type arguments after compilation, leaving a raw List.
+    #Correct. Generics are a compile-time device. This is why you cannot write `new T[]` or test `x instanceof List<String>`.
+  ~ The JVM stores type arguments in the object header.
+    #Incorrect. Java generics are erased, unlike C# where they are reified at runtime.
+  ~ The compiler generates a separate class per type argument and discards duplicates.
+    #Incorrect. That is C++ template instantiation, not Java.
+  ~ Both are subclasses of a common List type parameterised at runtime.
+    #Incorrect. No runtime parameterisation exists after erasure.
+}
+
+::t11_Q6:: [Spot the bug] A generic method declared `static <T> T max(List<T> items)`
+fails to compile at the line `if (items.get(i).compareTo(best) > 0)`. Why?
+{
+  = `T` is unbounded, so the compiler only knows it is an Object and cannot guarantee compareTo exists.
+    #Correct. Declare it `<T extends Comparable<T>>` so the bound supplies the capability being used.
+  ~ Generic methods cannot call methods on their type parameter at all.
+    #Incorrect. They can, provided a bound guarantees the method exists.
+  ~ The method must be non-static to use a type parameter.
+    #Incorrect. Static generic methods are permitted and common.
+  ~ `compareTo` can only be called on primitive types.
+    #Incorrect. It is defined on Comparable reference types; primitives do not have methods.
+}
+
+::t11_Q7:: [Predict the output] What happens when this compiles and runs:
+`List<Object> objs \= new ArrayList<>(); objs.add("text"); objs.add(42);`
+followed by `String s \= (String) objs.get(1);`
+{
+  = It compiles but throws ClassCastException at runtime.
+    #Correct. The compiler permits the cast because the static type is Object. This is exactly the failure generics exist to prevent.
+  ~ It fails to compile because an Integer cannot be cast to String.
+    #Incorrect. The declared element type is Object, so the compiler cannot detect the mismatch.
+  ~ It prints 42.
+    #Incorrect. The cast is checked at runtime and fails before anything is assigned.
+  ~ It returns null because the cast fails silently.
+    #Incorrect. A failed cast throws rather than yielding null.
+}
+
+::t11_Q8:: What is the practical benefit of the diamond operator in
+`Map<String, List<Integer>> m \= new HashMap<>();`?
+{
+  = The compiler infers the type arguments from the declaration, avoiding an error-prone repetition.
+    #Correct. Repeating a long type invites a mismatch, and the inferred version stays correct if the declaration changes.
+  ~ It creates a raw HashMap with no type checking.
+    #Incorrect. That would be `new HashMap()` without the diamond, which does disable checking and produces a warning.
+  ~ It allows the map to hold any key or value type at runtime.
+    #Incorrect. The declared types are still enforced at compile time.
+  ~ It makes the map immutable.
+    #Incorrect. Immutability comes from `Map.of(...)` or `Collections.unmodifiableMap(...)`.
+}

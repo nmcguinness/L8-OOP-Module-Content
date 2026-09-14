@@ -1,0 +1,105 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t10 Exception Handling
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t10_exception_handling
+
+::t10_Q1:: What distinguishes a checked exception from an unchecked one?
+{
+  = A checked exception must be caught or declared; an unchecked one carries no compiler obligation.
+    #Correct. Checked types extend Exception but not RuntimeException, and model failures outside the program's control.
+  ~ Checked exceptions are thrown at compile time.
+    #Incorrect. All exceptions are thrown at runtime; only the requirement to handle them is enforced at compile time.
+  ~ Unchecked exceptions cannot be caught.
+    #Incorrect. They can be caught; you are simply not obliged to.
+  ~ Checked exceptions are always more severe.
+    #Incorrect. Severity is unrelated. The distinction is about who is expected to respond.
+}
+
+::t10_Q2:: Which pairing correctly classifies these exceptions?
+{
+  = IOException is checked; IllegalArgumentException is unchecked.
+    #Correct. A failed file operation is environmental; a bad argument is a programming error.
+  ~ Both are checked.
+    #Incorrect. IllegalArgumentException extends RuntimeException and is unchecked.
+  ~ Both are unchecked.
+    #Incorrect. IOException extends Exception directly and is checked.
+  ~ IOException is unchecked; IllegalArgumentException is checked.
+    #Incorrect. This reverses both classifications.
+}
+
+::t10_Q3:: [Spot the bug] Production code contains `catch (Exception e) \{\}`. Name the two faults.
+{
+  = The catch is too broad and the body discards the error, so unrelated bugs vanish silently.
+    #Correct. It swallows NullPointerException and every other unanticipated failure, leaving no trace of the cause.
+  ~ Exception cannot be caught directly in Java.
+    #Incorrect. It can, which is precisely why this compiles.
+  ~ The catch block must declare a throws clause.
+    #Incorrect. Catch blocks do not have throws clauses.
+  ~ There is no fault provided the program continues running.
+    #Incorrect. Continuing in an unknown state is the danger, not the remedy.
+}
+
+::t10_Q4:: What interface must a resource implement to be used in try-with-resources?
+{
+  = AutoCloseable
+    #Correct. Closeable extends it for IO types. The resource is closed automatically on every exit path.
+  ~ Serializable
+    #Incorrect. That concerns object serialisation.
+  ~ Comparable
+    #Incorrect. That concerns ordering.
+  ~ Runnable
+    #Incorrect. That represents a task to execute.
+}
+
+::t10_Q5:: Why is try-with-resources safer than closing in a `finally` block?
+{
+  = If close() itself throws, the original exception is preserved and the close failure is attached as suppressed.
+    #Correct. In the manual version the close exception replaces the original, hiding the real cause.
+  ~ It closes resources faster.
+    #Incorrect. Timing is not the benefit.
+  ~ It prevents exceptions from being thrown inside the try block.
+    #Incorrect. Exceptions still occur and still propagate.
+  ~ finally blocks do not run when an exception is thrown.
+    #Incorrect. They do run; the problem is what happens if close throws as well.
+}
+
+::t10_Q6:: When should a DAO `findById` return `Optional` rather than throw?
+{
+  = When "not found" is an expected, ordinary outcome rather than a failure.
+    #Correct. Reserve exceptions for the exceptional. A dropped connection, by contrast, should still throw.
+  ~ Always, since DAOs must never throw.
+    #Incorrect. Genuine storage failures must not be flattened into an empty result.
+  ~ Never, because a missing row is always an error.
+    #Incorrect. Looking up an ID that does not exist is routine user behaviour.
+  ~ Only when the method is declared static.
+    #Incorrect. Unrelated to the decision.
+}
+
+::t10_Q7:: [Predict the output] A method has a `finally` block and the `try` block
+executes `return 1;`. Does the finally block run?
+{
+  = Yes, it runs before the method actually returns.
+    #Correct. finally executes on every exit path, including return, break and thrown exceptions.
+  ~ No, return exits the method immediately.
+    #Incorrect. The return value is computed, then finally runs, then control leaves the method.
+  ~ Only if an exception was thrown.
+    #Incorrect. It runs regardless.
+  ~ Only if the method returns void.
+    #Incorrect. The return type is irrelevant.
+}
+
+::t10_Q8:: In what order must catch blocks for `IOException` and `FileNotFoundException` appear?
+{
+  = FileNotFoundException first, because a supertype catch placed earlier would absorb it.
+    #Correct. Catch blocks are tested top to bottom, so the most specific type must come first. The reverse order fails to compile.
+  ~ IOException first, because it is checked.
+    #Incorrect. Both are checked, and this order makes the second block unreachable.
+  ~ The order is irrelevant.
+    #Incorrect. Java rejects an unreachable catch block outright.
+  ~ They must be combined into a single multi-catch.
+    #Incorrect. Multi-catch is not permitted for types in a subclass relationship.
+}

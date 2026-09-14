@@ -1,0 +1,11 @@
+id,timestampUtc,source,category,value,unit,notes
+s-001,1700000001,server,deaths,3.0,count,Tutorial
+c-002,1700000002,client,ping,163.8,ms,WiFi
+g-003,1700000003,game,ping,137.5,ms,Arena B
+g-004,1700000004,game,deaths,6.0,count,Arena A
+g-005,1700000005,game,payload_kb,1489.5,kb,Arena A
+g-006,1700000006,game,fps,143.3,fps,Mobile hotspot
+c-007,1700000007,client,response_time,969.0,ms,Tutorial
+s-008,1700000008,server,deaths,7.0,count,WiFi
+bad-009,1700000009,client,ping,-10.0,ms,Negative ping
+bad-010,1700000010,server,ping,-10.0,ms,Negative ping

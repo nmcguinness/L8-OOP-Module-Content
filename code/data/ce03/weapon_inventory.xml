@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<weapons>
+  <!-- Sample weapon inventory for the Frequency Forge challenge -->
+  <!-- Context: a factory in a game produces and stores weapons; we need to take stock. -->
+
+  <weapon>
+    <name>Iron Sword</name>
+    <strength>12</strength>
+  </weapon>
+  <weapon>
+    <name>Iron Sword</name>
+    <strength>12</strength>
+  </weapon>
+
+  <weapon>
+    <name>Steel Sword</name>
+    <strength>18</strength>
+  </weapon>
+
+  <weapon>
+    <name>Training Dagger</name>
+    <strength>4</strength>
+  </weapon>
+  <weapon>
+    <name>Training Dagger</name>
+    <strength>4</strength>
+  </weapon>
+  <weapon>
+    <name>Training Dagger</name>
+    <strength>4</strength>
+  </weapon>
+
+  <weapon>
+    <name>War Axe</name>
+    <strength>22</strength>
+  </weapon>
+  <weapon>
+    <name>War Axe</name>
+    <strength>22</strength>
+  </weapon>
+
+  <weapon>
+    <name>Crossbow</name>
+    <strength>16</strength>
+  </weapon>
+
+  <weapon>
+    <name>Fire Wand</name>
+    <strength>25</strength>
+  </weapon>
+  <weapon>
+    <name>Fire Wand</name>
+    <strength>25</strength>
+  </weapon>
+
+  <weapon>
+    <name>Ice Staff</name>
+    <strength>21</strength>
+  </weapon>
+
+  <weapon>
+    <name>Plasma Rifle</name>
+    <strength>35</strength>
+  </weapon>
+
+  <weapon>
+    <name>Shock Hammer</name>
+    <strength>28</strength>
+  </weapon>
+  <weapon>
+    <name>Shock Hammer</name>
+    <strength>28</strength>
+  </weapon>
+
+  <weapon>
+    <name>Arc Bow</name>
+    <strength>19</strength>
+  </weapon>
+
+  <weapon>
+    <name>Heavy Spear</name>
+    <strength>17</strength>
+  </weapon>
+  <weapon>
+    <name>Heavy Spear</name>
+    <strength>17</strength>
+  </weapon>
+
+  <weapon>
+    <name>Prototype Blade</name>
+    <strength>30</strength>
+  </weapon>
+</weapons>

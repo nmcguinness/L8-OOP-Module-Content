@@ -1,0 +1,108 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t09 Interfaces
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t09_interface
+
+::t09_Q1:: A Java class declaration reads `class Barrel implements Interactable, Damageable`. What does this tell you about the design?
+{
+  = `Barrel` commits to providing implementations for all methods declared in both `Interactable` and `Damageable`.
+    #Correct. Implementing multiple interfaces means the class must supply concrete implementations for every abstract method from each interface.
+  ~ `Barrel` inherits state (fields) from both `Interactable` and `Damageable`.
+    #Incorrect. Interfaces cannot hold instance fields; `Barrel` inherits no state from them.
+  ~ `Barrel` can only be used where a `Barrel` reference is expected, not through the interface types.
+    #Incorrect. A `Barrel` instance can be assigned to variables of type `Interactable`, `Damageable`, or `Barrel`.
+  ~ This is invalid Java because a class can implement at most one interface.
+    #Incorrect. Java allows a class to implement any number of interfaces.
+}
+
+::t09_Q2:: An interface declares `int DEFAULT_INTERACTION_RANGE \= 2;`. What modifiers does this field implicitly have?
+{
+  = `public static final`.
+    #Correct. All fields declared in an interface are implicitly `public static final`; they are compile-time constants shared across all implementations.
+  ~ `protected static`.
+    #Incorrect. Interface fields cannot be protected; they are always public and always final.
+  ~ `private final`.
+    #Incorrect. Interface fields must be public so implementing classes can access them.
+  ~ No modifiers are applied; the field is treated as a regular instance variable.
+    #Incorrect. Interface fields cannot be instance variables; they are always `public static final` constants.
+}
+
+::t09_Q3:: When should you prefer an interface over an abstract class?
+{
+  = When you want to define a behavioural capability that unrelated classes can share without requiring a common inheritance hierarchy.
+    #Correct. Interfaces model "can-do" abilities and can be implemented by any class regardless of its place in the inheritance tree.
+  ~ When you need to share concrete helper methods and private fields across a set of closely related classes.
+    #Incorrect. Sharing implementation details and fields is the strength of an abstract class, not an interface.
+  ~ When you want to prevent any class from instantiating the type directly.
+    #Incorrect. Both abstract classes and interfaces cannot be instantiated directly; this is not the distinguishing criterion.
+  ~ When you need to define a constructor that all implementing classes must call.
+    #Incorrect. Interfaces cannot declare constructors; if you need a shared constructor chain, an abstract class is required.
+}
+
+::t09_Q4:: Code attempts to do `Interactable obj \= new Interactable();`.
+What is the result?
+{
+  = A compile error, because interfaces cannot be instantiated directly.
+    #Correct. You can only instantiate concrete classes that implement the interface, not the interface itself.
+  ~ A runtime exception, because there is no class body to call the constructor on.
+    #Incorrect. This is caught at compile time, not at runtime.
+  ~ The code creates an empty object that responds to `interact()` with no operation.
+    #Incorrect. Java does not create default empty implementations; the code will not compile.
+  ~ The code is valid only if `Interactable` contains at least one default method.
+    #Incorrect. Even with default methods, an interface cannot be directly instantiated.
+}
+
+
+::t09_Q5:: A class needs to be both drawable and serialisable, and to inherit shared
+state from a base entity. What is the correct structure?
+{
+  = Extend the base class and implement both interfaces.
+    #Correct. Java allows one superclass but any number of interfaces, which is exactly why capabilities are modelled as interfaces.
+  ~ Extend all three, since Java supports multiple inheritance of classes.
+    #Incorrect. Java permits only one superclass, specifically to avoid multiple-inheritance ambiguity.
+  ~ Implement all three as interfaces and duplicate the shared state in each class.
+    #Incorrect. Duplicating state is what the base class exists to prevent.
+  ~ Create a chain where each interface extends the previous one.
+    #Incorrect. This forces unrelated capabilities to be adopted together.
+}
+
+::t09_Q6:: What are the implicit modifiers on a field declared inside an interface?
+{
+  = public static final
+    #Correct. Interface fields are constants, which is why they are written in upper case and cannot be reassigned.
+  ~ private final
+    #Incorrect. Interface fields are always public and accessible to every implementer.
+  ~ public abstract
+    #Incorrect. `abstract` applies to methods, not fields.
+  ~ protected static
+    #Incorrect. Interfaces have no protected members.
+}
+
+::t09_Q7:: When is an abstract class the better choice over an interface?
+{
+  = When implementers share common state and constructor logic, not merely a contract.
+    #Correct. An abstract class can hold fields and a constructor that validates them; an interface cannot hold instance state.
+  ~ When several unrelated classes need the same capability.
+    #Incorrect. That is the case for an interface, since a class can implement many but extend only one.
+  ~ When the type must define constants.
+    #Incorrect. Both can define constants.
+  ~ When you want to prevent the type from being instantiated.
+    #Incorrect. Neither an abstract class nor an interface can be instantiated directly.
+}
+
+::t09_Q8:: [Spot the bug] A `Repository` interface is given twelve methods, and most
+implementers leave half of them empty. What is the design fault?
+{
+  = The interface is too broad and should be split into smaller, focused ones.
+    #Correct. This is the interface segregation principle. Empty implementations are the symptom that clients are being forced to depend on methods they do not use.
+  ~ Interfaces are limited to a small number of methods in Java.
+    #Incorrect. There is no language limit; the problem is one of design.
+  ~ The methods should be given default implementations so nothing is empty.
+    #Incorrect. Defaults can hide the problem, but the interface still bundles unrelated responsibilities.
+  ~ The implementers should extend an abstract class instead.
+    #Incorrect. That relocates the empty methods without reducing the interface's scope.
+}

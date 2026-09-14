@@ -1,0 +1,109 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t13 Design Patterns I
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t13_design_patterns_1
+
+::t13_Q1:: The Strategy pattern is described as "define a family of algorithms, encapsulate each one, and make them interchangeable". In the notes example, what role does the `TaskRunner` class play?
+{
+  = Context — it holds a reference to the strategy interface and delegates execution to it without knowing the concrete implementation.
+    #Correct. The context (TaskRunner) uses the strategy interface to perform work, enabling the behaviour to be changed by injecting a different strategy.
+  ~ Strategy — it defines the algorithm that `ExecutionStrategy` implementations must follow.
+    #Incorrect. `TaskRunner` delegates to the strategy; it does not define the algorithm. The strategy interface defines the contract.
+  ~ Concrete Strategy — it provides one specific implementation of the execution algorithm.
+    #Incorrect. `FastExecution` and `SafeExecution` are the concrete strategies; `TaskRunner` is the context.
+  ~ Invoker — it enqueues commands and decides when to execute them.
+    #Incorrect. The Invoker role belongs to the Command pattern (e.g. `CommandQueue`), not the Strategy pattern.
+}
+
+::t13_Q2:: A codebase has a method containing a large `switch` statement with one case per payment type\: CARD, PAYPAL, CRYPTO. Adding a new payment type requires editing this method. Which design problem does this illustrate, and which pattern addresses it?
+{
+  = The code violates the open/closed principle because adding behaviour requires modifying existing code; the Strategy pattern addresses this by encapsulating each payment algorithm in its own class.
+    #Correct. Strategy replaces conditional-based variation with a family of interchangeable objects, allowing extension without modification.
+  ~ The code has too many classes and should be simplified by moving all logic into a single method; no pattern is needed.
+    #Incorrect. Consolidating all logic into one method increases coupling and makes future changes harder, not easier.
+  ~ The Command pattern solves this by wrapping each switch case in a command object that can be queued.
+    #Incorrect. Command addresses decoupling request invocation from execution; Strategy addresses varying the algorithm itself.
+  ~ This is a normal use of polymorphism and no design pattern is required.
+    #Incorrect. While polymorphism is involved, the recognised design solution for replacing conditionals over behaviour variants is the Strategy pattern.
+}
+
+::t13_Q3:: In the Command pattern, what is the main benefit of encapsulating a request as an object?
+{
+  = The request can be stored, queued, logged, or executed at a later time without the sender needing to know the details of the action.
+    #Correct. Turning a request into an object decouples the sender (invoker) from the receiver, enabling deferred or batched execution.
+  ~ The request runs faster because it avoids the overhead of method call dispatch.
+    #Incorrect. Performance is not the motivation for the Command pattern.
+  ~ The request automatically retries on failure without any additional code.
+    #Incorrect. Retry logic is not built into the Command pattern; it must be added explicitly if needed.
+  ~ It prevents any other code from modifying the request after it has been created.
+    #Incorrect. Immutability of command objects is a design choice, not an inherent property of the pattern.
+}
+
+::t13_Q4:: A `CommandQueue` has a `Queue<Command>` field and calls
+`command.execute()` in a loop. Which Statement accurately describes the
+relationship between the queue and the concrete command implementations?
+{
+  = The queue is decoupled from the concrete commands; it only depends on the `Command` interface, so new command types can be added without modifying the queue.
+    #Correct. Programming to the interface means the queue needs no knowledge of what each command does, satisfying the open/closed principle.
+  ~ The queue must be rewritten whenever a new concrete command class is added.
+    #Incorrect. Because the queue uses the `Command` interface, new implementations can be added without touching the queue code.
+  ~ The queue and commands must be in the same package to allow `execute()` to be called.
+    #Incorrect. Access control, not package membership, determines visibility; `execute()` is public on the interface.
+  ~ Concrete commands must extend the `CommandQueue` class to be eligible for processing.
+    #Incorrect. Commands implement the `Command` interface; they have no inheritance relationship with the queue.
+}
+
+
+::t13_Q5:: Which symptom most strongly suggests Strategy should replace existing code?
+{
+  = An if/else or switch chain selecting between algorithms, which is edited every time a new option is added.
+    #Correct. Strategy makes each option a class, so a new option is a new file rather than a change to working code.
+  ~ A class with a large number of fields.
+    #Incorrect. That suggests the class has too many responsibilities, not that an algorithm needs swapping.
+  ~ A method with more than three parameters.
+    #Incorrect. That points towards introducing a parameter object.
+  ~ Several classes implementing the same interface.
+    #Incorrect. That is normal and often desirable.
+}
+
+::t13_Q6:: Why must a Command capture the data it needs at construction rather than
+reading it during `execute()`?
+{
+  = Execution may be deferred, so the surrounding state could have changed by the time it runs.
+    #Correct. Commands are queued, logged, replayed or undone. Reading current state at execution time would apply the action to the wrong data.
+  ~ Because `execute()` is not allowed to read fields.
+    #Incorrect. It reads its own fields; the point is when those values were captured.
+  ~ Because constructors run faster than methods.
+    #Incorrect. Performance is irrelevant here.
+  ~ Because the Command interface forbids parameters on execute().
+    #Incorrect. The no-argument signature is a consequence of self-containment, not the reason for it.
+}
+
+::t13_Q7:: To support undo, what must a `ChangeStatusCommand` store in addition to the new status?
+{
+  = The previous status, captured before the change is applied.
+    #Correct. Undo restores the prior value, so it must be read in the constructor rather than at undo time.
+  ~ Only the new status, since undo can recalculate the old one.
+    #Incorrect. The old value is not generally recoverable from the new one.
+  ~ A reference to the undo stack.
+    #Incorrect. The invoker owns the stack; a command that knew about it would be needlessly coupled.
+  ~ A timestamp of when execute() was called.
+    #Incorrect. Useful for logging, but not required to reverse the change.
+}
+
+::t13_Q8:: [Spot the bug] Each concrete Strategy is created with `new` inside the
+context class. What benefit of the pattern has been lost?
+{
+  = The context is still coupled to every concrete strategy, so adding one means editing it.
+    #Correct. The strategy should be injected through the constructor or a setter, or supplied by a factory.
+  ~ Nothing; strategies must be created by the context.
+    #Incorrect. Creating them there reintroduces exactly the dependency the pattern removes.
+  ~ The strategies can no longer implement a common interface.
+    #Incorrect. They still can; the problem is who constructs them.
+  ~ Polymorphic dispatch stops working.
+    #Incorrect. Dispatch still works; the design has simply not been decoupled.
+}

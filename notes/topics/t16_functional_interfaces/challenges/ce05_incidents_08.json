@@ -1,0 +1,82 @@
+[
+  {
+    "id": "INC-1770827700-001",
+    "timestampUtc": 1770830020,
+    "deck": 7,
+    "zone": "Engine",
+    "type": "CAMERA",
+    "threat": 31,
+    "confidence": 27,
+    "notes": "unregistered bio-readings"
+  },
+  {
+    "id": "INC-1770827700-002",
+    "timestampUtc": 1770836299,
+    "deck": 2,
+    "zone": "Corridor-A",
+    "type": "DOOR",
+    "threat": 44,
+    "confidence": 140,
+    "notes": "temperature anomaly"
+  },
+  {
+    "id": "INC-1770827700-003",
+    "timestampUtc": 1770839634,
+    "deck": 3,
+    "zone": "Maintenance",
+    "type": "PRESSURE",
+    "threat": 82,
+    "confidence": 43,
+    "notes": "pressure dip detected"
+  },
+  {
+    "id": "INC-1770827700-004",
+    "timestampUtc": 1770842229,
+    "deck": 5,
+    "zone": "Cryo",
+    "type": "TEMP",
+    "threat": 33,
+    "confidence": 39,
+    "notes": "temperature anomaly"
+  },
+  {
+    "id": "INC-1770827700-005",
+    "timestampUtc": 1770845723,
+    "deck": 3,
+    "zone": "Corridor-A",
+    "type": "MOTION",
+    "threat": 41,
+    "confidence": 67,
+    "notes": "door cycled unexpectedly"
+  },
+  {
+    "id": "INC-1770827700-006",
+    "timestampUtc": 1770829115,
+    "deck": 3,
+    "zone": "Bridge",
+    "type": "LIFE_SUPPORT",
+    "threat": 46,
+    "confidence": 68,
+    "notes": ""
+  },
+  {
+    "id": "INC-1770827700-007",
+    "timestampUtc": 1770839188,
+    "deck": 4,
+    "zone": "Bridge",
+    "type": "MOTION",
+    "threat": 10,
+    "confidence": 55,
+    "notes": "temperature anomaly"
+  },
+  {
+    "id": "INC-1770827700-003",
+    "timestampUtc": 1770839634,
+    "deck": 3,
+    "zone": "Maintenance",
+    "type": "PRESSURE",
+    "threat": 82,
+    "confidence": 43,
+    "notes": "duplicate entry to test dedupe"
+  }
+]

@@ -1,0 +1,108 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t02 Recursion
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t02_recursion
+
+::t02_Q1:: What two parts must every correct recursive method have?
+{
+  = A base case that returns without recursing, and a recursive case that moves strictly closer to it.
+    #Correct. Both are required. A base case that is never approached still produces infinite recursion.
+  ~ A loop and a return statement.
+    #Incorrect. Recursion replaces the loop; the method calls itself instead.
+  ~ A static modifier and a return type.
+    #Incorrect. These are ordinary method requirements, unrelated to recursion.
+  ~ A try/catch for StackOverflowError.
+    #Incorrect. Catching that error hides the bug rather than fixing the missing base case.
+}
+
+::t02_Q2:: [Predict the output] For `factorial(4)` implemented as
+`if (n <\= 1) return 1; else return n * factorial(n - 1);` at what point does
+the first multiplication actually occur?
+{
+  = After the base case returns, as the stack unwinds.
+    #Correct. Frames pile up on the way down; the multiplications happen on the way back up, producing 1, 2, 6, 24.
+  ~ Immediately, on the first call.
+    #Incorrect. The first call cannot multiply until the value of factorial(3) is known.
+  ~ Before any recursive call is made.
+    #Incorrect. The recursive call appears as an operand of the multiplication and is evaluated first.
+  ~ Never; the method returns 1 for all inputs.
+    #Incorrect. That would only happen if the recursive branch were unreachable.
+}
+
+::t02_Q3:: Why is naive recursive Fibonacci unacceptably slow for n around 40?
+{
+  = The same subproblems are recomputed enormously many times, giving roughly O(2^n) work.
+    #Correct. fib(n) branches into fib(n-1) and fib(n-2), whose call trees overlap almost entirely.
+  ~ Recursion is always slower than iteration in Java.
+    #Incorrect. The overhead per call is small; the problem here is repeated work.
+  ~ It exceeds the stack depth limit at n \= 40.
+    #Incorrect. The depth is only about 40 frames. Time, not depth, is the issue.
+  ~ int overflows before n reaches 40.
+    #Incorrect. fib(40) fits in an int; the method is slow well before any overflow concern.
+}
+
+::t02_Q4:: What technique fixes naive Fibonacci, and what does it cost?
+{
+  = Memoisation - caching computed results - which reduces time to O(n) at the cost of O(n) memory.
+    #Correct. A classic time-for-space trade. An iterative version achieves the same time with O(1) memory.
+  ~ Increasing the JVM stack size.
+    #Incorrect. The problem is repeated computation, not stack depth.
+  ~ Converting the parameters from int to long.
+    #Incorrect. This changes the range of representable results, not the number of calls.
+  ~ Making the method static.
+    #Incorrect. This has no effect on the algorithm's complexity.
+}
+
+::t02_Q5:: [Spot the bug] A method throws StackOverflowError even though it has a
+base case `if (n \=\= 0) return 0;`. It recurses with `return n + sum(n);`. What is wrong?
+{
+  = The argument never decreases, so the base case is never reached.
+    #Correct. It must be `sum(n - 1)`. A base case only helps if each call moves towards it.
+  ~ The base case should return 1 rather than 0.
+    #Incorrect. The returned value does not affect whether the recursion terminates.
+  ~ The comparison should be `<\=` rather than `\=\=`.
+    #Incorrect. That would help for negative inputs, but the unchanged argument is the actual fault.
+  ~ Recursive methods cannot return int.
+    #Incorrect. They may return any type.
+}
+
+::t02_Q6:: You must walk a directory tree of unknown depth. Why is recursion a
+natural fit here?
+{
+  = The data structure is itself recursive, so the code mirrors its shape and depth stays small.
+    #Correct. A directory contains directories. An iterative version must maintain an explicit stack by hand.
+  ~ Recursion is always faster than iteration for file access.
+    #Incorrect. Speed is dominated by disk I/O, not by the traversal style.
+  ~ Loops cannot access nested directories.
+    #Incorrect. They can, using an explicit stack or queue.
+  ~ Java requires recursion for filesystem traversal.
+    #Incorrect. Files.walk and manual loops are both available.
+}
+
+::t02_Q7:: In a flood-fill algorithm, what corresponds to "making the problem smaller"?
+{
+  = Repainting the current cell so it no longer matches the target colour, then recursing into its neighbours.
+    #Correct. Each repaint permanently shrinks the set of cells still eligible, which guarantees termination.
+  ~ Reducing the size of the grid array on each call.
+    #Incorrect. The grid is not resized; the set of matching cells shrinks instead.
+  ~ Halving the number of neighbours visited each time.
+    #Incorrect. All four neighbours are visited; progress comes from the repainting.
+  ~ Decrementing a depth counter.
+    #Incorrect. A depth limit would stop the recursion but would not correctly fill the region.
+}
+
+::t02_Q8:: When should you prefer iteration over recursion?
+{
+  = When the recursion depth could grow large enough to exhaust the call stack.
+    #Correct. Java does not guarantee tail-call optimisation, so deep recursion risks StackOverflowError regardless of correctness.
+  ~ Whenever the problem involves an array.
+    #Incorrect. Binary search and merge sort are recursive and array-based.
+  ~ Whenever performance matters at all.
+    #Incorrect. The per-call overhead is usually negligible next to clarity.
+  ~ Whenever the method returns a value.
+    #Incorrect. Recursive methods commonly return values.
+}

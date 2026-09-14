@@ -1,0 +1,106 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t07 Collections III (Set, Map, PriorityQueue)
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t07_collections_3_set_map
+
+::t07_Q1:: Why does `HashSet` depend on `equals` and `hashCode` when `ArrayList` largely does not?
+{
+  = Its purpose is to detect duplicates in constant time, which requires hashing to a bucket and then comparing within it.
+    #Correct. ArrayList only stores in order, so add never needs to compare anything.
+  ~ Because HashSet stores elements in sorted order.
+    #Incorrect. That is TreeSet. HashSet has no defined iteration order.
+  ~ Because ArrayList cannot contain objects.
+    #Incorrect. It can hold any reference type.
+  ~ Because HashSet stores copies rather than references.
+    #Incorrect. All Java collections store references.
+}
+
+::t07_Q2:: You need fast membership testing over a million strings. Which collection is best?
+{
+  = HashSet
+    #Correct. Membership is O(1) on average, against O(n) for a List and O(log n) for a TreeSet.
+  ~ ArrayList
+    #Incorrect. `contains` is a linear scan, so a million lookups become prohibitively slow.
+  ~ TreeSet
+    #Incorrect. It works but costs O(log n) and only earns that if sorted order is also needed.
+  ~ LinkedList
+    #Incorrect. Membership testing is O(n), and it is slower than ArrayList in practice.
+}
+
+::t07_Q3:: When is `TreeMap` the right choice over `HashMap`?
+{
+  = When keys must be iterated in sorted order or queried by range.
+    #Correct. TreeMap adds firstKey, headMap, tailMap, floorKey and ceilingKey, which HashMap cannot offer.
+  ~ When lookups must be as fast as possible.
+    #Incorrect. HashMap is O(1) average; TreeMap is O(log n).
+  ~ When keys may be null.
+    #Incorrect. The reverse: HashMap permits one null key, TreeMap generally does not.
+  ~ When insertion order must be preserved.
+    #Incorrect. That is LinkedHashMap. TreeMap uses sorted order, not insertion order.
+}
+
+::t07_Q4:: [Predict the output] Two distinct objects return the same `hashCode()` but
+are not equal. Both are added to a HashSet. What is the size afterwards?
+{
+  = 2, because they collide into one bucket but equals distinguishes them.
+    #Correct. Collisions are normal and legal; only lookup speed within that bucket is affected.
+  ~ 1, because equal hash codes mean the objects are duplicates.
+    #Incorrect. That reverses the contract. Equal hash codes do not imply equality.
+  ~ 0, because the collision causes both insertions to fail.
+    #Incorrect. Collisions are handled transparently by the implementation.
+  ~ The add call throws IllegalStateException.
+    #Incorrect. No exception occurs.
+}
+
+::t07_Q5:: Which expression counts word occurrences most idiomatically?
+{
+  = `counts.merge(word, 1, Integer::sum)`
+    #Correct. It inserts 1 on first sight and otherwise adds to the existing value, in one call.
+  ~ `counts.put(word, counts.get(word) + 1)`
+    #Incorrect. This throws NullPointerException on the first occurrence, when get returns null.
+  ~ `counts.putIfAbsent(word, counts.get(word) + 1)`
+    #Incorrect. It has the same null problem and does not increment on later occurrences.
+  ~ `counts.computeIfAbsent(word, k -> k.length())`
+    #Incorrect. This stores the word length once and never counts anything.
+}
+
+::t07_Q6:: What ordering does a `PriorityQueue` guarantee?
+{
+  = Only that `poll()` returns the smallest remaining element according to its comparator.
+    #Correct. Iterating or printing the queue directly does NOT yield sorted order, which surprises many students.
+  ~ That iteration visits elements in fully sorted order.
+    #Incorrect. The internal heap is only partially ordered.
+  ~ That elements are returned in insertion order.
+    #Incorrect. That would be an ordinary queue.
+  ~ That the largest element is always returned first.
+    #Incorrect. The default is smallest-first; a reversed comparator is needed for largest-first.
+}
+
+::t07_Q7:: [Spot the bug] A `HashMap<Player, Integer>` loses entries after the program
+changes a Player's ID field. Why?
+{
+  = The key's hash code changed after insertion, so it is now looked up in the wrong bucket.
+    #Correct. Fields used in hashCode must be immutable. The entry is present but effectively unreachable.
+  ~ HashMap only supports String keys.
+    #Incorrect. Any type with correct equals and hashCode may be a key.
+  ~ The map silently rejects mutable objects.
+    #Incorrect. It accepts them; the failure appears only on later lookups.
+  ~ Changing a field removes the entry automatically.
+    #Incorrect. The map is never notified of the change.
+}
+
+::t07_Q8:: Which Set implementation preserves the order in which elements were inserted?
+{
+  = LinkedHashSet
+    #Correct. It keeps a linked list through the entries, giving predictable iteration at a small memory cost.
+  ~ HashSet
+    #Incorrect. Its iteration order is unspecified and may change.
+  ~ TreeSet
+    #Incorrect. It iterates in sorted order, which is not the same as insertion order.
+  ~ All Set implementations preserve insertion order.
+    #Incorrect. Only LinkedHashSet makes that guarantee.
+}

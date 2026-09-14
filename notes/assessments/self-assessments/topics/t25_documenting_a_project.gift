@@ -1,0 +1,108 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t24 Documenting a Project
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t25_documenting_a_project
+
+::t24_Q1:: Which Javadoc tag documents what a method gives back to its caller?
+{
+  = @return
+    #Correct. It is omitted for void methods and should describe meaning, not merely restate the type.
+  ~ @result
+    #Incorrect. Not a Javadoc tag.
+  ~ @output
+    #Incorrect. Not a Javadoc tag.
+  ~ @returns
+    #Incorrect. The tag is singular: @return.
+}
+
+::t24_Q2:: Which tag documents an exception a method may throw, and what should it explain?
+{
+  = @throws, stating the condition under which the exception occurs.
+    #Correct. "@throws IllegalArgumentException if name is null or blank" tells a caller what to avoid.
+  ~ @exception is required for checked exceptions and @throws for unchecked ones.
+    #Incorrect. They are synonyms; @throws is the conventional modern choice for both.
+  ~ @error, naming the exception class.
+    #Incorrect. Not a Javadoc tag.
+  ~ @catch, describing how the caller should handle it.
+    #Incorrect. Not a Javadoc tag.
+}
+
+::t24_Q3:: Which of these methods least needs a Javadoc comment?
+{
+  = A simple getter such as `getName()` that returns a field unchanged.
+    #Correct. A comment saying "returns the name" adds nothing. Document contracts, constraints and surprises.
+  ~ A DAO method that throws a checked exception on failure.
+    #Incorrect. Callers need to know the failure conditions.
+  ~ A constructor with guard clauses that reject invalid input.
+    #Incorrect. The rejection rules are exactly what a caller must know.
+  ~ A method whose return value may be null or empty.
+    #Incorrect. That is a contract detail worth stating explicitly.
+}
+
+::t24_Q4:: Which Mermaid diagram type best shows tables, their columns and their
+foreign-key relationships?
+{
+  = erDiagram
+    #Correct. It expresses entities, attributes and cardinality, matching a relational schema directly.
+  ~ sequenceDiagram
+    #Incorrect. That shows messages exchanged between participants over time.
+  ~ flowchart
+    #Incorrect. That shows decision and process flow.
+  ~ classDiagram
+    #Incorrect. That shows classes and their relationships, which is a different level of abstraction.
+}
+
+::t24_Q5:: Which diagram type best documents a full request cycle from client to
+server to DAO to database and back?
+{
+  = sequenceDiagram
+    #Correct. It shows the participants, the order of messages and the return path, which is exactly a request cycle.
+  ~ erDiagram
+    #Incorrect. That describes the data model, not the interaction over time.
+  ~ mindmap
+    #Incorrect. That organises topics hierarchically.
+  ~ pie
+    #Incorrect. That shows proportions of a whole.
+}
+
+::t24_Q6:: What is the practical advantage of Mermaid diagrams over embedded images
+in a project repository?
+{
+  = They are plain text, so they can be diffed, reviewed and edited alongside the code they describe.
+    #Correct. An image drifts out of date silently and cannot be updated without the original tool.
+  ~ They render faster than images in every viewer.
+    #Incorrect. Rendering speed is not the point, and depends on the viewer.
+  ~ They can display photographs.
+    #Incorrect. Mermaid draws structured diagrams, not raster images.
+  ~ They require no syntax to be learned.
+    #Incorrect. Each diagram type has its own syntax.
+}
+
+::t24_Q7:: [Spot the bug] A class Javadoc reads "This class is a class that handles
+handling of tasks." What is wrong with it?
+{
+  = It restates the class name without explaining responsibility, collaborators or constraints.
+    #Correct. Useful class documentation says what the class is responsible for and what a reader must know to use it.
+  ~ Class-level Javadoc is not permitted in Java.
+    #Incorrect. It is standard and appears immediately above the class declaration.
+  ~ It should be written as a line comment instead.
+    #Incorrect. Javadoc must use the /** */ form to be extracted by the tool.
+  ~ It is missing an @return tag.
+    #Incorrect. @return applies to methods, not classes.
+}
+
+::t24_Q8:: Where should an architecture diagram showing the tiers of a project normally live?
+{
+  = In the repository README, so it is the first thing a reader encounters.
+    #Correct. Detailed per-area diagrams can sit in the relevant module or package documentation.
+  ~ Inside a Javadoc comment on the main class.
+    #Incorrect. Javadoc documents an API; a whole-system view belongs at the project level.
+  ~ In a separate document not stored in the repository.
+    #Incorrect. Documentation kept outside version control drifts out of date quickly.
+  ~ In the commit message of the final commit.
+    #Incorrect. Commit messages explain a change, and are not a place readers look for architecture.
+}

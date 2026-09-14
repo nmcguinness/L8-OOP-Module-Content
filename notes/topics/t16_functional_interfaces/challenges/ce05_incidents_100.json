@@ -1,0 +1,1002 @@
+[
+  {
+    "id": "INC-1770741300-001",
+    "timestampUtc": 1770762387,
+    "deck": 3,
+    "zone": "Hydroponics",
+    "type": "LIFE_SUPPORT",
+    "threat": 42,
+    "confidence": 36,
+    "notes": "camera static"
+  },
+  {
+    "id": "INC-1770741300-002",
+    "timestampUtc": 1770750112,
+    "deck": 4,
+    "zone": "Corridor-B",
+    "type": "POWER",
+    "threat": 56,
+    "confidence": 26,
+    "notes": "pressure dip detected"
+  },
+  {
+    "id": "INC-1770741300-003",
+    "timestampUtc": 1770758230,
+    "deck": 5,
+    "zone": "Corridor-B",
+    "type": "LIFE_SUPPORT",
+    "threat": 28,
+    "confidence": 140,
+    "notes": "pressure dip detected"
+  },
+  {
+    "id": "INC-1770741300-004",
+    "timestampUtc": 1770748350,
+    "deck": 1,
+    "zone": "Maintenance",
+    "type": "DOOR",
+    "threat": 36,
+    "confidence": 40,
+    "notes": "acid residue on deck plate"
+  },
+  {
+    "id": "INC-1770741300-005",
+    "timestampUtc": 1770744142,
+    "deck": 2,
+    "zone": "  Engine  ",
+    "type": "PRESSURE",
+    "threat": 27,
+    "confidence": 45,
+    "notes": "comms interference"
+  },
+  {
+    "id": "INC-1770741300-006",
+    "timestampUtc": 1770755552,
+    "deck": 7,
+    "zone": "Cargo",
+    "type": "SOUND",
+    "threat": 43,
+    "confidence": 53,
+    "notes": "door cycled unexpectedly"
+  },
+  {
+    "id": "INC-1770741300-007",
+    "timestampUtc": 1770753130,
+    "deck": 7,
+    "zone": "  Airlock  ",
+    "type": "MOTION",
+    "threat": 52,
+    "confidence": 47,
+    "notes": "unregistered bio-readings"
+  },
+  {
+    "id": "INC-1770741300-008",
+    "timestampUtc": 1770759171,
+    "deck": 4,
+    "zone": "  Maintenance  ",
+    "type": "COMMS",
+    "threat": 19,
+    "confidence": 41,
+    "notes": "scratching behind panel"
+  },
+  {
+    "id": "INC-1770741300-009",
+    "timestampUtc": 1770742838,
+    "deck": 6,
+    "zone": "Airlock",
+    "type": "SOUND",
+    "threat": 83,
+    "confidence": 27,
+    "notes": "unregistered bio-readings"
+  },
+  {
+    "id": "INC-1770741300-010",
+    "timestampUtc": 1770745794,
+    "deck": 4,
+    "zone": "Bridge",
+    "type": "DOOR",
+    "threat": 0,
+    "confidence": 49,
+    "notes": "camera static"
+  },
+  {
+    "id": "INC-1770741300-011",
+    "timestampUtc": 1770758474,
+    "deck": 5,
+    "zone": "Corridor-A",
+    "type": "temp",
+    "threat": 26,
+    "confidence": 51,
+    "notes": "door cycled unexpectedly"
+  },
+  {
+    "id": "INC-1770741300-012",
+    "timestampUtc": 1770744885,
+    "deck": 4,
+    "zone": "Engine",
+    "type": "ACID",
+    "threat": 85,
+    "confidence": 54,
+    "notes": "unregistered bio-readings"
+  },
+  {
+    "id": "INC-1770741300-013",
+    "timestampUtc": 1770750352,
+    "deck": 4,
+    "zone": "Cargo",
+    "type": "CAMERA",
+    "threat": 26,
+    "confidence": 66,
+    "notes": "door cycled unexpectedly"
+  },
+  {
+    "id": "INC-1770741300-014",
+    "timestampUtc": 1770756408,
+    "deck": 7,
+    "zone": "Hydroponics",
+    "type": "DOOR",
+    "threat": 60,
+    "confidence": 49,
+    "notes": "pressure dip detected"
+  },
+  {
+    "id": "INC-1770741300-015",
+    "timestampUtc": 1770741480,
+    "deck": 6,
+    "zone": "Corridor-B",
+    "type": "POWER",
+    "threat": 8,
+    "confidence": -10,
+    "notes": "crew report: footsteps"
+  },
+  {
+    "id": "INC-1770741300-016",
+    "timestampUtc": 1770755339,
+    "deck": 4,
+    "zone": "Corridor-B",
+    "type": "MOTION",
+    "threat": 28,
+    "confidence": 93,
+    "notes": "comms interference"
+  },
+  {
+    "id": "INC-1770741300-017",
+    "timestampUtc": 1770749734,
+    "deck": 2,
+    "zone": "MedBay",
+    "type": "POWER",
+    "threat": 88,
+    "confidence": 60,
+    "notes": "door cycled unexpectedly"
+  },
+  {
+    "id": "INC-1770741300-018",
+    "timestampUtc": 1770761227,
+    "deck": 3,
+    "zone": "Bridge",
+    "type": "COMMS",
+    "threat": 54,
+    "confidence": 56,
+    "notes": "power spike then drop"
+  },
+  {
+    "id": "INC-1770741300-019",
+    "timestampUtc": 1770752597,
+    "deck": 5,
+    "zone": "MedBay",
+    "type": "POWER",
+    "threat": 37,
+    "confidence": 34,
+    "notes": "scratching behind panel"
+  },
+  {
+    "id": "INC-1770741300-020",
+    "timestampUtc": 1770758062,
+    "deck": 2,
+    "zone": "Bridge",
+    "type": "CAMERA",
+    "threat": 30,
+    "confidence": 46,
+    "notes": "unregistered bio-readings"
+  },
+  {
+    "id": "INC-1770741300-021",
+    "timestampUtc": 1770750490,
+    "deck": 7,
+    "zone": "MedBay",
+    "type": "COMMS",
+    "threat": 60,
+    "confidence": 41,
+    "notes": "comms interference"
+  },
+  {
+    "id": "INC-1770741300-022",
+    "timestampUtc": 1770742159,
+    "deck": 6,
+    "zone": "Hydroponics",
+    "type": "PRESSURE",
+    "threat": 22,
+    "confidence": 15,
+    "notes": "pressure dip detected"
+  },
+  {
+    "id": "INC-1770741300-023",
+    "timestampUtc": 1770758697,
+    "deck": 6,
+    "zone": "Maintenance",
+    "type": "PRESSURE",
+    "threat": 21,
+    "confidence": 68,
+    "notes": ""
+  },
+  {
+    "id": "INC-1770741300-024",
+    "timestampUtc": 1770753969,
+    "deck": 2,
+    "zone": "Bridge",
+    "type": "PRESSURE",
+    "threat": 61,
+    "confidence": 48,
+    "notes": "temperature anomaly"
+  },
+  {
+    "id": "INC-1770741300-025",
+    "timestampUtc": 1770754715,
+    "deck": 6,
+    "zone": "Bridge",
+    "type": "TEMP",
+    "threat": 47,
+    "confidence": 57,
+    "notes": ""
+  },
+  {
+    "id": "INC-1770741300-026",
+    "timestampUtc": 1770755274,
+    "deck": 1,
+    "zone": "Cargo",
+    "type": "COMMS",
+    "threat": 52,
+    "confidence": 45,
+    "notes": "pressure dip detected"
+  },
+  {
+    "id": "INC-1770741300-027",
+    "timestampUtc": 1770762664,
+    "deck": 7,
+    "zone": "Engine",
+    "type": "PRESSURE",
+    "threat": 39,
+    "confidence": 69,
+    "notes": "comms interference"
+  },
+  {
+    "id": "INC-1770741300-028",
+    "timestampUtc": 1770760920,
+    "deck": 7,
+    "zone": "Cargo",
+    "type": "MOTION",
+    "threat": 55,
+    "confidence": 57,
+    "notes": "door cycled unexpectedly"
+  },
+  {
+    "id": "INC-1770741300-029",
+    "timestampUtc": 1770757355,
+    "deck": 4,
+    "zone": "Cargo",
+    "type": "sound",
+    "threat": 36,
+    "confidence": 29,
+    "notes": "unregistered bio-readings"
+  },
+  {
+    "id": "INC-1770741300-030",
+    "timestampUtc": 1770752698,
+    "deck": 3,
+    "zone": "Cargo",
+    "type": "ACID",
+    "threat": 50,
+    "confidence": 15,
+    "notes": ""
+  },
+  {
+    "id": "INC-1770741300-031",
+    "timestampUtc": 1770761942,
+    "deck": 3,
+    "zone": "Airlock",
+    "type": "PRESSURE",
+    "threat": 48,
+    "confidence": 52,
+    "notes": "pressure dip detected"
+  },
+  {
+    "id": "INC-1770741300-032",
+    "timestampUtc": 1770741968,
+    "deck": 7,
+    "zone": "Cryo",
+    "type": "SOUND",
+    "threat": 53,
+    "confidence": 29,
+    "notes": "hissing near vent"
+  },
+  {
+    "id": "INC-1770741300-033",
+    "timestampUtc": 1770756417,
+    "deck": 3,
+    "zone": "Cryo",
+    "type": "PRESSURE",
+    "threat": 32,
+    "confidence": 72,
+    "notes": "hissing near vent"
+  },
+  {
+    "id": "INC-1770741300-034",
+    "timestampUtc": 1770749203,
+    "deck": 6,
+    "zone": "Maintenance",
+    "type": "ACID",
+    "threat": 9,
+    "confidence": 47,
+    "notes": "crew report: footsteps"
+  },
+  {
+    "id": "INC-1770741300-035",
+    "timestampUtc": 1770748051,
+    "deck": 1,
+    "zone": "Cryo",
+    "type": "SOUND",
+    "threat": 0,
+    "confidence": 55,
+    "notes": "pressure dip detected"
+  },
+  {
+    "id": "INC-1770741300-036",
+    "timestampUtc": 1770755926,
+    "deck": 2,
+    "zone": "  Cryo  ",
+    "type": "LIFE_SUPPORT",
+    "threat": 27,
+    "confidence": 67,
+    "notes": "temperature anomaly"
+  },
+  {
+    "id": "INC-1770741300-037",
+    "timestampUtc": 1770743966,
+    "deck": 5,
+    "zone": "Corridor-A",
+    "type": "LIFE_SUPPORT",
+    "threat": 6,
+    "confidence": 82,
+    "notes": "unregistered bio-readings"
+  },
+  {
+    "id": "INC-1770741300-038",
+    "timestampUtc": 1770747969,
+    "deck": 6,
+    "zone": "Corridor-A",
+    "type": "POWER",
+    "threat": 43,
+    "confidence": 51,
+    "notes": "crew report: footsteps"
+  },
+  {
+    "id": "INC-1770741300-039",
+    "timestampUtc": 1770741865,
+    "deck": 2,
+    "zone": "Maintenance",
+    "type": "COMMS",
+    "threat": 85,
+    "confidence": 63,
+    "notes": "door cycled unexpectedly"
+  },
+  {
+    "id": "INC-1770741300-040",
+    "timestampUtc": 1770745115,
+    "deck": 4,
+    "zone": "Airlock",
+    "type": "LIFE_SUPPORT",
+    "threat": 57,
+    "confidence": 59,
+    "notes": "camera static"
+  },
+  {
+    "id": "INC-1770741300-041",
+    "timestampUtc": 1770752062,
+    "deck": 2,
+    "zone": "Cargo",
+    "type": "LIFE_SUPPORT",
+    "threat": -5,
+    "confidence": 64,
+    "notes": "camera static"
+  },
+  {
+    "id": "INC-1770741300-042",
+    "timestampUtc": 1770743839,
+    "deck": 2,
+    "zone": "Airlock",
+    "type": "COMMS",
+    "threat": 23,
+    "confidence": 34,
+    "notes": "unregistered bio-readings"
+  },
+  {
+    "id": "INC-1770741300-043",
+    "timestampUtc": 1770755797,
+    "deck": 5,
+    "zone": "Corridor-A",
+    "type": "PRESSURE",
+    "threat": 31,
+    "confidence": 54,
+    "notes": "acid residue on deck plate"
+  },
+  {
+    "id": "INC-1770741300-044",
+    "timestampUtc": 1770761020,
+    "deck": 2,
+    "zone": "Maintenance",
+    "type": "DOOR",
+    "threat": 35,
+    "confidence": 19,
+    "notes": ""
+  },
+  {
+    "id": "INC-1770741300-045",
+    "timestampUtc": 1770743613,
+    "deck": 4,
+    "zone": "MedBay",
+    "type": "LIFE_SUPPORT",
+    "threat": 58,
+    "confidence": 67,
+    "notes": "scratching behind panel"
+  },
+  {
+    "id": "INC-1770741300-046",
+    "timestampUtc": 1770760152,
+    "deck": 7,
+    "zone": "Cargo",
+    "type": "ACID",
+    "threat": 53,
+    "confidence": 51,
+    "notes": "temperature anomaly"
+  },
+  {
+    "id": "INC-1770741300-047",
+    "timestampUtc": 1770743994,
+    "deck": 5,
+    "zone": "MedBay",
+    "type": "COMMS",
+    "threat": 40,
+    "confidence": 54,
+    "notes": "pressure dip detected"
+  },
+  {
+    "id": "INC-1770741300-048",
+    "timestampUtc": 1770754976,
+    "deck": 5,
+    "zone": "Corridor-B",
+    "type": "DOOR",
+    "threat": 57,
+    "confidence": 51,
+    "notes": ""
+  },
+  {
+    "id": "INC-1770741300-049",
+    "timestampUtc": 1770755274,
+    "deck": 4,
+    "zone": "Bridge",
+    "type": "COMMS",
+    "threat": 55,
+    "confidence": 79,
+    "notes": ""
+  },
+  {
+    "id": "INC-1770741300-050",
+    "timestampUtc": 1770762563,
+    "deck": 6,
+    "zone": "Corridor-A",
+    "type": "ACID",
+    "threat": 26,
+    "confidence": 57,
+    "notes": "hissing near vent"
+  },
+  {
+    "id": "INC-1770741300-051",
+    "timestampUtc": 1770746755,
+    "deck": 6,
+    "zone": "Airlock",
+    "type": "POWER",
+    "threat": 26,
+    "confidence": 86,
+    "notes": ""
+  },
+  {
+    "id": "INC-1770741300-052",
+    "timestampUtc": 1770752976,
+    "deck": 5,
+    "zone": "  Hydroponics  ",
+    "type": "PRESSURE",
+    "threat": 45,
+    "confidence": 95,
+    "notes": "crew report: footsteps"
+  },
+  {
+    "id": "INC-1770741300-053",
+    "timestampUtc": 1770749219,
+    "deck": 1,
+    "zone": "Corridor-B",
+    "type": "PRESSURE",
+    "threat": 61,
+    "confidence": 31,
+    "notes": "scratching behind panel"
+  },
+  {
+    "id": "INC-1770741300-054",
+    "timestampUtc": 1770755535,
+    "deck": 7,
+    "zone": "Airlock",
+    "type": "ACID",
+    "threat": 25,
+    "confidence": 64,
+    "notes": "door cycled unexpectedly"
+  },
+  {
+    "id": "INC-1770741300-055",
+    "timestampUtc": 1770747516,
+    "deck": 2,
+    "zone": "Cargo",
+    "type": "COMMS",
+    "threat": 53,
+    "confidence": 49,
+    "notes": "hissing near vent"
+  },
+  {
+    "id": "INC-1770741300-056",
+    "timestampUtc": 1770747145,
+    "deck": 3,
+    "zone": "Corridor-B",
+    "type": "POWER",
+    "threat": 41,
+    "confidence": 62,
+    "notes": "acid residue on deck plate"
+  },
+  {
+    "id": "INC-1770741300-057",
+    "timestampUtc": 1770741725,
+    "deck": 5,
+    "zone": "Engine",
+    "type": "CAMERA",
+    "threat": 49,
+    "confidence": 35,
+    "notes": "hissing near vent"
+  },
+  {
+    "id": "INC-1770741300-058",
+    "timestampUtc": 1770754344,
+    "deck": 6,
+    "zone": "Hydroponics",
+    "type": "TEMP",
+    "threat": 5,
+    "confidence": 75,
+    "notes": "power spike then drop"
+  },
+  {
+    "id": "INC-1770741300-059",
+    "timestampUtc": 1770750161,
+    "deck": 6,
+    "zone": "Corridor-A",
+    "type": "ACID",
+    "threat": 33,
+    "confidence": 46,
+    "notes": "temperature anomaly"
+  },
+  {
+    "id": "INC-1770741300-060",
+    "timestampUtc": 1770749898,
+    "deck": 7,
+    "zone": "Maintenance",
+    "type": "COMMS",
+    "threat": 86,
+    "confidence": 56,
+    "notes": "door cycled unexpectedly"
+  },
+  {
+    "id": "INC-1770741300-061",
+    "timestampUtc": 1770753277,
+    "deck": 2,
+    "zone": "Airlock",
+    "type": "SOUND",
+    "threat": 41,
+    "confidence": 62,
+    "notes": "camera static"
+  },
+  {
+    "id": "INC-1770741300-062",
+    "timestampUtc": 1770743589,
+    "deck": 4,
+    "zone": "MedBay",
+    "type": "COMMS",
+    "threat": 130,
+    "confidence": 68,
+    "notes": "acid residue on deck plate"
+  },
+  {
+    "id": "INC-1770741300-063",
+    "timestampUtc": 1770755446,
+    "deck": 2,
+    "zone": "MedBay",
+    "type": "SOUND",
+    "threat": 57,
+    "confidence": 64,
+    "notes": "crew report: footsteps"
+  },
+  {
+    "id": "INC-1770741300-064",
+    "timestampUtc": 1770744986,
+    "deck": 4,
+    "zone": "Corridor-A",
+    "type": "ACID",
+    "threat": 66,
+    "confidence": 73,
+    "notes": "scratching behind panel"
+  },
+  {
+    "id": "INC-1770741300-065",
+    "timestampUtc": 1770756649,
+    "deck": 3,
+    "zone": "Maintenance",
+    "type": "LIFE_SUPPORT",
+    "threat": 50,
+    "confidence": 57,
+    "notes": "temperature anomaly"
+  },
+  {
+    "id": "INC-1770741300-066",
+    "timestampUtc": 1770758921,
+    "deck": 4,
+    "zone": "Corridor-A",
+    "type": "PRESSURE",
+    "threat": 130,
+    "confidence": 15,
+    "notes": "unregistered bio-readings"
+  },
+  {
+    "id": "INC-1770741300-067",
+    "timestampUtc": 1770741626,
+    "deck": 4,
+    "zone": "Engine",
+    "type": "TEMP",
+    "threat": 0,
+    "confidence": 76,
+    "notes": "comms interference"
+  },
+  {
+    "id": "INC-1770741300-068",
+    "timestampUtc": 1770748163,
+    "deck": 1,
+    "zone": "Hydroponics",
+    "type": "CAMERA",
+    "threat": 78,
+    "confidence": 23,
+    "notes": "comms interference"
+  },
+  {
+    "id": "INC-1770741300-069",
+    "timestampUtc": 1770750967,
+    "deck": 4,
+    "zone": "Cargo",
+    "type": "POWER",
+    "threat": 34,
+    "confidence": 58,
+    "notes": ""
+  },
+  {
+    "id": "INC-1770741300-070",
+    "timestampUtc": 1770762061,
+    "deck": 4,
+    "zone": "Engine",
+    "type": "SOUND",
+    "threat": 42,
+    "confidence": 28,
+    "notes": "crew report: footsteps"
+  },
+  {
+    "id": "INC-1770741300-071",
+    "timestampUtc": 1770762082,
+    "deck": 1,
+    "zone": "Maintenance",
+    "type": "POWER",
+    "threat": 130,
+    "confidence": 66,
+    "notes": "temperature anomaly"
+  },
+  {
+    "id": "INC-1770741300-072",
+    "timestampUtc": 1770747942,
+    "deck": 5,
+    "zone": "  Corridor-B  ",
+    "type": "PRESSURE",
+    "threat": 35,
+    "confidence": 65,
+    "notes": "camera static"
+  },
+  {
+    "id": "INC-1770741300-073",
+    "timestampUtc": 1770744526,
+    "deck": 3,
+    "zone": "Corridor-B",
+    "type": "COMMS",
+    "threat": 68,
+    "confidence": 48,
+    "notes": "scratching behind panel"
+  },
+  {
+    "id": "INC-1770741300-074",
+    "timestampUtc": 1770749615,
+    "deck": 5,
+    "zone": "Maintenance",
+    "type": "LIFE_SUPPORT",
+    "threat": 60,
+    "confidence": 49,
+    "notes": "scratching behind panel"
+  },
+  {
+    "id": "INC-1770741300-075",
+    "timestampUtc": 1770762079,
+    "deck": 2,
+    "zone": "Hydroponics",
+    "type": "PRESSURE",
+    "threat": 23,
+    "confidence": 59,
+    "notes": "hissing near vent"
+  },
+  {
+    "id": "INC-1770741300-076",
+    "timestampUtc": 1770752395,
+    "deck": 6,
+    "zone": "Corridor-B",
+    "type": "MOTION",
+    "threat": 56,
+    "confidence": 58,
+    "notes": "pressure dip detected"
+  },
+  {
+    "id": "INC-1770741300-077",
+    "timestampUtc": 1770743007,
+    "deck": 5,
+    "zone": "Corridor-A",
+    "type": "LIFE_SUPPORT",
+    "threat": 35,
+    "confidence": 65,
+    "notes": "power spike then drop"
+  },
+  {
+    "id": "INC-1770741300-078",
+    "timestampUtc": 1770754806,
+    "deck": 2,
+    "zone": "Corridor-B",
+    "type": "PRESSURE",
+    "threat": 40,
+    "confidence": 37,
+    "notes": ""
+  },
+  {
+    "id": "INC-1770741300-079",
+    "timestampUtc": 1770749222,
+    "deck": 2,
+    "zone": "Airlock",
+    "type": "PRESSURE",
+    "threat": 130,
+    "confidence": 40,
+    "notes": "power spike then drop"
+  },
+  {
+    "id": "INC-1770741300-080",
+    "timestampUtc": 1770752968,
+    "deck": 6,
+    "zone": "Maintenance",
+    "type": "CAMERA",
+    "threat": 35,
+    "confidence": 40,
+    "notes": ""
+  },
+  {
+    "id": "INC-1770741300-081",
+    "timestampUtc": 1770747090,
+    "deck": 2,
+    "zone": "Hydroponics",
+    "type": "COMMS",
+    "threat": 26,
+    "confidence": 60,
+    "notes": "pressure dip detected"
+  },
+  {
+    "id": "INC-1770741300-082",
+    "timestampUtc": 1770760766,
+    "deck": 1,
+    "zone": "Hydroponics",
+    "type": "POWER",
+    "threat": 20,
+    "confidence": 89,
+    "notes": "crew report: footsteps"
+  },
+  {
+    "id": "INC-1770741300-083",
+    "timestampUtc": 1770761961,
+    "deck": 5,
+    "zone": "Maintenance",
+    "type": "SOUND",
+    "threat": 93,
+    "confidence": 95,
+    "notes": "power spike then drop"
+  },
+  {
+    "id": "INC-1770741300-084",
+    "timestampUtc": 1770759209,
+    "deck": 3,
+    "zone": "Maintenance",
+    "type": "ACID",
+    "threat": 22,
+    "confidence": 60,
+    "notes": ""
+  },
+  {
+    "id": "INC-1770741300-085",
+    "timestampUtc": 1770745516,
+    "deck": 3,
+    "zone": "Engine",
+    "type": "TEMP",
+    "threat": 83,
+    "confidence": 44,
+    "notes": "unregistered bio-readings"
+  },
+  {
+    "id": "INC-1770741300-086",
+    "timestampUtc": 1770753045,
+    "deck": 3,
+    "zone": "Airlock",
+    "type": "LIFE_SUPPORT",
+    "threat": 39,
+    "confidence": 12,
+    "notes": "power spike then drop"
+  },
+  {
+    "id": "INC-1770741300-087",
+    "timestampUtc": 1770758715,
+    "deck": 2,
+    "zone": "  Cargo  ",
+    "type": "TEMP",
+    "threat": 83,
+    "confidence": 68,
+    "notes": "scratching behind panel"
+  },
+  {
+    "id": "INC-1770741300-088",
+    "timestampUtc": 1770762536,
+    "deck": 1,
+    "zone": "MedBay",
+    "type": "CAMERA",
+    "threat": 60,
+    "confidence": 59,
+    "notes": "crew report: footsteps"
+  },
+  {
+    "id": "INC-1770741300-089",
+    "timestampUtc": 1770748523,
+    "deck": 5,
+    "zone": "Cryo",
+    "type": "TEMP",
+    "threat": 60,
+    "confidence": 52,
+    "notes": "pressure dip detected"
+  },
+  {
+    "id": "INC-1770741300-090",
+    "timestampUtc": 1770751207,
+    "deck": 4,
+    "zone": "Maintenance",
+    "type": "SOUND",
+    "threat": 51,
+    "confidence": 52,
+    "notes": "hissing near vent"
+  },
+  {
+    "id": "INC-1770741300-091",
+    "timestampUtc": 1770756166,
+    "deck": 2,
+    "zone": "Airlock",
+    "type": "TEMP",
+    "threat": 29,
+    "confidence": 36,
+    "notes": "temperature anomaly"
+  },
+  {
+    "id": "INC-1770741300-092",
+    "timestampUtc": 1770756470,
+    "deck": 5,
+    "zone": "  Cargo  ",
+    "type": "TEMP",
+    "threat": 130,
+    "confidence": 45,
+    "notes": "crew report: footsteps"
+  },
+  {
+    "id": "INC-1770741300-093",
+    "timestampUtc": 1770748726,
+    "deck": 1,
+    "zone": "Engine",
+    "type": "DOOR",
+    "threat": 50,
+    "confidence": 31,
+    "notes": "door cycled unexpectedly"
+  },
+  {
+    "id": "INC-1770741300-094",
+    "timestampUtc": 1770744037,
+    "deck": 6,
+    "zone": "MedBay",
+    "type": "TEMP",
+    "threat": 30,
+    "confidence": 53,
+    "notes": "camera static"
+  },
+  {
+    "id": "INC-1770741300-053",
+    "timestampUtc": 1770749219,
+    "deck": 1,
+    "zone": "Corridor-B",
+    "type": "PRESSURE",
+    "threat": 61,
+    "confidence": 31,
+    "notes": "scratching behind panel (duplicate)"
+  },
+  {
+    "id": "INC-1770741300-017",
+    "timestampUtc": 1770749734,
+    "deck": 2,
+    "zone": "MedBay",
+    "type": "POWER",
+    "threat": 88,
+    "confidence": 60,
+    "notes": "door cycled unexpectedly (duplicate)"
+  },
+  {
+    "id": "INC-1770741300-037",
+    "timestampUtc": 1770743966,
+    "deck": 5,
+    "zone": "Corridor-A",
+    "type": "LIFE_SUPPORT",
+    "threat": 6,
+    "confidence": 82,
+    "notes": "unregistered bio-readings (duplicate)"
+  },
+  {
+    "id": "INC-1770741300-075",
+    "timestampUtc": 1770762079,
+    "deck": 2,
+    "zone": "Hydroponics",
+    "type": "PRESSURE",
+    "threat": 23,
+    "confidence": 59,
+    "notes": "hissing near vent (duplicate)"
+  },
+  {
+    "id": "INC-1770741300-097",
+    "timestampUtc": 1770754017,
+    "deck": 3,
+    "zone": "  Airlock  ",
+    "type": "ACID",
+    "threat": -5,
+    "confidence": 57,
+    "notes": "crew report: footsteps (duplicate)"
+  },
+  {
+    "id": "INC-1770741300-041",
+    "timestampUtc": 1770752062,
+    "deck": 2,
+    "zone": "Cargo",
+    "type": "LIFE_SUPPORT",
+    "threat": -5,
+    "confidence": 64,
+    "notes": "camera static (duplicate)"
+  }
+]

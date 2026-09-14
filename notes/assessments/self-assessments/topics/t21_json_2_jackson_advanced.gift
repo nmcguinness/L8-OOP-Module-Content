@@ -1,0 +1,107 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t21 JSON II (Jackson Advanced)
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t21_json_2_jackson_advanced
+
+::t21_Q1:: Why should a request `type` string be looked up in a handler map rather
+than used to invoke a method of that name by reflection?
+{
+  = The type comes from an untrusted client, and reflection would let a caller reach arbitrary methods.
+    #Correct. A map is a whitelist: unknown types fall through to a clean error and nothing else is reachable.
+  ~ Reflection is not available in Java.
+    #Incorrect. It is available, which is what makes the approach dangerous rather than impossible.
+  ~ Method names cannot contain underscores.
+    #Incorrect. They can; naming is not the issue.
+  ~ A map lookup is the only way to compare strings.
+    #Incorrect. Strings can be compared directly; the reason is security and decoupling.
+}
+
+::t21_Q2:: [Spot the bug] `payload.get("id").asInt()` is called on a request whose
+payload has no "id" field. What happens?
+{
+  = `get` returns null and the call throws NullPointerException on the server thread.
+    #Correct. Check `has("id")` first, or use a safe accessor, and reply with a structured error instead of crashing the handler.
+  ~ It returns 0 safely.
+    #Incorrect. asInt() would return 0 for a present but non-numeric node; a missing node yields null first.
+  ~ Jackson creates the field automatically with a default value.
+    #Incorrect. Jackson never invents fields.
+  ~ It throws JsonProcessingException, which is checked.
+    #Incorrect. The failure is a NullPointerException at the call site.
+}
+
+::t21_Q3:: A payload contains `\{"id": "abc"\}` and the server calls `asInt()` on it.
+What is the result, and why is that dangerous?
+{
+  = It returns 0 silently, so the server proceeds with wrong data and nothing reports an error.
+    #Correct. Jackson's asInt is lenient. Wrong data is worse than a crash because it is invisible.
+  ~ It throws NumberFormatException immediately.
+    #Incorrect. asInt does not throw for a non-numeric node; it falls back to a default.
+  ~ It returns -1 to indicate failure.
+    #Incorrect. The default is 0, not a sentinel.
+  ~ It converts "abc" using its character codes.
+    #Incorrect. No such conversion occurs.
+}
+
+::t21_Q4:: Why must binary data be Base64-encoded before being placed in a JSON string?
+{
+  = JSON strings are text, and arbitrary bytes are not valid UTF-8 and could terminate or corrupt the string.
+    #Correct. Base64 maps any byte sequence onto 64 safe ASCII characters, at roughly a 33 per cent size increase.
+  ~ Because JSON has no string type.
+    #Incorrect. Strings are a core JSON type.
+  ~ Because Jackson cannot serialise byte arrays at all.
+    #Incorrect. It handles byte[] by Base64-encoding it, which is precisely the mechanism in question.
+  ~ Because Base64 compresses the data.
+    #Incorrect. It expands the data by about a third.
+}
+
+::t21_Q5:: When would Base64-in-JSON be the wrong choice?
+{
+  = For large files, because the payload grows by a third and must be held in memory as a String on both sides.
+    #Correct. Prefer a separate binary channel or multipart upload, keeping JSON for the metadata.
+  ~ For any file containing text.
+    #Incorrect. Text files encode perfectly well, though encoding them is often unnecessary.
+  ~ Whenever the transport is a socket.
+    #Incorrect. Sockets are exactly where line-delimited JSON with Base64 is convenient for modest payloads.
+  ~ When the receiving language is not Java.
+    #Incorrect. Base64 is a language-independent standard.
+}
+
+::t21_Q6:: Why should a metadata-only query list its columns rather than use `SELECT *`?
+{
+  = `SELECT *` fetches the BLOB column, transferring large binary data the caller never uses.
+    #Correct. Listing 200 rows would pull 200 images across the network to display 200 titles.
+  ~ `SELECT *` is invalid SQL in MySQL.
+    #Incorrect. It is valid, just wasteful and fragile here.
+  ~ Column names are required by PreparedStatement.
+    #Incorrect. PreparedStatement accepts any valid SQL.
+  ~ `SELECT *` cannot be used with a WHERE clause.
+    #Incorrect. It can.
+}
+
+::t21_Q7:: Which JDBC methods store and retrieve a byte array in a BLOB column?
+{
+  = `setBytes` on the PreparedStatement and `getBytes` on the ResultSet.
+    #Correct. For very large objects the streaming variants setBinaryStream and getBinaryStream avoid loading everything into memory.
+  ~ `setString` and `getString`.
+    #Incorrect. These are for character data and would corrupt arbitrary bytes.
+  ~ `setObject` and `getObject` only.
+    #Incorrect. These work in some drivers but are untyped and less clear than the byte-specific methods.
+  ~ `setBlob` is required; there is no byte array option.
+    #Incorrect. setBytes is the common and simpler approach for moderate sizes.
+}
+
+::t21_Q8:: What specifically does a JSON round-trip test verify?
+{
+  = That an object serialised and then deserialised equals the original, so nothing was lost or renamed in transit.
+    #Correct. It catches missing getters or setters, absent no-arg constructors, key mismatches and type drift - and it requires a correct equals.
+  ~ That the JSON string matches a fixed expected text exactly.
+    #Incorrect. That test is brittle, since key order and formatting may vary.
+  ~ That the object can be written to a file.
+    #Incorrect. File IO is not involved.
+  ~ That the class implements Serializable.
+    #Incorrect. Java serialisation is unrelated to Jackson.
+}

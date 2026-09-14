@@ -1,0 +1,112 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t15 DB Connectivity (JDBC + DAO)
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t15_dao
+
+::t15_Q1:: In an N-tier architecture using the DAO pattern, which layer should
+contain SQL statements and JDBC code?
+{
+  = The data access layer (DAO) only — SQL must not appear in the service layer or the presentation layer.
+    #Correct. The DAO pattern isolates all persistence logic in one place, keeping the service and presentation layers free of SQL.
+  ~ The service layer, so that business rules and data retrieval logic are co-located.
+    #Incorrect. Mixing SQL with business rules defeats the purpose of the DAO pattern and makes the system harder to test and maintain.
+  ~ The presentation (UI) layer, because it decides which data to display.
+    #Incorrect. The UI should never contain SQL; it should call service methods and display the results.
+  ~ Any layer, because JDBC is a utility library with no architectural constraints.
+    #Incorrect. While technically possible, scattering JDBC code throughout layers is a known design smell that the DAO pattern was created to prevent.
+}
+
+::t15_Q2:: Why should a JDBC DAO always use `PreparedStatement` with `?`
+placeholders rather than building SQL strings by concatenation?
+{
+  = String concatenation of user input into SQL creates a SQL injection vulnerability; `PreparedStatement` sends parameters separately, preventing malicious input from altering the query structure.
+    #Correct. SQL injection is one of the most serious security vulnerabilities; `PreparedStatement` is the standard defence.
+  ~ `PreparedStatement` is faster than string concatenation in all cases.
+    #Incorrect. While prepared statements can be faster due to pre-compilation, the primary reason to use them is security, not performance.
+  ~ String concatenation causes a `NullPointerException` when any parameter is null.
+    #Incorrect. String concatenation handles nulls without throwing; the critical issue is security, not null handling.
+  ~ Java's compiler rejects SQL string concatenation at compile time.
+    #Incorrect. The compiler cannot distinguish SQL strings from other strings; SQL injection is a runtime security issue.
+}
+
+::t15_Q3:: A `TaskDao` interface is defined with methods like `findById`,
+`insert`, and `deleteById`. The service layer depends on `TaskDao`, not on
+`JdbcTaskDao`. What design benefit does this provide?
+{
+  = The persistence implementation can be swapped (e.g. from JDBC to an in-memory DAO for testing) without changing the service layer.
+    #Correct. Programming to the interface decouples the service from any specific database technology, enabling easy testing and future migration.
+  ~ It prevents the DAO from being instantiated more than once, acting like a singleton.
+    #Incorrect. The interface type has no effect on instantiation; the factory or constructor controls object lifecycle.
+  ~ The interface guarantees that all DAO methods will execute within a database transaction.
+    #Incorrect. Transactions must be explicitly managed; the interface defines the method contract, not transactional behaviour.
+  ~ It allows the service layer to call private DAO methods directly.
+    #Incorrect. An interface only exposes public methods; private implementation details remain hidden in the implementing class.
+}
+
+::t15_Q4:: A DAO method returns `Optional<Task>` rather than `Task` or `null`.
+What does calling `dao.findById(999).orElseThrow(...)` express?
+{
+  = The caller expects the task to exist and treats its absence as an exceptional condition worth an exception.
+    #Correct. `orElseThrow` is the idiom for "this must be present; if not, throw a meaningful exception rather than a NullPointerException later".
+  ~ The method returns the default Task object when no row is found.
+    #Incorrect. `orElseThrow` throws an exception on empty; `orElse(defaultValue)` would provide a default.
+  ~ The DAO always finds a result when `orElseThrow` is called, so the Optional is always present.
+    #Incorrect. `orElseThrow` throws if the Optional is empty; it does not guarantee the Optional is present.
+  ~ Using `Optional` means null is never returned, so `orElseThrow` is unnecessary.
+    #Incorrect. An empty `Optional` is the representation of "no value"; `orElseThrow` is needed to explicitly handle that case.
+}
+
+
+::t15_Q5:: Why must user-supplied values be bound with `?` placeholders on a
+`PreparedStatement` rather than concatenated into the SQL string?
+{
+  = Concatenation allows SQL injection, because input can alter the statement's structure.
+    #Correct. A bound parameter is always treated as a value, never as SQL. Prepared statements are also faster on repeated execution.
+  ~ Concatenation does not compile in Java.
+    #Incorrect. It compiles perfectly well, which is what makes the vulnerability easy to introduce.
+  ~ Placeholders are needed only for numeric columns.
+    #Incorrect. Every user-supplied value should be bound, and string input is the most dangerous.
+  ~ Concatenation is limited to 255 characters.
+    #Incorrect. No such limit exists.
+}
+
+::t15_Q6:: [Spot the bug] A DAO opens a `Connection` in every method but never closes it,
+and after a while the application hangs on new queries. What is happening?
+{
+  = Connections are leaking until the pool or database connection limit is exhausted.
+    #Correct. Use try-with-resources so Connection, Statement and ResultSet are closed on every path, including exceptions.
+  ~ The database has run out of disk space.
+    #Incorrect. The symptom is blocked acquisition of connections, not storage failure.
+  ~ The JDBC driver caches queries and eventually stalls.
+    #Incorrect. Drivers do not behave this way.
+  ~ The connection string is malformed.
+    #Incorrect. That would fail immediately rather than after sustained use.
+}
+
+::t15_Q7:: Which responsibility belongs in the service layer rather than the DAO?
+{
+  = Coordinating two DAO calls inside a single transaction to enforce a business rule.
+    #Correct. The DAO handles one table's persistence. Transaction boundaries and cross-entity rules belong to the service.
+  ~ Mapping a ResultSet row to a domain object.
+    #Incorrect. Row mapping is core DAO work.
+  ~ Building the SQL string for a query.
+    #Incorrect. SQL belongs in the DAO and should not leak upwards.
+  ~ Binding parameters to a PreparedStatement.
+    #Incorrect. This is DAO work.
+}
+
+::t15_Q8:: Why should `findById` return `Optional<Task>` rather than `null`?
+{
+  = It makes possible absence part of the method signature, so the compiler pushes the caller to handle it.
+    #Correct. Absence is a normal outcome of a lookup, and null carries no information about whether it was expected.
+  ~ Optional is faster than returning null.
+    #Incorrect. There is a small overhead; the benefit is safety and clarity.
+  ~ Optional prevents the database query from failing.
+    #Incorrect. It describes the result, and a genuine failure should still surface as an exception.
+  ~ Because DAO methods are not permitted to return null in Java.
+    #Incorrect. They may; it is simply a poor contract for a lookup.
+}

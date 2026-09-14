@@ -1,0 +1,115 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t01 Arrays
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t01_arrays
+
+::t01_Q1:: A Java method receives an `int[]` parameter and loops with `for (int i \= 0; i <\= arr.length; i++)`. What happens when the loop runs?
+{
+  = An ArrayIndexOutOfBoundsException is thrown on the final iteration.
+    #Correct. When i equals arr.length the index is one past the last valid position (0 to length-1), causing the exception.
+  ~ The loop completes normally because the condition uses <=.
+    #Incorrect. The condition `i <= arr.length` allows i to reach arr.length, which is an invalid index.
+  ~ The last element is visited twice because of the <= boundary.
+    #Incorrect. The loop will attempt to access arr[arr.length], which does not exist, and throw an exception.
+  ~ A NullPointerException is thrown because the array has no element at that position.
+    #Incorrect. A missing element at an out-of-bounds index causes ArrayIndexOutOfBoundsException, not NullPointerException.
+}
+
+::t01_Q2:: You declare `int[][] jag \= new int[3][]`. After this single line,
+which statement is true?
+{
+  = The three inner row references are null and must each be separately allocated before use.
+    #Correct. `new int[3][]` allocates the outer array of three row references but leaves each inner row as null.
+  ~ A 3x3 rectangular array of zeros is created automatically.
+    #Incorrect. Only `new int[3][3]` would create a rectangular array; `new int[3][]` leaves rows unallocated.
+  ~ Accessing `jag[0][0]` returns 0 because Java initialises inner arrays to zero by default.
+    #Incorrect. Accessing `jag[0][0]` throws a NullPointerException because `jag[0]` is null.
+  ~ The code does not compile because jagged arrays are not supported in Java.
+    #Incorrect. Java fully supports jagged (non-rectangular) 2D arrays.
+}
+
+::t01_Q3:: A method needs to compute the average of an `int[]`. The following
+line appears inside the method\: `double avg \= sum / xs.length;` where `sum`
+is declared as `int`. For the input `\{3, 7\}` the result is `0.0` instead of `5.0`.
+What is the most likely cause?
+{
+  = Integer division is performed before the result is widened to double.
+    #Correct. Both `sum` and `xs.length` are ints, so division truncates before the double assignment.
+  ~ The array length returns 0 for a two-element array.
+    #Incorrect. `xs.length` returns 2 for a two-element array.
+  ~ The enhanced for-loop calculates the sum incorrectly for integer arrays.
+    #Incorrect. The issue is the division, not the loop. The sum itself would be correct.
+  ~ Java rounds the average down to the nearest integer automatically.
+    #Incorrect. Java performs integer division when both operands are int types, which truncates rather than rounds.
+}
+
+::t01_Q4:: You want to iterate over an `int[]` and double the value of every
+element. Which loop achieves this correctly?
+{
+  = An index-based for loop using `xs[i] = xs[i] * 2` inside the body.
+    #Correct. Only an index loop can write back to the original array; the loop variable gives the position needed to update.
+  ~ An enhanced for loop with `val = val * 2` inside the body.
+    #Incorrect. In an enhanced for loop, `val` is a copy of the element, so assigning to it does not modify the array.
+  ~ Either loop type works because the array is passed by reference.
+    #Incorrect. While the array reference is passed, the enhanced for loop variable is a primitive copy and cannot write back.
+  ~ A while loop is required because for loops cannot modify array elements.
+    #Incorrect. A standard index-based for loop can modify array elements; the loop type is not the constraint.
+}
+
+
+::t01_Q5:: [Predict the output] Given `int[] a \= \{1, 2, 3\};` followed by
+`int[] b \= a;` then `b[0] \= 99;` what does `System.out.println(a[0])` print?
+{
+  = 99
+    #Correct. Arrays are objects, so `b \= a` copies the reference, not the contents. Both names refer to one array.
+  ~ 1
+    #Incorrect. That would hold if `b` were a copy. Use `a.clone()` or `Arrays.copyOf(a, a.length)` to get a real copy.
+  ~ 0
+    #Incorrect. The element is set to 1 at creation and then to 99; it is never 0.
+  ~ The code throws ArrayIndexOutOfBoundsException.
+    #Incorrect. Index 0 is valid for a three-element array.
+}
+
+::t01_Q6:: [Spot the bug] This method should return the largest value, but for
+the input `\{-5, -2, -9\}` it returns 0. The body is: `int best \= 0;` then a loop
+`for (int i \= 0; i < xs.length; i++)` containing `if (xs[i] > best) best \= xs[i];`
+then `return best;`. What is the fault?
+{
+  = `best` is seeded with 0 instead of the first element, so it is never replaced when every value is negative.
+    #Correct. Seed with `int best \= xs[0];` and loop from index 1, after guarding against a null or empty array.
+  ~ The loop should start at index 1 rather than index 0.
+    #Incorrect. Starting at 1 is only correct once `best` is seeded from `xs[0]`; on its own it does not fix the wrong seed.
+  ~ The comparison should be `>\=` rather than `>`.
+    #Incorrect. Both find the maximum; only which of several equal values is kept changes.
+  ~ The method should return `xs[best]` rather than `best`.
+    #Incorrect. `best` already holds a value, not an index.
+}
+
+::t01_Q7:: You must visit every cell of a jagged 2D array `int[][] g` without
+risking an exception. Which pair of loop conditions is correct?
+{
+  = Outer `r < g.length`, inner `c < g[r].length`
+    #Correct. The column bound is read per row, so rows of differing lengths are all handled.
+  ~ Outer `r < g.length`, inner `c < g[0].length`
+    #Incorrect. This applies row 0's length to every row and throws ArrayIndexOutOfBoundsException on any longer row.
+  ~ Outer `r < g[0].length`, inner `c < g.length`
+    #Incorrect. The bounds are swapped. `g.length` is the number of rows, not the number of columns.
+  ~ Outer `r <\= g.length`, inner `c <\= g[r].length`
+    #Incorrect. Both conditions run one index past the end of their array.
+}
+
+::t01_Q8:: What does `new int[3]` guarantee about its contents immediately after creation?
+{
+  = Every element holds 0, because Java initialises array elements to the type's default value.
+    #Correct. `int` defaults to 0, `double` to 0.0, `boolean` to false, and reference types to null.
+  ~ The contents are undefined until explicitly assigned.
+    #Incorrect. That is the behaviour in C. Java always initialises array elements to type defaults.
+  ~ Every element holds null.
+    #Incorrect. `int` is a primitive and cannot be null. An `Integer[3]` would be filled with nulls.
+  ~ The array has length 0 until values are added.
+    #Incorrect. The length is fixed at 3 from creation and never changes.
+}

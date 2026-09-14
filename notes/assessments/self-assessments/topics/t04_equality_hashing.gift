@@ -1,0 +1,114 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t04 Equality & Hashing
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t04_equality_hashing
+
+::t04_Q1:: Two `String` objects are created with `new String("hello")` and
+compared using `\=\=`. The result is `false`. What does this demonstrate?
+{
+  = `\=\=` tests reference identity, not value equality; two distinct String objects can hold the same characters but occupy different memory locations.
+    #Correct. `\=\=` returns true only when both references point to the exact same object, regardless of content.
+  ~ The `String` class overrides `\=\=` to compare characters, so `false` means the strings differ.
+    #Incorrect. `\=\=` cannot be overridden in Java; it always tests reference identity for objects.
+  ~ Both objects hold the same value, so the result should be `true`; this indicates a Java bug.
+    #Incorrect. This is correct Java behaviour. `\=\=` on objects checks identity, not character content.
+  ~ Using `new String(...)` produces objects that are never equal because they bypass the string pool.
+    #Incorrect. While `new String(...)` bypasses the string pool, the objects are still equal by `equals()`; `\=\=` simply tests if they are the same object.
+}
+
+::t04_Q2:: A class overrides `equals` to compare by an `id` field but does
+not override `hashCode`. A developer stores two instances with the same `id`
+in a `HashSet`. What is the most likely problem?
+{
+  = Both objects may be stored in the set as if they were distinct, because they may produce different hash codes and land in different buckets.
+    #Correct. The equals/hashCode contract requires that equal objects share the same hash code. Without a matching `hashCode`, the set cannot find the duplicate.
+  ~ A compile-time error occurs because `hashCode` must always be overridden alongside `equals`.
+    #Incorrect. Java does not enforce this at compile time; the contract is a programming convention, not a language rule.
+  ~ The `HashSet` uses `equals` exclusively, so duplicates are still correctly detected.
+    #Incorrect. `HashSet` first uses `hashCode` to find the bucket, then uses `equals`; if hash codes differ, `equals` is never called for the comparison.
+  ~ The program throws a `NullPointerException` when the second object is added.
+    #Incorrect. The likely problem is a logical bug (duplicate entries), not a null pointer.
+}
+
+::t04_Q3:: You are implementing `hashCode` for a class with two fields: `int id`
+and `String email`. Which implementation correctly applies the standard
+31-multiplier pattern?
+{
+  = `int result = Objects.hash(id, email);`
+    #Correct. `Objects.hash(...)` is the idiomatic Java way to combine field hashes using the 31-multiplier pattern internally.
+  ~ `return id + email.hashCode();`
+    #Incorrect. A plain sum without a multiplier produces many collisions because adding fields commutatively means different field combinations can produce the same sum.
+  ~ `return id ^ email.hashCode();`
+    #Incorrect. XOR is symmetric and frequently produces 0 for equal fields, leading to poor hash distribution.
+  ~ `return System.identityHashCode(this);`
+    #Incorrect. This returns the default identity-based hash, which breaks the equals/hashCode contract when `equals` compares fields.
+}
+
+::t04_Q4:: What is the primary purpose of the bucket index calculation
+`index \= h mod tableSize` in a hash-based lookup structure?
+{
+  = It maps an arbitrarily large hash code integer to a valid position within the fixed-size internal array.
+    #Correct. The modulo operation constrains an unbounded hash integer to the range 0..tableSize-1.
+  ~ It ensures that no two objects can produce the same bucket index, preventing collisions.
+    #Incorrect. The modulo operation does not prevent collisions; multiple hash codes can map to the same bucket index.
+  ~ It converts the hash code to an alphabetical sort order for string keys.
+    #Incorrect. Modulo arithmetic has nothing to do with alphabetical ordering.
+  ~ It encrypts the hash code so that the original value cannot be recovered.
+    #Incorrect. Modulo is a lossy arithmetic operation, not encryption; it is used purely to select a bucket index.
+}
+
+
+::t04_Q5:: [Predict the output] A `Point` class overrides `equals` but not `hashCode`.
+Two equal points `p1` and `p2` are created, `p1` is added to a `HashSet`, and
+`set.contains(p2)` is called. What is printed?
+{
+  = false, because the two objects almost certainly hash to different buckets.
+    #Correct. `contains` uses hashCode first. With the default identity hash the lookup checks the wrong bucket and never reaches the equals test.
+  ~ true, because equals returns true.
+    #Incorrect. equals is only consulted after hashCode has selected a bucket. The wrong bucket is searched.
+  ~ The code throws IllegalStateException.
+    #Incorrect. Overriding equals without hashCode compiles and runs; it simply misbehaves.
+  ~ true, because Java derives hashCode from equals automatically.
+    #Incorrect. Java never derives one from the other. You must override both.
+}
+
+::t04_Q6:: Which statement about the equals/hashCode contract is correct?
+{
+  = If two objects are equal they must have the same hash code, but equal hash codes do not imply equality.
+    #Correct. The implication runs one way only. Two unequal objects sharing a hash code is a legal collision.
+  ~ If two objects have the same hash code they must be equal.
+    #Incorrect. This reverses the contract. Collisions are unavoidable because hashCode returns a finite int.
+  ~ Equal objects may have different hash codes provided equals is correct.
+    #Incorrect. This breaks the contract and causes lookups in hashed collections to fail.
+  ~ hashCode must return a unique value for every distinct object.
+    #Incorrect. Uniqueness is impossible in general, and is not required. Good distribution is what matters.
+}
+
+::t04_Q7:: [Spot the bug] An object is added to a `HashSet`, then a field used by its
+`hashCode` is modified. `set.contains(obj)` now returns false. Why?
+{
+  = The object was filed under its original hash code and is now in the wrong bucket for its current one.
+    #Correct. This is why fields used in hashCode should be immutable. The object is in the set but effectively unreachable, and cannot even be removed.
+  ~ HashSet copies objects on insertion, so the original is unaffected.
+    #Incorrect. Collections store references, not copies.
+  ~ The set was silently emptied when the field changed.
+    #Incorrect. The element is still present; only the lookup path is broken.
+  ~ contains compares by reference, so it fails after any mutation.
+    #Incorrect. contains uses hashCode then equals, not reference identity.
+}
+
+::t04_Q8:: Why is a Java `record` often the best choice for a value type such as a DTO?
+{
+  = It generates a correct equals, hashCode and toString from the components, and its fields are final.
+    #Correct. This removes the commonest source of contract bugs and gives immutability, which is exactly what hashed collections need.
+  ~ Records are faster at runtime than ordinary classes.
+    #Incorrect. There is no general speed advantage; the benefit is correctness and brevity.
+  ~ Records can be modified after construction, unlike classes.
+    #Incorrect. The reverse is true. Record components are final.
+  ~ Records do not require a constructor.
+    #Incorrect. A canonical constructor is generated automatically, and you can supply a compact one to add validation.
+}

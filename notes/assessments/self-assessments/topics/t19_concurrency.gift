@@ -1,0 +1,111 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t19 Concurrency
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t19_concurrency
+
+::t19_Q1:: A developer writes `thread.run()` instead of `thread.start()`.
+What is the consequence?
+{
+  = The `run()` method executes on the current (calling) thread — no new thread is created.
+    #Correct. `run()` is just a regular method call; only `start()` asks the JVM to schedule a new thread and eventually call `run()` on it.
+  ~ A new thread is created but it terminates immediately without executing `run`.
+    #Incorrect. `run()` called directly executes synchronously on the current thread; no new thread is involved at all.
+  ~ A compile error occurs because `run()` is not a public method on `Thread`.
+    #Incorrect. `run()` is public; the code compiles and runs without error — it just does not create a new thread.
+  ~ The thread enters a BLOCKED state waiting for the JVM scheduler to call `run()`.
+    #Incorrect. Calling `run()` directly bypasses the scheduler entirely and executes immediately on the caller's thread.
+}
+
+::t19_Q2:: A `Counter` class has `private int _count` and a non-synchronised
+`increment()` method that performs `_count++`. One thousand threads each call
+`increment()` once. Why is the final value of `_count` likely to be less than
+1000?
+{
+  = `_count++` is not atomic: it involves a read, an increment, and a write. Two threads can read the same value before either writes back, losing an increment.
+    #Correct. This is a classic race condition — without synchronisation, concurrent read-modify-write sequences can overlap and produce an incorrect final count.
+  ~ Threads automatically queue their increments so the count is always exactly 1000.
+    #Incorrect. Without synchronisation, the JVM provides no automatic queuing of concurrent writes to shared state.
+  ~ The JVM serialises all primitive operations, so `_count++` is inherently thread-safe.
+    #Incorrect. The JVM does not serialise compound operations on primitives; `_count++` is three separate operations that can interleave.
+  ~ Integer overflow causes the count to wrap around to a value below 1000.
+    #Incorrect. With only 1000 increments, integer overflow is not a factor; the issue is a race condition.
+}
+
+::t19_Q3:: `Executors.newCachedThreadPool()` is recommended for a server that handles client connections. Why is it preferred over `newFixedThreadPool(1)` for this use case?
+{
+  = A cached pool grows as concurrent connections increase and reuses idle threads when connections decrease, handling variable load without queuing clients behind each other.
+    #Correct. A single-thread fixed pool would serialise all client handling, causing each new client to wait for the previous one to finish.
+  ~ A cached pool is synchronised by default, preventing race conditions in client handlers.
+    #Incorrect. Thread pool type does not determine whether shared state in handlers is synchronised.
+  ~ A cached pool automatically balances load across multiple machines.
+    #Incorrect. `ExecutorService` operates within a single JVM; distributed load balancing is a separate concern.
+  ~ A cached pool limits the total number of threads to the number of available CPU cores.
+    #Incorrect. A cached pool creates as many threads as needed; `newWorkStealingPool` relates to CPU cores.
+}
+
+::t19_Q4:: After submitting tasks to an `ExecutorService`, the developer omits
+`pool.shutdown()`. What is the most likely observable problem?
+{
+  = The JVM does not exit after `main()` returns because the non-daemon pool threads are still running and keeping the process alive.
+    #Correct. `ExecutorService` threads are non-daemon by default; the JVM will not exit while they are alive.
+  ~ All submitted tasks are immediately cancelled and their results are lost.
+    #Incorrect. Tasks that have already started or been queued will continue running; the issue is that the JVM stays alive.
+  ~ A NullPointerException is thrown when the pool attempts to clean up its threads.
+    #Incorrect. Without a shutdown call, the pool simply keeps its threads idle and running; no exception is thrown.
+  ~ The pool automatically shuts down after 60 seconds of inactivity.
+    #Incorrect. `ExecutorService` does not have a built-in idle timeout for shutdown; you must call `shutdown()` explicitly.
+}
+
+
+::t19_Q5:: What is the difference between `execute()` and `submit()` on an ExecutorService?
+{
+  = `submit` returns a Future and captures any thrown exception inside it, whereas `execute` returns void and lets the exception reach the thread's handler.
+    #Correct. A task submitted with `submit` can fail silently if nobody calls `Future.get()`.
+  ~ `execute` runs the task on the calling thread; `submit` uses the pool.
+    #Incorrect. Both hand the task to the pool.
+  ~ `submit` runs tasks sequentially; `execute` runs them in parallel.
+    #Incorrect. The pool governs concurrency, not the choice of method.
+  ~ They are identical aliases.
+    #Incorrect. The return type and the error-handling behaviour differ significantly.
+}
+
+::t19_Q6:: [Spot the bug] Two threads each increment a shared `int counter` one
+thousand times, and the final total is less than 2000. Why?
+{
+  = `counter++` is a read-modify-write sequence, so two threads can read the same value and one update is lost.
+    #Correct. Use AtomicInteger, or synchronise the increment. The failure is timing-dependent, so it often passes on a single run.
+  ~ The JVM caps integer increments across threads.
+    #Incorrect. No such cap exists.
+  ~ One thread finished before the other started.
+    #Incorrect. That would still yield 2000.
+  ~ `int` overflows at 2000.
+    #Incorrect. `int` holds values above two billion.
+}
+
+::t19_Q7:: What happens if a server never calls `pool.shutdown()` before `main` returns?
+{
+  = The JVM does not exit, because the pool's threads are non-daemon and keep the process alive.
+    #Correct. The program appears to hang after finishing its work. Call shutdown, then awaitTermination.
+  ~ The pool's tasks are cancelled and the JVM exits immediately.
+    #Incorrect. Non-daemon threads prevent JVM termination.
+  ~ The program exits but leaks memory to the operating system.
+    #Incorrect. The OS reclaims everything once a process actually exits; the problem is that it does not.
+  ~ A CompletionException is thrown from main.
+    #Incorrect. No exception occurs; the process simply never terminates.
+}
+
+::t19_Q8:: Why is calling `myRunnable.run()` different from `new Thread(myRunnable).start()`?
+{
+  = `run()` executes the body on the current thread; only `start()` asks the JVM for a new thread.
+    #Correct. Printing `Thread.currentThread().getName()` confirms it: `run()` reports main for every task.
+  ~ `run()` is faster but otherwise identical.
+    #Incorrect. No new thread is created at all, so there is no concurrency.
+  ~ `run()` creates a thread but does not start it.
+    #Incorrect. It creates no thread; it is an ordinary method call.
+  ~ `start()` may be called repeatedly on one Thread object, unlike run().
+    #Incorrect. The reverse is true: a second `start()` throws IllegalThreadStateException.
+}

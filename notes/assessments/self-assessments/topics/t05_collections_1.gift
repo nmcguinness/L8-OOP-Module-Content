@@ -1,0 +1,114 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t05 Collections I (ArrayList)
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t05_collections_1
+
+::t05_Q1:: You call `names.remove("Maya")` on an `ArrayList<String>`. What
+does this method do?
+{
+  = It removes the first occurrence of the String "Maya" from the list by value equality.
+    #Correct. `remove(Object o)` scans from the start and removes the first element for which `equals` returns true.
+  ~ It removes the element at index 5 because "Maya" has 4 characters and indexing starts at 1.
+    #Incorrect. The String overload of `remove` removes by value, not by index.
+  ~ It removes all occurrences of "Maya" from the list.
+    #Incorrect. Only the first occurrence is removed; subsequent occurrences remain.
+  ~ It throws an IndexOutOfBoundsException if "Maya" is not found in the list.
+    #Incorrect. `remove(Object)` returns `false` if the element is not present; it does not throw.
+}
+
+::t05_Q2:: Code inside an enhanced for-each loop calls `list.remove(element)`
+directly on the `ArrayList` while iterating. What is the likely outcome?
+{
+  = A ConcurrentModificationException is thrown at runtime.
+    #Correct. Structurally modifying an ArrayList during enhanced for-each iteration invalidates the internal iterator and triggers this exception.
+  ~ The element is removed silently and iteration continues from the next element.
+    #Incorrect. This is the behaviour of `Iterator.remove()`, not direct list removal during for-each.
+  ~ A compile-time error prevents this code from being written.
+    #Incorrect. The code compiles without error; the exception only occurs at runtime.
+  ~ The loop skips the removed element and processes the rest without any exception.
+    #Incorrect. Java's fail-fast iterator detects the structural modification and throws ConcurrentModificationException.
+}
+
+::t05_Q3:: What is the time complexity of `ArrayList.get(i)` and
+`ArrayList.contains(x)` respectively?
+{
+  = O(1) for `get` and O(n) for `contains`.
+    #Correct. Random access by index is O(1) because ArrayList is backed by an array. `contains` must scan the whole list in the worst case.
+  ~ O(n) for `get` and O(1) for `contains`.
+    #Incorrect. Array-backed random access is O(1); linear scan for `contains` is O(n).
+  ~ O(1) for both because ArrayList is backed by a hash table.
+    #Incorrect. ArrayList is backed by a plain array, not a hash table. Only hash-based structures offer O(1) membership tests.
+  ~ O(log n) for both because ArrayList keeps its elements sorted.
+    #Incorrect. ArrayList does not maintain sorted order; elements are stored in insertion order.
+}
+
+::t05_Q4:: You want to safely remove from an ArrayList all elements that
+start with the letter "A" while iterating. Which approach is correct?
+{
+  = Obtain an `Iterator` from the list and call `it.remove()` after each matching `it.next()`.
+    #Correct. Using `Iterator.remove()` is the safe way to delete elements during iteration without causing ConcurrentModificationException.
+  ~ Use an enhanced for-each loop and call `list.remove(element)` for each match.
+    #Incorrect. This causes ConcurrentModificationException because the list is structurally modified during for-each iteration.
+  ~ Use an index loop counting down from `list.size()-1` to `0` and call `list.remove(i)` for each match.
+    #Incorrect. A reverse-index loop can work for some cases but the Iterator approach is cleaner and the standard Java idiom.
+  ~ Call `list.clear()` and re-add only the non-matching elements into a new list.
+    #Incorrect. This is unnecessarily destructive and replaces contents rather than selectively removing matches.
+}
+
+
+::t05_Q5:: [Spot the bug] This loop is meant to remove blank entries but throws
+ConcurrentModificationException: `for (String s : list) \{ if (s.isBlank()) list.remove(s); \}`
+What is the correct fix?
+{
+  = Use `list.removeIf(String::isBlank)`, or an explicit Iterator and call `it.remove()`.
+    #Correct. The removal must go through the iterator so its internal modification count stays consistent with the list.
+  ~ Change the enhanced for loop to a standard indexed for loop and keep `list.remove(s)`.
+    #Incorrect. That avoids the exception but skips elements, because every removal shifts the remaining items left.
+  ~ Wrap the loop body in a try/catch for ConcurrentModificationException.
+    #Incorrect. Catching it hides a real bug and leaves the removal incomplete.
+  ~ Synchronise the loop, since the exception name indicates a threading problem.
+    #Incorrect. The name is misleading. No second thread is involved; the iterator detected a structural change made behind its back.
+}
+
+::t05_Q6:: [Predict the output] What does `list.remove(1)` do when
+`List<Integer> list \= new ArrayList<>(List.of(10, 20, 30));`?
+{
+  = Removes the element at index 1, leaving [10, 30].
+    #Correct. `remove(int)` removes by index. To remove the value 1 you would need `remove(Integer.valueOf(1))`.
+  ~ Removes the value 1, leaving the list unchanged since 1 is not present.
+    #Incorrect. That is `remove(Object)`. An `int` literal selects the index overload.
+  ~ Throws IndexOutOfBoundsException.
+    #Incorrect. Index 1 is valid for a three-element list.
+  ~ Removes the first element, leaving [20, 30].
+    #Incorrect. That would be `remove(0)`.
+}
+
+::t05_Q7:: Why is `ArrayList` usually a better default than `LinkedList` even for
+frequent middle insertions?
+{
+  = Its elements are contiguous in memory, so bulk shifting is fast, whereas LinkedList must first walk the chain to reach the position.
+    #Correct. `add(i, x)` on a LinkedList is O(n) to locate the node, and its scattered nodes defeat CPU caching.
+  ~ ArrayList insertion in the middle is O(1).
+    #Incorrect. It is O(n) because subsequent elements shift, but the shift is a fast bulk memory move.
+  ~ LinkedList does not support insertion at an index.
+    #Incorrect. It does; the operation is simply not as cheap as its O(1) reputation suggests.
+  ~ ArrayList never needs to resize.
+    #Incorrect. It resizes by copying to a larger array, though this is amortised and rare.
+}
+
+::t05_Q8:: A method should return "no results" as an empty collection. Which return
+value is preferred, and why?
+{
+  = An empty `List`, because callers can iterate it without a null check.
+    #Correct. Returning null forces every caller to guard, and a forgotten guard is a NullPointerException. Prefer `Collections.emptyList()` or `new ArrayList<>()`.
+  ~ null, because it uses less memory than an empty list.
+    #Incorrect. The saving is negligible and the cost is a class of avoidable bugs.
+  ~ `Optional<List<T>>`, to signal absence explicitly.
+    #Incorrect. An empty list already means "nothing". This gives two ways to express the same state.
+  ~ A list containing a single null element.
+    #Incorrect. This is worse than null, because the emptiness is now hidden inside the iteration.
+}

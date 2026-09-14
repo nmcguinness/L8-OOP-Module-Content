@@ -1,0 +1,114 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t08 Inheritance
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t08_inheritance
+
+::t08_Q1:: A subclass constructor does not explicitly call `super(...)`. The
+parent class defines only a constructor that takes a String parameter and
+no no-argument constructor. What happens at compile time?
+{
+  = A compile error occurs because Java automatically inserts `super()` (no-arg), which does not exist in the parent.
+    #Correct. Without an explicit `super(...)` call, Java inserts `super()`. Since the parent has no no-arg constructor, this fails to compile.
+  ~ The code compiles and the parent's String constructor is called with an empty string automatically.
+    #Incorrect. Java inserts `super()` (no arguments), not `super("")`; and this fails if no no-arg constructor exists.
+  ~ The subclass object is created without initialising any parent fields.
+    #Incorrect. Java enforces constructor chaining; you cannot skip the parent constructor.
+  ~ The parent class is bypassed entirely when the subclass constructor runs.
+    #Incorrect. The parent constructor must always run; Java's constructor chaining rules ensure this.
+}
+
+::t08_Q2:: A method in a parent class is overridden in a subclass. An
+`ArrayList<Parent>` holds a mix of parent and subclass objects. When the
+loop calls `e.describe()` on each element, which version of `describe` is
+executed for a subclass instance?
+{
+  = The subclass version of `describe`, determined at runtime based on the actual object type.
+    #Correct. This is polymorphism: the JVM dispatches to the overriding method of the actual object, regardless of the reference type.
+  ~ The parent version of `describe`, because the reference type is `Parent`.
+    #Incorrect. The reference type controls which methods are visible at compile time, but the object type determines which implementation runs.
+  ~ Both versions run in sequence, with the subclass appending to the parent's output.
+    #Incorrect. Only one version runs unless the subclass explicitly calls `super.describe()`.
+  ~ A ClassCastException is thrown because the list is typed as `ArrayList<Parent>`.
+    #Incorrect. Storing subclass instances in a `List<Parent>` is valid polymorphism and does not cause a ClassCastException.
+}
+
+::t08_Q3:: What is the key reason to declare a class `abstract` rather than
+making it a concrete class with default method bodies?
+{
+  = An abstract class can declare methods without implementation, forcing every subclass to provide its own version and preventing incomplete objects from being instantiated.
+    #Correct. Abstract classes enforce a contract\: subclasses must implement abstract methods, and you cannot create an instance of the abstract class directly.
+  ~ Abstract classes run faster because the JVM optimises abstract method dispatch.
+    #Incorrect. Performance is not the reason to use abstract classes; the reason is design and contract enforcement.
+  ~ Abstract classes allow a subclass to extend multiple parents simultaneously.
+    #Incorrect. Java does not support multiple inheritance of classes, abstract or otherwise.
+  ~ Declaring a class abstract prevents any subclass from overriding its methods.
+    #Incorrect. It is the opposite: abstract classes invite overriding; `final` prevents it.
+}
+
+::t08_Q4:: What is the difference between method overriding and method overloading?
+{
+  = Overriding replaces a parent method with the same signature in a subclass; overloading provides multiple methods with the same name but different parameter lists in the same class.
+    #Correct. Overriding is about runtime polymorphism across the inheritance hierarchy; overloading is a compile-time convenience within one class.
+  ~ Overriding changes the return type of a method; overloading changes the parameter types.
+    #Incorrect. Overriding must match the return type (or use a covariant return); overloading uses different parameter lists, not just return types.
+  ~ Both terms describe the same concept but apply to different access modifiers.
+    #Incorrect. They describe fundamentally different mechanisms: one is inheritance-based dispatch, the other is compile-time method resolution.
+  ~ Overloading is only possible in abstract classes; overriding requires a concrete parent.
+    #Incorrect. Overloading can occur in any class; overriding requires a method defined in a parent class or interface.
+}
+
+
+::t08_Q5:: [Spot the bug] A subclass defines `public boolean equals(Player other)`
+but duplicate objects still appear in a `HashSet`. What went wrong?
+{
+  = The method overloads equals rather than overriding it, because the parameter must be `Object`.
+    #Correct. Collections call `equals(Object)`, which is still the inherited identity version. Adding `@Override` would have made this a compile error.
+  ~ equals cannot be overridden in a subclass.
+    #Incorrect. It can and often should be, together with hashCode.
+  ~ HashSet ignores equals and compares by reference.
+    #Incorrect. HashSet uses hashCode then equals; here the wrong equals is being consulted.
+  ~ The subclass must also declare `implements Comparable`.
+    #Incorrect. Comparable governs ordering, not equality.
+}
+
+::t08_Q6:: [Predict the output] `Animal a \= new Dog();` where `Dog extends Animal`
+and both define `speak()`. Which version runs, and why?
+{
+  = Dog's version, because instance method calls are dispatched on the runtime type.
+    #Correct. This is polymorphism. The declared type governs which methods may be called; the runtime type governs which implementation executes.
+  ~ Animal's version, because the variable is declared as Animal.
+    #Incorrect. The declared type determines what the compiler permits, not which override runs.
+  ~ Neither; the code does not compile without an explicit cast.
+    #Incorrect. Assigning a subclass instance to a superclass reference is always allowed.
+  ~ Dog's version only if `speak()` is declared abstract in Animal.
+    #Incorrect. Overriding works for concrete parent methods too.
+}
+
+::t08_Q7:: A subclass constructor does not call `super(...)` explicitly. What happens?
+{
+  = Java inserts an implicit call to the parent's no-argument constructor, and compilation fails if none exists.
+    #Correct. This is why a parent with only a parameterised constructor forces every subclass to call `super(...)` explicitly.
+  ~ The parent constructor is skipped entirely.
+    #Incorrect. A parent constructor always runs before the subclass body.
+  ~ The parent's fields are left null or zero but the code still compiles.
+    #Incorrect. If no no-arg constructor exists the code does not compile at all.
+  ~ The compiler chooses whichever parent constructor best matches the subclass parameters.
+    #Incorrect. There is no such matching. The implicit call is always to the no-argument constructor.
+}
+
+::t08_Q8:: A subclass overrides a method purely to throw `UnsupportedOperationException`.
+What does this usually indicate?
+{
+  = The is-a relationship is wrong, and composition or a narrower interface would model it better.
+    #Correct. If a child cannot honour the parent's contract it is not truly a kind of that parent. This violates the Liskov substitution principle.
+  ~ It is good defensive practice for methods a subclass does not need.
+    #Incorrect. It moves a design error into a runtime failure for anyone using the parent type.
+  ~ The parent method should have been declared final.
+    #Incorrect. That prevents the override but leaves the modelling problem unsolved.
+  ~ The subclass is missing an @Override annotation.
+    #Incorrect. The annotation is unrelated to the design problem being signalled.
+}

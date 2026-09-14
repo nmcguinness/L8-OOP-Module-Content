@@ -1,0 +1,23 @@
+{
+  "MD033": {
+    "allowed_elements": [
+      "details",
+      "summary",
+      "strong",
+      "code",
+      "br"
+    ]
+  },
+  "MD013": false,
+  "MD032": false,
+  "MD040": false,
+  "MD060": false,
+  "MD025": {
+    "front_matter_title": ""
+  },
+  "MD024": {
+    "siblings_only": true
+  },
+  "MD026": false,
+  "MD036": false
+}
