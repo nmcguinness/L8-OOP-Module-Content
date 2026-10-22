@@ -26,19 +26,32 @@ prerequisites:
 
 ## In this topic
 
-- [What you'll learn](#what-youll-learn)
-- [Why this matters](#why-this-matters)
-- [How this builds on previous content](#how-this-builds-on-previous-content)
-- [Identity vs Value Equality](#identity-vs-value-equality)
-- [The equals/hashCode contract (do not break this)](#the-equalshashcode-contract-do-not-break-this)
-- [How hashing works (collection-independent)](#how-hashing-works-collection-independent)
-- [Writing correct equals/hashCode](#writing-correct-equalshashcode)
-- [What makes a good hash code?](#what-makes-a-good-hash-code)
-- [Pitfalls to avoid](#pitfalls-to-avoid)
-- [Worked example: duplicate leak and fix](#worked-example-duplicate-leak-and-fix)
-- [Key takeaways](#key-takeaways)
-- [Reflective questions](#reflective-questions)
-- [Appendix A: Modulo arithmetic (a quick primer)](#appendix-a-modulo-arithmetic-a-quick-primer)
+- [Equality \& Hashing in Java](#equality--hashing-in-java)
+  - [In this topic](#in-this-topic)
+  - [What you'll learn](#what-youll-learn)
+  - [Why this matters](#why-this-matters)
+  - [How this builds on previous content](#how-this-builds-on-previous-content)
+  - [Identity vs Value Equality](#identity-vs-value-equality)
+  - [The equals/hashCode contract (do not break this)](#the-equalshashcode-contract-do-not-break-this)
+  - [How hashing works (collection-independent)](#how-hashing-works-collection-independent)
+    - [Simple, concrete hashing examples (string to number)](#simple-concrete-hashing-examples-string-to-number)
+    - [Object to number (combining field hashes)](#object-to-number-combining-field-hashes)
+    - [3.3 From hash code to bucket index](#33-from-hash-code-to-bucket-index)
+  - [Writing correct equals/hashCode](#writing-correct-equalshashcode)
+    - [Records (recommended when suitable)](#records-recommended-when-suitable)
+    - [Classes (override both consistently)](#classes-override-both-consistently)
+  - [What makes a good hash code?](#what-makes-a-good-hash-code)
+  - [Pitfalls to avoid](#pitfalls-to-avoid)
+  - [Worked example: duplicate leak and fix](#worked-example-duplicate-leak-and-fix)
+  - [Key takeaways](#key-takeaways)
+  - [Reflective questions](#reflective-questions)
+  - [Appendix A: Modulo arithmetic (a quick primer)](#appendix-a-modulo-arithmetic-a-quick-primer)
+    - [Examples](#examples)
+    - [Why it matters here](#why-it-matters-here)
+    - [Properties you’ll use](#properties-youll-use)
+    - [Java specifics (sign of result)](#java-specifics-sign-of-result)
+    - [Quick intuition](#quick-intuition)
+  - [Lesson Context](#lesson-context)
 
 ---
 
@@ -117,6 +130,27 @@ objects produced different hash codes, lookups could fail.
 - If `a.equals(b)` is true to `a.hashCode() == b.hashCode()` must be true.
 - `equals` should be **reflexive, symmetric, transitive**, and **consistent**.
 - `hashCode` should be stable for the object’s lifetime (don’t base it on fields you’ll mutate).
+
+> **Aside: the four properties of `equals`**
+>
+> These come from the mathematical definition of an **equivalence relation**. Your `equals` must satisfy all four, or collections such as `HashSet`, `HashMap` and `List.contains` will behave unpredictably.
+>
+> | Property | Rule | Plain meaning |
+> |---|---|---|
+> | **Reflexive** | `a.equals(a)` is `true` | An object is always equal to itself. |
+> | **Symmetric** | `a.equals(b)` is `true` if and only if `b.equals(a)` is `true` | Order does not matter; if `a` thinks it equals `b`, `b` must agree. |
+> | **Transitive** | if `a.equals(b)` and `b.equals(c)`, then `a.equals(c)` | Equality chains; you cannot have `a == b` and `b == c` but `a != c`. |
+> | **Consistent** | repeated calls to `a.equals(b)` return the same result, provided neither object is modified | The answer does not change between calls for no reason (for example, it must not depend on time or randomness). |
+>
+> One further rule: `a.equals(null)` must return `false`, never throw.
+>
+> **Typical ways these get broken**
+>
+> - **Symmetry:** comparing across types. If `CaseInsensitiveString.equals` accepts a plain `String`, then `cis.equals("abc")` is `true` but `"abc".equals(cis)` is `false`, because `String` knows nothing about your class.
+> - **Transitivity:** subclassing and adding a field to `equals`. A `ColourPoint(1, 2, RED)` may equal `Point(1, 2)`, and `Point(1, 2)` may equal `ColourPoint(1, 2, BLUE)`, but the two `ColourPoint`s are not equal to each other.
+> - **Consistency:** basing `equals` on mutable state or external resources (for example, resolving a URL to an IP address at comparison time).
+>
+> Using `getClass() != o.getClass()` rather than `instanceof` in `equals` avoids most of the symmetry and transitivity traps, at the cost of subclasses never equalling their parent type.
 
 ---
 
