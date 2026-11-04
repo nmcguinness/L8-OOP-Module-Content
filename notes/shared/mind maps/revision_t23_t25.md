@@ -117,54 +117,6 @@ mindmap
       rather than fight it`"]
 ```
 
-**Diagram description**
-Mind map of **Unit Testing**, with 9 branches:
-
-- **Anatomy of a good test**
-  - Arrange the inputs and objects
-  - Act by calling one thing
-  - Assert the expected outcome
-  - One test one scenario
-- **Naming convention**
-  - Pattern: method_scenario_expectedBehaviour
-  - findById_nonexistentId_returnsEmpty
-  - Failure report reads without opening the file
-  - testOne tells you nothing
-- **Worthless tests**
-  - assertNotNull on a new object
-  - Testing a plain getter
-  - Calling a method and asserting nothing
-  - Inflates coverage proves nothing
-- **Unit versus integration**
-  - Unit touches one class no external system
-  - Integration crosses classes or systems
-  - DAO tests are integration tests
-  - Keep the fast ones separate
-- **DAO testing**
-  - Use a dedicated test database
-  - BeforeEach resets to a known state
-  - Never point tests at development data
-  - Tests must be independent and repeatable
-- **What to test**
-  - Guard clauses reject invalid input
-  - Found and not found paths
-  - Empty collection results
-  - Boundary values
-- **Round trip tests**
-  - Serialise then deserialise
-  - Assert equal to the original
-  - Requires a correct equals
-  - Catches missing getters and setters
-- **Coverage**
-  - Measures lines executed not correctness
-  - Seventy percent is a floor
-  - Uncovered lines cluster in error handling
-  - Green suite still allows production bugs
-- **Testability is a design signal**
-  - Hard to test means doing too much
-  - Extract logic that needs no socket
-  - Split the class rather than fight it
-
 ### Code Snippets
 
 ```java
@@ -310,34 +262,6 @@ mindmap
       n15["`Unreachable goal
       must terminate`"]
 ```
-
-**Diagram description**
-Mind map of **Pathfinding**, with 5 branches:
-
-- **The frontier decides the algorithm**
-  - FIFO queue gives breadth-first
-  - Cheapest so far gives Dijkstra
-  - Cost plus estimate gives A star
-  - Same loop every time
-- **Steps versus cost**
-  - Steps counts moves
-  - Cost counts terrain
-  - Equal only on flat ground
-  - BFS optimises steps not cost
-- **Heuristics**
-  - h estimates what remains
-  - Manhattan for four way moves
-  - Zero heuristic is Dijkstra
-  - Admissible means never over-estimates
-- **What to measure**
-  - Cells expanded is the work
-  - Path cost is the quality
-  - Never judge one by the other
-- **Where it breaks**
-  - Over-estimating loses optimality
-  - Marking visited on queueing
-  - Mutating a cell used as a key
-  - Unreachable goal must terminate
 
 ### Code Snippets
 
@@ -501,55 +425,6 @@ mindmap
       outside version control`"]
       No README entry point
 ```
-
-**Diagram description**
-Mind map of **Documenting a Project**, with 10 branches:
-
-- **Javadoc basics**
-  - Slash star star above the member
-  - First sentence is the summary
-  - Documents the contract not the code
-  - Extracted into browsable HTML
-- **Common tags**
-  - param for each parameter
-  - return for the value meaning
-  - throws for the failure condition
-  - author and version at class level
-- **What to document**
-  - Constructors with guard clauses
-  - Methods that can return null or empty
-  - Anything that throws
-  - Non obvious constraints and units
-- **What not to document**
-  - Plain getters and setters
-  - Comments restating the method name
-  - Code that already reads clearly
-- **Mermaid advantages**
-  - Plain text so it diffs and reviews
-  - Lives beside the code it describes
-  - Renders on GitHub without tooling
-  - Cannot silently go stale like an image
-- **ER diagram**
-  - Entities attributes and keys
-  - Cardinality between tables
-  - Documents the database schema
-- **Flowchart**
-  - Decision and process flow
-  - Good for an algorithm or a pipeline
-- **Sequence diagram**
-  - Participants across the top
-  - Messages in time order
-  - Shows a full request cycle
-  - Client server DAO database and back
-- **Architecture diagram**
-  - Tiers and their dependencies
-  - Presentation service DAO database
-  - Belongs in the README
-- **Common mistakes**
-  - Javadoc that repeats the signature
-  - Diagrams that contradict the code
-  - Documentation kept outside version control
-  - No README entry point
 
 ### Code Snippets
 

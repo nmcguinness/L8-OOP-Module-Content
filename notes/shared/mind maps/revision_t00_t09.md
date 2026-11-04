@@ -114,47 +114,6 @@ mindmap
       in the constructor`"]
 ```
 
-**Diagram description**
-Mind map of **OOP Fundamentals**, with 8 branches:
-
-- **Class versus object**
-  - Class is the template or description
-  - Object is one instance with its own values
-  - One class can produce many objects
-  - Each object has independent state
-- **Anatomy of a class**
-  - Fields hold the state
-  - Constructors build and validate
-  - Methods expose behaviour
-  - Naming convention makes fields obvious
-- **Encapsulation**
-  - Fields are private by default
-  - Public methods form the API
-  - Class controls every change to its own state
-  - Storage can change later without breaking callers
-- **Access modifiers**
-  - private this class only
-  - public any class
-  - protected subclasses and same package
-  - no modifier same package only
-- **Guard clauses**
-  - Validate at the top of the constructor
-  - Fail fast before the object exists
-  - Throw IllegalArgumentException on bad input
-  - All preconditions visible in one glance
-- **Constructors**
-  - One constructor does the real work
-  - Others delegate with this dot dot dot
-  - Never duplicate guards across constructors
-- **References and aliasing**
-  - Variables hold references not objects
-  - Two names can refer to one object
-  - Change through one is visible through the other
-- **Common mistakes**
-  - Public fields that bypass validation
-  - Assigning name equals name without this
-  - Validating too late instead of in the constructor
-
 ### Code Snippets
 
 ```java
@@ -287,43 +246,6 @@ mindmap
         errors if not checked`"]
 ```
 
-**Diagram description**
-Mind map of **Arrays**, with 2 branches:
-
-- **One dimensional arrays**
-  - What it is
-    - Fixed length list of values of the same type
-  - Creation
-    - Create with values
-    - Create with size and default values
-  - Access
-    - Use **index** to read or write
-  - Length
-    - Use **length** field to get number of elements
-  - Iteration
-    - Use **for** loop when you need index
-    - Use **enhanced for** loop for simple reading
-  - Common tasks
-    - Find minimum or maximum value
-    - Search for a given value
-    - Count values that match a condition
-  - Common mistakes
-    - Using index outside valid range
-    - Expecting array to grow or shrink automatically
-- **Two dimensional arrays**
-  - What it is
-    - Array of arrays used for grids and tables
-  - Shapes
-    - Rectangular all rows same length
-    - Jagged rows can have different lengths
-  - Access
-    - Use row index then column index
-  - Iteration
-    - Nested loops outer for rows inner for columns
-  - Pitfalls
-    - Each row has its own length in jagged arrays
-    - Null rows cause errors if not checked
-
 ### Code Snippets
 
 ```java
@@ -447,41 +369,6 @@ mindmap
       such as symlinks`"]
 ```
 
-**Diagram description**
-Mind map of **Recursion**, with 6 branches:
-
-- **Two mandatory parts**
-  - Base case returns without recursing
-  - Recursive case shrinks the problem
-  - Both required or it never terminates
-  - Shrinking must actually approach the base case
-- **Call stack model**
-  - Each call adds a frame
-  - Frames pile up on the way down
-  - Work often happens on the way back up
-  - Stack unwinds when base case returns
-- **Common patterns**
-  - Number recursion such as factorial
-  - Array recursion using an index
-  - String recursion such as palindrome
-  - Branching recursion such as Fibonacci
-  - Grid recursion such as flood fill
-- **Efficiency trap**
-  - Naive Fibonacci recomputes subproblems
-  - Cost is roughly two to the power n
-  - Memoisation caches results for order n
-  - Trade time for memory
-- **When not to recurse**
-  - Depth could be very large
-  - Java has no tail call optimisation
-  - Simple loop is clearer
-  - Rewrite iteratively with an explicit stack
-- **Debugging**
-  - Print the argument on entry
-  - Values not shrinking means no progress
-  - Depth climbing past thousands means too deep
-  - Watch for cycles such as symlinks
-
 ### Code Snippets
 
 ```java
@@ -603,34 +490,6 @@ mindmap
       n12["`Forgetting to
       handle equality case`"]
 ```
-
-**Diagram description**
-Mind map of **Ordering**, with 4 branches:
-
-- **Why we sort**
-  - Make lists easier to read
-  - Find top scores or lowest prices
-  - Group similar items together
-- **Comparable natural order**
-  - Purpose
-    - Give a class one default way to compare itself
-  - Method
-    - **compareTo** returns negative or zero or positive
-  - Examples
-    - Sort by name alphabetically
-    - Sort by numeric id
-- **Comparator custom orders**
-  - Purpose
-    - Allow many different sorting rules
-  - Examples
-    - Sort by score highest first
-    - Sort by age then by name
-  - Multi step sorting
-    - Use tie breakers when values are equal
-- **Mistakes to avoid**
-  - Using subtraction in compare methods can overflow
-  - Returning inconsistent results for the same inputs
-  - Forgetting to handle equality case
 
 ### Code Snippets
 
@@ -755,41 +614,6 @@ mindmap
       adding to set or map`"]
 ```
 
-**Diagram description**
-Mind map of **Equality and Hashing**, with 4 branches:
-
-- **equals method**
-  - Why we use
-    - Decide if two objects represent the same value
-  - Contract
-    - **Reflexive:** if an object equals itself
-    - **Symmetric:** if a equals b then b equals a
-    - **Transitive:** if a equals b and b equals c then a equals c
-    - Consistent repeated calls give same answer
-    - Non-null never equal to null
-  - Implementation
-    - Compare key fields such as id or email
-    - Use defensive coding i.e. null safe checks
-- **hashCode method**
-  - Purpose
-    - Provide integer fingerprint for object
-  - Rule
-    - If two objects are equal their hash codes must match
-  - Good practice
-    - Use same fields as equals
-    - Use stable fields that do not change
-- **Hash-based collections**
-  - HashSet
-    - Stores unique elements
-    - Uses **equals** and **hashCode** to avoid duplicates
-  - HashMap
-    - Stores key value pairs
-    - Uses **equals** and **hashCode** on keys
-- **Mistakes to avoid**
-  - Implementing equals but not hashCode
-  - Using mutable fields for equality or hashing
-  - Changing key fields after adding to set or map
-
 ### Code Snippets
 
 ```java
@@ -912,43 +736,6 @@ mindmap
       n12["`Index out of range when
       list is small or empty`"]
 ```
-
-**Diagram description**
-Mind map of **ArrayList**, with 5 branches:
-
-- **What it is**
-  - Resizable list that grows automatically
-  - Keeps elements in order
-  - Allows random access by index
-- **Core operations**
-  - Add
-    - Add at end of list
-    - Insert at specific position
-  - Remove
-    - Remove by index
-    - Remove first matching value
-  - Read and write
-    - Get value at index
-    - Replace value at index
-  - Utilities
-    - Check if list contains a value
-    - Check if list is empty
-    - Find index of first match
-- **Iteration patterns**
-  - Index loop
-    - Good when you need positions
-    - Good when you want to modify values
-  - Enhanced for loop
-    - Good for simple reading
-  - Iterator
-    - Allows safe removal while looping
-- **Performance notes**
-  - Fast access by index
-  - Fast add at end
-  - Slower insert or remove in the middle
-- **Common errors**
-  - Concurrent modification exception when removing in **enhanced for** loop
-  - Index out of range when list is small or empty
 
 ### Code Snippets
 
@@ -1073,38 +860,6 @@ mindmap
       with iterator you must
       move before using set`"]
 ```
-
-**Diagram description**
-Mind map of **LinkedList**, with 6 branches:
-
-- **What it is**
-  - List made of linked nodes instead of array
-  - Each node points to next and previous node
-- **Strengths**
-  - Fast add at front or back
-  - Fast remove at front or back
-  - Grows one node at a time
-- **Weaknesses**
-  - Slow access by index must walk nodes
-  - More memory use than array based list
-- **List iterator**
-  - Purpose
-    - Move forward and backward through list
-    - Add or remove elements while iterating
-  - Operations
-    - Next and previous
-    - Add remove and set current element
-- **As queue or deque**
-  - Queue behaviour
-    - **Offer** adds at end
-    - **Poll** removes from front
-    - **Peek** looks at front without removing
-  - Stack behaviour
-    - **Push** adds to top
-    - **Pop** removes from top
-- **Pitfalls**
-  - Avoid repeated get by index in large linked lists
-  - After using add or remove with iterator you must move before using set
 
 ### Code Snippets
 
@@ -1245,45 +1000,6 @@ mindmap
       causes NullPointerException`"]
 ```
 
-**Diagram description**
-Mind map of **Set Map and PriorityQueue**, with 7 branches:
-
-- **Set unique elements**
-  - HashSet fast no order guarantee
-  - LinkedHashSet keeps insertion order
-  - TreeSet sorted order costs log n
-  - add returns false if already present
-- **Map keyed lookup**
-  - HashMap fast average constant time
-  - LinkedHashMap keeps insertion order
-  - TreeMap sorted keys and range queries
-  - Keys unique values may repeat
-- **Depends on t04**
-  - hashCode picks the bucket
-  - equals compares within the bucket
-  - Both must be overridden together
-  - Key fields must be immutable
-- **Compute patterns**
-  - merge for counting
-  - computeIfAbsent for grouping
-  - getOrDefault for a safe read
-  - putIfAbsent to fill only when missing
-- **PriorityQueue**
-  - Head is always the smallest
-  - Comparator can reverse or customise
-  - poll removes the smallest
-  - Iteration order is NOT sorted
-- **Choosing a collection**
-  - Need uniqueness choose a Set
-  - Need lookup by key choose a Map
-  - Need sorted keys choose TreeMap
-  - Need insertion order choose LinkedHash variants
-- **Common mistakes**
-  - Mutating a key after insertion
-  - Expecting HashSet to preserve order
-  - Printing a PriorityQueue and expecting sorted output
-  - get returns null and causes NullPointerException
-
 ### Code Snippets
 
 ```java
@@ -1415,34 +1131,6 @@ mindmap
       methods into subclasses
       instead of base class`"]
 ```
-
-**Diagram description**
-Mind map of **Inheritance**, with 6 branches:
-
-- **What it is**
-  - Share code between related classes
-  - Subclass is a more specific version of superclass
-- **Extends keyword**
-  - Subclass inherits **public** and **protected** fields and methods
-  - Can add new fields and methods
-  - Constructor must call **super** as first statement
-- **Method overriding**
-  - Subclass may **override** inherited methods
-  - Use **override** annotation to catch mistakes
-  - Polymorphism chooses method based on actual object type
-- **Abstract classes**
-  - Can not create objects directly
-  - Can have abstract methods with no body
-  - Subclasses must implement missing methods
-  - Useful when all subclasses share base behaviour
-- **Polymorphism**
-  - Use superclass reference to hold many subclass objects
-  - Example list of entities containing **Cars** and **Airplanes** are all stored in a list of **Vehicles**
-  - Code calls methods on base type and the correct overridden method in the subclass runs
-- **Common mistakes**
-  - Confusing **overloading** with **overriding**
-  - Forgetting to call **super** constructor when needed
-  - Putting too many common fields or methods into subclasses instead of base class
 
 ### Code Snippets
 
@@ -1592,36 +1280,6 @@ mindmap
       n18["`Forgetting to implement
       all required methods`"]
 ```
-
-**Diagram description**
-Mind map of **Interfaces**, with 6 branches:
-
-- **What it is**
-  - Describe behaviour that a class must provide
-  - Contain method **signatures** but no **instance** fields
-  - Used as capability labels on classes (i.e. this class implements Interactable)
-- **Why use interfaces**
-  - Different classes can share the same behaviour
-  - Works even when classes do not share a superclass
-  - Helps design flexible and testable code
-- **Features**
-  - Methods
-    - **Abstract** methods that must be implemented
-    - **Default** methods with a shared implementation
-    - **Static** methods as helpers
-  - Constants
-    - **public static final** values shared by all
-- **Using interfaces**
-  - Class declares that it implements one or many interfaces
-  - Objects can be referenced by interface type
-  - Example Door and CokeMachine both implement Interactable
-- **Common uses**
-  - Lists of mixed types using one shared interface
-  - Separating interface from implementation in large systems
-- **Common mistakes**
-  - Trying to store per object state in interface (e.g. Player::name, Connection::IPAddress)
-  - Creating many tiny interfaces without clear purpose
-  - Forgetting to implement all required methods
 
 ### Code Snippets
 

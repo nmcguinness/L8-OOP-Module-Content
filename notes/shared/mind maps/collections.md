@@ -31,14 +31,22 @@ flowchart TD
     M -->|No| O{Work mainly<br>at the ends?}
     O -->|Yes| P["ArrayDeque / LinkedList<br/>as a Deque"]
     O -->|No| Q["ArrayList<br/>the default List"]
+    classDef startQ fill:#EEF0F3,stroke:#94A3B8,color:#1F2937
+    class A,B,H startQ
+    classDef mapsQ fill:#EEF5FC,stroke:#7FA8D1,color:#1F2937
+    classDef mapsA fill:#D6E6F7,stroke:#7FA8D1,color:#1F2937
+    class C,E mapsQ
+    class D,F,G mapsA
+    classDef setsQ fill:#EDF7F0,stroke:#7DB591,color:#1F2937
+    classDef setsA fill:#D3ECDB,stroke:#7DB591,color:#1F2937
+    class I setsQ
+    class J,K,L setsA
+    classDef listsQ fill:#FDF3EA,stroke:#D9A06F,color:#1F2937
+    classDef listsA fill:#FAE0CA,stroke:#D9A06F,color:#1F2937
+    class M,O listsQ
+    class N,P,Q listsA
+    linkStyle default stroke:#64748B,stroke-width:1.5px
 ```
-
-**Diagram description**
-Work down two questions. **Do you need lookup by key?**
-
-- If yes: `TreeMap` when keys must be sorted or queried by range, `LinkedHashMap` when insertion order matters, otherwise `HashMap` as the default.
-- If no, ask **must elements be unique?** If yes: `TreeSet` for sorted order, `LinkedHashSet` for insertion order, `HashSet` when order does not matter.
-- If neither applies, ask whether you always process the smallest element first (`PriorityQueue`), whether the work happens at the two ends (`ArrayDeque` or `LinkedList` as a Deque), or neither — in which case `ArrayList` is the default.
 
 ---
 

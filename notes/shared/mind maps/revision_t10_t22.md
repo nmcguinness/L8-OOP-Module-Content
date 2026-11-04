@@ -118,49 +118,6 @@ mindmap
       placed first`"]
 ```
 
-**Diagram description**
-Mind map of **Exception Handling**, with 8 branches:
-
-- **The hierarchy**
-  - Throwable at the top
-  - Error is JVM level never catch
-  - Exception is checked by default
-  - RuntimeException is unchecked
-- **Checked exceptions**
-  - Compiler forces catch or declare
-  - Failure outside the program's control
-  - IOException and SQLException
-  - Caller can reasonably respond
-- **Unchecked exceptions**
-  - No compiler obligation
-  - Signals a bug to be fixed
-  - IllegalArgumentException
-  - NullPointerException
-- **try catch finally**
-  - catch the narrowest useful type
-  - Specific types before general ones
-  - finally runs on every exit path
-  - Multi catch with a pipe for siblings
-- **try with resources**
-  - Resource must implement AutoCloseable
-  - Closed automatically on every path
-  - Original exception preserved
-  - Close failure attached as suppressed
-- **Custom exceptions**
-  - Use when the failure is domain specific
-  - Lets callers catch that case alone
-  - Can carry structured data such as an id
-  - Do not reinvent standard exceptions
-- **Throw or return Optional**
-  - Not found is a normal outcome use Optional
-  - Genuine failure should still throw
-  - Do not use exceptions for control flow
-- **Common mistakes**
-  - Empty catch block swallows the cause
-  - Catching Exception hides real bugs
-  - Losing the cause by not passing e
-  - Supertype catch placed first
-
 ### Code Snippets
 
 ```java
@@ -291,34 +248,6 @@ mindmap
       type with runtime type`"]
 ```
 
-**Diagram description**
-Mind map of **Generics I**, with 6 branches:
-
-- **What it is**
-  - Parameterise a class or method by type
-  - Compiler enforces type safety
-  - No casting needed at call site
-- **Generic classes**
-  - Declare type parameter in angle brackets
-  - Example Box of T holds one value of any type
-  - Example Pair of K and V holds two values
-- **Generic methods**
-  - Type parameter declared before return type
-  - Can infer type from arguments
-  - Example static T first of List of T
-- **Bounded type parameters**
-  - Upper bound limits what types are accepted
-  - Example T extends Comparable allows comparison
-  - Example T extends Number allows numeric ops
-- **Type erasure**
-  - Compiler removes type info at runtime
-  - All T become Object in bytecode
-  - Cannot do new T or use T in instanceof
-- **Common mistakes**
-  - Using raw types loses compile time checking
-  - Trying to create arrays of generic types
-  - Confusing compile time type with runtime type
-
 ### Code Snippets
 
 ```java
@@ -429,37 +358,6 @@ mindmap
       n15["`Helper gives
       unknown type a name`"]
 ```
-
-**Diagram description**
-Mind map of **Generics II**, with 6 branches:
-
-- **Invariance problem**
-  - List of Dog cannot be assigned to List of Animal
-  - Even though Dog is a subtype of Animal
-  - Compiler rejects to prevent type corruption
-- **Unbounded wildcard**
-  - List of unknown written as List-questionmark
-  - Can read as Object
-  - Cannot add anything except null
-  - Use when type does not matter
-- **Upper bounded wildcard**
-  - List extends T written as producer
-  - Can read elements as T
-  - Cannot add elements
-  - Use when reading from a collection
-- **Lower bounded wildcard**
-  - List super T written as consumer
-  - Can add elements of type T
-  - Can only read as Object
-  - Use when writing to a collection
-- **PECS rule**
-  - Producer uses Extends
-  - Consumer uses Super
-  - Apply when designing flexible API methods
-- **Wildcard capture**
-  - Cannot call methods that depend on unknown type
-  - Introduce private generic helper method
-  - Helper gives unknown type a name
 
 ### Code Snippets
 
@@ -595,41 +493,6 @@ mindmap
       n21["`Overcomplying simple
       one off operations`"]
 ```
-
-**Diagram description**
-Mind map of **Design Patterns I**, with 4 branches:
-
-- **Strategy pattern**
-  - Intent
-    - Replace if-else chains with interchangeable objects
-    - Swap algorithm at runtime
-  - Components
-    - Strategy interface declares the algorithm method
-    - ConcreteStrategy implements one variant
-    - Context holds a strategy and delegates to it
-  - Examples
-    - AttackStrategy with Melee and Ranged variants
-    - PriceStrategy with NoDiscount and StudentDiscount
-- **Command pattern**
-  - Intent
-    - Wrap a request as an object
-    - Decouple sender from receiver
-  - Components
-    - Command interface with execute method
-    - ConcreteCommand calls action on a receiver
-    - Invoker holds and triggers commands
-  - Extensions
-    - MacroCommand runs a list of commands in sequence
-    - Undo stack reverses previously executed commands
-- **When to use**
-  - Many variations of the same operation
-  - Need to queue or log operations
-  - Need undo and redo support
-  - Need to build operations from smaller steps
-- **Common mistakes**
-  - Putting strategy selection logic back into context
-  - Forgetting to reverse state correctly in undo
-  - Overcomplying simple one off operations
 
 ### Code Snippets
 
@@ -798,47 +661,6 @@ mindmap
       of just translating`"]
 ```
 
-**Diagram description**
-Mind map of **Design Patterns II**, with 4 branches:
-
-- **Factory pattern**
-  - Intent
-    - Centralise object creation
-    - Caller does not know which class is created
-  - Components
-    - Factory class or static method
-    - Product interface or abstract class
-    - ConcreteProduct classes
-  - Examples
-    - ParserFactory creates CsvParser or JsonParser by extension
-    - EnemyFactory creates Slime variants by difficulty
-- **Observer pattern**
-  - Intent
-    - Notify many objects when one object changes
-    - Loose coupling between subject and listeners
-  - Components
-    - Subject holds list of listeners
-    - Listener interface with callback method
-    - ConcreteListeners implement the callback
-  - Examples
-    - Button notifies SoundListener and AnalyticsListener
-    - TemperatureSensor notifies ConsoleDisplay and OverheatAlarm
-- **Adapter pattern**
-  - Intent
-    - Make an incompatible class fit a required interface
-    - Bridge legacy or third party code to current design
-  - Components
-    - Target interface expected by existing code
-    - Adaptee class with incompatible interface
-    - Adapter wraps Adaptee and implements Target
-  - Examples
-    - LegacyLoggerAdapter wraps old logMessage method
-    - GatewayCheckoutAdapter converts cents to euros
-- **Common mistakes**
-  - Factory returning null instead of throwing on unknown type
-  - Observer keeping stale references to removed listeners
-  - Adapter doing too much business logic instead of just translating
-
 ### Code Snippets
 
 ```java
@@ -990,37 +812,6 @@ mindmap
       call is expensive`"]
 ```
 
-**Diagram description**
-Mind map of **DB Connectivity and DAO**, with 5 branches:
-
-- **JDBC basics**
-  - DriverManager gets a Connection
-  - Connection creates Statements
-  - ResultSet holds rows returned by a query
-  - Always close resources when done
-- **PreparedStatement**
-  - Parameterise SQL with placeholders
-  - Prevents SQL injection
-  - Set params with setInt setString setDouble
-  - executeQuery returns rows
-  - executeUpdate returns affected row count
-- **DAO pattern**
-  - Interface declares data operations
-    - findById findAll save update delete
-  - JdbcDAO implements with SQL
-  - InMemoryDAO implements with a list for tests
-  - Service layer depends only on interface
-- **ResultSet mapping**
-  - Loop while rs.next
-  - Read each column with rs.getString rs.getInt etc
-  - Create domain object from row values
-  - Extract to private mapRow helper
-- **Common mistakes**
-  - Not closing Connection or ResultSet causes leaks
-  - Building SQL with string concatenation allows injection
-  - Catching and ignoring SQLException hides real errors
-  - Opening a new Connection per method call is expensive
-
 ### Code Snippets
 
 ```java
@@ -1165,43 +956,6 @@ mindmap
       n17["`Iterate a map
       using BiConsumer`"]
 ```
-
-**Diagram description**
-Mind map of **Functional Interfaces**, with 4 branches:
-
-- **What it is**
-  - Interface with exactly one abstract method
-  - Can be assigned a lambda or method reference
-  - Annotation FunctionalInterface is optional but helpful
-- **Core interfaces**
-  - Predicate of T
-    - Takes T returns boolean
-    - Used for filtering and testing conditions
-  - Function of T and R
-    - Takes T returns R
-    - Used for transforming or mapping values
-  - Consumer of T
-    - Takes T returns nothing
-    - Used for side effects like printing
-  - Supplier of T
-    - Takes nothing returns T
-    - Used for lazy creation or default values
-  - BiConsumer of K and V
-    - Takes two arguments returns nothing
-    - Used for iterating maps
-  - Comparator of T
-    - Takes two T values returns int
-    - Used for sorting
-- **Lambda syntax**
-  - Single expression body no braces
-  - Block body with braces and return
-  - Method reference for existing methods
-- **Common patterns**
-  - Filter a list using Predicate
-  - Transform a list using Function
-  - Iterate a list using Consumer
-  - Group items using Function as key extractor
-  - Iterate a map using BiConsumer
 
 ### Code Snippets
 
@@ -1348,50 +1102,6 @@ mindmap
       list in forEach`"]
 ```
 
-**Diagram description**
-Mind map of **Streams API**, with 8 branches:
-
-- **Pipeline model**
-  - Source such as a collection or array
-  - Zero or more intermediate operations
-  - Exactly one terminal operation
-  - Nothing runs without a terminal operation
-- **Intermediate operations**
-  - filter keeps matching elements
-  - map transforms one to one
-  - flatMap transforms one to many
-  - distinct sorted limit skip
-  - All return a new stream
-- **Terminal operations**
-  - collect and toList gather results
-  - count reduce findFirst
-  - anyMatch allMatch noneMatch
-  - forEach for side effects
-- **Collectors**
-  - toList and toSet
-  - joining for strings
-  - groupingBy for a map of groups
-  - counting and summingInt as downstream
-- **Laziness**
-  - Elements pulled one at a time
-  - Short circuiting stops early
-  - Expensive map skipped for unreached elements
-  - peek alone prints nothing
-- **Single use**
-  - A stream is consumed once
-  - Reuse throws IllegalStateException
-  - Re-create from the collection instead
-  - Never store a Stream in a field
-- **Primitive streams**
-  - IntStream avoids boxing
-  - mapToInt to convert
-  - sum average max built in
-- **Common mistakes**
-  - Forgetting the terminal operation
-  - map where flatMap was needed
-  - Side effects in filter or map
-  - Mutating a shared list in forEach
-
 ### Code Snippets
 
 ```java
@@ -1537,47 +1247,6 @@ mindmap
       specific separators`"]
 ```
 
-**Diagram description**
-Mind map of **Java IO**, with 8 branches:
-
-- **Path and Files**
-  - Path names a location it may not exist
-  - Files performs the operations
-  - exists size delete copy move
-  - NIO2 replaces the old File class
-- **Reading text**
-  - readAllLines loads everything at once
-  - lines streams lazily and must be closed
-  - BufferedReader for line by line control
-  - Choose based on file size
-- **Writing text**
-  - Files.write for a whole collection
-  - newBufferedWriter for incremental writing
-  - Always inside try with resources
-- **Open options**
-  - CREATE makes it if absent
-  - CREATE_NEW fails if it already exists
-  - APPEND adds to the end
-  - TRUNCATE_EXISTING clears first
-- **Why CREATE_NEW**
-  - Test and create are atomic
-  - exists then write is a race condition
-  - Throws FileAlreadyExistsException
-- **Checked exceptions**
-  - IOException must be caught or declared
-  - File may vanish between check and read
-  - Permissions disk space network share
-- **CSV parsing**
-  - split on the delimiter
-  - Trailing empty fields are dropped
-  - Use a negative limit to keep them
-  - Guard against missing columns
-- **Common mistakes**
-  - Forgetting try with resources on lines
-  - Reading a whole huge file to get ten lines
-  - Assuming split keeps trailing empties
-  - Hard coded platform specific separators
-
 ### Code Snippets
 
 ```java
@@ -1698,37 +1367,6 @@ mindmap
       n22["`Calling future.get too
       early blocks all progress`"]
 ```
-
-**Diagram description**
-Mind map of **Concurrency**, with 5 branches:
-
-- **Runnable and Thread**
-  - Runnable describes a task with no return value
-  - Thread wraps a Runnable and runs it
-  - Call **start** not run to create a new thread
-  - Call **run** directly means no new thread
-- **ExecutorService**
-  - Manages a pool of reusable threads
-  - Submit tasks and get Futures back
-  - shutdown stops accepting new tasks
-  - awaitTermination waits for all tasks to finish
-  - newFixedThreadPool limits concurrent threads
-  - newCachedThreadPool grows as needed
-- **Callable and Future**
-  - Callable describes a task that returns a value
-  - Can throw checked exceptions unlike Runnable
-  - Future holds the eventual result
-  - future.get blocks until result is ready
-- **Race conditions**
-  - Multiple threads read and modify shared state
-  - Unsynchronized increments can lose updates
-  - synchronized keyword adds a lock on a method or block
-  - Only one thread can hold the lock at a time
-- **Common mistakes**
-  - Calling run instead of start runs on current thread
-  - Not shutting down executor leaks threads
-  - Shared mutable state without synchronization loses updates
-  - Calling future.get too early blocks all progress
 
 ### Code Snippets
 
@@ -1879,44 +1517,6 @@ mindmap
       line delimited wire`"]
 ```
 
-**Diagram description**
-Mind map of **Jackson Basics**, with 7 branches:
-
-- **What JSON is**
-  - Text format of objects and arrays
-  - Keys are always quoted strings
-  - Values are string number boolean null object array
-  - Language independent
-- **ObjectMapper**
-  - The single entry point
-  - writeValueAsString object to JSON
-  - readValue JSON to object
-  - Reuse one instance it is thread safe
-- **What Jackson needs**
-  - Public getters to serialise
-  - No-arg constructor and setters to deserialise
-  - Key derived from the getter name not the field
-  - getTrackId becomes trackId
-- **Annotations**
-  - JsonProperty renames a key
-  - JsonIgnore excludes a field
-  - JsonInclude controls nulls
-  - JsonIgnoreProperties tolerates unknown keys
-- **Type erasure problem**
-  - List.class loses the element type
-  - Elements come back as LinkedHashMap
-  - ClassCastException on first use
-  - TypeReference preserves the full type
-- **Generic wrappers**
-  - Response of T wraps any payload
-  - Serialises with no special handling
-  - Deserialising needs TypeReference
-- **Common mistakes**
-  - Missing no-arg constructor
-  - Expecting the field name to be the JSON key
-  - Using List.class instead of TypeReference
-  - Pretty printing on a line delimited wire
-
 ### Code Snippets
 
 ```java
@@ -2052,49 +1652,6 @@ mindmap
       n24["`Catches missing
       getters and setters`"]
 ```
-
-**Diagram description**
-Mind map of **Protocol Base64 and BLOBs**, with 8 branches:
-
-- **Request envelope**
-  - type names the request
-  - payload carries the data
-  - One JSON object per line
-  - Response wrapper reports status
-- **Routing safely**
-  - Map of type to handler
-  - Whitelist not reflection
-  - Unknown type returns a clean error
-  - Adding a type registers an entry
-- **Reading a payload**
-  - Check has before get
-  - get returns null when absent
-  - asInt returns zero for bad input
-  - Validate then reply with an error
-- **Base64 in JSON**
-  - Raw bytes are not valid text
-  - Encode to 64 safe ASCII characters
-  - Costs about 33 percent more size
-  - Decode on the receiving side
-- **When Base64 is wrong**
-  - Large files blow up memory
-  - Prefer a separate binary channel
-  - Keep JSON for the metadata
-- **BLOB storage in JDBC**
-  - MEDIUMBLOB holds up to 16 MB
-  - setBytes writes the raw byte array
-  - getBytes reads it back
-  - Database stores bytes not Base64
-- **Metadata only queries**
-  - Never select the BLOB you do not need
-  - List the columns explicitly
-  - Avoid SELECT star on BLOB tables
-  - Separate DAO methods for data and metadata
-- **Round trip testing**
-  - Serialise then deserialise
-  - Assert equal to the original
-  - Requires a correct equals
-  - Catches missing getters and setters
 
 ### Code Snippets
 
@@ -2241,35 +1798,6 @@ mindmap
       disconnect causes
       server thread to hang`"]
 ```
-
-**Diagram description**
-Mind map of **Networking**, with 5 branches:
-
-- **TCP basics**
-  - Reliable ordered byte stream between two endpoints
-  - ServerSocket listens on a fixed port
-  - Socket connects client to server
-  - Both ends get input and output streams
-- **Single client server**
-  - ServerSocket.accept blocks until client connects
-  - Wrap streams in BufferedReader and PrintWriter
-  - Read request, write response, close socket
-  - Simple but handles only one client at a time
-- **Multi-client server**
-  - Accept loop creates a new thread per connection
-  - Each thread handles one client independently
-  - Shared server state needs synchronization
-  - ExecutorService can replace raw thread creation
-- **JSON protocol**
-  - Requests and responses formatted as JSON strings
-  - ObjectMapper serialises Java objects to JSON
-  - ObjectMapper deserialises JSON back to Java objects
-  - Newline delimited messages over the stream
-- **Common mistakes**
-  - Forgetting to flush PrintWriter delays or blocks response
-  - Not closing socket on exception leaks file descriptors
-  - Blocking accept on main thread while handling client
-  - Not handling client disconnect causes server thread to hang
 
 ### Code Snippets
 
