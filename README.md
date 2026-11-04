@@ -12,8 +12,8 @@ This space holds your weekly topics, exercises, shared resources, and assessment
     - [Topic dependencies](#topic-dependencies)
     - [Topic Map — Difficulty vs OOP Transferability](#topic-map--difficulty-vs-oop-transferability)
   - [Continuous Assessment Briefs](#continuous-assessment-briefs)
-  - [Getting Started](#getting-started)
   - [How to Use This Repo](#how-to-use-this-repo)
+    - [Getting Started](#getting-started)
     - [Running Exercises from `Main`](#running-exercises-from-main)
     - [Folder Map](#folder-map)
     - [Cheatsheets](#cheatsheets)
@@ -219,14 +219,6 @@ quadrantChart
 
 ---
 
-## Getting Started
-
-- Install **JDK 25 or newer** and select it in your IDE. The build sets `maven.compiler.release` to 25, so an older JDK will not compile the code.
-- Open `code/` as a Maven project in IntelliJ: right-click `code/pom.xml` then **Add as Maven Project**. IntelliJ will download all dependencies automatically.
-- Use your IDE's Markdown preview for notes files and Mermaid diagrams, or view them on GitHub.
-
----
-
 ## How to Use This Repo
 
 - Start with the official [module descriptor](https://courses.dkit.ie/index.cfm/page/module/moduleId/55497/deliveryperiodid/1066) to understand *what* we cover in this module.
@@ -235,6 +227,14 @@ quadrantChart
   - Read the **notes**, then work through **exercises/** (core skills), then try **challenges/** (apply + extend).
   - Attempt each exercise before opening the worked version in [`code/src/`](code/src/) — reading a solution feels like understanding, but only writing the code builds it.
   - Finish with the **Reflective Questions** and compare against the *"Check your thinking"* panel beneath them.
+
+---
+
+### Getting Started
+
+- Install **JDK 25 or newer** and select it in your IDE. The build sets `maven.compiler.release` to 25, so an older JDK will not compile the code.
+- Open `code/` as a Maven project in IntelliJ: right-click `code/pom.xml` then **Add as Maven Project**. IntelliJ will download all dependencies automatically.
+- Use your IDE's Markdown preview for notes files and Mermaid diagrams, or view them on GitHub.
 
 ---
 
