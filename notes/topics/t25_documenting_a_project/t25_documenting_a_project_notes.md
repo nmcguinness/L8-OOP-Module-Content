@@ -332,7 +332,8 @@ Two rules for writing the description:
 - **State the relationships, not the picture.** "Each album belongs to one artist" — not "an arrow points from ALBUM up to ARTIST."
 - **For a sequence diagram, describe it as numbered steps.** That is what the diagram actually encodes, and steps read far better aloud than "participant A sends to B".
 
-> **One syntax caution.** `accTitle` and `accDescr` work inside `flowchart`, `sequenceDiagram`, `classDiagram`, `stateDiagram-v2` and `erDiagram`. They do **not** work inside `mindmap`, whose parser reads the indented lines as nodes and fails with "There can be only one root". For a mind map, put the title in YAML frontmatter above the diagram instead, and rely on the prose paragraph:
+> [!WARNING]
+> `accTitle` and `accDescr` work inside `flowchart`, `sequenceDiagram`, `classDiagram`, `stateDiagram-v2` and `erDiagram`. They do **not** work inside `mindmap`, whose parser reads the indented lines as nodes and fails with "There can be only one root". For a mind map, put the title in YAML frontmatter above the diagram instead, and rely on the prose paragraph:
 >
 > ```text
 > ---

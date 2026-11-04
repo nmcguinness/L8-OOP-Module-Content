@@ -182,6 +182,7 @@ public static long countNonEmpty(Path path) throws IOException {
 }
 ```
 
+> [!WARNING]
 > **Always** close the stream from `Files.lines()` — use try-with-resources. It holds an open file handle until closed.
 
 ---

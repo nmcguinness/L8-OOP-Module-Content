@@ -102,6 +102,7 @@ You must use the accumulator in a “pipeline” style by supplying:
 - a **measurer** function (extracts a numeric value from an event), and
 - a **filter** predicate (accept/reject rules).
 
+> [!IMPORTANT]
 > You are allowed to extend the accumulator (e.g., improve `reset()`, add better validation, or switch to `ToDoubleFunction<T>`), but your solution must still run using the provided accumulator as the starting point.
 
 ### Correctness requirement

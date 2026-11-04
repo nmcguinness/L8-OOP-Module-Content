@@ -67,7 +67,8 @@ Every exercise follows the same layout: a goal, the steps, the rules, hints, and
 
 - Describe the **contract**, not the code. "Opens a connection and runs a SELECT" describes the code; "returns an empty `Optional` if no task has this id" describes the contract.
 
-> **Watch out:** `@return the task` is not documentation: it repeats the type. `@return the same task, with its generated taskId filled in` tells the caller something they could not guess.
+> [!TIP]
+> `@return the task` is not documentation: it repeats the type. `@return the same task, with its generated taskId filled in` tells the caller something they could not guess.
 
 <details>
 <summary>Hints</summary>
@@ -252,7 +253,8 @@ public void setTitle(String title) { ... }   // NOTE: this setter trims and reje
 
 - One user has many tasks; each task has exactly one user.
 
-> **Watch out:** the cardinality marks are where most mistakes happen. `||--o{` reads "exactly one, to zero or more". Check which end is which.
+> [!WARNING]
+> The cardinality marks are where most mistakes happen. `||--o{` reads "exactly one, to zero or more". Check which end is which.
 
 <details>
 <summary>Hints</summary>

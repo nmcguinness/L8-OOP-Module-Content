@@ -475,6 +475,7 @@ public class PlayerJsonTest {
 }
 ```
 
+> [!IMPORTANT]
 > **Prerequisite for round-trip equality:** Your entity class must have:
 > - a public no-arg constructor (Jackson needs this to deserialise)
 > - `equals` and `hashCode` implemented (so `assertEquals` compares field values, not references)

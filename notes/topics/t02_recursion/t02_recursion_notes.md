@@ -216,6 +216,7 @@ static int fib(int n) {
 // fib(7) = 13
 ```
 
+> [!CAUTION]
 > Naïve Fibonacci is **exponential** — `fib(40)` makes ~330 million calls. For large `n`, use memoisation or a loop.
 
 The call tree for `fib(4)` shows why: every non-leaf node spawns **two** sub-calls, and sub-trees are recomputed repeatedly (green nodes are base cases):

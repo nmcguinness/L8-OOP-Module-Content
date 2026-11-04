@@ -68,6 +68,7 @@ A quick summary of what **you** should be able to do after this lesson:
 | Use              | Implement correct `equals` and `hashCode` for a small class, keeping fields consistent across both methods.                                       |
 | Debug         | Detect and explain bugs caused by **mutable identifying fields** or inconsistent `equals`/`hashCode`.                                             |
 
+> [!NOTE]
 > We will **not** use `HashSet`, `HashMap`, or any collection types here. Those appear in a later lesson.
 
 ---
@@ -120,6 +121,7 @@ Why? Hash-based lookups group values by their hash codes before checking equalit
 - `equals` should be **reflexive, symmetric, transitive**, and **consistent**.
 - `hashCode` should be stable for the object’s lifetime (don’t base it on fields you’ll mutate).
 
+> [!NOTE]
 > **Aside: the four properties of `equals`**
 >
 > These come from the mathematical definition of an **equivalence relation**. Your `equals` must satisfy all four, or collections such as `HashSet`, `HashMap` and `List.contains` will behave unpredictably.
@@ -208,10 +210,10 @@ If an object has more fields, you keep folding them in with the same pattern:
 h = 31*h + hash(fieldN)
 ```
 
-**Important:**
-- Use the **same fields** here as you use in `equals`.
-- Prefer fields that don’t change over the object’s lifetime (immutability).
-- In real Java code, `Objects.hash(...)` or your IDE can generate a good implementation.
+> [!IMPORTANT]
+> - Use the **same fields** here as you use in `equals`.
+> - Prefer fields that don’t change over the object’s lifetime (immutability).
+> - In real Java code, `Objects.hash(...)` or your IDE can generate a good implementation.
 
 ### 3.3 From hash code to bucket index
 

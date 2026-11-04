@@ -73,7 +73,8 @@ You must use:
 - `Consumer<Incident>` (or `BiConsumer<K, V>`) for side effects (logging, counters, state updates)
 - A **Comparator factory** (see below)
 
-**Important:** Predicates should be *pure* (no mutation). Put side effects in Consumers.
+> [!IMPORTANT]
+> Predicates should be *pure* (no mutation). Put side effects in Consumers.
 
 ---
 

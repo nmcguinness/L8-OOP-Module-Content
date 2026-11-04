@@ -70,6 +70,7 @@ Arrays are great when the size never changes. Real programs rarely stay that tid
 - **Index-based** random access is O(1) average.
 - Inserting/removing near the **end** is cheap; near the **front** can be costly (elements shift).
 
+> [!TIP]
 > Rule of thumb: lots of **random reads** + **append at end** — `ArrayList` is a strong default.
 
 ---
@@ -131,6 +132,7 @@ String[] out = list.toArray(new String[0]);            // size-aware copy
 list.clear();
 ```
 
+> [!WARNING]
 > Avoid `Arrays.asList` for a resizable list: it creates a fixed-size view; `add/remove` will throw.
 
 ---
@@ -181,6 +183,7 @@ for (String s : input) {
 }
 ```
 
+> [!NOTE]
 > Later we’ll prefer a `HashSet` for O(n) de-dup (see *Collections III*), but this version shows list-only logic.
 
 ---
@@ -202,6 +205,7 @@ for (String s : input) {
 | Insert/remove at middle/front     | O(n) |
 | `contains(x)` / `indexOf(x)`      | O(n) |
 
+> [!NOTE]
 > “Amortized” means occasional capacity growth is paid for by many cheap appends.
 
 ---

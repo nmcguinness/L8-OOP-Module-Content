@@ -196,6 +196,7 @@ ref1.addPoints(20);
 System.out.println(alice.getScore()); // 20 — same object was modified
 ```
 
+> [!WARNING]
 > **NullPointerException:** If you declare a variable but never assign it, it holds `null`. Calling any method on `null` crashes at runtime. Always initialise references before use.
 
 ```java

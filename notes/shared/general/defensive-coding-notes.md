@@ -274,6 +274,7 @@ static double divideStrict(double a, double b){
 }
 ```
 
+> [!IMPORTANT]
 > Pick **one** policy per method and **document it** in Javadoc or comments.
 
 ### 19) Reusable CSV cell getters (trim + empty to null)

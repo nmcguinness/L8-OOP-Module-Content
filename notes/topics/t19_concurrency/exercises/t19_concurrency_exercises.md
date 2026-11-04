@@ -38,7 +38,8 @@ Every exercise follows the same layout: a goal, the steps, a worked example, the
 
 Each exercise goes in its own package, `t19_concurrency.exercises.exNN`. Create a class `Exercise` in that package with a static `run()` method, and call `Exercise.run()` from `Main`.
 
-> **Watch out:** threads take turns in an order nobody controls. Your output will be in a slightly different order from the examples, and from your own previous run. That is expected. The checklists say what must be true however the lines are ordered.
+> [!NOTE]
+> Threads take turns in an order nobody controls. Your output will be in a slightly different order from the examples, and from your own previous run. That is expected. The checklists say what must be true however the lines are ordered.
 
 ---
 
@@ -203,7 +204,8 @@ Safe total     (expected 5000): 5000
 - [ ] The safe total is always exactly 5,000.
 - [ ] You can explain the read-add-write problem in one sentence.
 
-> **Watch out:** on some machines the unsafe total occasionally comes out at exactly 5,000. That does not mean the code is correct. A race condition is a bug that only shows up sometimes, which is what makes it dangerous.
+> [!CAUTION]
+> On some machines the unsafe total occasionally comes out at exactly 5,000. That does not mean the code is correct. A race condition is a bug that only shows up sometimes, which is what makes it dangerous.
 
 **Package:** `t19_concurrency.exercises.ex03`
 

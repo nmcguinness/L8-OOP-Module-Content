@@ -307,7 +307,8 @@ AccountLockedException: Account IE-001 is locked
 - [ ] `run()` prints the four lines shown.
 - [ ] One `catch (BankException e)` would handle either bank error.
 
-> **Watch out:** real banking code never stores money in a `double`, because a `double` cannot hold most decimal amounts exactly. It uses whole cents in a `long`, or `BigDecimal`.
+> [!CAUTION]
+> Real banking code never stores money in a `double`, because a `double` cannot hold most decimal amounts exactly. It uses whole cents in a `long`, or `BigDecimal`.
 
 **Package:** `t10_exception_handling.exercises.ex05`
 

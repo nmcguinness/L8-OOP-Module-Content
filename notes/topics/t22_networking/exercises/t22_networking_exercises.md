@@ -167,7 +167,8 @@ All clients done
 - [ ] Every client gets both of its replies.
 - [ ] Lines from different clients are mixed together, showing they were handled at the same time.
 
-> **Watch out:** the program may take up to a minute to exit after `All clients done`. A cached pool keeps idle threads alive for 60 seconds in case more work arrives. Called from `Main`, this does not matter.
+> [!NOTE]
+> The program may take up to a minute to exit after `All clients done`. A cached pool keeps idle threads alive for 60 seconds in case more work arrives. Called from `Main`, this does not matter.
 
 **Package:** `t22_networking.exercises.ex02`
 
@@ -397,7 +398,8 @@ Reply: {"status":"OK","message":"echo","data":"GET_PLAYER"}
 - One JSON message per line, sent with `println`.
 - Import `ClientRequest` and `ServerResponse`. Do not copy them.
 
-> **Watch out:** `PrintWriter` with auto-flush set to `true` flushes on `println` but **not** on `print`. A message sent with `print` never leaves the buffer, and the other end waits forever.
+> [!WARNING]
+> `PrintWriter` with auto-flush set to `true` flushes on `println` but **not** on `print`. A message sent with `print` never leaves the buffer, and the other end waits forever.
 
 <details>
 <summary>Hints</summary>

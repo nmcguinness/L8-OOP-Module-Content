@@ -307,6 +307,7 @@ public final class ChainComparator<T> implements Comparator<T> {
 }
 ```
 
+> [!TIP]
 > Each comparator is a "layer." The chain checks them left-to-right. Keep each comparator small and single-purpose; the chain handles the combination logic.
 
 ### 4) Putting it together (runnable demo)

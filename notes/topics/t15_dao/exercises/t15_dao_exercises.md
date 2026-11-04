@@ -51,7 +51,8 @@ Every exercise follows the same layout: a goal, the steps, a worked example, the
 
 Each exercise goes in its own package, `t15_dao.exercises.exNN`. Create a class `Exercise` in that package with a static `run()` method, and call `Exercise.run()` from `Main`.
 
-> **Watch out:** never type a password into a `.java` file. It ends up in Git, in every clone and in your team-mates' history. Every exercise reads its settings from `config/db.properties`, which is listed in `.gitignore`. See [Step 6](../t15_dao_notes.md#step-6--keep-credentials-out-of-your-code).
+> [!CAUTION]
+> Never type a password into a `.java` file. It ends up in Git, in every clone and in your team-mates' history. Every exercise reads its settings from `config/db.properties`, which is listed in `.gitignore`. See [Step 6](../t15_dao_notes.md#step-6--keep-credentials-out-of-your-code).
 
 ---
 
@@ -333,7 +334,8 @@ Available cars:
 - [ ] `run()` prints output like that shown.
 - [ ] Renting a car that is already rented, or under maintenance, returns `false`.
 
-> **Watch out:** registrations are `UNIQUE` in the table. Run this exercise a second time and the first `addCar` fails, printing `Storage error: Could not insert car 23-LH-1111`. Delete the two cars in phpMyAdmin, or change the registrations, before running it again.
+> [!WARNING]
+> Registrations are `UNIQUE` in the table. Run this exercise a second time and the first `addCar` fails, printing `Storage error: Could not insert car 23-LH-1111`. Delete the two cars in phpMyAdmin, or change the registrations, before running it again.
 
 **Package:** `t15_dao.exercises.ex04`
 

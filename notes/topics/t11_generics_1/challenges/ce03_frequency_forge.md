@@ -186,7 +186,8 @@ You are given:
 
 - [country_codes](https://github.com/nmcguinness/L8---OOP---Module-Content/blob/main/code/data/ce03/country_codes.csv)
 
-**Important:** this file contains codes separated by commas (often on one line), so your CSV reading must collect **every token**, not just the first column.
+> [!IMPORTANT]
+> This file contains codes separated by commas (often on one line), so your CSV reading must collect **every token**, not just the first column.
 
 ### Dataset B (XML): Weapon inventory
 

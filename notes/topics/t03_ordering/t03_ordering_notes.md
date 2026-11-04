@@ -320,7 +320,8 @@ Product::name                       // instance method reference as key extracto
 
 **When to use here:** `Comparator.comparing(...)` needs a *key extractor* function to pull the field you want to sort by; lambdas (or method references) are the neatest way to provide it.
 
-> Tip: Prefer the primitive versions `comparingInt/Long/Double` when your key is numeric to avoids boxing and is a touch faster.
+> [!TIP]
+> Prefer the primitive versions `comparingInt/Long/Double` when your key is numeric: they avoid boxing and are a touch faster.
 
 ---
 

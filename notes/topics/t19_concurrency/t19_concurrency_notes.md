@@ -154,7 +154,8 @@ t.start();   // <--- correct: asks the JVM to schedule this thread
 // t.run(); // WRONG: calls run() on the current thread — no new thread is created
 ```
 
-> **Common mistake:** calling `t.run()` instead of `t.start()`. Both compile. Only `start()` creates a new thread.
+> [!WARNING]
+> Calling `t.run()` instead of `t.start()`. Both compile. Only `start()` creates a new thread.
 
 ---
 

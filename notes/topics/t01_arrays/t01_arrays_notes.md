@@ -322,6 +322,7 @@ System.out.println(average2(new int[]{2,2}) == 2.0);
 
 **Goal:** You’ll create a tiny system to manage seating in a cinema where rows can have different lengths (a jagged 2D array). You’ll book a couple of seats and count how many are free.
 
+> [!NOTE]
 > *IPO means **Input then Process then Output** — a simple way to plan programs by listing what comes in, what you do, and what comes out.*
 
 | Inputs | Process | Output |

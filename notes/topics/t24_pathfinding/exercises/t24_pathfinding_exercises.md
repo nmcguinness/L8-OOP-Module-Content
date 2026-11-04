@@ -39,7 +39,8 @@ cd code
 mvn -o test -Dtest='t24_pathfinding.**'
 ```
 
-> **Watch out:** two demos are provided. `demos.de01.Demo` animates a search in the console and `demos.de02.Demo` prints a comparison table. Run both before you start, so you know what the finished searches look like.
+> [!TIP]
+> Two demos are provided. `demos.de01.Demo` animates a search in the console and `demos.de02.Demo` prints a comparison table. Run both before you start, so you know what the finished searches look like.
 
 ---
 
@@ -140,7 +141,8 @@ Centre (1,1): [(0,1), (2,1), (1,0), (1,2)]
 - [ ] Your four tests pass, and the all-walls test checks for an empty list.
 - [ ] Your result matches `grid.neighbours(cell)` from the given `Grid` class.
 
-> **Watch out:** a bounds bug here looks like an algorithm bug later, and you will spend an hour in the wrong file. Test this method properly before you move on.
+> [!WARNING]
+> A bounds bug here looks like an algorithm bug later, and you will spend an hour in the wrong file. Test this method properly before you move on.
 
 **Package:** `t24_pathfinding.exercises.ex02`
 
@@ -194,7 +196,8 @@ Breadth-first steps=10 cost=46 expanded= 21
 - [ ] Both tests pass.
 - [ ] A test checks that every pair of cells next to each other in your path differs by exactly one row or one column.
 
-> **Watch out:** if you mark cells as seen only when you take them off the queue, the same cell is queued many times and the search does far more work than it should. Marking on add is safe for breadth-first search. Exercise 04 shows why it stops being safe.
+> [!WARNING]
+> If you mark cells as seen only when you take them off the queue, the same cell is queued many times and the search does far more work than it should. Marking on add is safe for breadth-first search. Exercise 04 shows why it stops being safe.
 
 **Package:** `t24_pathfinding.exercises.ex03`
 

@@ -23,7 +23,7 @@ These exercises build the pieces of a small client-server protocol, in the order
 | 05 BLOB storage | keeping binary data in MySQL | Intermediate, needs MySQL |
 | 06 Round-trip tests | proving it all with JUnit | Extension |
 
-Every exercise follows the same layout: a goal, the steps, a worked example, the rules, hints you can open if you are stuck, and a checklist. Some also have a **Watch out** box for a common mistake, and a **Think about it** question to discuss.
+Every exercise follows the same layout: a goal, the steps, a worked example, the rules, hints you can open if you are stuck, and a checklist. Some also have an alert box for a common mistake, and a **Think about it** question to discuss.
 
 Each exercise has its own package under `code/src/t21_json_2_jackson_advanced/exercises/`. Give the main class a `run()` method. Jackson is already in `code/pom.xml`.
 
@@ -162,7 +162,8 @@ public static String optionalString(JsonNode payload, String field, String fallb
 - Test four cases for each method: field present and correct, present but the wrong type, missing, and a `null` payload.
 - `{"id":"42"}` is a **string**, so `requireInt` must reject it, not convert it.
 
-> **Watch out:** three similar-looking calls behave differently on a missing field. `payload.get("id")` returns `null`. `payload.get("id").asInt()` throws `NullPointerException`. `payload.path("id").asInt()` silently returns `0`. Picking the wrong one is how a server ends up storing zeros it was never sent.
+> [!WARNING]
+> Three similar-looking calls behave differently on a missing field. `payload.get("id")` returns `null`. `payload.get("id").asInt()` throws `NullPointerException`. `payload.path("id").asInt()` silently returns `0`. Picking the wrong one is how a server ends up storing zeros it was never sent.
 
 <details>
 <summary>Hints</summary>
@@ -216,7 +217,8 @@ Original 13 bytes, Base64 20 characters
 - Both methods throw `IllegalArgumentException` for `null`.
 - `decodeFromBase64` throws `IllegalArgumentException` for text that is not valid Base64.
 
-> **Watch out:** compare byte arrays with `Arrays.equals(a, b)`. Never use `a.equals(b)` or `a == b`: those compare references, so they report failure even for a perfect copy.
+> [!WARNING]
+> Compare byte arrays with `Arrays.equals(a, b)`. Never use `a.equals(b)` or `a == b`: those compare references, so they report failure even for a perfect copy.
 
 <details>
 <summary>Hints</summary>
@@ -273,7 +275,8 @@ getAllMetadata() gives [AssetMetadata[id=1, name=hero.png]]
 - A missing row gives `Optional.empty()`.
 - `insertAsset` throws `IllegalArgumentException` for `null` data.
 
-> **Watch out:** `getBytes()` returns `null` on a missing row, not an empty array. Returning an `Optional` makes that impossible to forget.
+> [!WARNING]
+> `getBytes()` returns `null` on a missing row, not an empty array. Returning an `Optional` makes that impossible to forget.
 
 <details>
 <summary>Hints</summary>
@@ -331,7 +334,8 @@ ProtocolRoundTripTest
 
 - Each test does one thing: arrange the data, act once, then assert.
 
-> **Watch out:** `assertEquals(original, restored)` calls `equals`. `ClientRequest` does not override it, so that line compares references and fails on correct code. Either override `equals` and `hashCode`, or compare field by field. Know which you are doing and why.
+> [!WARNING]
+> `assertEquals(original, restored)` calls `equals`. `ClientRequest` does not override it, so that line compares references and fails on correct code. Either override `equals` and `hashCode`, or compare field by field. Know which you are doing and why.
 
 <details>
 <summary>Hints</summary>

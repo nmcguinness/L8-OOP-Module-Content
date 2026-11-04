@@ -66,6 +66,7 @@ A quick summary of what **you** should be able to do after this lesson:
 
 Many real problems involve **frequent inserts/removals in the middle or ends** (task queues, undo/redo, event streams). `LinkedList<T>` trades **random access speed** for **cheap structural changes**—especially when you already hold an iterator at the change point.
 
+> [!TIP]
 > Rule of thumb: If you’re **walking** the structure and **mutating as you go**, `LinkedList` + `ListIterator` is often simpler and can be efficient enough. If you’re **index-hopping**, prefer `ArrayList`.
 
 ---
@@ -157,6 +158,7 @@ stack.push("state2");
 String undo = stack.pop();     // "state2"
 ```
 
+> [!TIP]
 > Prefer `offer/poll/peek` over `add/remove/element` to avoid exceptions on empty queues.
 
 ---

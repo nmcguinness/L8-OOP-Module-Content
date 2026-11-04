@@ -7,7 +7,8 @@ This document collects the mindmaps for **topics t10–t22**. Each section has:
 - **Code snippets** showing the syntax in use.
 - **Self-assessment prompts** to test yourself before checking the notes.
 
-> :warning: This revision document is not a substitute for reading, understanding, and learning the content covered in the related notes.
+> [!IMPORTANT]
+> This revision document is not a substitute for reading, understanding, and learning the content covered in the related notes.
 
 | Topic | Covers | Notes |
 |:--|:--|:--|

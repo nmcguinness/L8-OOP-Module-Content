@@ -2,7 +2,8 @@
 
 A cross-topic revision aid. The per-topic mindmaps cover each collection in detail — [t05 ArrayList](revision_t00_t09.md#t05--collections-i-arraylist), [t06 LinkedList](revision_t00_t09.md#t06--collections-ii-linkedlist-and-iterators) and [t07 Set, Map and PriorityQueue](revision_t00_t09.md#t07--collections-iii-set-map-and-priorityqueue). This page answers the question that spans all three: **which one do I actually pick?**
 
-> :warning: This revision document is not a substitute for reading, understanding, and learning the content covered in the related notes.
+> [!IMPORTANT]
+> This revision document is not a substitute for reading, understanding, and learning the content covered in the related notes.
 
 ---
 

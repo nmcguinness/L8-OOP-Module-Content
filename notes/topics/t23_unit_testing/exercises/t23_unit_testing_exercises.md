@@ -341,7 +341,8 @@ deleteById(9999)                                   gives false
 - Each test sets up its own data. No test may rely on another test having run first.
 - `TaskDAO` has no update method, so there is no update test.
 
-> **Watch out:** a test that asserts `findAll().size() == 3` passes only until someone leaves a row behind. The `@BeforeEach` reset is what makes every test independent of the others and of their order.
+> [!WARNING]
+> A test that asserts `findAll().size() == 3` passes only until someone leaves a row behind. The `@BeforeEach` reset is what makes every test independent of the others and of their order.
 
 <details>
 <summary>Hints</summary>
@@ -437,4 +438,5 @@ deleteById(9999)                                   gives false
 
 - [ ] `coverage-notes.md` answers all three questions and includes the screenshot.
 
-> **Remember:** 70% coverage is the floor, not the goal. A fully green suite at 80% can still miss a real bug, as Exercise 07 shows.
+> [!IMPORTANT]
+> 70% coverage is the floor, not the goal. A fully green suite at 80% can still miss a real bug, as Exercise 07 shows.

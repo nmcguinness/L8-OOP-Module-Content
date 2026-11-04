@@ -416,7 +416,8 @@ Empty: true
 
 - [ ] `run()` prints the five lines shown.
 
-> **Watch out:** `remove(0)` moves every other item along one place, so it gets slower as the list grows. That is fine here. The `ArrayDeque` from t07 does not have this problem.
+> [!NOTE]
+> `remove(0)` moves every other item along one place, so it gets slower as the list grows. That is fine here. The `ArrayDeque` from t07 does not have this problem.
 
 **Package:** `t11_generics_1.exercises.ex07`
 
