@@ -10,7 +10,7 @@ This space holds your weekly topics, exercises, shared resources, and assessment
   - [Table of Contents](#table-of-contents)
   - [Module Content](#module-content)
     - [Topic dependencies](#topic-dependencies)
-    - [Topic Map — Difficulty vs OOP Transferability](#topic-map--difficulty-vs-oop-transferability)
+    - [Topic Map — Difficulty vs Transferability](#topic-map--difficulty-vs-transferability)
   - [Continuous Assessment Briefs](#continuous-assessment-briefs)
   - [How to Use This Repo](#how-to-use-this-repo)
     - [Getting Started](#getting-started)
@@ -163,51 +163,51 @@ flowchart TD
 
 ---
 
-### Topic Map — Difficulty vs OOP Transferability
+### Topic Map — Difficulty vs Transferability
 
 The chart below positions each topic on two axes:
 - **X — Difficulty**: how much new syntax and mental model is required
-- **Y — OOP beyond Java**: how directly the concept transfers to other OO languages (C#, C++, Python, Kotlin, etc.)
+- **Y — Transferability**: how far the idea transfers beyond Java to other languages (C#, C++, Python, Kotlin, etc.)
 
-Topics in the top-right demand the most effort but give the most lasting value. Topics in the bottom-left are Java-specific foundations — essential here, less portable.
+Topics in the top-right demand the most effort but give the most lasting value. Topics in the bottom half are tied more closely to Java — essential here, less portable.
 
 ```mermaid
 %%{init: {"quadrantChart": {"chartWidth": 1100, "chartHeight": 820, "pointLabelFontSize": 13, "pointRadius": 5, "quadrantLabelFontSize": 18, "titleFontSize": 20, "axisLabelFontSize": 14, "pointTextMargin": 4}, "themeVariables": {"quadrant1Fill": "#E2D8F3", "quadrant2Fill": "#D3ECDB", "quadrant3Fill": "#D6E6F7", "quadrant4Fill": "#FAE0CA", "quadrant1TextFill": "#1F2937", "quadrant2TextFill": "#1F2937", "quadrant3TextFill": "#1F2937", "quadrant4TextFill": "#1F2937", "quadrantPointFill": "#475569", "quadrantPointTextFill": "#1F2937", "quadrantInternalBorderStrokeFill": "#FFFFFF", "quadrantExternalBorderStrokeFill": "#94A3B8"}, "themeCSS": ".quadrant text { font-weight: 700; }"}}%%
 quadrantChart
-    accTitle: Topic map - difficulty against how well each topic transfers beyond Java
-    accDescr: Each topic is plotted on two axes. The x-axis is difficulty, low to high. The y-axis is how well the idea transfers to other object-oriented languages, from Java-specific at the bottom to widely transferable at the top. Topics in the top right cost the most effort and give the most lasting value; those in the bottom left are Java-specific foundations.
-    title Topic Map — Difficulty vs OOP Transferability
+    accTitle: Topic map - difficulty against how far each topic transfers beyond Java
+    accDescr: Each topic is plotted on two axes. The x-axis is difficulty, low to high. The y-axis is how far the idea transfers beyond Java, from Java-bound at the bottom to widely transferable at the top. Topics in the top right cost the most effort and give the most lasting value; those in the bottom half are tied more closely to Java.
+    title Topic Map — Difficulty vs Transferability
     x-axis Low Difficulty --> High Difficulty
-    y-axis Java-specific --> Transfers to any OO language
+    y-axis Java-bound --> Transfers beyond Java
     quadrant-1 High effort, high payoff
     quadrant-2 Approachable, high payoff
-    quadrant-3 Foundations - Java-specific
-    quadrant-4 Advanced - Java-specific
+    quadrant-3 Approachable, Java-bound
+    quadrant-4 High effort, Java-bound
     t00 OOP Fundamentals: [0.08, 0.85]
-    t01 Arrays: [0.10, 0.20]
-    t02 Recursion: [0.28, 0.80]
+    t01 Arrays: [0.10, 0.70]
+    t02 Recursion: [0.60, 0.78]
     t03 Ordering: [0.25, 0.55]
     t04 Equality & Hashing: [0.40, 0.72]
-    t05 Collections I: [0.15, 0.28]
-    t06 Collections II: [0.31, 0.45]
-    t07 Collections III: [0.44, 0.36]
+    t05 Collections I: [0.15, 0.58]
+    t06 Collections II: [0.31, 0.35]
+    t07 Collections III: [0.44, 0.60]
     t08 Inheritance: [0.38, 0.88]
     t09 Interfaces: [0.44, 0.92]
     t10 Exception Handling: [0.30, 0.75]
     t11 Generics I: [0.51, 0.68]
-    t12 Generics II: [0.72, 0.58]
+    t12 Generics II: [0.72, 0.35]
     t13 Design Patterns I: [0.58, 0.95]
     t14 Design Patterns II: [0.63, 0.90]
-    t15 DB Connectivity: [0.54, 0.60]
-    t16 Functional Interfaces: [0.48, 0.82]
-    t17 Streams API: [0.52, 0.45]
+    t15 DB Connectivity: [0.58, 0.60]
+    t16 Functional Interfaces: [0.46, 0.65]
+    t17 Streams API: [0.60, 0.65]
     t18 Java IO: [0.42, 0.40]
     t19 Concurrency: [0.76, 0.78]
     t20 JSON I Basics: [0.45, 0.55]
     t21 JSON II Advanced: [0.65, 0.55]
     t22 Networking: [0.70, 0.65]
     t23 Unit Testing: [0.56, 0.85]
-    t24 Pathfinding: [0.66, 0.72]
+    t24 Pathfinding: [0.70, 0.86]
     t25 Documenting a Project: [0.32, 0.68]
 ```
 
