@@ -13,19 +13,14 @@ tags: [metadata, frontmatter, yaml, standards, comp-c8z03]
 
 # Frontmatter Schema
 
-Every topic file carries YAML frontmatter. Tooling reads it, so the field set is fixed:
-a file either conforms or it does not. This page is the contract.
+Every topic file carries YAML frontmatter. Tooling reads it, so the field set is fixed: a file either conforms or it does not. This page is the contract.
 
-Two schemas exist. **Notes** carry the full 14 fields, because a topic is described once.
-**Exercises** carry a 10-field subset — the same keys, in the same order, minus the four
-that describe the *topic* rather than the *file*.
+Two schemas exist. **Notes** carry the full 14 fields, because a topic is described once. **Exercises** carry a 10-field subset — the same keys, in the same order, minus the four that describe the *topic* rather than the *file*.
 
 ## Rules
 
-- The frontmatter block is the **first thing in the file**. No blank line, no BOM, nothing
-  before the opening `---`.
-- `title` must match the file's H1 exactly. This is also required by R14 of the
-  [accessibility style guide](accessibility-style-guide.md).
+- The frontmatter block is the **first thing in the file**. No blank line, no BOM, nothing before the opening `---`.
+- `title` must match the file's H1 exactly. This is also required by R14 of the [accessibility style guide](accessibility-style-guide.md).
 - Key **order** is part of the schema, so a diff shows real changes rather than reordering.
 - Frontmatter is never line-wrapped, so a long `description` stays on one line.
 - Values containing a colon must be **quoted**, or the parser reads a nested mapping.
@@ -63,10 +58,7 @@ Notes carry all five. **Exercises carry only `tags`.**
 
 ## Why exercises omit four fields
 
-`difficulty_tier`, `mlos`, `previous_topic` and `prerequisites` describe **the topic**, not
-the exercise file. Recording them twice means they drift: the notes get updated, the
-exercises quietly keep last year's values, and neither is obviously wrong. They are
-declared once, in the notes, and the exercise file is joined to them by `topic_code`.
+`difficulty_tier`, `mlos`, `previous_topic` and `prerequisites` describe **the topic**, not the exercise file. Recording them twice means they drift: the notes get updated, the exercises quietly keep last year's values, and neither is obviously wrong. They are declared once, in the notes, and the exercise file is joined to them by `topic_code`.
 
 ## The `Lesson Context` footer
 
@@ -81,22 +73,15 @@ this_lesson:
 mlos: [MLO3]
 ```
 
-Four of those values — `topic_code`, `difficulty_tier`, `mlos` and the previous topic —
-**also live in the frontmatter**, so the same fact is recorded twice in one file.
+Four of those values — `topic_code`, `difficulty_tier`, `mlos` and the previous topic — **also live in the frontmatter**, so the same fact is recorded twice in one file.
 
-**The frontmatter wins.** When the two disagree, the frontmatter is correct and the footer
-is stale. Change the frontmatter first, then bring the footer into line.
+**The frontmatter wins.** When the two disagree, the frontmatter is correct and the footer is stale. Change the frontmatter first, then bring the footer into line.
 
-This is not a hypothetical risk. An audit of all 25 topics found two files where the pair
-had already diverged: t00 omitted `mlos` from its footer, and t01 claimed it had no
-previous lesson when it follows t00. Both are fixed, but the duplication that allowed them
-remains — the footer is kept because it is part of the documented section structure.
-Re-run the comparison after any edit to either block.
+This is not a hypothetical risk. An audit of all 25 topics found two files where the pair had already diverged: t00 omitted `mlos` from its footer, and t01 claimed it had no previous lesson when it follows t00. Both are fixed, but the duplication that allowed them remains — the footer is kept because it is part of the documented section structure. Re-run the comparison after any edit to either block.
 
 ## Verifying a file
 
-A `grep` for `^title:` proves nothing — it cannot tell you the block parses, that the keys
-are the right ones, or that they are in order. Parse it:
+A `grep` for `^title:` proves nothing — it cannot tell you the block parses, that the keys are the right ones, or that they are in order. Parse it:
 
 ```python
 import yaml
@@ -107,6 +92,4 @@ data = yaml.safe_load(text[4:text.find("\n---\n", 3)])
 assert list(data) == EXPECTED_KEYS, list(data)
 ```
 
-A UTF-8 BOM is the failure worth knowing about: the file *looks* correct in an editor, but
-because the first bytes are not `---`, every YAML front-matter parser reports no
-frontmatter at all rather than an error.
+A UTF-8 BOM is the failure worth knowing about: the file *looks* correct in an editor, but because the first bytes are not `---`, every YAML front-matter parser reports no frontmatter at all rather than an error.

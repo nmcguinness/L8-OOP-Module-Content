@@ -12,9 +12,7 @@ tags: [java, ordering, sorting, comparable, comparator, arraylist, exercises, ye
 ---
 # Ordering — Exercises
 
-> These exercises match the lesson **Ordering in Java — Comparable & Comparator (No Lambdas)**.
-> You will write **named Comparator classes** or **anonymous classes**.  Keep your lists short
-> so you can quickly see the effect of sorting.
+> These exercises match the lesson **Ordering in Java — Comparable & Comparator (No Lambdas)**. You will write **named Comparator classes** or **anonymous classes**. Keep your lists short so you can quickly see the effect of sorting.
 
 ## How to run
 
@@ -42,8 +40,7 @@ public final class Exercise {
 
 **What you’ll practice:** Implementing `Comparable<T>` and using `List.sort(null)`.
 
-**Task:** Create a `Score(player:String, value:int)` class that implements `Comparable<Score>`.
-Sorting rule: **value descending**, then **player name ascending**.
+**Task:** Create a `Score(player:String, value:int)` class that implements `Comparable<Score>`. Sorting rule: **value descending**, then **player name ascending**.
 
 **Steps:**
 1) Write the class with fields, constructor, getters, and `toString()`.
@@ -66,8 +63,7 @@ System.out.println(scores.get(scores.size()-1).value() <= scores.get(scores.size
 
 **What you’ll practice:** Writing a **named Comparator class** and using it with `list.sort(...)`.
 
-**Task:** Define `Product(name:String, price:double, rating:double)`.
-Create `NameAscComparator` that sorts products by `name` **A–Z**.
+**Task:** Define `Product(name:String, price:double, rating:double)`. Create `NameAscComparator` that sorts products by `name` **A–Z**.
 
 **Steps:**
 1) Implement `Product` (fields, constructor, getters, `toString()`).
@@ -120,12 +116,10 @@ System.out.println(items.get(0).price() <= items.get(1).price());
 
 **What you’ll practice:** Designing a comparator with a clear **tie-breaker**.
 
-**Task:** Create a class `RatingDescThenNameAsc` that sorts by `rating` **high to low**.
-If ratings are equal, sort by `name` **A–Z**.
+**Task:** Create a class `RatingDescThenNameAsc` that sorts by `rating` **high to low**. If ratings are equal, sort by `name` **A–Z**.
 
 **Steps:**
-1) Implement `RatingDescThenNameAsc implements Comparator<Product>` with two steps: rating
-   first, then name.
+1) Implement `RatingDescThenNameAsc implements Comparator<Product>` with two steps: rating first, then name.
 2) Build a list with at least two products sharing the same rating.
 3) Sort and print. Manually verify that tied ratings are ordered by name.
 
@@ -140,8 +134,7 @@ if (items.get(0).rating() == items.get(1).rating()) {
 }
 ```
 
-**Hint:** Write comparisons step-by-step. If the first comparison is non-zero, return it
-immediately.
+**Hint:** Write comparisons step-by-step. If the first comparison is non-zero, return it immediately.
 
 ---
 
@@ -149,17 +142,14 @@ immediately.
 
 **What you’ll practice:** Seeing how **stable** sorting preserves earlier order for “ties”.
 
-**Task:** Show that two-pass sorting is stable on lists.
-First sort by `name` A–Z, then by `price` low to high.
+**Task:** Show that two-pass sorting is stable on lists. First sort by `name` A–Z, then by `price` low to high.
 
 **Steps:**
 1) Sort by `name` using `NameAscComparator`. Print.
 2) Sort by `price` using your anonymous comparator from Exercise 03. Print.
-3) Pick two items with the same price and explain (in a comment) whether their **name order**
-   from step 1 is preserved.
+3) Pick two items with the same price and explain (in a comment) whether their **name order** from step 1 is preserved.
 
-**Hint:** Stability means that items considered “equal” by the current comparator keep their
-previous relative order.
+**Hint:** Stability means that items considered “equal” by the current comparator keep their previous relative order.
 
 ---
 
@@ -167,8 +157,7 @@ previous relative order.
 
 **What you’ll practice:** Making a deliberate choice about `null` values during sorting.
 
-**Task:** Allow `rating` to be `null` in `Product`. Write `RatingNullLast` that puts `null`
-ratings **after** all non-null ratings, and then ties break by `name` A–Z.
+**Task:** Allow `rating` to be `null` in `Product`. Write `RatingNullLast` that puts `null` ratings **after** all non-null ratings, and then ties break by `name` A–Z.
 
 **Steps:**
 1) Add `rating` as `Double` and allow `null`.
@@ -186,17 +175,14 @@ ratings **after** all non-null ratings, and then ties break by `name` A–Z.
 
 **What you’ll practice:** Choosing between **natural order** and **external orderings**.
 
-**Task:** Pick a class from your project (e.g., `Task`, `Level`, `Product`). Decide whether it
-should implement `Comparable` (one sensible default) or whether you should keep several named
-`Comparator` classes instead.
+**Task:** Pick a class from your project (e.g., `Task`, `Level`, `Product`). Decide whether it should implement `Comparable` (one sensible default) or whether you should keep several named `Comparator` classes instead.
 
 **Steps:**
 1) Write 3–5 lines in comments explaining your decision.
 2) Implement the chosen approach (either `compareTo` or a named comparator).
 3) Demonstrate with a short `ArrayList` and a call to `list.sort(...)`.
 
-**Hint:** If different screens or reports need different orders, prefer comparators over a
-single natural order.
+**Hint:** If different screens or reports need different orders, prefer comparators over a single natural order.
 
 ---
 
@@ -204,9 +190,7 @@ single natural order.
 
 **What you’ll practice:** Combining simple comparators into one **reusable** order.
 
-**Task:** Implement a generic `ChainComparator<T>` that accepts an ordered list of comparators
-and tries each in turn until one decides. Then compose a chain:
-**price asc then rating desc then name asc**.
+**Task:** Implement a generic `ChainComparator<T>` that accepts an ordered list of comparators and tries each in turn until one decides. Then compose a chain: **price asc then rating desc then name asc**.
 
 **Steps:**
 1. Define a simple Product class.
@@ -214,8 +198,7 @@ and tries each in turn until one decides. Then compose a chain:
 3. Implement a reusable `ChainComparator<T>` that tries each comparator in order.
 4. Put it all together in a short demo you can run immediately.
 
-This is a **stretch exercise** meant to challenge you so you're not supposed to find it "easy".
-Below you can see a worked solution to the exercise.
+This is a **stretch exercise** meant to challenge you so you're not supposed to find it "easy". Below you can see a worked solution to the exercise.
 
 ### 1) Product class
 
@@ -297,8 +280,7 @@ Why separate classes?
 
 ### 3) A reusable ChainComparator
 
-The chain tries PriceAsc, then RatingDesc, then NameAsc.
-If the first comparator declares two items different, we stop. If not, we try the next, and so on.
+The chain tries PriceAsc, then RatingDesc, then NameAsc. If the first comparator declares two items different, we stop. If not, we try the next, and so on.
 
 ```java
 // File: ChainComparator.java
@@ -325,8 +307,7 @@ public final class ChainComparator<T> implements Comparator<T> {
 }
 ```
 
-> Each comparator is a "layer." The chain checks them left-to-right. Keep each comparator small
-> and single-purpose; the chain handles the combination logic.
+> Each comparator is a "layer." The chain checks them left-to-right. Keep each comparator small and single-purpose; the chain handles the combination logic.
 
 ### 4) Putting it together (runnable demo)
 
@@ -394,8 +375,7 @@ Suggested structure (follow your existing repo conventions):
     DemoChaining.java
 ```
 
-Then call t03_ordering.exercises.ex05_chaining_demo.DemoChaining.main() from your Main or run
-it directly in your IDE.
+Then call t03_ordering.exercises.ex05_chaining_demo.DemoChaining.main() from your Main or run it directly in your IDE.
 
 ### 6) Extension ideas (optional)
 

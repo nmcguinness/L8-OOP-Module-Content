@@ -8,15 +8,15 @@ import java.util.Objects;
  */
 public class Contact {
 
-    private String id;
-    private String name;
-    private String email;
-    private String phone;
-    private String department;
-    private String country;
-    private String company;
-    private boolean followUp;
-    private int turnoverThousands;
+    private final String id;
+    private final String name;
+    private final String email;
+    private final String phone;
+    private final String department;
+    private final String country;
+    private final String company;
+    private final boolean followUp;
+    private final int turnoverThousands;
 
     public Contact(
         String id,

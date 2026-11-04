@@ -1,31 +1,21 @@
 package t12_generics_2.exercises.ex07;
 
-class Entity { }
-
-class Enemy extends Entity { }
-
-class Spawner {
-    public static void addEnemies(java.util.List<? super Enemy> out) {
-        if (out == null)
-            throw new NullPointerException("out must not be null");
-
-        out.add(new Enemy());
-        out.add(new Enemy());
-    }
-}
+import java.util.ArrayList;
+import java.util.List;
 
 public class Exercise {
+
     public static void run() {
-        java.util.ArrayList<Enemy> a = new java.util.ArrayList<>();
-        java.util.ArrayList<Entity> b = new java.util.ArrayList<>();
-        java.util.ArrayList<Object> c = new java.util.ArrayList<>();
+        List<Enemy> enemies = new ArrayList<>();
+        List<Entity> entities = new ArrayList<>();
+        List<Object> objects = new ArrayList<>();
 
-        Spawner.addEnemies(a);
-        Spawner.addEnemies(b);
-        Spawner.addEnemies(c);
+        Spawner.addEnemies(enemies);
+        Spawner.addEnemies(entities);
+        Spawner.addEnemies(objects);
 
-        System.out.println(a.size()); // 2
-        System.out.println(b.size()); // 2
-        System.out.println(c.size()); // 2
+        System.out.println("List<Enemy>: " + enemies);
+        System.out.println("List<Entity>: " + entities);
+        System.out.println("List<Object>: " + objects);
     }
 }

@@ -61,10 +61,9 @@ class ExerciseTest {
     }
 
     @Test
-    void npc_implementsBothInterfaces() {
+    void npc_isNamed() {
         NPC npc = new NPC("Guard");
         assertTrue(npc instanceof Named);
-        assertTrue(npc instanceof IGreetPlayer);
         assertEquals("Guard", npc.getName());
     }
 }

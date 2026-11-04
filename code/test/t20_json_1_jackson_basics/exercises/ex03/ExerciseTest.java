@@ -2,90 +2,46 @@ package t20_json_1_jackson_basics.exercises.ex03;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import t20_json_1_jackson_basics.exercises.ex01.Player;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DisplayName("t20 ex03 - GameAsset validation and normalisation")
+@DisplayName("t20 ex03 - a generic ServerResponse wrapper")
 class ExerciseTest {
 
-    private static final byte[] DATA = {1, 2, 3};
+    @Test
+    void toJson_response_includesStatusAndNestedData() throws Exception {
+        String json = Exercise.toJson(
+                ServerResponse.ok("Player found", new Player("Alice", 95)), Exercise.MAPPER);
 
-    private static GameAsset asset() {
-        return new GameAsset(1, "Hero Sprite", "PNG", 3, DATA);
+        assertTrue(json.contains("\"status\":\"OK\""), json);
+        assertTrue(json.contains("\"name\":\"Alice\""), json);
     }
 
     @Test
-    void constructor_validArguments_storesEveryField() {
-        GameAsset a = asset();
-        assertEquals(1, a.getAssetId());
-        assertEquals("Hero Sprite", a.getAssetName());
-        assertEquals(3, a.getFileSize());
-        assertArrayEquals(DATA, a.getAssetData());
+    void fromJson_dataComesBackAsPlayerNotMap() throws Exception {
+        String json = Exercise.toJson(
+                ServerResponse.ok("Player found", new Player("Alice", 95)), Exercise.MAPPER);
+
+        ServerResponse<Player> back = Exercise.fromJson(json);
+
+        assertInstanceOf(Player.class, back.getData());
+        assertEquals("Alice", back.getData().getName());
     }
 
     @Test
-    void constructor_lowercasesTheAssetType() {
-        assertEquals("png", asset().getAssetType());
+    void toJson_doesNotSendIsOkAsAField() throws Exception {
+        String json = Exercise.toJson(ServerResponse.error("no"), Exercise.MAPPER);
+
+        assertFalse(json.contains("\"ok\""), json);
     }
 
     @Test
-    void constructor_trimsNameAndType() {
-        GameAsset a = new GameAsset(1, "  Hero  ", "  PNG  ", 3, DATA);
-        assertEquals("Hero", a.getAssetName());
-        assertEquals("png", a.getAssetType());
-    }
-
-    @Test
-    void constructor_zeroIdAndZeroFileSize_areAccepted() {
-        // The guards reject negatives, not zero.
-        GameAsset a = new GameAsset(0, "n", "t", 0, DATA);
-        assertEquals(0, a.getAssetId());
-        assertEquals(0, a.getFileSize());
-    }
-
-    @Test
-    void constructor_negativeId_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new GameAsset(-1, "n", "t", 1, DATA));
-    }
-
-    @Test
-    void constructor_negativeFileSize_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new GameAsset(1, "n", "t", -1, DATA));
-    }
-
-    @Test
-    void constructor_blankNameOrType_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new GameAsset(1, "   ", "t", 1, DATA));
-        assertThrows(IllegalArgumentException.class,
-                () -> new GameAsset(1, "n", "   ", 1, DATA));
-    }
-
-    @Test
-    void constructor_nullNameOrType_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new GameAsset(1, null, "t", 1, DATA));
-        assertThrows(IllegalArgumentException.class,
-                () -> new GameAsset(1, "n", null, 1, DATA));
-    }
-
-    @Test
-    void constructor_nullOrEmptyData_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new GameAsset(1, "n", "t", 1, null));
-        assertThrows(IllegalArgumentException.class,
-                () -> new GameAsset(1, "n", "t", 1, new byte[0]));
-    }
-
-    @Test
-    void fileSize_isNotDerivedFromTheDataArray() {
-        // Worth knowing: nothing checks that fileSize matches assetData.length.
-        GameAsset a = new GameAsset(1, "n", "t", 9999, DATA);
-        assertEquals(9999, a.getFileSize());
-        assertEquals(3, a.getAssetData().length);
+    void toJson_nullArguments_throw() {
+        assertThrows(IllegalArgumentException.class, () -> Exercise.toJson(null, Exercise.MAPPER));
     }
 }

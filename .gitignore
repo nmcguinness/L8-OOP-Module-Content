@@ -42,3 +42,6 @@ target/
 hs_err_pid*
 replay_pid*
 
+
+# Database credentials (see t15 Step 6)
+**/config/db.properties

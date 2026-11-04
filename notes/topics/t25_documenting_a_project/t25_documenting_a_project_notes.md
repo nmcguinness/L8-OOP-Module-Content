@@ -4,7 +4,7 @@ subtitle: "COMP C8Z03 — Year 2 OOP"
 topic_code: t25_documenting_a_project
 description: "How to write Javadoc comments for classes and methods, and how to produce ER diagrams, flowcharts, sequence diagrams, and architecture diagrams using Mermaid markdown — illustrated with a consistent three-table N-tier example."
 created: 2026-04-24
-last_updated: 2026-04-24
+last_updated: 2026-11-04
 version: 1.0
 status: published
 authors: ["OOP Teaching Team"]
@@ -21,12 +21,11 @@ prerequisites:
 # Documenting a Project
 
 > **Prerequisites:**
-> - You have a working N-tier project with entities, DAO classes, a server, and at least one
->   client (or a project of equivalent structure)
-> - You are familiar with the DAO interface / JDBC implementation pattern (see
->   [DAO](../t15_dao/t15_dao_notes.md))
-> - You understand the `ClientHandler` / `ServerResponse<T>` pattern (see
->   [Networking](../t22_networking/t22_networking_notes.md))
+> - You have a working N-tier project with entities, DAO classes, a server, and at least one client (or a project of equivalent structure)
+> - You are familiar with the DAO interface / JDBC implementation pattern (see [DAO](../t15_dao/t15_dao_notes.md))
+> - You understand the `ClientHandler` / `ServerResponse<T>` pattern (see [Networking](../t22_networking/t22_networking_notes.md))
+
+---
 
 ---
 
@@ -44,8 +43,9 @@ prerequisites:
 - [Part 5 — Sequence Diagrams](#part-5--sequence-diagrams)
 - [Part 6 — Architecture Diagrams](#part-6--architecture-diagrams)
 - [Common mistakes](#common-mistakes)
-- [Further reading](#further-reading)
+- [Practice tasks](#practice-tasks)
 - [Reflective questions](#reflective-questions)
+- [Further reading](#further-reading)
 
 ---
 
@@ -67,17 +67,11 @@ prerequisites:
 
 ## Why this matters
 
-Good documentation serves two audiences: your future self, and anyone who reads your code. An
-architecture diagram communicates system structure at a glance; Javadoc communicates intent at
-the method level. Both become essential when projects grow beyond what a single person can hold
-in their head.
+Good documentation serves two audiences: your future self, and anyone who reads your code. An architecture diagram communicates system structure at a glance; Javadoc communicates intent at the method level. Both become essential when projects grow beyond what a single person can hold in their head.
 
-Documentation is not decoration. An architecture diagram that is missing a tier, or a Javadoc
-comment that only restates the method name, adds no value and signals incomplete understanding
-of the system.
+Documentation is not decoration. An architecture diagram that is missing a tier, or a Javadoc comment that only restates the method name, adds no value and signals incomplete understanding of the system.
 
-This note gives you the tools and a complete worked example so that your documentation
-accurately reflects the system you built.
+This note gives you the tools and a complete worked example so that your documentation accurately reflects the system you built.
 
 ---
 
@@ -96,43 +90,33 @@ accurately reflects the system you built.
 
 ### Javadoc
 
-A documentation tool built into the Java compiler. It reads specially formatted block comments
-(`/** ... */`) directly above classes, methods, and fields, and can generate HTML documentation
-from them. IntelliJ renders Javadoc inline as you hover over identifiers.
+A documentation tool built into the Java compiler. It reads specially formatted block comments (`/** ... */`) directly above classes, methods, and fields, and can generate HTML documentation from them. IntelliJ renders Javadoc inline as you hover over identifiers.
 
 ### Javadoc tag
 
-A keyword prefixed with `@` inside a Javadoc comment that carries structured metadata. Common
-tags: `@author`, `@param`, `@return`, `@throws`.
+A keyword prefixed with `@` inside a Javadoc comment that carries structured metadata. Common tags: `@author`, `@param`, `@return`, `@throws`.
 
 ### Mermaid
 
-A plain-text diagramming language that is rendered into SVG by tools including GitHub, GitLab,
-IntelliJ (with the Mermaid plugin), and most modern Markdown viewers. Diagrams live inside
-fenced code blocks labelled ` ```mermaid `.
+A plain-text diagramming language that is rendered into SVG by tools including GitHub, GitLab, IntelliJ (with the Mermaid plugin), and most modern Markdown viewers. Diagrams live inside fenced code blocks labelled ` ```mermaid `.
 
 ### ER diagram
 
-An Entity-Relationship diagram. Shows the tables in a relational database, the columns in each
-table, and the relationships (foreign key constraints) between tables.
+An Entity-Relationship diagram. Shows the tables in a relational database, the columns in each table, and the relationships (foreign key constraints) between tables.
 
 ### Sequence diagram
 
-Shows a time-ordered series of messages exchanged between participants (objects, classes,
-systems). Used to illustrate a single request/response cycle through a system.
+Shows a time-ordered series of messages exchanged between participants (objects, classes, systems). Used to illustrate a single request/response cycle through a system.
 
 ### Architecture diagram
 
-A high-level overview of all the components (tiers, classes, databases, external systems) that
-make up a system, and how they communicate. It answers the question: *what are the parts, and
-how do they connect?*
+A high-level overview of all the components (tiers, classes, databases, external systems) that make up a system, and how they communicate. It answers the question: *what are the parts, and how do they connect?*
 
 ---
 
 ## The running example
 
-All diagrams in this note use the same three-table music library system. This is a stand-in for
-your project domain — replace `Artist`, `Album`, and `Track` with your own entity names.
+All diagrams in this note use the same three-table music library system. This is a stand-in for your project domain — replace `Artist`, `Album`, and `Track` with your own entity names.
 
 ### Schema
 
@@ -159,8 +143,7 @@ your project domain — replace `Artist`, `Album`, and `Track` with your own ent
 
 ### What Javadoc is
 
-Javadoc comments use `/** */` — two asterisks to open, one to close. Everything between them is
-documentation. Each `@tag` line carries structured information that tools and IDEs can parse.
+Javadoc comments use `/** */` — two asterisks to open, one to close. Everything between them is documentation. Each `@tag` line carries structured information that tools and IDEs can parse.
 
 ```java
 /**
@@ -172,16 +155,13 @@ documentation. Each `@tag` line carries structured information that tools and ID
  */
 ```
 
-> Javadoc is **not** a block comment. A block comment uses `/* */`. Javadoc uses `/** */`. The
-> extra `*` is what tells the Java compiler to treat it as documentation.
+> Javadoc is **not** a block comment. A block comment uses `/* */`. Javadoc uses `/** */`. The extra `*` is what tells the Java compiler to treat it as documentation.
 
 ---
 
 ### Class-level Javadoc
 
-Every class needs a Javadoc comment that states its purpose and identifies its authors.
-Identifying authors on every class makes individual contributions traceable and is a
-professional standard.
+Every class needs a Javadoc comment that states its purpose and identifies its authors. Identifying authors on every class makes individual contributions traceable and is a professional standard.
 
 ```java
 /**
@@ -197,8 +177,7 @@ public class JdbcArtistDao implements ArtistDao {
 }
 ```
 
-The summary sentence states **what the class does**, not what it is. "Handles all database
-operations for Artist entities" is useful. "This is the JdbcArtistDao class" is not.
+The summary sentence states **what the class does**, not what it is. "Handles all database operations for Artist entities" is useful. "This is the JdbcArtistDao class" is not.
 
 If only one person wrote the class, omit the contributor line:
 
@@ -218,8 +197,7 @@ public class Track {
 
 ### Method-level Javadoc
 
-Every non-trivial method needs a Javadoc comment. A method is non-trivial if it contains logic
-— validation, SQL, JSON conversion, computation. The four tags you use most often are:
+Every non-trivial method needs a Javadoc comment. A method is non-trivial if it contains logic — validation, SQL, JSON conversion, computation. The four tags you use most often are:
 
 | Tag | Purpose | Example |
 | :- | :- | :- |
@@ -319,8 +297,7 @@ flowchart TD
 ```
 ````
 
-GitHub, GitLab, and IntelliJ (with the Mermaid plugin) all render these to SVG automatically.
-You do not need to install any tool to write them — just write the text and push to GitHub.
+GitHub, GitLab, and IntelliJ (with the Mermaid plugin) all render these to SVG automatically. You do not need to install any tool to write them — just write the text and push to GitHub.
 
 The four diagram types covered in this topic are:
 
@@ -333,15 +310,11 @@ The four diagram types covered in this topic are:
 
 ### Every diagram needs a text equivalent
 
-A rendered Mermaid diagram is an SVG with no accessible name. A screen reader announces
-nothing at all, or at best "graphic" — so a reader using one gets **none** of the
-information a sighted reader gets from the picture. This is not a minor omission: in a
-document whose whole purpose is explaining a system, it is the explanation going missing.
+A rendered Mermaid diagram is an SVG with no accessible name. A screen reader announces nothing at all, or at best "graphic" — so a reader using one gets **none** of the information a sighted reader gets from the picture. This is not a minor omission: in a document whose whole purpose is explaining a system, it is the explanation going missing.
 
 Every diagram you submit must carry both of the following.
 
-**1. `accTitle` and `accDescr` inside the diagram.** Mermaid emits these as `<title>` and
-`<desc>` on the SVG, which is what assistive technology reads.
+**1. `accTitle` and `accDescr` inside the diagram.** Mermaid emits these as `<title>` and `<desc>` on the SVG, which is what assistive technology reads.
 
 ```mermaid
 erDiagram
@@ -350,25 +323,16 @@ erDiagram
     ARTIST ||--o{ ALBUM : releases
 ```
 
-**2. A short prose paragraph immediately after the block**, labelled
-**Diagram description**, saying the same thing as standalone text.
+**2. A short prose paragraph immediately after the block**, labelled **Diagram description**, saying the same thing as standalone text.
 
-The prose is not redundant. It survives PDF export, a paste into Moodle, a renderer that
-does not support Mermaid, and a reader who simply prefers prose. Write it so that someone
-who never sees the picture misses nothing.
+The prose is not redundant. It survives PDF export, a paste into Moodle, a renderer that does not support Mermaid, and a reader who simply prefers prose. Write it so that someone who never sees the picture misses nothing.
 
 Two rules for writing the description:
 
-- **State the relationships, not the picture.** "Each album belongs to one artist" — not
-  "an arrow points from ALBUM up to ARTIST."
-- **For a sequence diagram, describe it as numbered steps.** That is what the diagram
-  actually encodes, and steps read far better aloud than "participant A sends to B".
+- **State the relationships, not the picture.** "Each album belongs to one artist" — not "an arrow points from ALBUM up to ARTIST."
+- **For a sequence diagram, describe it as numbered steps.** That is what the diagram actually encodes, and steps read far better aloud than "participant A sends to B".
 
-> **One syntax caution.** `accTitle` and `accDescr` work inside `flowchart`,
-> `sequenceDiagram`, `classDiagram`, `stateDiagram-v2` and `erDiagram`. They do **not**
-> work inside `mindmap`, whose parser reads the indented lines as nodes and fails with
-> "There can be only one root". For a mind map, put the title in YAML frontmatter above
-> the diagram instead, and rely on the prose paragraph:
+> **One syntax caution.** `accTitle` and `accDescr` work inside `flowchart`, `sequenceDiagram`, `classDiagram`, `stateDiagram-v2` and `erDiagram`. They do **not** work inside `mindmap`, whose parser reads the indented lines as nodes and fails with "There can be only one root". For a mind map, put the title in YAML frontmatter above the diagram instead, and rely on the prose paragraph:
 >
 > ```text
 > ---
@@ -379,15 +343,13 @@ Two rules for writing the description:
 >   root((Collections))
 > ```
 
-The full house rules are in the
-[accessibility style guide](../../shared/general/accessibility-style-guide.md).
+The full house rules are in the [accessibility style guide](../../shared/general/accessibility-style-guide.md).
 
 ---
 
 ## Part 3 — ER Diagrams
 
-An ER diagram documents the database schema. It shows every table, every column with its type
-and any key annotation, and the FK relationships that link tables together.
+An ER diagram documents the database schema. It shows every table, every column with its type and any key annotation, and the FK relationships that link tables together.
 
 ### Syntax reference
 
@@ -442,14 +404,9 @@ erDiagram
 ```
 
 **Diagram description**
-The schema has three tables. `artists` is the root table, keyed by `artist_id`, holding a
-name, country and founded year. `albums` is keyed by `album_id` and holds a title, release
-year and genre, plus an `artist_id` foreign key. `tracks` is keyed by `track_id` and holds
-a title, duration in seconds and track number, plus an `album_id` foreign key.
+The schema has three tables. `artists` is the root table, keyed by `artist_id`, holding a name, country and founded year. `albums` is keyed by `album_id` and holds a title, release year and genre, plus an `artist_id` foreign key. `tracks` is keyed by `track_id` and holds a title, duration in seconds and track number, plus an `album_id` foreign key.
 
-Both relationships are one-to-many: one artist releases one or more albums, and one album
-contains one or more tracks. Read the other way, every album belongs to exactly one artist
-and every track belongs to exactly one album.
+Both relationships are one-to-many: one artist releases one or more albums, and one album contains one or more tracks. Read the other way, every album belongs to exactly one artist and every track belongs to exactly one album.
 
 <details>
 <summary>Source</summary>
@@ -487,21 +444,16 @@ erDiagram
 
 **Reading the relationships:**
 
-- `artists ||--|{  albums` — one artist releases one or more albums; each album belongs to
-  exactly one artist.
-- `albums  ||--|{  tracks` — one album contains one or more tracks; each track belongs to
-  exactly one album.
+- `artists ||--|{  albums` — one artist releases one or more albums; each album belongs to exactly one artist.
+- `albums  ||--|{  tracks` — one album contains one or more tracks; each track belongs to exactly one album.
 
-> The labels (`"releases"`, `"contains"`) describe the relationship from the perspective of the
-> left-hand table. Choose a verb that makes the relationship readable in plain English.
+> The labels (`"releases"`, `"contains"`) describe the relationship from the perspective of the left-hand table. Choose a verb that makes the relationship readable in plain English.
 
 ---
 
 ## Part 4 — Flowcharts
 
-A flowchart shows how execution moves through a piece of logic: decisions, branches, loops, and
-exits. Use it to document a single method or handler whose flow is not obvious from the code
-alone.
+A flowchart shows how execution moves through a piece of logic: decisions, branches, loops, and exits. Use it to document a single method or handler whose flow is not obvious from the code alone.
 
 ### Syntax reference
 
@@ -522,8 +474,7 @@ Direction keywords: `flowchart TD` (top-down) or `flowchart LR` (left-right).
 
 ### Binary upload flow — `insertWithBlob`
 
-The flowchart below documents `JdbcTrackDao.insertWithBlob()`. It shows a guard check, two
-transformations, a DB operation, and three distinct exit paths — one success and two errors.
+The flowchart below documents `JdbcTrackDao.insertWithBlob()`. It shows a guard check, two transformations, a DB operation, and three distinct exit paths — one success and two errors.
 
 ```mermaid
 flowchart TD
@@ -552,11 +503,7 @@ flowchart TD
 ```
 
 **Diagram description**
-The method begins by checking whether `track` or `data` is null; if either is, it throws
-`IllegalArgumentException` immediately and no database work happens. Otherwise it
-Base64-encodes the byte array, opens a connection, prepares the INSERT, binds each
-parameter including the encoded data, and executes the statement. It then reads the
-generated key and returns it. Every exit path either returns an id or throws.
+The method begins by checking whether `track` or `data` is null; if either is, it throws `IllegalArgumentException` immediately and no database work happens. Otherwise it Base64-encodes the byte array, opens a connection, prepares the INSERT, binds each parameter including the encoded data, and executes the statement. It then reads the generated key and returns it. Every exit path either returns an id or throws.
 
 <details>
 <summary>Source</summary>
@@ -587,17 +534,13 @@ flowchart TD
 
 </details>
 
-> **TD vs LR:** Use `flowchart TD` for processes that read naturally top-to-bottom, such as a
-> method body. Use `flowchart LR` when you have a wide fan-out of parallel branches that would
-> be too tall in TD layout.
+> **TD vs LR:** Use `flowchart TD` for processes that read naturally top-to-bottom, such as a method body. Use `flowchart LR` when you have a wide fan-out of parallel branches that would be too tall in TD layout.
 
 ---
 
 ## Part 5 — Sequence Diagrams
 
-A sequence diagram shows messages passing between participants in time order. Use it to
-document a single end-to-end request/response cycle — from the client sending a request,
-through the server, DAO, and database, to the response arriving back at the client.
+A sequence diagram shows messages passing between participants in time order. Use it to document a single end-to-end request/response cycle — from the client sending a request, through the server, DAO, and database, to the response arriving back at the client.
 
 ### Syntax reference
 
@@ -638,12 +581,7 @@ sequenceDiagram
 ```
 
 **Diagram description**
-The cycle runs in five steps. First, the client sends a JSON request with request type
-`GET_TRACK` and a payload containing the id. Second, `ClientHandler` parses that JSON and
-calls `findById` on `JdbcTrackDao`. Third, the DAO runs a parameterised SELECT against the
-database. Fourth, the database returns the matching row, which the DAO maps into a
-`Track` wrapped in an `Optional`. Fifth, `ClientHandler` wraps that in a `ServerResponse`
-and writes it back to the client as JSON.
+The cycle runs in five steps. First, the client sends a JSON request with request type `GET_TRACK` and a payload containing the id. Second, `ClientHandler` parses that JSON and calls `findById` on `JdbcTrackDao`. Third, the DAO runs a parameterised SELECT against the database. Fourth, the database returns the matching row, which the DAO maps into a `Track` wrapped in an `Optional`. Fifth, `ClientHandler` wraps that in a `ServerResponse` and writes it back to the client as JSON.
 
 <details>
 <summary>Source</summary>
@@ -703,12 +641,7 @@ sequenceDiagram
 ```
 
 **Diagram description**
-The cycle runs in five steps. First, the client sends a JSON request with request type
-`INSERT_TRACK` and a payload containing the title, duration and album id. Second,
-`ClientHandler` parses it and calls `insert` on `JdbcTrackDao`. Third, the DAO executes a
-parameterised INSERT. Fourth, the database returns the generated key, which the DAO reads
-and returns as an `int`. Fifth, `ClientHandler` wraps the new id in a `ServerResponse` and
-sends it back as JSON.
+The cycle runs in five steps. First, the client sends a JSON request with request type `INSERT_TRACK` and a payload containing the title, duration and album id. Second, `ClientHandler` parses it and calls `insert` on `JdbcTrackDao`. Third, the DAO executes a parameterised INSERT. Fourth, the database returns the generated key, which the DAO reads and returns as an `int`. Fifth, `ClientHandler` wraps the new id in a `ServerResponse` and sends it back as JSON.
 
 <details>
 <summary>Source</summary>
@@ -738,18 +671,13 @@ sequenceDiagram
 
 </details>
 
-> Sequence diagrams document **one scenario at a time** — not every possible path. Write one
-> diagram per meaningful request type. The `GET_ALL_TRACKS` and `DELETE_TRACK` cycles follow
-> the same structural pattern and do not need separate diagrams unless the routing is
-> materially different.
+> Sequence diagrams document **one scenario at a time** — not every possible path. Write one diagram per meaningful request type. The `GET_ALL_TRACKS` and `DELETE_TRACK` cycles follow the same structural pattern and do not need separate diagrams unless the routing is materially different.
 
 ---
 
 ## Part 6 — Architecture Diagrams
 
-The architecture diagram is the hardest diagram to get right because it must show the system
-**as a whole** — all tiers, all key classes, and all communication paths — without becoming an
-unreadable wall of boxes.
+The architecture diagram is the hardest diagram to get right because it must show the system **as a whole** — all tiers, all key classes, and all communication paths — without becoming an unreadable wall of boxes.
 
 The approach that works best for a multi-tier project is:
 
@@ -799,11 +727,7 @@ flowchart TD
 ```
 
 **Diagram description**
-Four tiers, each depending only on the one below it. The **client tier** holds
-`Client.java`. The **server tier** holds `Server.java` and `ClientHandler.java`. The **DAO
-tier** holds the DAO interfaces and their JDBC implementations. The **database tier** holds
-MySQL. No arrow skips a tier, and none points back upwards — the client never talks to the
-DAO or the database directly.
+Four tiers, each depending only on the one below it. The **client tier** holds `Client.java`. The **server tier** holds `Server.java` and `ClientHandler.java`. The **DAO tier** holds the DAO interfaces and their JDBC implementations. The **database tier** holds MySQL. No arrow skips a tier, and none points back upwards — the client never talks to the DAO or the database directly.
 
 <details>
 <summary>Source</summary>
@@ -856,10 +780,7 @@ flowchart TD
 
 ### Full class-level architecture diagram
 
-This second version includes every significant class and is suitable for committing as the
-project's architecture artefact. It shows all tiers and communication paths: Client then Server
-(socket); Server then DAO then Database; JSON protocol layer; binary file upload/retrieval
-flow.
+This second version includes every significant class and is suitable for committing as the project's architecture artefact. It shows all tiers and communication paths: Client then Server (socket); Server then DAO then Database; JSON protocol layer; binary file upload/retrieval flow.
 
 ```mermaid
 flowchart TD
@@ -912,12 +833,7 @@ flowchart TD
 ```
 
 **Diagram description**
-The same four tiers as the overview, with every class named. The client tier connects to
-port 9000, sends JSON and receives a `ServerResponse`. The server tier runs an accept loop
-and a thread pool, handing each connection to a `ClientHandler`. The DAO tier separates the
-interfaces (`ArtistDao`, `AlbumDao`, `TrackDao`) from their JDBC implementations. The
-database tier holds the three MySQL tables. The protocol classes `ServerResponse` and
-`ClientRequest` are shared by the client and server tiers rather than belonging to either.
+The same four tiers as the overview, with every class named. The client tier connects to port 9000, sends JSON and receives a `ServerResponse`. The server tier runs an accept loop and a thread pool, handing each connection to a `ClientHandler`. The DAO tier separates the interfaces (`ArtistDao`, `AlbumDao`, `TrackDao`) from their JDBC implementations. The database tier holds the three MySQL tables. The protocol classes `ServerResponse` and `ClientRequest` are shared by the client and server tiers rather than belonging to either.
 
 <details>
 <summary>Source</summary>
@@ -972,10 +888,7 @@ flowchart TD
 
 </details>
 
-> **Tip:** If your project has a BLOB column, show it in the relevant table node as above. The
-> binary file upload/retrieval flow should be visible in the architecture diagram — a reviewer
-> should be able to see at a glance which table stores the BLOB and which DAO class accesses
-> it.
+> **Tip:** If your project has a BLOB column, show it in the relevant table node as above. The binary file upload/retrieval flow should be visible in the architecture diagram — a reviewer should be able to see at a glance which table stores the BLOB and which DAO class accesses it.
 
 ---
 
@@ -1007,6 +920,67 @@ flowchart TD
 
 ---
 
+## Practice tasks
+
+1. Write Javadoc for one public class of your own, then generate the HTML and read it as a stranger would.
+2. Draw a sequence diagram for one request in your project. Could someone write the client from it alone?
+3. Compare your README with your code. Which statement in it is already out of date?
+
+For step-by-step practice with worked solutions, see the [t25 exercises](exercises/t25_documenting_a_project_exercises.md).
+
+---
+
+## Reflective questions
+
+1. Which methods in your project genuinely need Javadoc, and which are better left alone? What is the test you apply?
+2. A comment reads `/** Gets the title. @return the title */`. What has it added, and what would a useful version say instead?
+3. Why is a Mermaid diagram in the repository better than a PNG exported from a drawing tool — and when would the PNG actually be the better choice?
+4. You need to answer "what tables exist and how do they relate?" and "what happens when a client sends a request?". Which diagram type answers each, and why not use one for both?
+5. Your sequence diagram shows a path where the DAO throws and nothing returns to the client. Is that a documentation bug or a code bug?
+6. Where should the architecture diagram live, and what does putting it in the wrong place cost you?
+
+<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
+padding:0.9rem 1rem; margin:1rem 0;">
+  <summary style="cursor:pointer; font-weight:800; margin:0;">
+    Check your thinking
+  </summary>
+
+**1. Which methods need Javadoc.**
+The test: **could a competent caller get this wrong without being told?** If yes, document it.
+
+That means documenting anything with a **contract beyond its signature** — a constructor with guard clauses (what is rejected), a method that can return `null` or an empty collection, anything that throws, a parameter with a unit or range (`timeoutMs`, `0..100`), and any non-obvious ordering or thread-safety guarantee.
+
+It means *not* documenting a plain getter, a setter that only assigns, or anything where the comment would restate the name. Those comments cost real effort to maintain and add nothing, and — worse — a stale one actively misleads. Fewer, better comments beat blanket coverage.
+
+**2. "Gets the title."**
+It has added nothing. It is the method name with the words rearranged, so a reader who did not understand `getTitle()` is no better off, and now there are two things to keep in step instead of one.
+
+A useful version documents what the signature cannot express: `@return the display title, trimmed and never blank`. Note that this is only worth writing *because* `setTitle` enforces it. If the getter really is a plain field read with no invariant, delete the comment — that is the right answer, not a better sentence.
+
+**3. Mermaid vs an exported image.**
+Mermaid is **plain text**, and that buys three things a PNG cannot: it diffs, so a reviewer sees a diagram change in the pull request; it lives beside the code and is edited in the same commit as the change it describes; and anyone can update it without hunting for the original `.drawio` file and the licence to open it. A binary image drifts out of date silently, because updating it is just enough friction that nobody does.
+
+The honest exception: Mermaid supports a fixed set of diagram types. For a genuinely bespoke picture — a UI mockup, a network topology with icons, anything needing precise layout — an image is the right tool. Commit the **source file** alongside it so the next person can edit it.
+
+**4. Matching diagram to question.**
+"What tables exist and how do they relate?" is **structure**, and structure is an `erDiagram`: entities, attributes, keys, cardinality. "What happens when a client sends a request?" is **behaviour over time**, and that is a `sequenceDiagram`: participants across the top, messages in order, the return path visible.
+
+Using one for both fails in each direction. An ER diagram has no notion of ordering, so it cannot show that the DAO is called *after* the JSON is parsed. A sequence diagram has no notion of schema, so it cannot show a foreign key. They answer different questions, and a reader looking for one in the other simply will not find it.
+
+**5. A path with no return.**
+Almost certainly a **code bug that the diagram just exposed** — and this is the strongest argument for drawing these at all. Sketching the request cycle forces you to walk every branch, and a branch with no arrow back to the client is a branch where a real client blocks on `readLine()` forever.
+
+The diagram made a *behavioural* gap visible as a *visual* gap. Fix the code so every path — success, unknown request type, DAO exception, malformed JSON — ends in a response, then redraw. If instead you conclude the code is fine and the diagram is incomplete, say so explicitly: an incomplete diagram is also a defect, because the next reader will trust it.
+
+**6. Where the architecture diagram lives.**
+In the **repository README**, because that is the first and often only thing a new reader — or a marker under time pressure — opens. Detailed per-area diagrams can sit in the relevant package or module docs, linked from there.
+
+Putting it elsewhere costs you the reader. In a Javadoc comment on `Main`, nobody browsing the repo sees it. In a Word document on a shared drive, it is outside version control, so it cannot be reviewed, will not be updated with the code, and may not survive the module at all. Documentation nobody finds is documentation you did not write.
+
+</details>
+
+---
+
 ## Further reading
 
 - Oracle — How to Write Doc Comments for the Javadoc Tool
@@ -1023,96 +997,6 @@ flowchart TD
 
 - Mermaid — Flowchart syntax
   <https://mermaid.js.org/syntax/flowchart.html>
-
----
-
-## Reflective questions
-
-1. Which methods in your project genuinely need Javadoc, and which are better left alone? What
-   is the test you apply?
-2. A comment reads `/** Gets the title. @return the title */`. What has it added, and what
-   would a useful version say instead?
-3. Why is a Mermaid diagram in the repository better than a PNG exported from a drawing tool —
-   and when would the PNG actually be the better choice?
-4. You need to answer "what tables exist and how do they relate?" and "what happens when a
-   client sends a request?". Which diagram type answers each, and why not use one for both?
-5. Your sequence diagram shows a path where the DAO throws and nothing returns to the client.
-   Is that a documentation bug or a code bug?
-6. Where should the architecture diagram live, and what does putting it in the wrong place cost you?
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    Check your thinking
-  </summary>
-
-**1. Which methods need Javadoc.**
-The test: **could a competent caller get this wrong without being told?** If yes, document it.
-
-That means documenting anything with a **contract beyond its signature** — a constructor with
-guard clauses (what is rejected), a method that can return `null` or an empty collection,
-anything that throws, a parameter with a unit or range (`timeoutMs`, `0..100`), and any
-non-obvious ordering or thread-safety guarantee.
-
-It means *not* documenting a plain getter, a setter that only assigns, or anything where the
-comment would restate the name. Those comments cost real effort to maintain and add nothing,
-and — worse — a stale one actively misleads. Fewer, better comments beat blanket coverage.
-
-**2. "Gets the title."**
-It has added nothing. It is the method name with the words rearranged, so a reader who did not
-understand `getTitle()` is no better off, and now there are two things to keep in step instead
-of one.
-
-A useful version documents what the signature cannot express: `@return the display title,
-trimmed and never blank`. Note that this is only worth writing *because* `setTitle` enforces
-it. If the getter really is a plain field read with no invariant, delete the comment — that is
-the right answer, not a better sentence.
-
-**3. Mermaid vs an exported image.**
-Mermaid is **plain text**, and that buys three things a PNG cannot: it diffs, so a reviewer
-sees a diagram change in the pull request; it lives beside the code and is edited in the same
-commit as the change it describes; and anyone can update it without hunting for the original
-`.drawio` file and the licence to open it. A binary image drifts out of date silently, because
-updating it is just enough friction that nobody does.
-
-The honest exception: Mermaid supports a fixed set of diagram types. For a genuinely bespoke
-picture — a UI mockup, a network topology with icons, anything needing precise layout — an
-image is the right tool. Commit the **source file** alongside it so the next person can edit
-it.
-
-**4. Matching diagram to question.**
-"What tables exist and how do they relate?" is **structure**, and structure is an `erDiagram`:
-entities, attributes, keys, cardinality. "What happens when a client sends a request?" is
-**behaviour over time**, and that is a `sequenceDiagram`: participants across the top, messages
-in order, the return path visible.
-
-Using one for both fails in each direction. An ER diagram has no notion of ordering, so it
-cannot show that the DAO is called *after* the JSON is parsed. A sequence diagram has no notion
-of schema, so it cannot show a foreign key. They answer different questions, and a reader
-looking for one in the other simply will not find it.
-
-**5. A path with no return.**
-Almost certainly a **code bug that the diagram just exposed** — and this is the strongest
-argument for drawing these at all. Sketching the request cycle forces you to walk every branch,
-and a branch with no arrow back to the client is a branch where a real client blocks on
-`readLine()` forever.
-
-The diagram made a *behavioural* gap visible as a *visual* gap. Fix the code so every path —
-success, unknown request type, DAO exception, malformed JSON — ends in a response, then redraw.
-If instead you conclude the code is fine and the diagram is incomplete, say so explicitly: an
-incomplete diagram is also a defect, because the next reader will trust it.
-
-**6. Where the architecture diagram lives.**
-In the **repository README**, because that is the first and often only thing a new reader — or
-a marker under time pressure — opens. Detailed per-area diagrams can sit in the relevant
-package or module docs, linked from there.
-
-Putting it elsewhere costs you the reader. In a Javadoc comment on `Main`, nobody browsing the
-repo sees it. In a Word document on a shared drive, it is outside version control, so it cannot
-be reviewed, will not be updated with the code, and may not survive the module at all.
-Documentation nobody finds is documentation you did not write.
-
-</details>
 
 ---
 

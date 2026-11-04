@@ -12,14 +12,11 @@ tags: [java, equality, hashing, equals, hashcode, exercises, year2, comp-c8z03]
 ---
 # Equality & Hashing — Exercises
 
-> These exercises build directly on the **Equality & Hashing — Foundations** notes. Work from
-> top to bottom.
+> These exercises build directly on the **Equality & Hashing — Foundations** notes. Work from top to bottom.
 >
-> Most tasks include small, checkable outputs. Use the provided method signatures and add tiny
-> tests in `main` or `Exercise.run()`.
+> Most tasks include small, checkable outputs. Use the provided method signatures and add tiny tests in `main` or `Exercise.run()`.
 >
-> Hints and snippets you can reuse are in the notes (e.g., 31-multiplier pattern,
-> `Objects.hash`, and `Math.floorMod`).
+> Hints and snippets you can reuse are in the notes (e.g., 31-multiplier pattern, `Objects.hash`, and `Math.floorMod`).
 
 ## How to run
 
@@ -48,8 +45,7 @@ Call `Exercise.run()` from your `Main`, as shown in the repo README.
 ## Exercise 01 — Identity vs Equality (warm-up)
 
 **Objective:** Distinguish identity (`==`) from value equality (`equals`).
-**Description:** Create **two distinct** `String` objects with the same text and compare using
-both `==` and `.equals(...)`. Summarise the difference in your own words.
+**Description:** Create **two distinct** `String` objects with the same text and compare using both `==` and `.equals(...)`. Summarise the difference in your own words.
 - In `run()`:
 
   ```java
@@ -65,9 +61,7 @@ both `==` and `.equals(...)`. Summarise the difference in your own words.
 ## Exercise 02 — The equals/hashCode Contract
 
 **Objective:** State and apply the contract correctly.
-**Description:** Write a short bullet list of the contract (reflexive, symmetric, transitive,
-consistent, non-null). Provide a tiny counterexample that **breaks symmetry** and explain why
-it’s dangerous.
+**Description:** Write a short bullet list of the contract (reflexive, symmetric, transitive, consistent, non-null). Provide a tiny counterexample that **breaks symmetry** and explain why it’s dangerous.
 - Deliverables:
   - 3–5 bullet points describing the contract.
   - 5–10 lines of Java (or pseudocode) that break symmetry, plus a 1-sentence risk explanation.
@@ -77,8 +71,7 @@ it’s dangerous.
 ## Exercise 03 — Hand Hash (string to number, polynomial)
 
 **Objective:** Compute a rolling (polynomial) hash by hand.
-**Description:** Using base `b = 31`, compute the hash for `S = "CAB"` step-by-step and report
-the final value.
+**Description:** Using base `b = 31`, compute the hash for `S = "CAB"` step-by-step and report the final value.
 - Work:
 
   ```text
@@ -101,17 +94,14 @@ the final value.
 h = 31 * hash("C1") + hash("a@x.com")
 ```
 
-- Then, in 2–3 sentences, explain why the **same fields** used in `equals` must be used in
-  `hashCode` and why immutability helps.
+- Then, in 2–3 sentences, explain why the **same fields** used in `equals` must be used in `hashCode` and why immutability helps.
 
 ---
 
 ## Exercise 05 — From Hash to Bucket Index
 
 **Objective:** Map a hash to a valid array index using modulo and masking.
-**Description:** Using your `h3` from Exercise 03, compute indices for table sizes `m = 16` and
-`m = 32` using both `h % m` and `h & (m-1)` (assume `h = 0`). If `h` could be negative, show
-the expression with `Math.floorMod(h, m)`.
+**Description:** Using your `h3` from Exercise 03, compute indices for table sizes `m = 16` and `m = 32` using both `h % m` and `h & (m-1)` (assume `h = 0`). If `h` could be negative, show the expression with `Math.floorMod(h, m)`.
 - Quick checks:
 
   ```java
@@ -129,9 +119,7 @@ the expression with `Math.floorMod(h, m)`.
 ## Exercise 06 — Implement equals/hashCode (class)
 
 **Objective:** Write consistent overrides based on identifying fields.
-**Description:** Implement a `final class Customer` with fields `id` and `email`. Two customers
-are equal if their **id** is equal. Implement `hashCode` consistently. Add a tiny `main` (or
-`run`) that shows two equal customers produce `equals == true` and equal hash codes.
+**Description:** Implement a `final class Customer` with fields `id` and `email`. Two customers are equal if their **id** is equal. Implement `hashCode` consistently. Add a tiny `main` (or `run`) that shows two equal customers produce `equals == true` and equal hash codes.
 - Skeleton:
 
   ```java
@@ -150,15 +138,11 @@ are equal if their **id** is equal. Implement `hashCode` consistently. Add a tin
 ## Exercise 07 — Collision Reasoning (toy hash)
 
 **Objective:** Reason about collisions and hash quality.
-**Description:** For the **toy** hash `h_sum(S) = sum of ASCII codes`, give **two different**
-3-letter strings that produce the **same** result. Show your working. In one sentence, explain
-why this toy hash is a poor real-world choice.
+**Description:** For the **toy** hash `h_sum(S) = sum of ASCII codes`, give **two different** 3-letter strings that produce the **same** result. Show your working. In one sentence, explain why this toy hash is a poor real-world choice.
 
 ---
 
 ## Exercise 08 — Mutability Pitfall
 
 **Objective:** Explain why changing the fields that are used to generate a hash is dangerous.
-**Description:** Create a class `Tag` with a mutable `name` and write `equals`/`hashCode` based
-on `name`. In 1–2 sentences, explain what could go wrong if this object were used in a hashed
-lookup and `name` changes after insertion (we’ll implement collections later).
+**Description:** Create a class `Tag` with a mutable `name` and write `equals`/`hashCode` based on `name`. In 1–2 sentences, explain what could go wrong if this object were used in a hashed lookup and `name` changes after insertion (we’ll implement collections later).

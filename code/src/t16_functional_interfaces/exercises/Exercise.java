@@ -29,23 +29,23 @@ public class Exercise {
     // -------------------------------------------------------------------------
 
     static class PlayerEvent {
-        private String _playerId;
-        private String _eventType;
-        private int _value;
+        private final String playerId;
+        private final String eventType;
+        private final int value;
 
         public PlayerEvent(String playerId, String eventType, int value) {
-            _playerId  = playerId;
-            _eventType = eventType;
-            _value     = value;
+            this.playerId  = playerId;
+            this.eventType = eventType;
+            this.value     = value;
         }
 
-        public String getPlayerId()  { return _playerId; }
-        public String getEventType() { return _eventType; }
-        public int    getValue()     { return _value; }
+        public String getPlayerId()  { return playerId; }
+        public String getEventType() { return eventType; }
+        public int    getValue()     { return value; }
 
         @Override
         public String toString() {
-            return _playerId + " | " + _eventType + " | " + _value;
+            return playerId + " | " + eventType + " | " + value;
         }
     }
 
@@ -102,6 +102,12 @@ public class Exercise {
         List<PlayerEvent> flagged = filterItems(events, suspicious);
         System.out.println("Suspicious events:");
         for (PlayerEvent e : flagged) System.out.println("  " + e);
+
+        // The same rule built with negate(): "not loot" is the opposite of "is loot"
+        Predicate<PlayerEvent> isLoot = e -> e.getEventType().equals("LOOT");
+        Predicate<PlayerEvent> suspiciousViaNegate = isKill.and(isBig).and(isLoot.negate());
+        boolean same = filterItems(events, suspiciousViaNegate).equals(flagged);
+        System.out.println("Same result with negate(): " + same);
     }
 
     // -------------------------------------------------------------------------
@@ -138,9 +144,9 @@ public class Exercise {
     // -------------------------------------------------------------------------
 
     static class Counter {
-        private int _count = 0;
-        public void increment() { _count++; }
-        public int getCount()   { return _count; }
+        private int count = 0;
+        public void increment() { count++; }
+        public int getCount()   { return count; }
     }
 
     static <T> void forEach(List<T> items, Consumer<T> action) {
@@ -172,19 +178,19 @@ public class Exercise {
     // -------------------------------------------------------------------------
 
     static class BugTicket {
-        private String _id;
-        private String _priority;
+        private final String id;
+        private final String priority;
 
         public BugTicket(String id, String priority) {
-            _id       = id;
-            _priority = priority;
+            this.id       = id;
+            this.priority = priority;
         }
 
-        public String getId()       { return _id; }
-        public String getPriority() { return _priority; }
+        public String getId()       { return id; }
+        public String getPriority() { return priority; }
 
         @Override
-        public String toString() { return _id + "(" + _priority + ")"; }
+        public String toString() { return id + "(" + priority + ")"; }
     }
 
     static <T, K> Map<K, List<T>> groupBy(List<T> items,
@@ -262,23 +268,23 @@ public class Exercise {
     // -------------------------------------------------------------------------
 
     static class StoreItem {
-        private String _name;
-        private double _price;
-        private int    _stock;
+        private final String name;
+        private final double price;
+        private final int    stock;
 
         public StoreItem(String name, double price, int stock) {
-            _name  = name;
-            _price = price;
-            _stock = stock;
+            this.name  = name;
+            this.price = price;
+            this.stock = stock;
         }
 
-        public String getName()  { return _name; }
-        public double getPrice() { return _price; }
-        public int    getStock() { return _stock; }
+        public String getName()  { return name; }
+        public double getPrice() { return price; }
+        public int    getStock() { return stock; }
 
         @Override
         public String toString() {
-            return _name + "(\u20ac" + _price + ", stock=" + _stock + ")";
+            return name + "(\u20ac" + price + ", stock=" + stock + ")";
         }
     }
 
@@ -326,23 +332,23 @@ public class Exercise {
     // -------------------------------------------------------------------------
 
     static class SupportTicket {
-        private int    _id;
-        private String _category;
-        private int    _severity;
+        private final int    id;
+        private final String category;
+        private final int    severity;
 
         public SupportTicket(int id, String category, int severity) {
-            _id       = id;
-            _category = category;
-            _severity = severity;
+            this.id       = id;
+            this.category = category;
+            this.severity = severity;
         }
 
-        public int    getId()       { return _id; }
-        public String getCategory() { return _category; }
-        public int    getSeverity() { return _severity; }
+        public int    getId()       { return id; }
+        public String getCategory() { return category; }
+        public int    getSeverity() { return severity; }
 
         @Override
         public String toString() {
-            return "T#" + _id + "[" + _category + ", sev=" + _severity + "]";
+            return "T#" + id + "[" + category + ", sev=" + severity + "]";
         }
     }
 

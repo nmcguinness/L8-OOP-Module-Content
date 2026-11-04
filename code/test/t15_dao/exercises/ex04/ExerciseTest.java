@@ -29,8 +29,8 @@ class ExerciseTest {
         private int updateStatusCalls;
 
         @Override
-        public int insert(String reg, String make, String model, double dailyRate, String status) {
-            cars.add(new Car(nextId, reg, make, model, dailyRate, status));
+        public int insert(Car car) {
+            cars.add(car.withId(nextId));
             return nextId++;
         }
 
@@ -55,7 +55,7 @@ class ExerciseTest {
             for (int i = 0; i < cars.size(); i++) {
                 Car c = cars.get(i);
                 if (c.id() == id) {
-                    cars.set(i, new Car(c.id(), c.reg(), c.make(), c.model(), c.dailyRate(), newStatus));
+                    cars.set(i, c.withStatus(newStatus));
                     return true;
                 }
             }
@@ -74,14 +74,14 @@ class ExerciseTest {
     }
 
     @Test
-    void addCar_alwaysStartsLifeAsAvailable() throws Exception {
+    void addCar_alwaysStartsLifeAsAvailable() throws DaoException {
         StubCarDao dao = new StubCarDao();
         int id = new CarRentalService(dao).addCar("12-LH-1", "Toyota", "Yaris", 45.0);
         assertEquals("AVAILABLE", dao.findById(id).orElseThrow().status());
     }
 
     @Test
-    void rentCar_availableCar_succeedsAndMarksItRented() throws Exception {
+    void rentCar_availableCar_succeedsAndMarksItRented() throws DaoException {
         StubCarDao dao = new StubCarDao();
         CarRentalService service = new CarRentalService(dao);
         int id = service.addCar("12-LH-1", "Toyota", "Yaris", 45.0);
@@ -91,7 +91,7 @@ class ExerciseTest {
     }
 
     @Test
-    void rentCar_alreadyRented_isRefused() throws Exception {
+    void rentCar_alreadyRented_isRefused() throws DaoException {
         StubCarDao dao = new StubCarDao();
         CarRentalService service = new CarRentalService(dao);
         int id = service.addCar("12-LH-1", "Toyota", "Yaris", 45.0);
@@ -101,22 +101,22 @@ class ExerciseTest {
     }
 
     @Test
-    void rentCar_carUnderMaintenance_isRefused() throws Exception {
+    void rentCar_carUnderMaintenance_isRefused() throws DaoException {
         StubCarDao dao = new StubCarDao();
-        int id = dao.insert("12-LH-1", "Toyota", "Yaris", 45.0, "MAINTENANCE");
+        int id = dao.insert(new Car(0, "12-LH-1", "Toyota", "Yaris", 45.0, "MAINTENANCE"));
 
         assertFalse(new CarRentalService(dao).rentCar(id));
     }
 
     @Test
-    void rentCar_unknownId_returnsFalseWithoutTouchingTheDao() throws Exception {
+    void rentCar_unknownId_returnsFalseWithoutTouchingTheDao() throws DaoException {
         StubCarDao dao = new StubCarDao();
         assertFalse(new CarRentalService(dao).rentCar(99));
         assertEquals(0, dao.updateStatusCalls, "a missing car must not trigger a write");
     }
 
     @Test
-    void returnCar_rentedCar_succeedsAndMarksItAvailable() throws Exception {
+    void returnCar_rentedCar_succeedsAndMarksItAvailable() throws DaoException {
         StubCarDao dao = new StubCarDao();
         CarRentalService service = new CarRentalService(dao);
         int id = service.addCar("12-LH-1", "Toyota", "Yaris", 45.0);
@@ -127,7 +127,7 @@ class ExerciseTest {
     }
 
     @Test
-    void returnCar_carThatWasNeverRented_isRefused() throws Exception {
+    void returnCar_carThatWasNeverRented_isRefused() throws DaoException {
         StubCarDao dao = new StubCarDao();
         CarRentalService service = new CarRentalService(dao);
         int id = service.addCar("12-LH-1", "Toyota", "Yaris", 45.0);
@@ -136,17 +136,17 @@ class ExerciseTest {
     }
 
     @Test
-    void returnCar_unknownId_returnsFalse() throws Exception {
+    void returnCar_unknownId_returnsFalse() throws DaoException {
         assertFalse(new CarRentalService(new StubCarDao()).returnCar(99));
     }
 
     @Test
-    void listAvailable_excludesRentedAndMaintenanceCars() throws Exception {
+    void listAvailable_excludesRentedAndMaintenanceCars() throws DaoException {
         StubCarDao dao = new StubCarDao();
         CarRentalService service = new CarRentalService(dao);
         int free = service.addCar("12-LH-1", "Toyota", "Yaris", 45.0);
         int rented = service.addCar("15-D-2", "Ford", "Focus", 55.0);
-        dao.insert("16-C-3", "Opel", "Corsa", 40.0, "MAINTENANCE");
+        dao.insert(new Car(0, "16-C-3", "Opel", "Corsa", 40.0, "MAINTENANCE"));
         service.rentCar(rented);
 
         List<Car> available = service.listAvailable();
@@ -156,7 +156,7 @@ class ExerciseTest {
     }
 
     @Test
-    void listAvailable_noCars_returnsEmptyListNotNull() throws Exception {
+    void listAvailable_noCars_returnsEmptyListNotNull() throws DaoException {
         assertTrue(new CarRentalService(new StubCarDao()).listAvailable().isEmpty());
     }
 }

@@ -2,104 +2,76 @@
 title: "DB Connectivity I — JDBC + DAO — Exercises"
 subtitle: "COMP C8Z03 — Year 2 OOP"
 topic_code: t15_dao
-description: "Five progressive exercises building a car-rental system: schema, DAO contract, JDBC implementation, service layer, and richer queries."
+description: "Five step-by-step exercises building a car-rental back end: schema and smoke test, a domain class and DAO contract with its own exception type, a JDBC implementation, a service layer, and richer queries."
 created: 2026-02-04
-last_updated: 2026-09-10
-version: 1.0
+last_updated: 2026-11-03
+version: 1.2
 status: published
 authors: ["OOP Teaching Team"]
 tags: [java, mysql, phpmyadmin, jdbc, dao, n-tier, exercises, year2, comp-c8z03]
 ---
 # DB Connectivity I — JDBC + DAO — Exercises
 
-These exercises reinforce the lesson **DB Connectivity I — JDBC + DAO (Data Access Object)** by
-building a small **Car Rental** backend using a layered structure (**UI then Service then DAO
-then DB**).
+These exercises build a small car-rental back end, one layer at a time, following the [t15 notes](../t15_dao_notes.md). The program is split into layers, and each layer talks only to the one below it:
 
-## Ground rules
+| Layer | Its job | In these exercises |
+| :-- | :-- | :-- |
+| Presentation | show results, report errors | `Exercise.run()` |
+| Service | business rules, such as "only rent an available car" | `CarRentalService` |
+| DAO | all the SQL, and nothing else | `CarDao`, `JdbcCarDao` |
+| Database | stores the data | MySQL, through phpMyAdmin |
 
-* **No SQL in `Main`** (or in UI classes). SQL belongs in DAO only.
-* **Service layer contains business rules**, not JDBC.
-* Use **PreparedStatement** placeholders (`?`). No string concatenation for SQL.
-* Use **try-with-resources** for `Connection`, `PreparedStatement`, `ResultSet`.
-* Prefer simple loops over streams unless asked otherwise.
-* Print small outputs in `Exercise.run()` so behaviour can be verified quickly.
+A **DAO** (Data Access Object) is a class whose only job is to move objects in and out of the database. Everything above it calls methods such as `findById(3)` and never sees SQL.
 
-## How to run
+Every exercise follows the same layout: a goal, the steps, a worked example, the rules, hints you can open if you are stuck, and a checklist. Each one ends with a link to a worked solution, and to its tests where there are some. Work through them in order: each one adds one layer or feature to the last.
 
-Each exercise uses:
+| Exercise | You practise | Difficulty |
+| :-- | :-- | :-- |
+| 01 Schema and smoke test | creating tables, a first JDBC query | Foundation |
+| 02 Domain class and DAO contract | a validated class, an interface, a fake DAO | Foundation |
+| 03 A JDBC DAO | `PreparedStatement`, mapping rows to objects | Intermediate |
+| 04 A service layer | business rules that never touch SQL | Intermediate |
+| 05 Richer queries | paging, search, a small report | Intermediate |
 
-* **Folder:** `code/src/t15_dao/exercises/eXX/`
-* **Filename:** `Exercise.java`
-* **Package:** `t15_dao.exercises.eXX`
+## Rules for every exercise
 
-```java
-package t15_dao.exercises.ex01;
-
-public class Exercise {
-    public static void run() throws Exception {
-        // your tests here
-    }
-}
-```
-
-From your `Main.java`, call:
-
-```java
-t15_dao.exercises.ex01.Exercise.run();
-```
+- SQL goes in the DAO only. Never in `run()` or in the service.
+- Business rules go in the service. Never JDBC.
+- Every value in a query goes through a `?` placeholder. Never join values into SQL text.
+- Every `Connection`, `PreparedStatement` and `ResultSet` is opened in try-with-resources.
+- DAO methods declare `throws DaoException`, never `throws Exception`. A `SQLException` stays inside the DAO, kept as the cause of a `DaoException`.
 
 ## Before you start
 
-### Prerequisites checklist
+- [ ] MySQL is running (for example through XAMPP) and you can open phpMyAdmin.
+- [ ] The MySQL driver is in the project's `pom.xml`. See [Step 4](../t15_dao_notes.md#step-4--add-the-mysql-jdbc-driver-to-your-project).
+- [ ] You can explain what an interface is and why code should depend on one.
 
-* [ ] Completed the lesson notes: JDBC + DAO + layering
-* [ ] You can use `ArrayList` and loops
-* [ ] You can write defensive checks (null/blank, fail fast)
-* [ ] You understand interfaces and polymorphism (program to an interface)
+## How to run
 
-### How to use these exercises
+Each exercise goes in its own package, `t15_dao.exercises.exNN`. Create a class `Exercise` in that package with a static `run()` method, and call `Exercise.run()` from `Main`.
 
-* Work **in order**. Each exercise adds one more layer or capability.
-* Try the tasks first, then open the solution.
-* Keep your output tiny but consistent (print IDs, counts, and key objects).
+> **Watch out:** never type a password into a `.java` file. It ends up in Git, in every clone and in your team-mates' history. Every exercise reads its settings from `config/db.properties`, which is listed in `.gitignore`. See [Step 6](../t15_dao_notes.md#step-6--keep-credentials-out-of-your-code).
 
 ---
 
-## Exercise 01 — Create the schema + run a DB smoke test (JDBC)
+## Exercise 01 — Schema and smoke test
 
-**Objective:** Create a minimal MySQL schema for a Car Rental system and write a tiny Java
-smoke test that proves your JDBC connection works by running a trivial query and printing a
-result.
+**Goal:** Create the car-rental database, then write the smallest possible Java program that proves it can talk to it. A **smoke test** checks that the basic connection works before you build anything on top.
 
-**Context (software + games):**
+**You will need:** [Step 1](../t15_dao_notes.md#step-1--create-a-database-in-phpmyadmin), [Step 3](../t15_dao_notes.md#step-3--create-the-table-schema) and [Step 7](../t15_dao_notes.md#step-7--connection-smoke-test).
 
-* **Software:** This is the first step in any CRUD system: confirm your DB is reachable before
-  building abstractions.
-* **Games:** Similar “smoke tests” exist when validating network connections, analytics
-  endpoints, or persistence services before wiring gameplay logic.
+**Steps**
 
-### What you are building
-
-* A MySQL database named `car_rental`
-* Two tables:
-
-  * `cars` (fleet inventory)
-  * `rentals` (rental bookings)
-* A Java class `DbSmokeTest` that:
-
-  * Connects using JDBC
-  * Runs `SELECT 1`
-  * Prints `"DB connection OK..."`
-
-### Required API
-
-None beyond a runnable entry point.
-
-### Tasks
-
-1. In phpMyAdmin, create a database named `car_rental` (use `utf8mb4` collation).
-2. Run this SQL:
+1. In phpMyAdmin, create a database called `car_rental` with the `utf8mb4` collation.
+2. In its **SQL** tab, run the script below. It creates a `cars` table and a `rentals` table, and adds two cars.
+3. In the `code/config` folder, copy `db.properties.example` to `db.properties` and fill in your settings. With XAMPP's defaults, the user is `root` and the password is empty.
+4. Create the record `DbConfig` shown in the notes, in the package `t15_dao.exercises`, so that all the exercises can share it.
+5. In `run()`, load the settings. If the file cannot be read, print a helpful message and return.
+6. Open a connection with `DriverManager.getConnection`, using the three values from `DbConfig`.
+7. Run `SELECT 1` with a `PreparedStatement` and print the result.
+8. Run `SELECT COUNT(*) FROM cars` and print the result.
+9. Catch `SQLException` in `run()` and print its message with a hint about what to check.
 
 ```sql
 CREATE TABLE cars (
@@ -130,156 +102,83 @@ CREATE TABLE rentals (
 
 CREATE INDEX idx_rentals_status ON rentals(status);
 CREATE INDEX idx_rentals_customer ON rentals(customer_name);
-```
 
-1. Insert a couple of cars:
-
-```sql
 INSERT INTO cars(reg, make, model, daily_rate, status)
 VALUES
 ('12-LH-1234', 'Toyota', 'Yaris', 45.00, 'AVAILABLE'),
 ('15-D-7788', 'Ford', 'Focus', 55.00, 'MAINTENANCE');
 ```
 
-1. Create `DbSmokeTest` in this package: `t15_dao.exercises.ex01`.
-2. In `DbSmokeTest.main` (or `Exercise.run()`), run:
-
-   * `SELECT 1`
-   * `SELECT COUNT(*) FROM cars`
-3. Print both results.
-
-### Sample input/output
-
-Expected output shape (your numbers may differ):
+**Example**
 
 ```text
 DB connection OK, SELECT 1 -> 1
 Cars in fleet -> 2
 ```
 
-### Constraints
+If MySQL is not running, you see the error instead:
 
-* Use a **PreparedStatement** even for `SELECT 1` (practice the habit).
-* Use try-with-resources for everything.
-
-### Done when...
-
-* You can run the program and see `SELECT 1 -> 1`.
-* You can query and print a real value from your DB (car count).
-* No JDBC resources are left open (everything in try-with-resources).
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    ✅ Solution
-  </summary>
-
-```java
-package t15_dao.exercises.ex01;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-
-public class Exercise {
-
-    public static void run() throws Exception {
-
-        String url = "jdbc:mysql://localhost:3306/car_rental?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-        String user = "car_rental_user";
-        String pass = "your_password";
-
-        try (Connection c = DriverManager.getConnection(url, user, pass)) {
-
-            try (PreparedStatement ps = c.prepareStatement("SELECT 1");
-                 ResultSet rs = ps.executeQuery()) {
-
-                rs.next();
-                int v = rs.getInt(1);
-                System.out.println("DB connection OK, SELECT 1 -> " + v);
-            }
-
-            try (PreparedStatement ps = c.prepareStatement("SELECT COUNT(*) FROM cars");
-                 ResultSet rs = ps.executeQuery()) {
-
-                rs.next();
-                int count = rs.getInt(1);
-                System.out.println("Cars in fleet -> " + count);
-            }
-        }
-    }
-}
+```text
+Database error: Communications link failure ...
+Check that MySQL is running (XAMPP) and that the car_rental database and cars table exist.
 ```
+
+**Rules**
+
+- Use a `PreparedStatement` even for `SELECT 1`, to build the habit.
+- No database URL, user name or password appears in any `.java` file.
+
+<details>
+<summary>Hints</summary>
+
+1. The program runs in the `code` folder, so the path is `Path.of("config", "db.properties")`.
+2. A `ResultSet` starts **before** the first row. Call `rs.next()` once, then `rs.getInt(1)`.
+3. Several resources can share one `try`: `try (PreparedStatement ps = ...; ResultSet rs = ...)`.
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints the two lines shown.
+- [ ] Every JDBC object is opened in try-with-resources.
+- [ ] `git status` does not list `config/db.properties`.
+
+**Package:** `t15_dao.exercises.ex01`
+
+**Solution:** [t15 exercise 01 solution code](../../../../code/src/t15_dao/exercises/ex01/) and [DbConfig](../../../../code/src/t15_dao/exercises/DbConfig.java).
+**Tests:** [DbConfig tests](../../../../code/test/t15_dao/exercises/DbConfigTest.java).
+
 ---
 
-## Exercise 02 — Model the domain + define your DAO contract (Car)
+## Exercise 02 — Domain class and DAO contract
 
-**Objective:** Build a clean **domain model** (`Car`) and a **DAO interface** (`CarDao`) that
-defines the persistence operations your system supports, without committing to JDBC yet.
+**Goal:** Write the `Car` class and the `CarDao` interface that says what the program can ask the database to do. Then write a fake DAO that keeps cars in a list, so you can test everything without a database.
 
-**Context (software + games):**
+**You will need:** [Step 8](../t15_dao_notes.md#step-8--domain-class-task) and [Step 9](../t15_dao_notes.md#step-9--dao-exception-and-interface).
 
-* **Software:** DAO interfaces keep database decisions out of business logic and make
-  implementations swappable.
-* **Games:** The same idea appears when gameplay code targets an interface (e.g., `SaveSystem`)
-  while swapping between local save vs cloud save.
+**Steps**
 
-### What you are building
-
-* A validated `Car` domain class
-* A `CarDao` interface defining CRUD-style operations
-* An `InMemoryCarDao` implementation to let you test behaviour before JDBC
-
-### Required API
+1. Create `Car` with six `private final` fields: `id`, `reg`, `make`, `model`, `dailyRate` and `status`, a constructor, and a getter for each, named as in the signatures below.
+2. In the constructor, check the values: `id` is 0 or more, the four text fields are not blank, and `dailyRate` is above 0. Trim the text, and make `status` upper case.
+3. Add `withId(int)` and `withStatus(String)`. Each returns a **new** `Car` with one value changed.
+4. Create a **checked** exception `DaoException` with a constructor that takes a message and a cause.
+5. Create the interface `CarDao` below.
+6. Create `InMemoryCarDao`, which implements `CarDao` with an `ArrayList<Car>` and an id counter that starts at 1. `insert` stores `car.withId(nextId)`.
+7. In `run()`, insert two cars, print them all, mark car 1 as `RENTED`, delete car 2, and print them all again.
 
 ```java
-public class Car {
-    public Car(int id, String reg, String make, String model, double dailyRate, String status);
-    public int id();
-    public String reg();
-    public String make();
-    public String model();
-    public double dailyRate();
-    public String status();
-}
+public Car(int id, String reg, String make, String model, double dailyRate, String status)
 
 public interface CarDao {
-    int insert(String reg, String make, String model, double dailyRate, String status) throws Exception;
-    java.util.Optional<Car> findById(int id) throws Exception;
-    java.util.List<Car> findAll() throws Exception;
-    boolean updateStatus(int id, String newStatus) throws Exception;
-    boolean deleteById(int id) throws Exception;
+    int insert(Car car) throws DaoException;
+    Optional<Car> findById(int id) throws DaoException;
+    List<Car> findAll() throws DaoException;
+    boolean updateStatus(int id, String newStatus) throws DaoException;
+    boolean deleteById(int id) throws DaoException;
 }
 ```
 
-### Tasks
-
-1. Create `Car` with these validation rules:
-
-   * `id >= 0`
-   * `reg`, `make`, `model`, `status` are required (non-null, non-blank)
-   * `dailyRate > 0`
-   * Trim strings, uppercase `status`
-2. Create the `CarDao` interface with the required methods above.
-3. Create `InMemoryCarDao` that implements `CarDao` using:
-
-   * `ArrayList<Car>` storage
-   * an integer ID counter that starts at 1
-4. In `Exercise.run()`:
-
-   * Insert 2 cars
-   * Print all cars
-   * Update one to `RENTED`
-   * Delete one
-   * Print again
-
-### Sample input/output
-
-Expected output shape:
+**Example**
 
 ```text
 Inserted car id=1
@@ -290,1205 +189,212 @@ All cars:
 Update status id=1 -> true
 Delete id=2 -> true
 All cars:
- - Car{id=1, ... status=RENTED}
+ - Car{id=1, reg='12-LH-1234', make='Toyota', model='Yaris', rate=45.0, status=RENTED}
 ```
 
-### Constraints
+**Rules**
 
-* No JDBC in this exercise.
-* `updateStatus` returns `false` for `id <= 0`. (Fail fast.)
+- `insert` takes a whole `Car`. Pass `0` as the id of a car that is not stored yet; the DAO assigns the real one.
+- `updateStatus` and `deleteById` return `false` for an id of 0 or less.
+- `InMemoryCarDao` has no `throws` clauses. Nothing in memory can fail, and a class may declare fewer checked exceptions than its interface.
 
-### Done when...
+<details>
+<summary>Hints</summary>
 
-* The service/user code can talk to `CarDao` without knowing the implementation.
-* Your in-memory DAO behaves like a tiny fake database.
-* You can demonstrate insert/findAll/update/delete in `run()`.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    ✅ Solution
-  </summary>
-
-```java
-package t15_dao.exercises.ex02;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-public class Exercise {
-
-    public static void run() throws Exception {
-
-        CarDao dao = new InMemoryCarDao();
-
-        int a = dao.insert("12-LH-1234", "Toyota", "Yaris", 45.0, "AVAILABLE");
-        System.out.println("Inserted car id=" + a);
-
-        int b = dao.insert("15-D-7788", "Ford", "Focus", 55.0, "MAINTENANCE");
-        System.out.println("Inserted car id=" + b);
-
-        System.out.println("All cars:");
-        for (Car c : dao.findAll())
-            System.out.println(" - " + c);
-
-        System.out.println("Update status id=" + a + " -> " + dao.updateStatus(a, "RENTED"));
-        System.out.println("Delete id=" + b + " -> " + dao.deleteById(b));
-
-        System.out.println("All cars:");
-        for (Car c : dao.findAll())
-            System.out.println(" - " + c);
-    }
-}
-
-class Car {
-
-    private int _id;
-    private String _reg;
-    private String _make;
-    private String _model;
-    private double _dailyRate;
-    private String _status;
-
-    public Car(int id, String reg, String make, String model, double dailyRate, String status) {
-
-        if (id < 0)
-            throw new IllegalArgumentException("id must be >= 0");
-
-        if (reg == null || reg.isBlank())
-            throw new IllegalArgumentException("reg is required");
-
-        if (make == null || make.isBlank())
-            throw new IllegalArgumentException("make is required");
-
-        if (model == null || model.isBlank())
-            throw new IllegalArgumentException("model is required");
-
-        if (dailyRate <= 0.0)
-            throw new IllegalArgumentException("dailyRate must be > 0");
-
-        if (status == null || status.isBlank())
-            throw new IllegalArgumentException("status is required");
-
-        _id = id;
-        _reg = reg.trim();
-        _make = make.trim();
-        _model = model.trim();
-        _dailyRate = dailyRate;
-        _status = status.trim().toUpperCase();
-    }
-
-    public int id() { return _id; }
-    public String reg() { return _reg; }
-    public String make() { return _make; }
-    public String model() { return _model; }
-    public double dailyRate() { return _dailyRate; }
-    public String status() { return _status; }
-
-    @Override
-    public String toString() {
-        return "Car{id=" + _id +
-                ", reg='" + _reg + "'" +
-                ", make='" + _make + "'" +
-                ", model='" + _model + "'" +
-                ", rate=" + _dailyRate +
-                ", status=" + _status +
-                "}";
-    }
-}
-
-interface CarDao {
-    int insert(String reg, String make, String model, double dailyRate, String status) throws Exception;
-    Optional<Car> findById(int id) throws Exception;
-    List<Car> findAll() throws Exception;
-    boolean updateStatus(int id, String newStatus) throws Exception;
-    boolean deleteById(int id) throws Exception;
-}
-
-class InMemoryCarDao implements CarDao {
-
-    private ArrayList<Car> _cars = new ArrayList<>();
-    private int _nextId = 1;
-
-    @Override
-    public int insert(String reg, String make, String model, double dailyRate, String status) {
-
-        if (reg == null || reg.isBlank())
-            throw new IllegalArgumentException("reg is required");
-
-        Car c = new Car(_nextId, reg, make, model, dailyRate, status);
-        _cars.add(c);
-        _nextId++;
-        return c.id();
-    }
-
-    @Override
-    public Optional<Car> findById(int id) {
-        if (id <= 0)
-            return Optional.empty();
-
-        for (Car c : _cars) {
-            if (c.id() == id)
-                return Optional.of(c);
-        }
-
-        return Optional.empty();
-    }
-
-    @Override
-    public List<Car> findAll() {
-        return new ArrayList<>(_cars);
-    }
-
-    @Override
-    public boolean updateStatus(int id, String newStatus) {
-        if (id <= 0)
-            return false;
-
-        if (newStatus == null || newStatus.isBlank())
-            throw new IllegalArgumentException("newStatus is required");
-
-        for (int i = 0; i < _cars.size(); i++) {
-            Car c = _cars.get(i);
-            if (c.id() == id) {
-                Car updated = new Car(c.id(), c.reg(), c.make(), c.model(), c.dailyRate(), newStatus);
-                _cars.set(i, updated);
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    @Override
-    public boolean deleteById(int id) {
-        if (id <= 0)
-            return false;
-
-        for (int i = 0; i < _cars.size(); i++) {
-            if (_cars.get(i).id() == id) {
-                _cars.remove(i);
-                return true;
-            }
-        }
-
-        return false;
-    }
-}
-```
+1. Why not `insert(String reg, String make, String model, double rate, String status)`? Five parameters of similar types are easy to pass in the wrong order, and every new column would change the interface.
+2. A `Car` cannot change once made, so `updateStatus` replaces the car in the list: `cars.set(i, cars.get(i).withStatus(newStatus))`.
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints the output shown.
+- [ ] `new Car(0, "  ", "Ford", "Focus", 55.0, "AVAILABLE")` throws an `IllegalArgumentException`.
+
+**Package:** `t15_dao.exercises.ex02`
+
+**Solution:** [t15 exercise 02 solution code](../../../../code/src/t15_dao/exercises/ex02/).
+**Tests:** [t15 exercise 02 tests](../../../../code/test/t15_dao/exercises/ex02/).
+
 ---
 
-## Exercise 03 — Implement `JdbcCarDao` (PreparedStatement + mapping)
+## Exercise 03 — A JDBC DAO
 
-**Objective:** Replace the in-memory DAO with a real JDBC implementation that runs SQL, maps
-rows into `Car` objects, and returns clean Java results (`Optional`, `List`, `boolean`).
+**Goal:** Write the real DAO. It runs SQL against the `cars` table, turns each row into a `Car`, and hands back plain Java results: an `Optional`, a `List` or a `boolean`.
 
-**Context (software + games):**
+**You will need:** [Step 10](../t15_dao_notes.md#step-10--jdbc-implementation-jdbctaskdao).
 
-* **Software:** This is the exact “DAO boundary” used in real apps: JDBC code lives in one
-  place, everyone else talks to methods.
-* **Games:** The same boundary exists for persistence layers (SQLite saves, leaderboard
-  backends, telemetry).
+**Steps**
 
-### What you are building
-
-* `JdbcCarDao implements CarDao`
-* Safe SQL using `PreparedStatement`
-* Row to object mapping using a dedicated `mapRow(ResultSet)`
-
-### Required API
-
-Same `Car` and `CarDao` as Exercise 02, plus:
+1. Copy `Car`, `DaoException` and `CarDao` into this package.
+2. Create `JdbcCarDao`, which implements `CarDao`. Its constructor takes `url`, `user` and `pass`, stores them in `final` fields, and rejects a blank `url`.
+3. Add `private Connection open()`, which calls `DriverManager.getConnection(url, user, pass)`.
+4. Add `private static Car mapRow(ResultSet rs)`. It reads the six columns of the current row and returns a `Car`.
+5. Write the five DAO methods. Each one catches `SQLException` and throws `new DaoException("what failed", e)`.
+6. In `run()`, load a `DbConfig`, create a `JdbcCarDao` from it, insert a car, find it by its new id, and print how many cars `findAll()` returns.
 
 ```java
-public class JdbcCarDao implements CarDao {
-    public JdbcCarDao(String url, String user, String pass);
-}
+public JdbcCarDao(String url, String user, String pass)
+private static Car mapRow(ResultSet rs) throws SQLException
 ```
 
-### Tasks
-
-1. Copy `Car` and `CarDao` into this exercise package (or import from your shared project code).
-2. Implement `JdbcCarDao` with:
-
-   * fields `_url`, `_user`, `_pass`
-   * constructor validation (`url` required)
-   * `private Connection open()`
-3. Implement the DAO methods using SQL against the `cars` table:
-
-   * `insert(...)` returns the generated key
-   * `findById(...)` returns `Optional.empty()` if not found or id invalid
-   * `findAll()` returns cars ordered by `id`
-   * `updateStatus(...)` returns `true` only when exactly one row changed
-   * `deleteById(...)` returns `true` only when exactly one row deleted
-4. Add `private static Car mapRow(ResultSet rs)` that reads:
-
-   * `id`, `reg`, `make`, `model`, `daily_rate`, `status`
-5. In `Exercise.run()`:
-
-   * Create a `JdbcCarDao`
-   * Insert one car
-   * Read it back by ID
-   * Print `findAll()` count
-
-### Sample input/output
+**Example** (your ids and counts will differ)
 
 ```text
 Inserted car id=7
-Find by id -> Car{id=7, reg='...', ...}
+Find by id -> Car{id=7, reg='...', make='...', model='...', rate=..., status=AVAILABLE}
 Cars in DB -> 3
 ```
 
-### Constraints
-
-* Use placeholders (`?`) for all input values.
-* Use try-with-resources for every JDBC object.
-* Keep SQL inside `JdbcCarDao` only.
-
-### Done when...
-
-* You can swap `CarDao dao = new InMemoryCarDao()` to `new JdbcCarDao(...)` with no other code
-  changes.
-* CRUD methods work and return expected values.
-* Your DAO never leaks `ResultSet` or JDBC types outside.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    ✅ Solution
-  </summary>
-
-```java
-package t15_dao.exercises.ex03;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-public class Exercise {
-
-    public static void run() throws Exception {
-
-        String url = "jdbc:mysql://localhost:3306/car_rental?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-        String user = "car_rental_user";
-        String pass = "your_password";
-
-        CarDao dao = new JdbcCarDao(url, user, pass);
-
-        int id = dao.insert("24-D-9001", "Honda", "Civic", 62.5, "AVAILABLE");
-        System.out.println("Inserted car id=" + id);
-
-        System.out.println("Find by id -> " + dao.findById(id).orElse(null));
-
-        List<Car> all = dao.findAll();
-        System.out.println("Cars in DB -> " + all.size());
-    }
-}
-
-class JdbcCarDao implements CarDao {
-
-    private String _url;
-    private String _user;
-    private String _pass;
-
-    public JdbcCarDao(String url, String user, String pass) {
-
-        if (url == null || url.isBlank())
-            throw new IllegalArgumentException("url is required");
-
-        _url = url.trim();
-        _user = user;
-        _pass = pass;
-    }
-
-    private Connection open() throws SQLException {
-        return DriverManager.getConnection(_url, _user, _pass);
-    }
-
-    @Override
-    public int insert(String reg, String make, String model, double dailyRate, String status) throws Exception {
-
-        if (reg == null || reg.isBlank())
-            throw new IllegalArgumentException("reg is required");
-
-        if (make == null || make.isBlank())
-            throw new IllegalArgumentException("make is required");
-
-        if (model == null || model.isBlank())
-            throw new IllegalArgumentException("model is required");
-
-        if (dailyRate <= 0.0)
-            throw new IllegalArgumentException("dailyRate must be > 0");
-
-        if (status == null || status.isBlank())
-            throw new IllegalArgumentException("status is required");
-
-        String sql = "INSERT INTO cars(reg, make, model, daily_rate, status) VALUES (?, ?, ?, ?, ?)";
-
-        try (Connection c = open();
-             PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            ps.setString(1, reg.trim());
-            ps.setString(2, make.trim());
-            ps.setString(3, model.trim());
-            ps.setDouble(4, dailyRate);
-            ps.setString(5, status.trim().toUpperCase());
-
-            int rows = ps.executeUpdate();
-            if (rows != 1)
-                throw new IllegalStateException("insert failed, rows=" + rows);
-
-            try (ResultSet keys = ps.getGeneratedKeys()) {
-                if (!keys.next())
-                    throw new IllegalStateException("no generated key returned");
-                return keys.getInt(1);
-            }
-        }
-    }
-
-    @Override
-    public Optional<Car> findById(int id) throws Exception {
-
-        if (id <= 0)
-            return Optional.empty();
-
-        String sql = "SELECT id, reg, make, model, daily_rate, status FROM cars WHERE id = ?";
-
-        try (Connection c = open();
-             PreparedStatement ps = c.prepareStatement(sql)) {
-
-            ps.setInt(1, id);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (!rs.next())
-                    return Optional.empty();
-                return Optional.of(mapRow(rs));
-            }
-        }
-    }
-
-    @Override
-    public List<Car> findAll() throws Exception {
-
-        String sql = "SELECT id, reg, make, model, daily_rate, status FROM cars ORDER BY id";
-
-        try (Connection c = open();
-             PreparedStatement ps = c.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            ArrayList<Car> out = new ArrayList<>();
-            while (rs.next())
-                out.add(mapRow(rs));
-            return out;
-        }
-    }
-
-    @Override
-    public boolean updateStatus(int id, String newStatus) throws Exception {
-
-        if (id <= 0)
-            return false;
-
-        if (newStatus == null || newStatus.isBlank())
-            throw new IllegalArgumentException("newStatus is required");
-
-        String sql = "UPDATE cars SET status = ? WHERE id = ?";
-
-        try (Connection c = open();
-             PreparedStatement ps = c.prepareStatement(sql)) {
-
-            ps.setString(1, newStatus.trim().toUpperCase());
-            ps.setInt(2, id);
-
-            return ps.executeUpdate() == 1;
-        }
-    }
-
-    @Override
-    public boolean deleteById(int id) throws Exception {
-
-        if (id <= 0)
-            return false;
-
-        String sql = "DELETE FROM cars WHERE id = ?";
-
-        try (Connection c = open();
-             PreparedStatement ps = c.prepareStatement(sql)) {
-
-            ps.setInt(1, id);
-            return ps.executeUpdate() == 1;
-        }
-    }
-
-    private static Car mapRow(ResultSet rs) throws SQLException {
-
-        int id = rs.getInt("id");
-        String reg = rs.getString("reg");
-        String make = rs.getString("make");
-        String model = rs.getString("model");
-        double rate = rs.getDouble("daily_rate");
-        String status = rs.getString("status");
-
-        return new Car(id, reg, make, model, rate, status);
-    }
-}
-
-class Car {
-
-    private int _id;
-    private String _reg;
-    private String _make;
-    private String _model;
-    private double _dailyRate;
-    private String _status;
-
-    public Car(int id, String reg, String make, String model, double dailyRate, String status) {
-
-        if (id < 0)
-            throw new IllegalArgumentException("id must be >= 0");
-
-        if (reg == null || reg.isBlank())
-            throw new IllegalArgumentException("reg is required");
-
-        if (make == null || make.isBlank())
-            throw new IllegalArgumentException("make is required");
-
-        if (model == null || model.isBlank())
-            throw new IllegalArgumentException("model is required");
-
-        if (dailyRate <= 0.0)
-            throw new IllegalArgumentException("dailyRate must be > 0");
-
-        if (status == null || status.isBlank())
-            throw new IllegalArgumentException("status is required");
-
-        _id = id;
-        _reg = reg.trim();
-        _make = make.trim();
-        _model = model.trim();
-        _dailyRate = dailyRate;
-        _status = status.trim().toUpperCase();
-    }
-
-    public int id() { return _id; }
-    public String reg() { return _reg; }
-    public String make() { return _make; }
-    public String model() { return _model; }
-    public double dailyRate() { return _dailyRate; }
-    public String status() { return _status; }
-
-    @Override
-    public String toString() {
-        return "Car{id=" + _id +
-                ", reg='" + _reg + "'" +
-                ", make='" + _make + "'" +
-                ", model='" + _model + "'" +
-                ", rate=" + _dailyRate +
-                ", status=" + _status +
-                "}";
-    }
-}
-
-interface CarDao {
-    int insert(String reg, String make, String model, double dailyRate, String status) throws Exception;
-    Optional<Car> findById(int id) throws Exception;
-    List<Car> findAll() throws Exception;
-    boolean updateStatus(int id, String newStatus) throws Exception;
-    boolean deleteById(int id) throws Exception;
-}
-```
+**Rules**
+
+- `insert` returns the id that MySQL generated.
+- `findById` returns `Optional.empty()` for an unknown id, or an id of 0 or less.
+- `findAll` returns the cars ordered by `id`.
+- `updateStatus` and `deleteById` return `true` only when exactly one row changed.
+- No `ResultSet`, `SQLException` or other JDBC type appears in any public method.
+
+<details>
+<summary>Hints</summary>
+
+1. To get the new id, pass `Statement.RETURN_GENERATED_KEYS` to `prepareStatement`, then read `ps.getGeneratedKeys()` after `executeUpdate()`.
+2. `executeUpdate()` returns the number of rows changed, so `return rows == 1;`.
+3. Read a `DECIMAL` column with `rs.getDouble("daily_rate")`.
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints three lines like those shown.
+- [ ] Changing `new InMemoryCarDao()` to `new JdbcCarDao(...)` in a program needs no other change.
+
+**Package:** `t15_dao.exercises.ex03`
+
+**Solution:** [t15 exercise 03 solution code](../../../../code/src/t15_dao/exercises/ex03/).
+
 ---
 
-## Exercise 04 — Add a Service layer (business rules, not JDBC)
+## Exercise 04 — A service layer
 
-**Objective:** Add a **CarRentalService** that enforces business rules (valid statuses,
-“renting” a car) while depending only on the **DAO interface**, not JDBC.
+**Goal:** Add a `CarRentalService` that holds the business rules, such as "you can only rent an available car". It works with any `CarDao`, so the rules can be tested without a database.
 
-**Context (software + games):**
+**You will need:** [Step 11](../t15_dao_notes.md#step-11--service-layer-taskservice) and [Where DAO fits in an N-tier structure](../t15_dao_notes.md#where-dao-fits-in-an-n-tier-structure).
 
-* **Software:** Business rules must remain stable even if you swap databases or add caching.
-* **Games:** Your “rules system” shouldn’t care whether state is stored locally, remotely, or
-  mocked.
+**Steps**
 
-### What you are building
-
-* A `CarRentalService` that uses `CarDao`
-* A new DAO method for status filtering (`findByStatus`)
-* A “rent car” workflow in the service
-
-### Required API
-
-Extend `CarDao` with:
+1. Add `findByStatus` to `CarDao`, and implement it in `JdbcCarDao` with `SELECT ... WHERE status = ? ORDER BY id`.
+2. Create `CarRentalService`. Its constructor takes a `CarDao` and rejects `null`.
+3. `addCar` creates `new Car(0, reg, make, model, dailyRate, "AVAILABLE")` and inserts it.
+4. `rentCar` looks the car up. It changes the status to `RENTED` only if the car exists and is `AVAILABLE`. Otherwise it returns `false`.
+5. `returnCar` does the opposite: `RENTED` back to `AVAILABLE`.
+6. `listAvailable` returns the cars whose status is `AVAILABLE`.
+7. In `run()`, add two cars, rent one, list the available cars, return it, and list them again.
 
 ```java
-java.util.List<Car> findByStatus(String status) throws Exception;
+public CarRentalService(CarDao dao)
+public int addCar(String reg, String make, String model, double dailyRate) throws DaoException
+public boolean rentCar(int carId) throws DaoException
+public boolean returnCar(int carId) throws DaoException
+public List<Car> listAvailable() throws DaoException
 ```
 
-Add:
+**Example** (your ids will differ)
 
-```java
-public class CarRentalService {
-    public CarRentalService(CarDao dao);
-
-    public int addCar(String reg, String make, String model, double dailyRate) throws Exception;
-    public boolean rentCar(int carId) throws Exception;     // AVAILABLE -> RENTED
-    public boolean returnCar(int carId) throws Exception;   // RENTED -> AVAILABLE
-    public java.util.List<Car> listAvailable() throws Exception;
-}
+```text
+Added cars: 3, 4
+Rent car 3 -> true
+Available cars:
+ - Car{id=1, reg='12-LH-1234', make='Toyota', model='Yaris', rate=45.0, status=AVAILABLE}
+ - Car{id=4, reg='22-D-2222', make='VW', model='Golf', rate=60.0, status=AVAILABLE}
+Return car 3 -> true
+Available cars:
+ - Car{id=1, ...}
+ - Car{id=3, ...}
+ - Car{id=4, ...}
 ```
 
-### Tasks
+**Rules**
 
-1. Add `findByStatus` to the DAO interface.
-2. Implement `findByStatus` in `JdbcCarDao` using:
+- No SQL in the service.
+- The service does not catch `DaoException`. It passes storage failures up to `run()`, which reports them.
+- The DAO contains no business rules. "Only rent if available" belongs in the service.
 
-   * `SELECT ... WHERE status = ? ORDER BY id`
-3. Create `CarRentalService` with a private `_dao` field:
+<details>
+<summary>Hints</summary>
 
-   * Validate `_dao` is non-null in constructor.
-4. Implement service rules:
-
-   * `addCar` always inserts with status `AVAILABLE`.
-   * `rentCar` only succeeds if current status is `AVAILABLE`.
-   * `returnCar` only succeeds if current status is `RENTED`.
-5. In `Exercise.run()`:
-
-   * Add two cars
-   * Rent one
-   * Print available cars
-   * Return it
-   * Print available cars again
-
-### Constraints
-
-* Service must not contain SQL.
-* DAO must not contain business rule branching like “only rent if available” (that belongs in
-  service).
-
-### Done when...
-
-* Your workflow can be tested without changing DAO code.
-* Renting fails safely when the car is not available.
-* You can swap DAO implementations (in-memory vs JDBC) and the service still compiles.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    ✅ Solution
-  </summary>
-
-```java
-package t15_dao.exercises.ex04;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-public class Exercise {
-
-    public static void run() throws Exception {
-
-        String url = "jdbc:mysql://localhost:3306/car_rental?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-        String user = "car_rental_user";
-        String pass = "your_password";
-
-        CarDao dao = new JdbcCarDao(url, user, pass);
-        CarRentalService service = new CarRentalService(dao);
-
-        int a = service.addCar("23-LH-1111", "Toyota", "Corolla", 58.0);
-        int b = service.addCar("22-D-2222", "VW", "Golf", 60.0);
-
-        System.out.println("Added cars: " + a + ", " + b);
-
-        System.out.println("Rent car " + a + " -> " + service.rentCar(a));
-
-        System.out.println("Available cars:");
-        for (Car c : service.listAvailable())
-            System.out.println(" - " + c);
-
-        System.out.println("Return car " + a + " -> " + service.returnCar(a));
-
-        System.out.println("Available cars:");
-        for (Car c : service.listAvailable())
-            System.out.println(" - " + c);
-    }
-}
-
-class CarRentalService {
-
-    private static Set<String> ALLOWED = Set.of("AVAILABLE", "RENTED", "MAINTENANCE");
-
-    private CarDao _dao;
-
-    public CarRentalService(CarDao dao) {
-        if (dao == null)
-            throw new IllegalArgumentException("dao is null");
-        _dao = dao;
-    }
-
-    public int addCar(String reg, String make, String model, double dailyRate) throws Exception {
-        return _dao.insert(reg, make, model, dailyRate, "AVAILABLE");
-    }
-
-    public boolean rentCar(int carId) throws Exception {
-
-        Optional<Car> c = _dao.findById(carId);
-        if (c.isEmpty())
-            return false;
-
-        if (!c.get().status().equals("AVAILABLE"))
-            return false;
-
-        return _dao.updateStatus(carId, "RENTED");
-    }
-
-    public boolean returnCar(int carId) throws Exception {
-
-        Optional<Car> c = _dao.findById(carId);
-        if (c.isEmpty())
-            return false;
-
-        if (!c.get().status().equals("RENTED"))
-            return false;
-
-        return _dao.updateStatus(carId, "AVAILABLE");
-    }
-
-    public List<Car> listAvailable() throws Exception {
-        return _dao.findByStatus("AVAILABLE");
-    }
-
-    @SuppressWarnings("unused")
-    private static boolean isAllowed(String status) {
-        if (status == null || status.isBlank())
-            return false;
-        return ALLOWED.contains(status.trim().toUpperCase());
-    }
-}
-
-interface CarDao {
-    int insert(String reg, String make, String model, double dailyRate, String status) throws Exception;
-    Optional<Car> findById(int id) throws Exception;
-    List<Car> findAll() throws Exception;
-    List<Car> findByStatus(String status) throws Exception;
-    boolean updateStatus(int id, String newStatus) throws Exception;
-    boolean deleteById(int id) throws Exception;
-}
-
-class JdbcCarDao implements CarDao {
-
-    private String _url;
-    private String _user;
-    private String _pass;
-
-    public JdbcCarDao(String url, String user, String pass) {
-
-        if (url == null || url.isBlank())
-            throw new IllegalArgumentException("url is required");
-
-        _url = url.trim();
-        _user = user;
-        _pass = pass;
-    }
-
-    private Connection open() throws SQLException {
-        return DriverManager.getConnection(_url, _user, _pass);
-    }
-
-    @Override
-    public int insert(String reg, String make, String model, double dailyRate, String status) throws Exception {
-
-        if (reg == null || reg.isBlank())
-            throw new IllegalArgumentException("reg is required");
-
-        if (make == null || make.isBlank())
-            throw new IllegalArgumentException("make is required");
-
-        if (model == null || model.isBlank())
-            throw new IllegalArgumentException("model is required");
-
-        if (dailyRate <= 0.0)
-            throw new IllegalArgumentException("dailyRate must be > 0");
-
-        if (status == null || status.isBlank())
-            throw new IllegalArgumentException("status is required");
-
-        String sql = "INSERT INTO cars(reg, make, model, daily_rate, status) VALUES (?, ?, ?, ?, ?)";
-
-        try (Connection c = open();
-             PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            ps.setString(1, reg.trim());
-            ps.setString(2, make.trim());
-            ps.setString(3, model.trim());
-            ps.setDouble(4, dailyRate);
-            ps.setString(5, status.trim().toUpperCase());
-
-            int rows = ps.executeUpdate();
-            if (rows != 1)
-                throw new IllegalStateException("insert failed, rows=" + rows);
-
-            try (ResultSet keys = ps.getGeneratedKeys()) {
-                if (!keys.next())
-                    throw new IllegalStateException("no generated key returned");
-                return keys.getInt(1);
-            }
-        }
-    }
-
-    @Override
-    public Optional<Car> findById(int id) throws Exception {
-
-        if (id <= 0)
-            return Optional.empty();
-
-        String sql = "SELECT id, reg, make, model, daily_rate, status FROM cars WHERE id = ?";
-
-        try (Connection c = open();
-             PreparedStatement ps = c.prepareStatement(sql)) {
-
-            ps.setInt(1, id);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (!rs.next())
-                    return Optional.empty();
-                return Optional.of(mapRow(rs));
-            }
-        }
-    }
-
-    @Override
-    public List<Car> findAll() throws Exception {
-
-        String sql = "SELECT id, reg, make, model, daily_rate, status FROM cars ORDER BY id";
-
-        try (Connection c = open();
-             PreparedStatement ps = c.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            ArrayList<Car> out = new ArrayList<>();
-            while (rs.next())
-                out.add(mapRow(rs));
-            return out;
-        }
-    }
-
-    @Override
-    public List<Car> findByStatus(String status) throws Exception {
-
-        if (status == null || status.isBlank())
-            return List.of();
-
-        String sql = "SELECT id, reg, make, model, daily_rate, status FROM cars WHERE status = ? ORDER BY id";
-
-        try (Connection c = open();
-             PreparedStatement ps = c.prepareStatement(sql)) {
-
-            ps.setString(1, status.trim().toUpperCase());
-
-            try (ResultSet rs = ps.executeQuery()) {
-                ArrayList<Car> out = new ArrayList<>();
-                while (rs.next())
-                    out.add(mapRow(rs));
-                return out;
-            }
-        }
-    }
-
-    @Override
-    public boolean updateStatus(int id, String newStatus) throws Exception {
-
-        if (id <= 0)
-            return false;
-
-        if (newStatus == null || newStatus.isBlank())
-            throw new IllegalArgumentException("newStatus is required");
-
-        String sql = "UPDATE cars SET status = ? WHERE id = ?";
-
-        try (Connection c = open();
-             PreparedStatement ps = c.prepareStatement(sql)) {
-
-            ps.setString(1, newStatus.trim().toUpperCase());
-            ps.setInt(2, id);
-
-            return ps.executeUpdate() == 1;
-        }
-    }
-
-    @Override
-    public boolean deleteById(int id) throws Exception {
-
-        if (id <= 0)
-            return false;
-
-        String sql = "DELETE FROM cars WHERE id = ?";
-
-        try (Connection c = open();
-             PreparedStatement ps = c.prepareStatement(sql)) {
-
-            ps.setInt(1, id);
-            return ps.executeUpdate() == 1;
-        }
-    }
-
-    private static Car mapRow(ResultSet rs) throws SQLException {
-
-        int id = rs.getInt("id");
-        String reg = rs.getString("reg");
-        String make = rs.getString("make");
-        String model = rs.getString("model");
-        double rate = rs.getDouble("daily_rate");
-        String status = rs.getString("status");
-
-        return new Car(id, reg, make, model, rate, status);
-    }
-}
-
-class Car {
-
-    private int _id;
-    private String _reg;
-    private String _make;
-    private String _model;
-    private double _dailyRate;
-    private String _status;
-
-    public Car(int id, String reg, String make, String model, double dailyRate, String status) {
-
-        if (id < 0)
-            throw new IllegalArgumentException("id must be >= 0");
-
-        if (reg == null || reg.isBlank())
-            throw new IllegalArgumentException("reg is required");
-
-        if (make == null || make.isBlank())
-            throw new IllegalArgumentException("make is required");
-
-        if (model == null || model.isBlank())
-            throw new IllegalArgumentException("model is required");
-
-        if (dailyRate <= 0.0)
-            throw new IllegalArgumentException("dailyRate must be > 0");
-
-        if (status == null || status.isBlank())
-            throw new IllegalArgumentException("status is required");
-
-        _id = id;
-        _reg = reg.trim();
-        _make = make.trim();
-        _model = model.trim();
-        _dailyRate = dailyRate;
-        _status = status.trim().toUpperCase();
-    }
-
-    public int id() { return _id; }
-    public String reg() { return _reg; }
-    public String make() { return _make; }
-    public String model() { return _model; }
-    public double dailyRate() { return _dailyRate; }
-    public String status() { return _status; }
-
-    @Override
-    public String toString() {
-        return "Car{id=" + _id +
-                ", reg='" + _reg + "'" +
-                ", make='" + _make + "'" +
-                ", model='" + _model + "'" +
-                ", rate=" + _dailyRate +
-                ", status=" + _status +
-                "}";
-    }
-}
-```
+1. Keep the status names in constants: `private static final String AVAILABLE = "AVAILABLE";`.
+2. `Optional<Car> car = dao.findById(carId); if (car.isEmpty()) { return false; }`
+3. To test the rules without MySQL, give the service a fake `CarDao`, such as your `InMemoryCarDao` from Exercise 02 with `findByStatus` added. The worked tests do exactly this.
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints output like that shown.
+- [ ] Renting a car that is already rented, or under maintenance, returns `false`.
+
+> **Watch out:** registrations are `UNIQUE` in the table. Run this exercise a second time and the first `addCar` fails, printing `Storage error: Could not insert car 23-LH-1111`. Delete the two cars in phpMyAdmin, or change the registrations, before running it again.
+
+**Package:** `t15_dao.exercises.ex04`
+
+**Solution:** [t15 exercise 04 solution code](../../../../code/src/t15_dao/exercises/ex04/).
+**Tests:** [t15 exercise 04 tests](../../../../code/test/t15_dao/exercises/ex04/).
+
 ---
 
-## Exercise 05 — Add richer queries (paging + “search”) and reflect on design
+## Exercise 05 — Richer queries
 
-**Objective:** Extend your DAO API with common real-world needs: **paging**, **search**, and a
-“tiny reporting query”. Then demonstrate that these are still cleanly isolated in the DAO
-layer.
+**Goal:** Add three queries that real programs need: a page of results, a simple search, and a count of cars in each status. The rest of the program still sees only Java types.
 
-### What you are building
+**You will need:** [Step 10](../t15_dao_notes.md#step-10--jdbc-implementation-jdbctaskdao) and [Placeholder](../t15_dao_notes.md#placeholder).
 
-* DAO extensions:
+**Steps**
 
-  * `findPage(int offset, int limit)`
-  * `findByMakeOrModel(String query)` (simple search)
-* A small reporting call:
-
-  * `countByStatus()`
-
-### Required API
-
-Add to `CarDao`:
+1. Add the three methods below to `CarDao`, and implement them in `JdbcCarDao`.
+2. `findPage` uses `ORDER BY id LIMIT ? OFFSET ?`. A `limit` of 0 or less gives an empty list, and a negative `offset` counts as 0.
+3. `findByMakeOrModel` uses `WHERE make LIKE ? OR model LIKE ?`. A blank query gives an empty list.
+4. `countByStatus` uses `SELECT status, COUNT(*) AS c FROM cars GROUP BY status` and returns a `Map` from status to count.
+5. In `run()`, print the first page of three cars, the results of searching for `for`, and the counts.
 
 ```java
-java.util.List<Car> findPage(int offset, int limit) throws Exception;
-java.util.List<Car> findByMakeOrModel(String query) throws Exception;
-java.util.Map<String, Integer> countByStatus() throws Exception;
+List<Car> findPage(int offset, int limit) throws DaoException;
+List<Car> findByMakeOrModel(String query) throws DaoException;
+Map<String, Integer> countByStatus() throws DaoException;
 ```
 
-### Tasks
+**Example** (your cars and counts will differ)
 
-1. Implement `findPage(offset, limit)` using:
-
-   * `ORDER BY id LIMIT ? OFFSET ?`
-2. Implement `findByMakeOrModel(query)` using:
-
-   * `WHERE make LIKE ? OR model LIKE ?`
-   * Hint: pass `"%"+q+"%"` to both placeholders
-3. Implement `countByStatus()` using:
-
-   * `SELECT status, COUNT(*) AS c FROM cars GROUP BY status`
-4. In `Exercise.run()`:
-
-   * Print the first page of 3 cars
-   * Print search results for `"for"` (should match Ford, etc.)
-   * Print the status counts map
-
-### Constraints
-
-* Clamp or reject invalid paging:
-
-  * If `limit <= 0`, return an empty list.
-  * If `offset < 0`, treat it as 0.
-* Search query:
-
-  * If query is null/blank, return empty list.
-
-### Done when...
-
-* Paging works without loading the whole table.
-* Search works without SQL injection risk (still placeholders).
-* Your “report” method returns a clean Java `Map`, not JDBC types.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    ✅ Solution
-  </summary>
-
-```java
-package t15_dao.exercises.ex05;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public class Exercise {
-
-    public static void run() throws Exception {
-
-        String url = "jdbc:mysql://localhost:3306/car_rental?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-        String user = "car_rental_user";
-        String pass = "your_password";
-
-        CarDao dao = new JdbcCarDao(url, user, pass);
-
-        System.out.println("Page (offset=0, limit=3):");
-        for (Car c : dao.findPage(0, 3))
-            System.out.println(" - " + c);
-
-        System.out.println("Search query='for':");
-        for (Car c : dao.findByMakeOrModel("for"))
-            System.out.println(" - " + c);
-
-        System.out.println("Count by status:");
-        System.out.println(dao.countByStatus());
-    }
-}
-
-interface CarDao {
-    List<Car> findPage(int offset, int limit) throws Exception;
-    List<Car> findByMakeOrModel(String query) throws Exception;
-    Map<String, Integer> countByStatus() throws Exception;
-}
-
-class JdbcCarDao implements CarDao {
-
-    private String _url;
-    private String _user;
-    private String _pass;
-
-    public JdbcCarDao(String url, String user, String pass) {
-        if (url == null || url.isBlank())
-            throw new IllegalArgumentException("url is required");
-        _url = url.trim();
-        _user = user;
-        _pass = pass;
-    }
-
-    private Connection open() throws SQLException {
-        return DriverManager.getConnection(_url, _user, _pass);
-    }
-
-    @Override
-    public List<Car> findPage(int offset, int limit) throws Exception {
-
-        if (limit <= 0)
-            return List.of();
-
-        int safeOffset = Math.max(0, offset);
-
-        String sql = "SELECT id, reg, make, model, daily_rate, status " +
-                     "FROM cars ORDER BY id LIMIT ? OFFSET ?";
-
-        try (Connection c = open();
-             PreparedStatement ps = c.prepareStatement(sql)) {
-
-            ps.setInt(1, limit);
-            ps.setInt(2, safeOffset);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                ArrayList<Car> out = new ArrayList<>();
-                while (rs.next())
-                    out.add(mapRow(rs));
-                return out;
-            }
-        }
-    }
-
-    @Override
-    public List<Car> findByMakeOrModel(String query) throws Exception {
-
-        if (query == null || query.isBlank())
-            return List.of();
-
-        String q = "%" + query.trim() + "%";
-
-        String sql = "SELECT id, reg, make, model, daily_rate, status " +
-                     "FROM cars WHERE make LIKE ? OR model LIKE ? ORDER BY id";
-
-        try (Connection c = open();
-             PreparedStatement ps = c.prepareStatement(sql)) {
-
-            ps.setString(1, q);
-            ps.setString(2, q);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                ArrayList<Car> out = new ArrayList<>();
-                while (rs.next())
-                    out.add(mapRow(rs));
-                return out;
-            }
-        }
-    }
-
-    @Override
-    public Map<String, Integer> countByStatus() throws Exception {
-
-        String sql = "SELECT status, COUNT(*) AS c FROM cars GROUP BY status";
-
-        try (Connection c = open();
-             PreparedStatement ps = c.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            HashMap<String, Integer> out = new HashMap<>();
-            while (rs.next()) {
-                String status = rs.getString("status");
-                int count = rs.getInt("c");
-                out.put(status, count);
-            }
-
-            return out;
-        }
-    }
-
-    private static Car mapRow(ResultSet rs) throws SQLException {
-
-        int id = rs.getInt("id");
-        String reg = rs.getString("reg");
-        String make = rs.getString("make");
-        String model = rs.getString("model");
-        double rate = rs.getDouble("daily_rate");
-        String status = rs.getString("status");
-
-        return new Car(id, reg, make, model, rate, status);
-    }
-}
-
-class Car {
-
-    private int _id;
-    private String _reg;
-    private String _make;
-    private String _model;
-    private double _dailyRate;
-    private String _status;
-
-    public Car(int id, String reg, String make, String model, double dailyRate, String status) {
-
-        if (id < 0)
-            throw new IllegalArgumentException("id must be >= 0");
-
-        if (reg == null || reg.isBlank())
-            throw new IllegalArgumentException("reg is required");
-
-        if (make == null || make.isBlank())
-            throw new IllegalArgumentException("make is required");
-
-        if (model == null || model.isBlank())
-            throw new IllegalArgumentException("model is required");
-
-        if (dailyRate <= 0.0)
-            throw new IllegalArgumentException("dailyRate must be > 0");
-
-        if (status == null || status.isBlank())
-            throw new IllegalArgumentException("status is required");
-
-        _id = id;
-        _reg = reg.trim();
-        _make = make.trim();
-        _model = model.trim();
-        _dailyRate = dailyRate;
-        _status = status.trim().toUpperCase();
-    }
-
-    @Override
-    public String toString() {
-        return "Car{id=" + _id +
-                ", reg='" + _reg + "'" +
-                ", make='" + _make + "'" +
-                ", model='" + _model + "'" +
-                ", rate=" + _dailyRate +
-                ", status=" + _status +
-                "}";
-    }
-}
+```text
+Page (offset=0, limit=3):
+ - Car{id=1, reg='12-LH-1234', make='Toyota', model='Yaris', ...}
+ - Car{id=2, reg='15-D-7788', make='Ford', model='Focus', ...}
+ - Car{id=3, ...}
+Search query='for':
+ - Car{id=2, reg='15-D-7788', make='Ford', model='Focus', ...}
+Count by status:
+{AVAILABLE=3, MAINTENANCE=1}
 ```
+
+**Rules**
+
+- The search text goes through a placeholder like every other value.
+- `countByStatus` returns a Java `Map`, not a `ResultSet`.
+
+<details>
+<summary>Hints</summary>
+
+1. The `%` wildcards go in the **value**, not the SQL: pass `"%" + query + "%"` to both placeholders.
+2. `LIMIT ? OFFSET ?` takes the limit first, so it is placeholder 1, and the offset is placeholder 2.
 
 </details>
 
----
+**Done when**
 
-## Lesson Context
+- [ ] `run()` prints a page, the search results and the counts.
+- [ ] Searching for `' OR '1'='1` finds nothing, rather than every car.
 
-```yaml
-linked_lesson:
-  topic_code: "t15_dao"
-  lesson_path: "/notes/topics/t15_dao/t15_dao.md"
-  primary_domain_emphasis: "Balanced"
-  difficulty_tier: "Foundation → Intermediate"
-```
+**Think about it:** why is paging done in SQL, rather than by calling `findAll()` and taking the first three cars in Java?
+
+**Package:** `t15_dao.exercises.ex05`
+
+**Solution:** [t15 exercise 05 solution code](../../../../code/src/t15_dao/exercises/ex05/).

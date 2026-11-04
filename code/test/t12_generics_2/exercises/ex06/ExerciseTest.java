@@ -16,16 +16,16 @@ class ExerciseTest {
     @Test
     void addAllEntities_fromTwoDifferentSubtypes_collectsIntoOneList() {
         ArrayList<Entity> all = new ArrayList<>();
-        Entities.addAllEntities(List.of(new Enemy(), new Enemy()), all);
-        Entities.addAllEntities(List.of(new Pickup()), all);
+        Entities.addAllEntities(List.of(new Enemy("Orc"), new Enemy("Orc")), all);
+        Entities.addAllEntities(List.of(new Pickup("Coin")), all);
         assertEquals(3, all.size());
     }
 
     @Test
     void addAllEntities_preservesInsertionOrderAndRuntimeTypes() {
         ArrayList<Entity> all = new ArrayList<>();
-        Entities.addAllEntities(List.of(new Enemy()), all);
-        Entities.addAllEntities(List.of(new Pickup()), all);
+        Entities.addAllEntities(List.of(new Enemy("Orc")), all);
+        Entities.addAllEntities(List.of(new Pickup("Coin")), all);
         assertInstanceOf(Enemy.class, all.get(0));
         assertInstanceOf(Pickup.class, all.get(1));
     }
@@ -33,7 +33,7 @@ class ExerciseTest {
     @Test
     void addAllEntities_intoAnObjectList_isAllowedByTheSuperBound() {
         ArrayList<Object> all = new ArrayList<>();
-        Entities.addAllEntities(List.of(new Enemy()), all);
+        Entities.addAllEntities(List.of(new Enemy("Orc")), all);
         assertEquals(1, all.size());
     }
 
@@ -49,6 +49,6 @@ class ExerciseTest {
         assertThrows(NullPointerException.class,
                 () -> Entities.addAllEntities(null, new ArrayList<Entity>()));
         assertThrows(NullPointerException.class,
-                () -> Entities.addAllEntities(List.of(new Enemy()), null));
+                () -> Entities.addAllEntities(List.of(new Enemy("Orc")), null));
     }
 }

@@ -58,25 +58,20 @@ prerequisites:
 
 ## Why this matters
 
-Every topic in this module builds on one idea: organising code around **objects** that combine
-state (data) and behaviour (methods) into a single unit.
+Every topic in this module builds on one idea: organising code around **objects** that combine state (data) and behaviour (methods) into a single unit.
 
-Before diving into arrays, collections, inheritance, or design patterns, you need a solid
-answer to two questions:
+Before diving into arrays, collections, inheritance, or design patterns, you need a solid answer to two questions:
 
 1. **What is a class?** — A blueprint that describes what data an object holds and what it can do.
-2. **What is an object?** — A specific instance of a class, created at runtime, with its own
-   copy of the data.
+2. **What is an object?** — A specific instance of a class, created at runtime, with its own copy of the data.
 
-Everything else in OOP is about composing, extending, or coordinating objects. Get this right
-and the rest follows naturally.
+Everything else in OOP is about composing, extending, or coordinating objects. Get this right and the rest follows naturally.
 
 ---
 
 ## How this builds on previous content
 
-This is the first topic of the module, so it builds on **Year 1 programming** rather than on an
-earlier note.
+This is the first topic of the module, so it builds on **Year 1 programming** rather than on an earlier note.
 
 | What you already know | How it reappears here |
 | :- | :- |
@@ -85,11 +80,7 @@ earlier note.
 | `if` statements | Become **guard clauses** at the top of a constructor, rejecting invalid objects outright |
 | Calling a method on a `String` or `Scanner` | You have been *using* objects all along; here you start **designing** them |
 
-Everything after this topic assumes these ideas. [t01
-Arrays](../t01_arrays/t01_arrays_notes.md) stores objects, [t04 Equality &
-Hashing](../t04_equality_hashing/t04_equality_hashing_notes.md) decides when two of them count
-as the same, and [t08 Inheritance](../t08_inheritance/t08_inheritance_notes.md) relates one
-class to another.
+Everything after this topic assumes these ideas. [t01 Arrays](../t01_arrays/t01_arrays_notes.md) stores objects, [t04 Equality & Hashing](../t04_equality_hashing/t04_equality_hashing_notes.md) decides when two of them count as the same, and [t08 Inheritance](../t08_inheritance/t08_inheritance_notes.md) relates one class to another.
 
 ---
 
@@ -102,8 +93,7 @@ class to another.
 | **Inheritance** | A class can extend another, inheriting its behaviour | `extends` ([t08](../t08_inheritance/t08_inheritance_notes.md)) |
 | **Polymorphism** | One type reference, many possible implementations | Method overriding ([t08](../t08_inheritance/t08_inheritance_notes.md)), interface types ([t09](../t09_interface/t09_interface_notes.md)) |
 
-This topic covers **encapsulation** in full and introduces the vocabulary needed to understand
-the others.
+This topic covers **encapsulation** in full and introduces the vocabulary needed to understand the others.
 
 ---
 
@@ -178,9 +168,7 @@ public class Counter {
 }
 ```
 
-Callers never see `_count` directly. They can only use `increment()`, `decrement()`, and
-`getCount()`. That means you can change how counting works internally without breaking any
-caller — this is encapsulation at work.
+Callers never see `_count` directly. They can only use `increment()`, `decrement()`, and `getCount()`. That means you can change how counting works internally without breaking any caller — this is encapsulation at work.
 
 ---
 
@@ -208,8 +196,7 @@ ref1.addPoints(20);
 System.out.println(alice.getScore()); // 20 — same object was modified
 ```
 
-> **NullPointerException:** If you declare a variable but never assign it, it holds `null`.
-> Calling any method on `null` crashes at runtime. Always initialise references before use.
+> **NullPointerException:** If you declare a variable but never assign it, it holds `null`. Calling any method on `null` crashes at runtime. Always initialise references before use.
 
 ```java
 Player ghost = null;
@@ -220,8 +207,7 @@ ghost.getName();    // NullPointerException — ghost is not pointing at any obj
 
 ## Part 4: Guard clauses (defensive constructors)
 
-A **guard clause** is a check at the top of a method or constructor that rejects invalid input
-immediately.
+A **guard clause** is a check at the top of a method or constructor that rejects invalid input immediately.
 
 ```java
 public class Task {
@@ -250,8 +236,7 @@ public class Task {
 }
 ```
 
-Guard clauses mean an object is **always valid** once constructed. You never need to check
-inside methods whether the state makes sense.
+Guard clauses mean an object is **always valid** once constructed. You never need to check inside methods whether the state makes sense.
 
 ---
 
@@ -288,8 +273,7 @@ public class Item {
 }
 ```
 
-`this(name, 0)` calls the other constructor in the same class. This keeps validation in one
-place and avoids duplication.
+`this(name, 0)` calls the other constructor in the same class. This keeps validation in one place and avoids duplication.
 
 ---
 
@@ -443,10 +427,8 @@ list.add(new TodoTask("Set up database", "Backend")).markDone();  // illustratio
 
 1. What is the difference between a **class** and an **object**? Give a concrete example.
 2. Why should fields nearly always be `private`? What goes wrong if they are `public`?
-3. What is a guard clause and why should it be at the top of a constructor rather than at the
-   point where the field is used?
-4. If `ref1` and `ref2` both refer to the same object, what happens when you call
-   `ref1.setName("Dave")`? What does `ref2.getName()` return?
+3. What is a guard clause and why should it be at the top of a constructor rather than at the point where the field is used?
+4. If `ref1` and `ref2` both refer to the same object, what happens when you call `ref1.setName("Dave")`? What does `ref2.getName()` return?
 5. When would you add a second constructor to a class rather than just using the main one?
 
 <details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
@@ -456,37 +438,19 @@ padding:0.9rem 1rem; margin:1rem 0;">
   </summary>
 
 **1. Class vs object.**
-A class is the *description*; an object is one *instance* built from it and holding its own
-field values.
-`class Player { private String _name; }` is written once. `new Player("Ana")` and `new
-Player("Bo")` are two objects with separate `_name` values. Compare it to a form and filled-in
-copies of that form.
+A class is the *description*; an object is one *instance* built from it and holding its own field values. `class Player { private String _name; }` is written once. `new Player("Ana")` and `new Player("Bo")` are two objects with separate `_name` values. Compare it to a form and filled-in copies of that form.
 
 **2. Why fields are `private`.**
-`private` means the class controls every change to its own state, so guard clauses cannot be
-bypassed. If `_health` is `public`, any code can write `p._health = -500;` and your validation
-never runs. You also lose the freedom to change how the field is stored later — every caller is
-already depending on it directly.
+`private` means the class controls every change to its own state, so guard clauses cannot be bypassed. If `_health` is `public`, any code can write `p._health = -500;` and your validation never runs. You also lose the freedom to change how the field is stored later — every caller is already depending on it directly.
 
 **3. Guard clauses at the top.**
-Two reasons. First, **fail fast**: the object is never half-built, so it can never exist in an
-invalid state. If you validate at point of use instead, a bad object may be stored, copied and
-passed around for a long time before anything complains — and by then the stack trace points at
-the wrong place. Second, **readability**: all preconditions sit together, so a reader sees the
-contract in one glance.
+Two reasons. First, **fail fast**: the object is never half-built, so it can never exist in an invalid state. If you validate at point of use instead, a bad object may be stored, copied and passed around for a long time before anything complains — and by then the stack trace points at the wrong place. Second, **readability**: all preconditions sit together, so a reader sees the contract in one glance.
 
 **4. Aliasing.**
-`ref2.getName()` returns `"Dave"`. Both variables hold the *same reference*, so there is only
-one object; changing it through one name changes what you see through the other. This is the
-single most common source of "but I never touched that object" bugs. Two objects that merely
-hold equal data would behave differently — that distinction is the whole of [t04 Equality &
-Hashing](../t04_equality_hashing/t04_equality_hashing_notes.md).
+`ref2.getName()` returns `"Dave"`. Both variables hold the *same reference*, so there is only one object; changing it through one name changes what you see through the other. This is the single most common source of "but I never touched that object" bugs. Two objects that merely hold equal data would behave differently — that distinction is the whole of [t04 Equality & Hashing](../t04_equality_hashing/t04_equality_hashing_notes.md).
 
 **5. A second constructor.**
-When a sensible default exists and you want to save callers from repeating it — `new
-Task(title)` meaning "priority MEDIUM". Keep exactly one constructor that does the real work
-and validation, and have the others delegate to it with `this(...)`. If you copy the guard
-clauses into both, they *will* drift apart.
+When a sensible default exists and you want to save callers from repeating it — `new Task(title)` meaning "priority MEDIUM". Keep exactly one constructor that does the real work and validation, and have the others delegate to it with `this(...)`. If you copy the guard clauses into both, they *will* drift apart.
 
 </details>
 

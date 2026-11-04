@@ -2,7 +2,7 @@ package t19_concurrency.exercises.ex01;
 
 public class Exercise {
 
-    public static void run() throws Exception {
+    public static void run() {
         Thread t1 = new Thread(new DeliveryTask("ORD-001", "Galway", 3));
         Thread t2 = new Thread(new DeliveryTask("ORD-002", "Limerick", 2));
 
@@ -15,9 +15,9 @@ public class Exercise {
 
 class DeliveryTask implements Runnable {
 
-    private String _orderId;
-    private String _destination;
-    private int _steps;
+    private final String orderId;
+    private final String destination;
+    private final int steps;
 
     public DeliveryTask(String orderId, String destination, int steps) {
         if (orderId == null || orderId.isBlank())
@@ -27,18 +27,18 @@ class DeliveryTask implements Runnable {
         if (steps < 1)
             throw new IllegalArgumentException("steps must be >= 1");
 
-        _orderId     = orderId;
-        _destination = destination;
-        _steps       = steps;
+        this.orderId     = orderId;
+        this.destination = destination;
+        this.steps       = steps;
     }
 
     @Override
     public void run() {
         String name = Thread.currentThread().getName();
 
-        for (int i = 1; i <= _steps; i++) {
-            System.out.println("[" + name + "] Order " + _orderId
-                + ": step " + i + "/" + _steps + " \u2192 " + _destination);
+        for (int i = 1; i <= steps; i++) {
+            System.out.println("[" + name + "] Order " + orderId
+                + ": step " + i + "/" + steps + " \u2192 " + destination);
 
             try {
                 Thread.sleep(200);
@@ -49,7 +49,7 @@ class DeliveryTask implements Runnable {
             }
         }
 
-        System.out.println("[" + name + "] Order " + _orderId
-            + ": DELIVERED to " + _destination);
+        System.out.println("[" + name + "] Order " + orderId
+            + ": DELIVERED to " + destination);
     }
 }

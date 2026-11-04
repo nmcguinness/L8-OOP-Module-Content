@@ -68,20 +68,15 @@ A quick summary of what **you** should be able to do after this lesson:
 | Use              | Implement correct `equals` and `hashCode` for a small class, keeping fields consistent across both methods.                                       |
 | Debug         | Detect and explain bugs caused by **mutable identifying fields** or inconsistent `equals`/`hashCode`.                                             |
 
-> We will **not** use `HashSet`, `HashMap`, or any collection types here. Those appear in a
-> later lesson.
+> We will **not** use `HashSet`, `HashMap`, or any collection types here. Those appear in a later lesson.
 
 ---
 
 ## Why this matters
 
-Java gives you two different questions that look like one: *are these the same object?*
-and *do these two objects mean the same thing?* Confusing them produces bugs that are hard
-to see, because the code reads correctly.
+Java gives you two different questions that look like one: *are these the same object?* and *do these two objects mean the same thing?* Confusing them produces bugs that are hard to see, because the code reads correctly.
 
-It matters most because the collections in the next topics are built directly on it. A
-`HashSet` that will not de-duplicate, or a `HashMap` lookup that fails on an object you can
-see in the map, is almost always a broken `equals` or `hashCode` — not a broken collection.
+It matters most because the collections in the next topics are built directly on it. A `HashSet` that will not de-duplicate, or a `HashMap` lookup that fails on an object you can see in the map, is almost always a broken `equals` or `hashCode` — not a broken collection.
 
 ---
 
@@ -93,12 +88,7 @@ see in the map, is almost always a broken `equals` or `hashCode` — not a broke
 | [t00 Encapsulation](../t00_oop_fundamentals/t00_oop_fundamentals_notes.md) | Which fields are `private` and `final` now decides which fields may safely define identity |
 | [t03 Ordering](../t03_ordering/t03_ordering_notes.md) | `compareTo` already compares objects; `equals` answers the narrower question "are these the same thing?" — and the two must agree |
 
-Where this goes next: this topic is a hard prerequisite for [t07 Collections
-III](../t07_collections_3_set_map/t07_collections_3_set_map_notes.md). `HashSet` and `HashMap`
-are built directly on `equals`/`hashCode`, so a mistake here shows up there as duplicates that
-will not de-duplicate and lookups that fail on objects demonstrably in the collection. It
-returns again in [t23](../t23_unit_testing/t23_unit_testing_notes.md), where a JSON round-trip
-test compares with `equals`.
+Where this goes next: this topic is a hard prerequisite for [t07 Collections III](../t07_collections_3_set_map/t07_collections_3_set_map_notes.md). `HashSet` and `HashMap` are built directly on `equals`/`hashCode`, so a mistake here shows up there as duplicates that will not de-duplicate and lookups that fail on objects demonstrably in the collection. It returns again in [t23](../t23_unit_testing/t23_unit_testing_notes.md), where a JSON round-trip test compares with `equals`.
 
 ---
 
@@ -123,8 +113,7 @@ Use `equals` when “sameness” is about data, not the instance.
 
 If two objects are **equal** by `equals`, they **must** have the **same hash code**.
 
-Why? Hash-based lookups group values by their hash codes before checking equality. If equal
-objects produced different hash codes, lookups could fail.
+Why? Hash-based lookups group values by their hash codes before checking equality. If equal objects produced different hash codes, lookups could fail.
 
 **Key rules:**
 - If `a.equals(b)` is true to `a.hashCode() == b.hashCode()` must be true.
@@ -156,16 +145,14 @@ objects produced different hash codes, lookups could fail.
 
 ## How hashing works (collection-independent)
 
-Hashing turns a value into an integer (**hash code**). A lookup table can use that integer to
-quickly narrow down where a value might be stored.
+Hashing turns a value into an integer (**hash code**). A lookup table can use that integer to quickly narrow down where a value might be stored.
 
 Typical membership check idea:
 1) Compute the hash code of the value.
 2) Convert that hash to a **bucket index** within a fixed-size table.
 3) Compare with `equals` only against the small group in that bucket to confirm.
 
-This is fast because we avoid scanning all items. With a good hash function and a sensible
-table size, lookups are close to constant time for practical purposes.
+This is fast because we avoid scanning all items. With a good hash function and a sensible table size, lookups are close to constant time for practical purposes.
 
 **Terminology (kept simple):**
 - **Bucket**: a group where items that share an index are stored.
@@ -292,8 +279,7 @@ public final class Customer {
 
 - Use `Objects.hash(...)` or your IDE’s generator for correctness and readability.
 - Ensure fields used in `equals` are also used in `hashCode`.
-- For performance-sensitive scenarios, hand-crafted functions are possible—but prioritize
-  **correctness** and **distribution** at this stage.
+- For performance-sensitive scenarios, hand-crafted functions are possible—but prioritize **correctness** and **distribution** at this stage.
 
 **Example (hand-crafted)**
 
@@ -311,16 +297,14 @@ public int hashCode() {
 ## Pitfalls to avoid
 
 - **Overriding one without the other**: equal objects must share the same hash code.
-- **Mutable keys**: changing fields used for equality after storing an object in a hashed
-  structure can break lookups.
+- **Mutable keys**: changing fields used for equality after storing an object in a hashed structure can break lookups.
 - **Inconsistent equality**: breaking symmetry or transitivity leads to hard-to-trace bugs.
 
 ---
 
 ## Worked example: duplicate leak and fix
 
-Below we demonstrate the *principle* by comparing equality results directly—no collections
-involved yet.
+Below we demonstrate the *principle* by comparing equality results directly—no collections involved yet.
 
 ```java
 class ProductBroken {
@@ -362,8 +346,7 @@ public class Demo {
 - `==` is identity; `equals` is value equality.
 - If `equals` says two objects are equal, `hashCode` **must** be the same.
 - Hashing converts values to integers so lookup tables can jump to candidate locations quickly.
-- Prefer **records** for value types; for classes, override both methods with the same
-  identifying fields.
+- Prefer **records** for value types; for classes, override both methods with the same identifying fields.
 - Keep identifying fields **immutable**.
 
 ---
@@ -381,23 +364,12 @@ padding:0.9rem 1rem; margin:1rem 0;">
   </summary>
 
 **Which types should behave like values.**
-Ask: *if two instances hold the same data, should the program treat them as the same thing?* If
-yes, it is a value type and needs `equals`/`hashCode`. Typical yes: `Money`, `Point`,
-`EmailAddress`, `TrackId`, a DTO you deserialise from JSON and compare against an expected
-object in a test. Typical no: `Server`, `ClientHandler`, `Scanner`, `Connection` — these have
-identity and lifecycle, and two of them are never interchangeable even with identical fields.
-The default `Object.equals` (reference identity) is the *correct* behaviour for that second
-group; leave it alone.
+Ask: *if two instances hold the same data, should the program treat them as the same thing?* If yes, it is a value type and needs `equals`/`hashCode`. Typical yes: `Money`, `Point`, `EmailAddress`, `TrackId`, a DTO you deserialise from JSON and compare against an expected object in a test. Typical no: `Server`, `ClientHandler`, `Scanner`, `Connection` — these have identity and lifecycle, and two of them are never interchangeable even with identical fields. The default `Object.equals` (reference identity) is the *correct* behaviour for that second group; leave it alone.
 
 **Which fields define identity, and should they be immutable.**
-Only the fields that make the object *that* object — usually a natural or surrogate key. A
-`Player` is identified by its `id`, not by its `score`, which changes constantly. Include the
-minimum set that makes two distinct entities distinguishable.
+Only the fields that make the object *that* object — usually a natural or surrogate key. A `Player` is identified by its `id`, not by its `score`, which changes constantly. Include the minimum set that makes two distinct entities distinguishable.
 
-They should be **immutable**, and this matters more than students expect. A hashed collection
-files an object into a bucket using `hashCode()` *at the moment you insert it*. Mutate a field
-used by `hashCode` afterwards and the object is now sitting in the wrong bucket — `contains(x)`
-returns `false` for an object that is demonstrably in the set, and you cannot remove it:
+They should be **immutable**, and this matters more than students expect. A hashed collection files an object into a bucket using `hashCode()` *at the moment you insert it*. Mutate a field used by `hashCode` afterwards and the object is now sitting in the wrong bucket — `contains(x)` returns `false` for an object that is demonstrably in the set, and you cannot remove it:
 
 ```java
 Set<Player> set = new HashSet<>();
@@ -407,21 +379,12 @@ p.setId(2);                 // mutated a field used by hashCode
 System.out.println(set.contains(p));  // false - it is in the set, but in the wrong bucket
 ```
 
-Make key fields `final` and the problem cannot occur. This is the strongest practical argument
-for `record`s, which give you correct `equals`/`hashCode` and immutability for free.
+Make key fields `final` and the problem cannot occur. This is the strongest practical argument for `record`s, which give you correct `equals`/`hashCode` and immutability for free.
 
 **Where a hashed lookup would help.**
-Any place you currently do a linear scan to answer "have I seen this?" or "give me the one with
-this key". Concretely: a "seen already" filter over incoming messages (`HashSet`), an in-memory
-cache of entities keyed by ID so repeated `findById` calls skip the database (`HashMap<Integer,
-Task>`), counting occurrences (`HashMap<String, Integer>`), or routing a request `type` string
-to its handler instead of an `if`/`else` chain (`HashMap<String, Handler>` — the pattern used
-in [t21](../t21_json_2_jackson_advanced/t21_json_2_jackson_advanced_notes.md)).
+Any place you currently do a linear scan to answer "have I seen this?" or "give me the one with this key". Concretely: a "seen already" filter over incoming messages (`HashSet`), an in-memory cache of entities keyed by ID so repeated `findById` calls skip the database (`HashMap<Integer, Task>`), counting occurrences (`HashMap<String, Integer>`), or routing a request `type` string to its handler instead of an `if`/`else` chain (`HashMap<String, Handler>` — the pattern used in [t21](../t21_json_2_jackson_advanced/t21_json_2_jackson_advanced_notes.md)).
 
-The performance argument is the point: scanning a `List` for a match is O(n) per lookup, so a
-million lookups over a thousand items is a billion comparisons; a `HashMap` makes each lookup
-O(1) on average. But that only holds if `hashCode` distributes well — a `hashCode` that returns
-a constant is *legal* and turns every lookup back into a linear scan.
+The performance argument is the point: scanning a `List` for a match is O(n) per lookup, so a million lookups over a thousand items is a billion comparisons; a `HashMap` makes each lookup O(1) on average. But that only holds if `hashCode` distributes well — a `hashCode` that returns a constant is *legal* and turns every lookup back into a linear scan.
 
 </details>
 
@@ -429,8 +392,7 @@ a constant is *legal* and turns every lookup back into a linear scan.
 
 ## Appendix A: Modulo arithmetic (a quick primer)
 
-**Idea:** Modulo (“mod”) gives the **remainder** after division.
-We write `a mod m` (in Java: `a % m`) and read it as “the remainder when `a` is divided by `m`.”
+**Idea:** Modulo (“mod”) gives the **remainder** after division. We write `a mod m` (in Java: `a % m`) and read it as “the remainder when `a` is divided by `m`.”
 
 ### Examples
 
@@ -440,25 +402,19 @@ We write `a mod m` (in Java: `a % m`) and read it as “the remainder when `a` i
 
 ### Why it matters here
 
-- We turn a (possibly huge) hash code `h` into a valid **bucket index** by reducing it to the
-  range `0..m-1` with `h mod m`.
-- If the table size `m` is a **power of two**, `h mod m` can be computed as a fast **bit
-  mask**: `h & (m - 1)`.
+- We turn a (possibly huge) hash code `h` into a valid **bucket index** by reducing it to the range `0..m-1` with `h mod m`.
+- If the table size `m` is a **power of two**, `h mod m` can be computed as a fast **bit mask**: `h & (m - 1)`.
 
 ### Properties you’ll use
 
 - **Range:** `0 = (a mod m) < m` for positive `a` and `m>0`.
-- **Congruence:** If `a mod m == b mod m`, then `a` and `b` fall in the **same bucket** (same
-  remainder).
+- **Congruence:** If `a mod m == b mod m`, then `a` and `b` fall in the **same bucket** (same remainder).
 - **Add/multiply:**
-  `(a + b) mod m = ((a mod m) + (b mod m)) mod m`
-  `(a × b) mod m = ((a mod m) × (b mod m)) mod m`
+  `(a + b) mod m = ((a mod m) + (b mod m)) mod m` `(a × b) mod m = ((a mod m) × (b mod m)) mod m`
 
 ### Java specifics (sign of result)
 
-- In Java, `a % m` has the **same sign as `a`**.
-  E.g., `(-3) % 5 == -3`.
-  For bucket indices you usually want non-negative, so use:
+- In Java, `a % m` has the **same sign as `a`**. E.g., `(-3) % 5 == -3`. For bucket indices you usually want non-negative, so use:
 
   ```java
   int idx = Math.floorMod(h, m);   // always 0..m-1

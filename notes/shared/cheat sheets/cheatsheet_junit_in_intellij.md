@@ -6,8 +6,7 @@ See the [JUnit demo code repository](https://github.com/nmcguinness/L8_OOP_Using
 
 ### `assertEquals`
 
-Checks that expected and actual values are equal. Use for exact matches (numbers, strings,
-objects with proper `equals`).
+Checks that expected and actual values are equal. Use for exact matches (numbers, strings, objects with proper `equals`).
 
 ```java
 assertEquals(80.0, PricingUtils.applyDiscount(100.0, 20.0));
@@ -100,8 +99,7 @@ WORLD"));
 
 ### `assertThrows`
 
-Asserts that executing code throws the given exception type (including subclasses). Capture the
-exception to inspect message/state.
+Asserts that executing code throws the given exception type (including subclasses). Capture the exception to inspect message/state.
 
 ```java
 ArithmeticException ex = assertThrows(
@@ -121,8 +119,7 @@ assertThrowsExactly(ArithmeticException.class, () -> DataUtils.safeDivide(10, 0)
 
 ### `assertDoesNotThrow`
 
-Asserts that executing code completes without throwing. Returns the value of the lambda for
-further checks.
+Asserts that executing code completes without throwing. Returns the value of the lambda for further checks.
 
 ```java
 String s = assertDoesNotThrow(() -> DataUtils.formatName("zara", "lee"));
@@ -131,8 +128,7 @@ assertNotNull(s);
 
 ### `assertTimeout`
 
-Asserts that code completes **within** a duration (non-preemptive: lets code finish then checks
-elapsed).
+Asserts that code completes **within** a duration (non-preemptive: lets code finish then checks elapsed).
 
 ```java
 assertTimeout(java.time.Duration.ofMillis(150),
@@ -141,8 +137,7 @@ assertTimeout(java.time.Duration.ofMillis(150),
 
 ### `assertTimeoutPreemptively`
 
-Runs code in another thread and interrupts if it exceeds the duration (be careful with
-threads/locks).
+Runs code in another thread and interrupts if it exceeds the duration (be careful with threads/locks).
 
 ```java
 assertTimeoutPreemptively(java.time.Duration.ofMillis(150),
@@ -162,8 +157,7 @@ assertAll("pricing",
 
 ### `fail`
 
-Forces a test to fail immediately with a message—use sparingly when a more specific assert
-isn’t suitable.
+Forces a test to fail immediately with a message—use sparingly when a more specific assert isn’t suitable.
 
 ```java
 fail("Feature must be enabled for this test");
@@ -179,15 +173,13 @@ Double d = assertInstanceOf(Double.class, n);
 assertTrue(d > 3.0);
 ```
 
-> **Tip**: For floating-point assertions where small precision errors are expected, use
-> overloads with a delta/tolerance or compare `BigDecimal` values.
+> **Tip**: For floating-point assertions where small precision errors are expected, use overloads with a delta/tolerance or compare `BigDecimal` values.
 
 ---
 
 ## JUnit Setup Reminders
 
-- **Follow JetBrains’ JUnit tutorial:** [Set up and run JUnit tests in IntelliJ
-  IDEA](https://www.jetbrains.com/help/idea/junit.html).
+- **Follow JetBrains’ JUnit tutorial:** [Set up and run JUnit tests in IntelliJ IDEA](https://www.jetbrains.com/help/idea/junit.html).
 - **Add (latest) JUnit 5 to Maven (`pom.xml`):**
 
   ```xml
@@ -200,11 +192,8 @@ assertTrue(d > 3.0);
   ```
 
 - **Reload Maven after editing `pom.xml` (before any restart):**
-  In IntelliJ, click the Maven tool window’s **Reload All Maven Projects** (🔄) button or
-  accept the “Load Maven Changes” prompt. This triggers dependency download and re-indexing.
-- **Aside (common fix):** If IntelliJ still shows *“Cannot resolve symbol junit”* after the
-  **Maven reload**, **close and reopen IntelliJ** (or **File to Invalidate Caches /
-  Restart...**). Restarting only helps **after** Maven has been reloaded.
+  In IntelliJ, click the Maven tool window’s **Reload All Maven Projects** (🔄) button or accept the “Load Maven Changes” prompt. This triggers dependency download and re-indexing.
+- **Aside (common fix):** If IntelliJ still shows *“Cannot resolve symbol junit”* after the **Maven reload**, **close and reopen IntelliJ** (or **File to Invalidate Caches / Restart...**). Restarting only helps **after** Maven has been reloaded.
 - Run tests via gutter icons, the **Run** tool window, or `mvn test`.
 
 ---

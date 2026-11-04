@@ -12,9 +12,7 @@ tags: [java, arrays, 1d, 2d, loops, indexing, debugging, exercises, year2, comp-
 ---
 # Arrays (1D & 2D) — Exercises
 
-> These exercises build directly on the **Arrays (1D & 2D)** notes. Work from top to bottom.
-> Most tasks include small, checkable outputs. Use the provided method signatures and add tiny
-> tests in `main` or `Exercise.run()`.
+> These exercises build directly on the **Arrays (1D & 2D)** notes. Work from top to bottom. Most tasks include small, checkable outputs. Use the provided method signatures and add tiny tests in `main` or `Exercise.run()`.
 >
 > Hints and snippets you can reuse are in the notes (e.g., `inBounds`, `print2D`).
 
@@ -45,13 +43,7 @@ Call `Exercise.run()` from your `Main`, as shown in the repo README.
 ## Exercise 01 — Fill, Sum, Average (1D warm-up)
 
 **Objective:** Practice create then write then read then iterate.
-**Description:** In this exercise you will create an integer array of a given length,
-initialize all elements with the same value, and then derive basic statistics from it. You’ll
-implement functions to build the array, compute its sum, and compute the average with
-appropriate handling for `null` and empty arrays. Pay close attention to
-integer-vs-floating-point division when computing the average, and make sure your
-implementation is safe and predictable for edge cases. Use the quick checks to confirm your
-methods behave as expected.
+**Description:** In this exercise you will create an integer array of a given length, initialize all elements with the same value, and then derive basic statistics from it. You’ll implement functions to build the array, compute its sum, and compute the average with appropriate handling for `null` and empty arrays. Pay close attention to integer-vs-floating-point division when computing the average, and make sure your implementation is safe and predictable for edge cases. Use the quick checks to confirm your methods behave as expected.
 - Write three methods:
 
   ```java
@@ -76,11 +68,7 @@ methods behave as expected.
 ## Exercise 02 — `indexOf` & `count` (search in 1D)
 
 **Objective:** Implement simple linear searches.
-**Description:** Here you’ll add two classic search utilities: one to find the first index of a
-target value and one to count all occurrences. These are the building blocks for more advanced
-algorithms and teach you how to traverse arrays in a safe, robust way. Think about when to stop
-early (for `indexOf`) versus when to traverse the entire array (for `count`). Consider how your
-code behaves for `null` and empty arrays and keep your contracts consistent across methods.
+**Description:** Here you’ll add two classic search utilities: one to find the first index of a target value and one to count all occurrences. These are the building blocks for more advanced algorithms and teach you how to traverse arrays in a safe, robust way. Think about when to stop early (for `indexOf`) versus when to traverse the entire array (for `count`). Consider how your code behaves for `null` and empty arrays and keep your contracts consistent across methods.
 - Implement:
 
   ```java
@@ -103,11 +91,7 @@ code behaves for `null` and empty arrays and keep your contracts consistent acro
 ## Exercise 03 — Min/Max with Guards
 
 **Objective:** Handle edge cases explicitly.
-**Description:** You will compute the minimum and maximum values in an array, but this time you
-must define a clear policy for invalid inputs. Instead of returning a sentinel like
-`Integer.MAX_VALUE`, throw an `IllegalArgumentException` when given `null` or empty arrays.
-This forces you to separate “happy path” logic from input validation and practice defensive
-programming. Use tests that exercise normal, boundary, and failing cases.
+**Description:** You will compute the minimum and maximum values in an array, but this time you must define a clear policy for invalid inputs. Instead of returning a sentinel like `Integer.MAX_VALUE`, throw an `IllegalArgumentException` when given `null` or empty arrays. This forces you to separate “happy path” logic from input validation and practice defensive programming. Use tests that exercise normal, boundary, and failing cases.
 - Implement:
 
   ```java
@@ -129,11 +113,7 @@ programming. Use tests that exercise normal, boundary, and failing cases.
 ## Exercise 04 — Grade Histogram (1D to frequency)
 
 **Objective:** Use arrays as fixed-size counters.
-**Description:** Convert a list of exam scores (0–100) into a frequency distribution spanning
-11 bins (0–9, 10–19, ..., 100). This exercise emphasizes mapping raw values into categories
-using integer arithmetic and array indexing. After producing the frequency array, render a
-simple textual histogram so you can visually inspect distribution patterns. Consider
-out-of-range inputs and decide how your function should respond.
+**Description:** Convert a list of exam scores (0–100) into a frequency distribution spanning 11 bins (0–9, 10–19, ..., 100). This exercise emphasizes mapping raw values into categories using integer arithmetic and array indexing. After producing the frequency array, render a simple textual histogram so you can visually inspect distribution patterns. Consider out-of-range inputs and decide how your function should respond.
 - Implement:
 
   ```java
@@ -156,11 +136,7 @@ out-of-range inputs and decide how your function should respond.
 ## Exercise 05 — Border & Center (2D basics)
 
 **Objective:** Create and update a rectangular 2D grid.
-**Description:** Build a `5x5` integer grid and set specific cells to create a recognizable
-pattern: all border cells set to `1` and the exact center cell set to `9`. This will give you
-practice with nested loops, row/column addressing, and the difference between `grid.length` and
-`grid[r].length`. Finish by pretty-printing the grid so each row appears on its own line.
-Confirm the last two rows match the expected pattern.
+**Description:** Build a `5x5` integer grid and set specific cells to create a recognizable pattern: all border cells set to `1` and the exact center cell set to `9`. This will give you practice with nested loops, row/column addressing, and the difference between `grid.length` and `grid[r].length`. Finish by pretty-printing the grid so each row appears on its own line. Confirm the last two rows match the expected pattern.
 - Make a `5x5` `int[][] grid`.
 - Set the **border** cells to `1` and the **center** cell to `9`.
 - Pretty print one row per line.
@@ -178,11 +154,7 @@ Confirm the last two rows match the expected pattern.
 ## Exercise 06 — Find & Count in 2D
 
 **Objective:** Traverse all cells correctly.
-**Description:** Implement two helpers for 2D integer arrays: `find2D`, which returns the first
-coordinates `{r,c}` for a target value (or `{-1,-1}` if absent), and `count2D`, which returns
-the total number of matches in the grid. This exercise reinforces nested-loop traversal and
-careful bounds usage for potentially jagged grids. Design small test grids to verify hits,
-misses, and multiple occurrences.
+**Description:** Implement two helpers for 2D integer arrays: `find2D`, which returns the first coordinates `{r,c}` for a target value (or `{-1,-1}` if absent), and `count2D`, which returns the total number of matches in the grid. This exercise reinforces nested-loop traversal and careful bounds usage for potentially jagged grids. Design small test grids to verify hits, misses, and multiple occurrences.
 - Implement:
 
   ```java
@@ -197,11 +169,7 @@ misses, and multiple occurrences.
 ## Exercise 07 — Jagged Rows: Build & Validate
 
 **Objective:** Work with non-rectangular (jagged) arrays.
-**Description:** Learn how to construct and reason about jagged arrays where rows can have
-different lengths. Start by creating a 2D array with rows of lengths `{2,5,3}` and then
-implement `isRectangular` to detect whether all non-null rows share the same length. This
-clarifies the difference between rectangular matrices and general 2D arrays in Java. Add tests
-that include `null` rows and rows of differing sizes to validate your logic.
+**Description:** Learn how to construct and reason about jagged arrays where rows can have different lengths. Start by creating a 2D array with rows of lengths `{2,5,3}` and then implement `isRectangular` to detect whether all non-null rows share the same length. This clarifies the difference between rectangular matrices and general 2D arrays in Java. Add tests that include `null` rows and rows of differing sizes to validate your logic.
 - Create `int[][] jag = new int[3][];` and then rows of lengths `{2,5,3}`.
 - Write:
 
@@ -216,19 +184,14 @@ that include `null` rows and rows of differing sizes to validate your logic.
   System.out.println(isRectangular(new int[][]{{1,2},{3,4,5}}));    // false
   ```
 
-**Stretch:** `static int[][] padToRect(int[][] g, int pad)` — return a **new** rectangular
-copy, padding short rows with `pad`.
+**Stretch:** `static int[][] padToRect(int[][] g, int pad)` — return a **new** rectangular copy, padding short rows with `pad`.
 
 ---
 
 ## Exercise 08 — Heatmap Normalization (2D compute)
 
 **Objective:** Compute derived values across the grid.
-**Description:** You are given a 2D integer heatmap with values in the range `0..255`. Your
-task is to normalize each value to the range `0..1` by dividing by the **maximum** value found
-in the entire grid. This requires two passes: one to find the max and another to compute the
-normalized output. Handle the degenerate case where all values are `0` to avoid division by
-zero, and return a `double[][]` with the normalized results.
+**Description:** You are given a 2D integer heatmap with values in the range `0..255`. Your task is to normalize each value to the range `0..1` by dividing by the **maximum** value found in the entire grid. This requires two passes: one to find the max and another to compute the normalized output. Handle the degenerate case where all values are `0` to avoid division by zero, and return a `double[][]` with the normalized results.
 - Implement:
 
   ```java
@@ -236,18 +199,14 @@ zero, and return a `double[][]` with the normalized results.
   ```
 
 - Check: if all entries are `0`, the result is all `0.0` (avoid divide-by-zero).
-**Stretch:** Return the coordinates of the hottest cell(s).
+  **Stretch:** Return the coordinates of the hottest cell(s).
 
 ---
 
 ## Exercise 09 — Tic-Tac-Toe Checker (2D char)
 
 **Objective:** Practice row/col/diag traversal.
-**Description:** Represent a tic-tac-toe board using a `char[3][3]` containing `'X'`, `'O'`, or
-`' '`. Implement `hasWon` to detect whether a given player has completed a row, column, or
-diagonal. Implement `isFull` to check whether the board contains any empty spaces. Construct
-several boards (win by row, win by column, no win) and confirm your functions return the
-correct results. Consider how you might generalize this to larger board sizes.
+**Description:** Represent a tic-tac-toe board using a `char[3][3]` containing `'X'`, `'O'`, or `' '`. Implement `hasWon` to detect whether a given player has completed a row, column, or diagonal. Implement `isFull` to check whether the board contains any empty spaces. Construct several boards (win by row, win by column, no win) and confirm your functions return the correct results. Consider how you might generalize this to larger board sizes.
 - Board is `char[3][3]` with `'X'`, `'O'`, or `' '`.
 - Implement:
 
@@ -257,20 +216,15 @@ correct results. Consider how you might generalize this to larger board sizes.
   ```
 
 - Quick checks on a known winning board for `'X'` and a non-winning board for `'O'`.
-**Stretch:** Write a `nextMove(char[][] b)` that returns the first free cell `{r,c}` or `{-1,-1}`.
+  **Stretch:** Write a `nextMove(char[][] b)` that returns the first free cell `{r,c}` or `{-1,-1}`.
 
 ---
 
 ## Exercise 10 — Word Search (2D char, optional challenge)
 
 **Objective:** Multi-directional search using 2D traversal and helpers.
-**Description:** Implement two search functions that scan a 2D grid of letters for the presence
-of a word either left-to-right or top-to-bottom. You’ll need to write careful nested loops and
-verify characters step-by-step without stepping outside the grid bounds. Keep your logic
-modular by using small helpers such as `startsWithAtRow` or `startsWithAtCol`. Extend the
-challenge by supporting reverse directions or diagonals once the basic version works.
-- Given a grid of letters and a target word, return `true` if the word can be read left then
-  right or top then bottom (no diagonals, no wrapping).
+**Description:** Implement two search functions that scan a 2D grid of letters for the presence of a word either left-to-right or top-to-bottom. You’ll need to write careful nested loops and verify characters step-by-step without stepping outside the grid bounds. Keep your logic modular by using small helpers such as `startsWithAtRow` or `startsWithAtCol`. Extend the challenge by supporting reverse directions or diagonals once the basic version works.
+- Given a grid of letters and a target word, return `true` if the word can be read left then right or top then bottom (no diagonals, no wrapping).
 
   ```java
   static boolean containsWordLR(char[][] g, String w)
@@ -297,11 +251,7 @@ challenge by supporting reverse directions or diagonals once the basic version w
 ## Exercise 11 — Data Wrangling with Arrays (mini real-world)
 
 **Objective:** Parse, compute, and report without collections.
-**Description:** You’ll process a comma-separated list of daily step counts (e.g., data
-exported from a basic fitness tracker). Parse the string into an `int[]`, compute min, max,
-average, and the count of zero-days, then produce a compact textual summary. Avoid using
-`ArrayList` or streams—focus on array fundamentals and robust parsing. For an extension, group
-the data by week (7-day windows) and print a weekly report.
+**Description:** You’ll process a comma-separated list of daily step counts (e.g., data exported from a basic fitness tracker). Parse the string into an `int[]`, compute min, max, average, and the count of zero-days, then produce a compact textual summary. Avoid using `ArrayList` or streams—focus on array fundamentals and robust parsing. For an extension, group the data by week (7-day windows) and print a weekly report.
 - Tasks:
   1) Parse into `int[]` (trim whitespace).
   2) Compute min, max, average, and count of zero-days.

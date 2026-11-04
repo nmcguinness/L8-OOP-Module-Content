@@ -4,8 +4,8 @@ subtitle: "COMP C8Z03 — Year 2 OOP"
 topic_code: t18_io
 description: "Reading and writing files using NIO.2 (Path, Files), text I/O with BufferedReader/Writer, byte array I/O, basic CSV parsing, and try-with-resources for safe resource management."
 created: 2026-05-27
-last_updated: 2026-05-27
-version: 1.0
+last_updated: 2026-11-04
+version: 1.1
 status: published
 authors: ["OOP Teaching Team"]
 tags: [java, io, files, path, nio2, bufferedreader, csv, try-with-resources, year2, comp-c8z03]
@@ -27,11 +27,14 @@ prerequisites:
 
 ---
 
+---
+
 ## In this topic
 
 - [What you'll learn](#what-youll-learn)
 - [Why this matters](#why-this-matters)
 - [How this builds on previous content](#how-this-builds-on-previous-content)
+- [Key terms](#key-terms)
 - [Part 1: Path and Files — the NIO.2 API](#part-1-path-and-files--the-nio2-api)
 - [Part 2: Reading text files](#part-2-reading-text-files)
 - [Part 3: Writing text files](#part-3-writing-text-files)
@@ -41,7 +44,9 @@ prerequisites:
 - [Games example: load level config from file](#games-example-load-level-config-from-file)
 - [Software example: append-only task log](#software-example-append-only-task-log)
 - [Common mistakes](#common-mistakes)
+- [Practice tasks](#practice-tasks)
 - [Reflective questions](#reflective-questions)
+- [Further reading](#further-reading)
 
 ---
 
@@ -63,13 +68,9 @@ prerequisites:
 
 ## Why this matters
 
-Most programs need to persist data: load a configuration, read a dataset, save results,
-exchange files with other systems. Java's NIO.2 API (`java.nio.file`) provides a clean,
-expressive way to do all of this — far safer and more readable than the older
-`File`/`FileInputStream` approach.
+Most programs need to persist data: load a configuration, read a dataset, save results, exchange files with other systems. Java's NIO.2 API (`java.nio.file`) provides a clean, expressive way to do all of this — far safer and more readable than the older `File`/`FileInputStream` approach.
 
-Combined with `try-with-resources` (from the exception handling topic) and `Stream<String>`
-(from the Streams topic), NIO.2 enables concise, safe file processing in very few lines.
+Combined with `try-with-resources` (from the exception handling topic) and `Stream<String>` (from the Streams topic), NIO.2 enables concise, safe file processing in very few lines.
 
 ---
 
@@ -80,6 +81,30 @@ Combined with `try-with-resources` (from the exception handling topic) and `Stre
 | Exception handling | `IOException` is checked — callers must handle or propagate; try-with-resources closes resources automatically |
 | Streams API | `Files.lines(path)` returns a `Stream<String>` — plug directly into `.filter()`, `.map()`, `.collect()` |
 | Collections | Results are usually collected into `List<String>` or `List<YourRecord>` |
+
+---
+
+## Key terms
+
+### The Path class
+
+A **`Path`** describes where a file is. It does not open the file, and the file need not exist.
+
+### Files
+
+**`Files`** is a class of static methods that read, write, copy and inspect the file a `Path` points to.
+
+### Text and binary files
+
+A **text file** holds characters, encoded as bytes by a charset. A **binary file** is read and written as raw bytes.
+
+### Charset
+
+A **charset** such as UTF-8 is the rule for turning characters into bytes. Both ends must use the same one.
+
+### Buffering
+
+A **buffer** collects data and moves it in larger pieces, because reading or writing one byte at a time is slow.
 
 ---
 
@@ -141,6 +166,8 @@ public static List<String> readLines(Path path) throws IOException {
 
 Use when the file fits comfortably in memory (< a few hundred MB).
 
+> **Why pass `StandardCharsets.UTF_8`?** A **charset** says how the bytes in a file map to characters. Since Java 18 the default charset is UTF-8 on every platform, and the `Files` methods have always used UTF-8 when you leave it out. So on the JDK 25 used in this module, `Files.readAllLines(path)` already reads UTF-8. These notes still name the charset because it states what the file is expected to contain, it keeps the code correct on an older JDK, and it is the only right choice when a file really is in another encoding, such as a Windows export in `windows-1252` (`Charset.forName("windows-1252")`). The things that still go wrong are files saved in a different encoding, and the older `FileReader` and `InputStreamReader` constructors on JDK 17 and earlier, which used the platform's own default.
+
 ---
 
 ### Stream lines lazily
@@ -155,8 +182,7 @@ public static long countNonEmpty(Path path) throws IOException {
 }
 ```
 
-> **Always** close the stream from `Files.lines()` — use try-with-resources. It holds an open
-> file handle until closed.
+> **Always** close the stream from `Files.lines()` — use try-with-resources. It holds an open file handle until closed.
 
 ---
 
@@ -295,8 +321,7 @@ Ben,82
 Clara,78
 ```
 
-> For production CSV (quoted fields, embedded commas), use a library like **Apache Commons
-> CSV** or **OpenCSV**.
+> For production CSV (quoted fields, embedded commas), use a library like **Apache Commons CSV** or **OpenCSV**.
 
 ---
 
@@ -329,7 +354,7 @@ Path output = Path.of("scores_upper.csv");
 List<String> lines = Files.readAllLines(input, StandardCharsets.UTF_8);
 List<String> upper = lines.stream()
     .map(String::toUpperCase)
-    .collect(Collectors.toList());
+    .toList();
 Files.write(output, upper, StandardCharsets.UTF_8);
 ```
 
@@ -351,7 +376,7 @@ import java.util.Map;
 
 public class LevelConfig {
 
-    private final Map<String, String> _props = new HashMap<>();
+    private final Map<String, String> props = new HashMap<>();
 
     public static LevelConfig load(Path path) throws IOException {
         LevelConfig config = new LevelConfig();
@@ -360,18 +385,18 @@ public class LevelConfig {
             if (trimmed.isEmpty() || trimmed.startsWith("#")) continue;
             String[] parts = trimmed.split("=", 2);
             if (parts.length == 2) {
-                config._props.put(parts[0].strip(), parts[1].strip());
+                config.props.put(parts[0].strip(), parts[1].strip());
             }
         }
         return config;
     }
 
     public String get(String key, String defaultValue) {
-        return _props.getOrDefault(key, defaultValue);
+        return props.getOrDefault(key, defaultValue);
     }
 
     public int getInt(String key, int defaultValue) {
-        String val = _props.get(key);
+        String val = props.get(key);
         if (val == null) return defaultValue;
         try {
             return Integer.parseInt(val);
@@ -402,34 +427,33 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TaskLog {
 
-    private final Path _logFile;
+    private final Path logFile;
 
     public TaskLog(Path logFile) {
-        _logFile = logFile;
+        this.logFile = logFile;
     }
 
     public void log(String event) throws IOException {
         String entry = LocalDateTime.now() + " | " + event;
-        Files.writeString(_logFile, entry + System.lineSeparator(),
+        Files.writeString(logFile, entry + System.lineSeparator(),
             StandardCharsets.UTF_8,
             StandardOpenOption.CREATE,
             StandardOpenOption.APPEND);
     }
 
     public List<String> readAll() throws IOException {
-        if (!Files.exists(_logFile)) return List.of();
-        return Files.readAllLines(_logFile, StandardCharsets.UTF_8);
+        if (!Files.exists(logFile)) return List.of();
+        return Files.readAllLines(logFile, StandardCharsets.UTF_8);
     }
 
     public List<String> search(String keyword) throws IOException {
-        try (var lines = Files.lines(_logFile, StandardCharsets.UTF_8)) {
+        try (var lines = Files.lines(logFile, StandardCharsets.UTF_8)) {
             return lines
                 .filter(l -> l.contains(keyword))
-                .collect(Collectors.toList());
+                .toList();
         }
     }
 }
@@ -443,10 +467,21 @@ public class TaskLog {
 | :-- | :-- | :-- |
 | Forgetting to close `Files.lines()` | File handle leak — OS runs out of handles | Always wrap in try-with-resources |
 | Using `File` instead of `Path` | Legacy API is more error-prone; returns `boolean` instead of throwing | Use `Path` + `Files` for all new code |
-| Ignoring `StandardCharsets.UTF_8` | Default encoding varies by platform — files read on one machine may fail on another | Always specify charset explicitly |
+| Assuming every file is UTF-8 | A file exported by another program (for example Excel on Windows) may use another encoding, so accented characters come out as `�` or `Ã©` | Check how the file was produced, and pass the matching `Charset` |
+| Relying on the default charset on an old JDK | Before Java 18 the default depended on the operating system, so the same code read a file differently on Windows and Linux | Pass `StandardCharsets.UTF_8` explicitly; on JDK 18 and later the default is UTF-8 everywhere |
 | `split(",")` for CSV with quoted fields | Fails on `"Smith, Jr.",90` — splits inside the quotes | Use a CSV library for complex files |
 | `Files.readAllLines()` on a 2 GB log | Loads entire file into heap | Use `Files.lines()` (lazy stream) instead |
 | Constructing `Path` with OS-specific separators | `"data\\scores.txt"` fails on Linux | Use `Path.of("data", "scores.txt")` — handles separators |
+
+---
+
+## Practice tasks
+
+1. Write a method that counts the non-blank lines in a text file, and test it with `@TempDir`.
+2. Copy a binary file with `Files.readAllBytes` and `Files.write`, and check the copy is identical with `Files.mismatch`.
+3. Read a file through `Files.lines` without try-with-resources. What resource stays open, and why does it matter in a long-running server?
+
+For step-by-step practice with worked solutions, see the [t18 exercises](exercises/t18_io_exercises.md).
 
 ---
 
@@ -456,8 +491,7 @@ public class TaskLog {
 - What would happen if you forgot the `try-with-resources` around `Files.lines()`?
 - Why must `IOException` be handled or declared when calling `Files.readAllLines()`?
 - How would you read only the first 10 lines of a large file efficiently?
-- You need to write a file only if it does not already exist. Which `StandardOpenOption` values
-  would you use?
+- You need to write a file only if it does not already exist. Which `StandardOpenOption` values would you use?
 
 <details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
 padding:0.9rem 1rem; margin:1rem 0;">
@@ -466,25 +500,14 @@ padding:0.9rem 1rem; margin:1rem 0;">
   </summary>
 
 **Why `Files.lines()` beats `Files.readAllLines()` on large files.**
-`readAllLines` loads **every line into a `List<String>` in memory at once**. A 2 GB log file
-needs more than 2 GB of heap (Java `String`s carry overhead) and you get `OutOfMemoryError` —
-regardless of how few lines you actually wanted.
+`readAllLines` loads **every line into a `List<String>` in memory at once**. A 2 GB log file needs more than 2 GB of heap (Java `String`s carry overhead) and you get `OutOfMemoryError` — regardless of how few lines you actually wanted.
 
-`Files.lines()` returns a lazy `Stream<String>` that reads a buffer at a time, so memory stays
-roughly constant no matter how big the file is. It also composes with the whole Streams API and
-short-circuits: with `.filter(...).findFirst()` you stop reading the moment you have an answer,
-instead of reading 2 GB first.
+`Files.lines()` returns a lazy `Stream<String>` that reads a buffer at a time, so memory stays roughly constant no matter how big the file is. It also composes with the whole Streams API and short-circuits: with `.filter(...).findFirst()` you stop reading the moment you have an answer, instead of reading 2 GB first.
 
-Use `readAllLines` only when the file is known-small *and* you need random access or multiple
-passes over the lines.
+Use `readAllLines` only when the file is known-small *and* you need random access or multiple passes over the lines.
 
 **Forgetting `try-with-resources` around `Files.lines()`.**
-The underlying file handle is never closed — a **resource leak**. `Files.lines()` is one of the
-few streams that is backed by an open file, so unlike a stream over a `List` it *must* be
-closed. Symptoms build up rather than appearing at once: the process accumulates open
-descriptors until it hits the OS limit and throws `IOException: Too many open files`, typically
-far from the offending code. On Windows the more immediate symptom is that the file stays
-**locked**, so a later attempt to delete, rename or rewrite it fails.
+The underlying file handle is never closed — a **resource leak**. `Files.lines()` is one of the few streams that is backed by an open file, so unlike a stream over a `List` it *must* be closed. Symptoms build up rather than appearing at once: the process accumulates open descriptors until it hits the OS limit and throws `IOException: Too many open files`, typically far from the offending code. On Windows the more immediate symptom is that the file stays **locked**, so a later attempt to delete, rename or rewrite it fails.
 
 Because it is `AutoCloseable`, the fix is just to declare it in the `try`:
 
@@ -495,14 +518,7 @@ try (Stream<String> lines = Files.lines(path)) {
 ```
 
 **Why `IOException` must be handled or declared.**
-It is a **checked** exception, so the compiler enforces it. That is deliberate: file operations
-fail for reasons entirely outside your program's control — the file was deleted between check
-and read, permissions changed, the disk filled, the network share dropped. No amount of correct
-code prevents it, so the language forces you to make a conscious decision: handle it here, or
-declare `throws IOException` and let a caller who has more context decide. Contrast with
-`IllegalArgumentException`, which is unchecked because it signals a bug you should fix rather
-than a condition you should tolerate. See
-[t10](../t10_exception_handling/t10_exception_handling_notes.md).
+It is a **checked** exception, so the compiler enforces it. That is deliberate: file operations fail for reasons entirely outside your program's control — the file was deleted between check and read, permissions changed, the disk filled, the network share dropped. No amount of correct code prevents it, so the language forces you to make a conscious decision: handle it here, or declare `throws IOException` and let a caller who has more context decide. Contrast with `IllegalArgumentException`, which is unchecked because it signals a bug you should fix rather than a condition you should tolerate. See [t10](../t10_exception_handling/t10_exception_handling_notes.md).
 
 **Reading only the first 10 lines efficiently.**
 Stream it and `limit`, so you read only what you need:
@@ -513,11 +529,7 @@ try (Stream<String> lines = Files.lines(path)) {
 }
 ```
 
-Laziness is doing the work: `limit(10)` short-circuits, so the file is read only far enough to
-produce ten lines and then closed — constant memory, near-instant on a huge file.
-`Files.readAllLines(path).subList(0, 10)` returns the same ten lines but reads the entire file
-first, which is the wrong answer here even though it looks equivalent. Guard `subList` anyway
-if the file might have fewer than ten lines; `limit` handles that case without complaint.
+Laziness is doing the work: `limit(10)` short-circuits, so the file is read only far enough to produce ten lines and then closed — constant memory, near-instant on a huge file. `Files.readAllLines(path).subList(0, 10)` returns the same ten lines but reads the entire file first, which is the wrong answer here even though it looks equivalent. Guard `subList` anyway if the file might have fewer than ten lines; `limit` handles that case without complaint.
 
 **Writing only if the file does not exist.**
 `StandardOpenOption.CREATE_NEW` (with `WRITE`, which `Files.newBufferedWriter` implies):
@@ -530,17 +542,23 @@ try (BufferedWriter w = Files.newBufferedWriter(path, StandardOpenOption.CREATE_
 }
 ```
 
-The distinction to remember is between the two CREATE options: **`CREATE`** makes the file if
-absent and opens it if present; **`CREATE_NEW`** fails with `FileAlreadyExistsException` if it
-already exists — which is exactly the requirement. `CREATE_NEW` is also **atomic**, so it is
-the correct choice over `if (!Files.exists(path))` followed by a write: between that check and
-the write, another process (or thread) could create the file, and you would overwrite it.
-Checking first is a race condition; `CREATE_NEW` is not.
+The distinction to remember is between the two CREATE options: **`CREATE`** makes the file if absent and opens it if present; **`CREATE_NEW`** fails with `FileAlreadyExistsException` if it already exists — which is exactly the requirement. `CREATE_NEW` is also **atomic**, so it is the correct choice over `if (!Files.exists(path))` followed by a write: between that check and the write, another process (or thread) could create the file, and you would overwrite it. Checking first is a race condition; `CREATE_NEW` is not.
 
-Related options worth knowing: `APPEND` to add to the end, and `TRUNCATE_EXISTING` to clear
-before writing (the default alongside `CREATE` when writing).
+Related options worth knowing: `APPEND` to add to the end, and `TRUNCATE_EXISTING` to clear before writing (the default alongside `CREATE` when writing).
 
 </details>
+
+---
+
+## Further reading
+
+- **Java API: Files**
+  <https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/nio/file/Files.html>
+  Every file operation, with the exceptions each one throws.
+
+- **Oracle Java Tutorials: Basic I/O**
+  <https://docs.oracle.com/javase/tutorial/essential/io/index.html>
+  Streams, paths and file operations in more depth.
 
 ---
 

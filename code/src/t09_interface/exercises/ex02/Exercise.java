@@ -11,15 +11,16 @@ public class Exercise {
         objects.add(new Chest("Treasure chest"));
         objects.add(new NPC("Shopkeeper"));
 
-        int[] distancesToPlayer = {1, 3, 2};
+        int[] distancesToPlayer = {1, 3, 3};
 
         for (int i = 0; i < objects.size(); i++) {
             Interactable obj = objects.get(i);
             int distance = distancesToPlayer[i];
 
-            System.out.println("Player is " + distance + " units from " + obj.getDescription());
+            System.out.println("Player is " + distance + " units from " + obj.getDescription()
+                    + " (range " + obj.interactionRange() + ")");
 
-            if (distance <= Interactable.DEFAULT_INTERACTION_RANGE) {
+            if (obj.canInteract(distance)) {
                 obj.interact();
             } else {
                 System.out.println("Too far away to interact.");

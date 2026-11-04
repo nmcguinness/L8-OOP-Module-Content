@@ -18,11 +18,13 @@ interface CheckoutService {
 
 class ThirdPartyGateway {
     public boolean makePayment(String euroAmount) {
-        if (euroAmount == null || euroAmount.equals("0.00"))
+        if (euroAmount == null || euroAmount.equals("0.00")) {
             return false;
+        }
 
-        if (euroAmount.startsWith("0.00"))
+        if (euroAmount.startsWith("0.00")) {
             return false;
+        }
 
         System.out.println("PAID: " + euroAmount);
         return true;
@@ -30,21 +32,23 @@ class ThirdPartyGateway {
 }
 
 class GatewayCheckoutAdapter implements CheckoutService {
-    private ThirdPartyGateway _gateway;
+    private final ThirdPartyGateway gateway;
 
     public GatewayCheckoutAdapter(ThirdPartyGateway gateway) {
-        if (gateway == null)
+        if (gateway == null) {
             throw new IllegalArgumentException("gateway is null.");
+        }
 
-        _gateway = gateway;
+        this.gateway = gateway;
     }
 
     @Override
     public boolean checkout(int cents) {
-        if (cents < 0)
+        if (cents < 0) {
             throw new IllegalArgumentException("cents must be >= 0.");
+        }
 
-        return _gateway.makePayment(formatEuro(cents));
+        return gateway.makePayment(formatEuro(cents));
     }
 
     private String formatEuro(int cents) {

@@ -23,8 +23,7 @@ prerequisites:
 > **Prerequisites:**
 > - Arrays (1D & 2D): indexing, iteration, basic algorithms (search, simple transforms)
 > - equals/hashCode basics: what identity means for objects
-> - Ordering basics (reading only): idea of natural order vs custom order (using Comparing and
->   Lambda functions)
+> - Ordering basics (reading only): idea of natural order vs custom order (using Comparing and Lambda functions)
 
 ---
 
@@ -59,13 +58,9 @@ A quick summary of what **you** should be able to do after this lesson:
 
 ## Why this matters
 
-Arrays are great when the size never changes. Real programs rarely stay that tidy.
-**`ArrayList<T>`** gives you a resizable, indexable list with familiar bracket-style thinking,
-but with safer APIs. It underpins many tasks we’ll do this semester: loading CSVs, sorting
-records, and building simple reports.
+Arrays are great when the size never changes. Real programs rarely stay that tidy. **`ArrayList<T>`** gives you a resizable, indexable list with familiar bracket-style thinking, but with safer APIs. It underpins many tasks we’ll do this semester: loading CSVs, sorting records, and building simple reports.
 
-> If you can reason about a 1D array, you can master `ArrayList`—just trade fixed length for
-> automatic resizing and a rich set of methods.
+> If you can reason about a 1D array, you can master `ArrayList`—just trade fixed length for automatic resizing and a rich set of methods.
 
 ---
 
@@ -144,8 +139,7 @@ list.clear();
 
 - **Index `for`**: when you need positions, random access, or to write back with `set(i,...)`.
 - **Enhanced `for`**: clean read-only traversal.
-- **`Iterator`**: when **removing** elements as you scan. Don’t remove from the list inside an
-  enhanced `for` to `ConcurrentModificationException`.
+- **`Iterator`**: when **removing** elements as you scan. Don’t remove from the list inside an enhanced `for` to `ConcurrentModificationException`.
 
 ---
 
@@ -163,8 +157,7 @@ long t2 = System.nanoTime();
 System.out.printf("append: %d µs, front-insert: %d µs\n", (t1-t0)/1000, (t2-t1)/1000);
 ```
 
-*Observation:* front inserts shift many elements. Prefer appending + sorting later if order is
-flexible.
+*Observation:* front inserts shift many elements. Prefer appending + sorting later if order is flexible.
 
 ### Step B — Filtering
 
@@ -188,8 +181,7 @@ for (String s : input) {
 }
 ```
 
-> Later we’ll prefer a `HashSet` for O(n) de-dup (see *Collections III*), but this version
-> shows list-only logic.
+> Later we’ll prefer a `HashSet` for O(n) de-dup (see *Collections III*), but this version shows list-only logic.
 
 ---
 
@@ -270,25 +262,14 @@ padding:0.9rem 1rem; margin:1rem 0;">
   </summary>
 
 **When a raw array still wins.**
-Three honest cases. **Fixed, known size** where the length is part of the meaning — a chess
-board, an RGB triple, a lookup table of 12 month lengths. **Primitives at scale**:
-`int[1_000_000]` stores raw ints, whereas `List<Integer>` boxes every element into an object,
-costing several times the memory and adding pointer-chasing. **APIs that demand one** —
-`main(String[] args)`, `String.split()`, `Files.readAllBytes()`.
+Three honest cases. **Fixed, known size** where the length is part of the meaning — a chess board, an RGB triple, a lookup table of 12 month lengths. **Primitives at scale**: `int[1_000_000]` stores raw ints, whereas `List<Integer>` boxes every element into an object, costing several times the memory and adding pointer-chasing. **APIs that demand one** — `main(String[] args)`, `String.split()`, `Files.readAllBytes()`.
 
-Outside those, `ArrayList` is the better default: it grows, it carries its own size, and it
-gives you `contains`, `remove`, `indexOf` rather than hand-written loops. Note that `ArrayList`
-*is* an array internally — you are choosing a managed wrapper, not a different data structure.
+Outside those, `ArrayList` is the better default: it grows, it carries its own size, and it gives you `contains`, `remove`, `indexOf` rather than hand-written loops. Note that `ArrayList` *is* an array internally — you are choosing a managed wrapper, not a different data structure.
 
 **Why removing during `for-each` is a problem.**
-The enhanced `for` uses an `Iterator` behind the scenes. That iterator records the list's
-`modCount` when it starts; calling `list.remove(...)` directly changes the list without the
-iterator's knowledge, and the next `next()` detects the mismatch and throws
-`ConcurrentModificationException`. The name misleads — no second thread is involved.
+The enhanced `for` uses an `Iterator` behind the scenes. That iterator records the list's `modCount` when it starts; calling `list.remove(...)` directly changes the list without the iterator's knowledge, and the next `next()` detects the mismatch and throws `ConcurrentModificationException`. The name misleads — no second thread is involved.
 
-It is worse than a plain crash, because it is only *usually* detected. Removing the
-second-to-last element can make the iterator's index checks pass and the loop exit silently one
-element early, so you get wrong output and no exception at all:
+It is worse than a plain crash, because it is only *usually* detected. Removing the second-to-last element can make the iterator's index checks pass and the loop exit silently one element early, so you get wrong output and no exception at all:
 
 ```java
 // Throws ConcurrentModificationException
@@ -303,20 +284,12 @@ while (it.hasNext()) { if (it.next().isBlank()) it.remove(); }
 ```
 
 **`contains` on a list vs a set.**
-`List.contains` is a linear scan, O(n) — it compares against elements one by one until it finds
-a match. `HashSet.contains` hashes the value and checks one bucket, O(1) on average. For a
-handful of elements the difference is irrelevant and the list is simpler; inside a loop over
-many items it is the difference between instant and unusable — 10 000 lookups over a 10
-000-element list is 100 million comparisons.
+`List.contains` is a linear scan, O(n) — it compares against elements one by one until it finds a match. `HashSet.contains` hashes the value and checks one bucket, O(1) on average. For a handful of elements the difference is irrelevant and the list is simpler; inside a loop over many items it is the difference between instant and unusable — 10 000 lookups over a 10 000-element list is 100 million comparisons.
 
-The trade-off is what you give up: a `Set` discards duplicates and (for `HashSet`) insertion
-order. If you need "unique, and I only ever ask *is it in there?*", use a `Set`. If you need
-order and duplicates, keep the `List` — and if you need *both* fast lookup and order, keep a
-`List` for iteration plus a `HashSet` for membership, or use `LinkedHashSet`.
+The trade-off is what you give up: a `Set` discards duplicates and (for `HashSet`) insertion order. If you need "unique, and I only ever ask *is it in there?*", use a `Set`. If you need order and duplicates, keep the `List` — and if you need *both* fast lookup and order, keep a `List` for iteration plus a `HashSet` for membership, or use `LinkedHashSet`.
 
 **Testing behaviour on empty lists.**
-Call each method with `new ArrayList<>()` and assert the *documented* result rather than
-whatever the code happens to do — that is the point of the test. A good set:
+Call each method with `new ArrayList<>()` and assert the *documented* result rather than whatever the code happens to do — that is the point of the test. A good set:
 
 ```java
 @Test void filterEvens_emptyList_returnsEmptyList() {
@@ -332,10 +305,7 @@ whatever the code happens to do — that is the point of the test. A good set:
 }
 ```
 
-Note the deliberate contrast: a *filter* over nothing sensibly returns an empty list, but a
-*maximum* of nothing has no sensible answer, so it should throw rather than invent one. Decide
-which case each method is, write it down, then test it. Also test the single-element list — it
-is where off-by-one bugs in index loops actually surface.
+Note the deliberate contrast: a *filter* over nothing sensibly returns an empty list, but a *maximum* of nothing has no sensible answer, so it should throw rather than invent one. Decide which case each method is, write it down, then test it. Also test the single-element list — it is where off-by-one bugs in index loops actually surface.
 
 </details>
 

@@ -54,13 +54,9 @@ prerequisites:
 
 ## Why this matters
 
-Almost every program that shows a user a list has to decide what order to show it in, and
-that order is rarely the order the data arrived. Sorting is where you first separate
-**what** you want (this before that) from **how** it is achieved (the sort algorithm).
+Almost every program that shows a user a list has to decide what order to show it in, and that order is rarely the order the data arrived. Sorting is where you first separate **what** you want (this before that) from **how** it is achieved (the sort algorithm).
 
-This is also your first encounter with **behaviour as a value**: a comparator is a rule you
-can name, store in a variable, pass to a method and swap at runtime. That idea returns in
-full with functional interfaces and streams, so it is worth getting comfortable here.
+This is also your first encounter with **behaviour as a value**: a comparator is a rule you can name, store in a variable, pass to a method and swap at runtime. That idea returns in full with functional interfaces and streams, so it is worth getting comfortable here.
 
 ---
 
@@ -72,14 +68,9 @@ full with functional interfaces and streams, so it is worth getting comfortable 
 | [t01 Arrays](../t01_arrays/t01_arrays_notes.md) | `Arrays.sort` orders an array; the same ordering rules apply to lists |
 | [t02 Recursion](../t02_recursion/t02_recursion_notes.md) | The library's sort is a recursive merge sort — you supply the comparison, it supplies the algorithm |
 
-The new idea is that **the comparison itself becomes a value** you can name, store and pass
-around. That is your first taste of behaviour-as-data, which returns in full in [t16 Functional
-Interfaces](../t16_functional_interfaces/t16_functional_interfaces_notes.md).
+The new idea is that **the comparison itself becomes a value** you can name, store and pass around. That is your first taste of behaviour-as-data, which returns in full in [t16 Functional Interfaces](../t16_functional_interfaces/t16_functional_interfaces_notes.md).
 
-Where this goes next: `compareTo` must stay **consistent with `equals`**
-([t04](../t04_equality_hashing/t04_equality_hashing_notes.md)), because `TreeSet` and `TreeMap`
-([t07](../t07_collections_3_set_map/t07_collections_3_set_map_notes.md)) use it — not `equals`
-— to decide what counts as a duplicate.
+Where this goes next: `compareTo` must stay **consistent with `equals`** ([t04](../t04_equality_hashing/t04_equality_hashing_notes.md)), because `TreeSet` and `TreeMap` ([t07](../t07_collections_3_set_map/t07_collections_3_set_map_notes.md)) use it — not `equals` — to decide what counts as a duplicate.
 
 ---
 
@@ -235,8 +226,7 @@ class DemoComparatorC {
 
 ## Comparator - Using factories
 
-> Goal: sort an `ArrayList<T>` by one field, then break ties by another, using tiny, readable
-> helpers from `Comparator`.
+> Goal: sort an `ArrayList<T>` by one field, then break ties by another, using tiny, readable helpers from `Comparator`.
 
 **Key API (java.util.Comparator):**
 - `Comparator.comparing(keyExtractor)`
@@ -308,9 +298,7 @@ Comparator<Product> byNameNullSafe =
         Comparator.nullsLast(String::compareToIgnoreCase));
 ```
 
-**Why this matters here:** you already know how to store things in an `ArrayList`; now you can
-produce ordered views of that list **without** changing the class itself. The code reads like
-English and is easy to extend with more tie-breakers.
+**Why this matters here:** you already know how to store things in an `ArrayList`; now you can produce ordered views of that list **without** changing the class itself. The code reads like English and is easy to extend with more tie-breakers.
 
 ---
 
@@ -330,18 +318,15 @@ String::length                      // method reference (equivalent to s -> s.le
 Product::name                       // instance method reference as key extractor
 ```
 
-**When to use here:** `Comparator.comparing(...)` needs a *key extractor* function to pull the
-field you want to sort by; lambdas (or method references) are the neatest way to provide it.
+**When to use here:** `Comparator.comparing(...)` needs a *key extractor* function to pull the field you want to sort by; lambdas (or method references) are the neatest way to provide it.
 
-> Tip: Prefer the primitive versions `comparingInt/Long/Double` when your key is numeric to
-> avoids boxing and is a touch faster.
+> Tip: Prefer the primitive versions `comparingInt/Long/Double` when your key is numeric to avoids boxing and is a touch faster.
 
 ---
 
 ### Quick practice
 
-1) **Backlog tasks**: sort by priority then (int), tie-break by due date then (long epoch),
-   tie-break by title A?Z.
+1) **Backlog tasks**: sort by priority then (int), tie-break by due date then (long epoch), tie-break by title A?Z.
 2) **Game scores**: value ?, then player name A?Z, and treat `null` names as last.
 
 Starter:
@@ -366,8 +351,7 @@ Comparator<Task> byPriThenDueThenTitle =
 
 ## Reflective questions
 
-- For one of your project classes, write a named Comparator class. What is the primary field
-  and at least one tie-breaker?
+- For one of your project classes, write a named Comparator class. What is the primary field and at least one tie-breaker?
 - What class in a project (if any) should define a natural order using Comparable?
 
 <details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
@@ -376,16 +360,10 @@ padding:0.9rem 1rem; margin:1rem 0;">
     Check your thinking
   </summary>
 
-These are open questions about *your* code, so there is no single right answer — but a good one
-has the following shape.
+These are open questions about *your* code, so there is no single right answer — but a good one has the following shape.
 
 **Writing a named Comparator.**
-Name the class after the ordering, not the type: `TaskByDueDateThenPriority`, not
-`TaskComparator2`. Pick a **primary field** that is the ordering users would expect by default
-(due date for tasks, score for leaderboard entries), then at least one **tie-breaker** that is
-*stable and unique* — an ID is ideal, because it guarantees a deterministic order when
-everything else is equal. Without a unique final tie-break, two runs over the same data can
-print rows in different orders and your tests will flicker.
+Name the class after the ordering, not the type: `TaskByDueDateThenPriority`, not `TaskComparator2`. Pick a **primary field** that is the ordering users would expect by default (due date for tasks, score for leaderboard entries), then at least one **tie-breaker** that is *stable and unique* — an ID is ideal, because it guarantees a deterministic order when everything else is equal. Without a unique final tie-break, two runs over the same data can print rows in different orders and your tests will flicker.
 
 A good answer also states the direction explicitly, since reversing is where most marks are lost:
 
@@ -397,24 +375,11 @@ Comparator<Task> byDueThenPriority =
 ```
 
 **Which class should implement `Comparable`.**
-Use `Comparable` only when there is *one* ordering that is genuinely the natural, obvious
-meaning of "sorted" for that type, and it will not change. Good candidates: `Version`, `Money`,
-`Date`, an exam `Grade` — orderings intrinsic to the value itself. Poor candidates: `Task`,
-`Player`, `Product`, because those have several equally reasonable orderings (by name, by
-price, by date added) and baking one into the class privileges it arbitrarily and makes it
-awkward to change later.
+Use `Comparable` only when there is *one* ordering that is genuinely the natural, obvious meaning of "sorted" for that type, and it will not change. Good candidates: `Version`, `Money`, `Date`, an exam `Grade` — orderings intrinsic to the value itself. Poor candidates: `Task`, `Player`, `Product`, because those have several equally reasonable orderings (by name, by price, by date added) and baking one into the class privileges it arbitrarily and makes it awkward to change later.
 
-The deciding question is: *would two reasonable developers agree on what "sorted" means here
-without being told?* If yes, `Comparable`. If no, supply `Comparator`s instead. It is also
-perfectly normal for a class to have neither, or to have `Comparable` **and** several
-`Comparator`s for alternative views.
+The deciding question is: *would two reasonable developers agree on what "sorted" means here without being told?* If yes, `Comparable`. If no, supply `Comparator`s instead. It is also perfectly normal for a class to have neither, or to have `Comparable` **and** several `Comparator`s for alternative views.
 
-One rule worth remembering: if you implement `Comparable`, keep `compareTo` **consistent with
-`equals`** — `a.compareTo(b) == 0` should mean `a.equals(b)`. `TreeSet` and `TreeMap` use
-`compareTo`, not `equals`, to decide duplicates, so an inconsistent implementation silently
-swallows elements. That link is picked up in [t04 Equality &
-Hashing](../t04_equality_hashing/t04_equality_hashing_notes.md) and [t07 Collections
-III](../t07_collections_3_set_map/t07_collections_3_set_map_notes.md).
+One rule worth remembering: if you implement `Comparable`, keep `compareTo` **consistent with `equals`** — `a.compareTo(b) == 0` should mean `a.equals(b)`. `TreeSet` and `TreeMap` use `compareTo`, not `equals`, to decide duplicates, so an inconsistent implementation silently swallows elements. That link is picked up in [t04 Equality & Hashing](../t04_equality_hashing/t04_equality_hashing_notes.md) and [t07 Collections III](../t07_collections_3_set_map/t07_collections_3_set_map_notes.md).
 
 </details>
 

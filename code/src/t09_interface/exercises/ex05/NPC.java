@@ -1,6 +1,6 @@
 package t09_interface.exercises.ex05;
 
-public class NPC implements Named, IGreetPlayer {
+public class NPC implements Named {
 
     private final String name;
 
@@ -11,10 +11,5 @@ public class NPC implements Named, IGreetPlayer {
     @Override
     public String getName() {
         return name;
-    }
-
-    @Override
-    public void greet(String name) {
-        System.out.println("Hi " + name + ", I'm " + this.name + "!");
     }
 }

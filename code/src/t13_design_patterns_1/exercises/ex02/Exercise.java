@@ -58,15 +58,15 @@ class BlackFridayDiscount implements PriceStrategy
 
 class Checkout
 {
-    private PriceStrategy _pricing;
+    private final PriceStrategy pricing;
 
     public Checkout(PriceStrategy pricing)
     {
-        _pricing = pricing;
+        this.pricing = pricing;
     }
 
     public double price(double basePrice)
     {
-        return _pricing.finalPrice(basePrice);
+        return pricing.finalPrice(basePrice);
     }
 }

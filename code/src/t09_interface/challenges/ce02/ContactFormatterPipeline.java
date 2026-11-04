@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class ContactFormatterPipeline {
 
-    private List<IFormatter> formatters;
+    private final List<IFormatter> formatters;
 
     public ContactFormatterPipeline(List<IFormatter> formatters) {
 

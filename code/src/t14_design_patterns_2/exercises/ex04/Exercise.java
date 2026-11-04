@@ -29,38 +29,42 @@ class ConsoleDisplayListener implements TemperatureListener {
 }
 
 class OverheatAlarmListener implements TemperatureListener {
-    private double _threshold;
+    private final double threshold;
 
     public OverheatAlarmListener(double threshold) {
-        _threshold = threshold;
+        this.threshold = threshold;
     }
 
     @Override
     public void onTemperatureChanged(double celsius) {
-        if (celsius >= _threshold)
+        if (celsius >= threshold) {
             System.out.println("ALARM: " + celsius + "C");
+        }
     }
 }
 
 class TemperatureSensor {
-    private List<TemperatureListener> _listeners = new ArrayList<>();
+    private final List<TemperatureListener> listeners = new ArrayList<>();
 
     public void addListener(TemperatureListener l) {
-        if (l == null)
+        if (l == null) {
             throw new IllegalArgumentException("listener is null.");
+        }
 
-        _listeners.add(l);
+        listeners.add(l);
     }
 
     public boolean removeListener(TemperatureListener l) {
-        if (l == null)
+        if (l == null) {
             throw new IllegalArgumentException("listener is null.");
+        }
 
-        return _listeners.remove(l);
+        return listeners.remove(l);
     }
 
     public void setTemperature(double celsius) {
-        for (TemperatureListener l : _listeners)
+        for (TemperatureListener l : listeners) {
             l.onTemperatureChanged(celsius);
+        }
     }
 }

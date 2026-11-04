@@ -2,8 +2,7 @@
 
 ## Scenario
 
-A tollbooth operator saw a suspicious car passing through the toll booth moments after a crime
-in the area. Strangely, they remember:
+A tollbooth operator saw a suspicious car passing through the toll booth moments after a crime in the area. Strangely, they remember:
 
 1. The **county code** contained an **“L”**.
 2. The **year digits (YYY)** summed to **10**.
@@ -55,8 +54,7 @@ Example: 181 LH 626
 
 ## Utility: Reading Plates from a File
 
-Sometimes you may want to load license plate data from a text file rather than generating it
-randomly. The file will contain comma-separated plate entries.
+Sometimes you may want to load license plate data from a text file rather than generating it randomly. The file will contain comma-separated plate entries.
 
 Here is a helper method that reads the file and returns an `ArrayList<String>`:
 

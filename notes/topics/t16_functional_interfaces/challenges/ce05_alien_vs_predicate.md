@@ -14,8 +14,7 @@ prerequisites: ["t15_functional_interfaces.md", "t13_design_patterns_2_exercises
 
 ## Scenario
 
-The commercial towing ship **NOSTROMO-ISH** is returning home when **MOTHER** starts receiving
-incident reports from a third-party “sensor aggregation service” (in JSON format).
+The commercial towing ship **NOSTROMO-ISH** is returning home when **MOTHER** starts receiving incident reports from a third-party “sensor aggregation service” (in JSON format).
 
 Some incidents are harmless ship noise. Some are crew error. Some... look *alien*.
 
@@ -80,8 +79,7 @@ You must use:
 
 ### Comparator factory (required)
 
-Create a small factory that returns a `Comparator` based on a mode string (or enum).
-It must support at least **3** prioritisation modes, for example:
+Create a small factory that returns a `Comparator` based on a mode string (or enum). It must support at least **3** prioritisation modes, for example:
 
 - `"threat_desc"`
 - `"confidence_desc"`
@@ -94,13 +92,10 @@ You must demonstrate changing the mode changes the order of incidents shown in t
 
 ### Design pattern requirement (pick ONE)
 
-Your solution must clearly apply **one** design pattern from Design Patterns I or II notes.
-Choose **Strategy** or **Command**, but do **not** use both.
+Your solution must clearly apply **one** design pattern from Design Patterns I or II notes. Choose **Strategy** or **Command**, but do **not** use both.
 
-- **If you choose Strategy:** it must switch between **at least two** different triage policies
-  (e.g., “Quarantine Mode” vs “Stealth Mode”) without editing the core triage engine.
-- **If you choose Command:** it must represent responses as objects that can be **queued** and
-  executed without putting special-case logic in your engine.
+- **If you choose Strategy:** it must switch between **at least two** different triage policies (e.g., “Quarantine Mode” vs “Stealth Mode”) without editing the core triage engine.
+- **If you choose Command:** it must represent responses as objects that can be **queued** and executed without putting special-case logic in your engine.
 
 Write a short comment in code explaining where the pattern lives and why.
 
@@ -152,9 +147,7 @@ Your printed output must include:
 
 ## Utility: Loading incidents from JSON (starter helper)
 
-You may use a helper class to load incidents from a remote URL that returns JSON.
-If you don’t want networking in your submission, provide a fallback that loads from a local
-JSON string/file.
+You may use a helper class to load incidents from a remote URL that returns JSON. If you don’t want networking in your submission, provide a fallback that loads from a local JSON string/file.
 
 **You must not rely on perfect input.** Validate and skip bad incidents.
 
@@ -176,8 +169,7 @@ Suggested behaviour:
 
 ## Real-World Parallels: How this maps to incident triage
 
-This challenge is playful, but the architecture mirrors real incident triage systems
-(monitoring + alerting + response).
+This challenge is playful, but the architecture mirrors real incident triage systems (monitoring + alerting + response).
 
 | In-story concept | Real-world analogue | What the concept represents |
 | :- | :- | :- |
@@ -206,8 +198,7 @@ This challenge is playful, but the architecture mirrors real incident triage sys
 
 ## Appendix B: Gson helper for reading JSON from a file
 
-This appendix shows one simple way to load a JSON **array of objects** from disk using **Gson**.
-The demo uses a `Book` class so you can test the helper without touching your Alien challenge code.
+This appendix shows one simple way to load a JSON **array of objects** from disk using **Gson**. The demo uses a `Book` class so you can test the helper without touching your Alien challenge code.
 
 ### Setup (Maven / pom.xml)
 
@@ -265,8 +256,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GsonFileReader<T> {
-    private final Gson _gson;
-    private final Class<T> _elementType;
+    private final Gson gson;
+    private final Class<T> elementType;
 
     /// <summary>
     /// Creates a JSON file reader that can parse a JSON array into a List of <typeparamref name="T"/>.
@@ -276,8 +267,8 @@ public class GsonFileReader<T> {
         if (elementType == null)
             throw new IllegalArgumentException("elementType is null.");
 
-        _elementType = elementType;
-        _gson = new Gson();
+        this.elementType = elementType;
+        gson = new Gson();
     }
 
     /// <summary>
@@ -298,8 +289,8 @@ public class GsonFileReader<T> {
             if (json == null || json.isBlank())
                 return new ArrayList<>();
 
-            Type listType = TypeToken.getParameterized(List.class, _elementType).getType();
-            List<T> data = _gson.fromJson(json, listType);
+            Type listType = TypeToken.getParameterized(List.class, elementType).getType();
+            List<T> data = gson.fromJson(json, listType);
 
             if (data == null)
                 return new ArrayList<>();
@@ -334,19 +325,19 @@ public class DemoBooksFromFile {
 }
 
 class Book {
-    private String _title;
-    private String _author;
-    private int _year;
+    private String title;
+    private String author;
+    private int year;
 
     public Book() { }
 
-    public String getTitle() { return _title; }
-    public String getAuthor() { return _author; }
-    public int getYear() { return _year; }
+    public String getTitle() { return title; }
+    public String getAuthor() { return author; }
+    public int getYear() { return year; }
 
     @Override
     public String toString() {
-        return _title + " (" + _year + "), by " + _author;
+        return title + " (" + year + "), by " + author;
     }
 }
 ```

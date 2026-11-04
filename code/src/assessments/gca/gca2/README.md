@@ -1,9 +1,6 @@
 # GCA2 — N-Tier Reference System
 
-A complete working example of the N-tier architecture required for GCA2.
-The domain is a simple **Task** management system with one database table.
-Use it as a reference for structuring your own project, understanding how
-the layers connect, and writing unit tests for each tier.
+A complete working example of the N-tier architecture required for GCA2. The domain is a simple **Task** management system with one database table. Use it as a reference for structuring your own project, understanding how the layers connect, and writing unit tests for each tier.
 
 ---
 
@@ -23,8 +20,7 @@ the layers connect, and writing unit tests for each tier.
 
 ## Setup
 
-1. Run `sql/mysqlSetup.sql` against a local MySQL instance to create
-   `gca2_support_db`, the `gca2_user` account, and the `tasks` table.
+1. Run `sql/mysqlSetup.sql` against a local MySQL instance to create `gca2_support_db`, the `gca2_user` account, and the `tasks` table.
 2. If you change the password, update the `DB_PASS` constant in `TaskServer`.
 
 ---
@@ -150,4 +146,6 @@ All responses follow the same envelope:
 | `FIND_BY_ID` | `taskId` (int) | Matching `Task`, or `ERROR` if not found |
 | `LIST` | _(none)_ | `List<Task>` — empty array if table is empty |
 | `DELETE_BY_ID` | `taskId` (int) | `true`, or `ERROR` if not found |
-| `DISCONNECT` | _(none)_ | _(no response — server closes socket)_ |
+| `DISCONNECT` | _(none)_ | `null`, with the message `Goodbye`; the server then closes the socket |
+
+Every request line gets exactly one reply. A line that is not valid JSON gets an `ERROR` reply and the session continues.

@@ -1,0 +1,104 @@
+// ============================================================
+// COMP C8Z03 - Year 2 OOP: Self-Assessment - t24 Pathfinding
+// ============================================================
+// Format : Moodle GIFT
+// Import : Moodle > Question bank > Import > GIFT format
+// ============================================================
+
+$CATEGORY: $module$/t24_pathfinding
+
+::t24_Q1:: What does breadth-first search guarantee about the path it returns?
+{
+  = It has the fewest steps, because cells are expanded in order of their distance in steps from the start.
+    #Correct. A FIFO queue explores in rings, so the first time it reaches the goal it has used the fewest moves. It ignores what those moves cost.
+  ~ It has the lowest total cost, whatever each cell costs to enter.
+    #Incorrect. That is true only when every move costs the same. On a map with rough ground, the fewest steps can be far from the cheapest.
+  ~ It expands fewer cells than any other search.
+    #Incorrect. It has no sense of direction, so it often expands more cells than A*.
+  ~ It always finds a path, even when the goal is sealed off.
+    #Incorrect. If no path exists, the queue empties and the search reports failure.
+}
+
+::t24_Q2:: On the marsh map, breadth-first search returns 10 steps costing 46, and Dijkstra returns 14 steps costing 14. What does this show?
+{
+  = A path with more steps can be cheaper, and each algorithm found the best path by its own measure.
+    #Correct. Breadth-first search minimises steps and Dijkstra minimises cost. Neither result is a bug.
+  ~ Breadth-first search has a bug, because it should have found the cost of 14.
+    #Incorrect. It was never trying to minimise cost. It correctly found the path with the fewest steps.
+  ~ Dijkstra has a bug, because a path of 14 steps cannot beat a path of 10 steps.
+    #Incorrect. Steps and cost are different measures. Rough ground makes some steps cost far more than 1.
+  ~ The two results must be equal on any map, so the map is invalid.
+    #Incorrect. They are equal only when every cell costs the same to enter.
+}
+
+::t24_Q3:: Java's `PriorityQueue` has no operation to lower the priority of an element it already holds. How does Dijkstra's algorithm cope when it finds a cheaper route to a queued cell?
+{
+  = It adds the cell again with the better priority, and skips the old copy when it comes off the queue.
+    #Correct. The old copy is stale. The check at the top of the loop, for whether the cell has already been expanded, throws it away.
+  ~ It changes the cost stored in the queued entry directly.
+    #Incorrect. Changing an element's priority while it is in the queue breaks the heap's ordering.
+  ~ It ignores the cheaper route, because the first route found is always the best.
+    #Incorrect. That is exactly what Dijkstra must not do. A cell first reached by an expensive route may later be reached by a cheap one.
+  ~ It restarts the whole search from the start cell.
+    #Incorrect. That would work but waste a great deal of effort. Adding a second entry is enough.
+}
+
+::t24_Q4:: [Spot the bug] A Dijkstra search marks each cell as seen when it adds the cell to the queue, and never adds a seen cell again. It sometimes returns a path that is not the cheapest. Why?
+{
+  = A cell's first route is locked in, so a cheaper route found later is thrown away.
+    #Correct. Marking on add is safe for breadth-first search, where the first route has the fewest steps. It is not safe when costs differ. Dijkstra must mark a cell when it is expanded.
+  ~ The priority queue is ordered in the wrong direction.
+    #Incorrect. That would give far worse results than an occasional wrong path, and it is not what this code does.
+  ~ `HashSet` cannot store grid cells.
+    #Incorrect. It can, provided the cell type has correct `equals` and `hashCode`. A record gets both.
+  ~ Marking a cell as seen always makes a search incorrect.
+    #Incorrect. Every search needs to track visited cells. The problem here is when the marking happens.
+}
+
+::t24_Q5:: In A*, what does it mean for a heuristic to be admissible?
+{
+  = It never overestimates the true remaining cost to the goal.
+    #Correct. Manhattan distance is admissible on this grid, because each move changes one row or column and costs at least 1.
+  ~ It always returns exactly the true remaining cost.
+    #Incorrect. That would be a perfect heuristic. Admissible only requires that it is not too high.
+  ~ It never underestimates the true remaining cost.
+    #Incorrect. That is the wrong way round. Underestimating is safe, and overestimating is what loses the guarantee.
+  ~ It returns a value within a fixed percentage of the true cost.
+    #Incorrect. No such tolerance is involved. The rule is simply that the estimate must not exceed the true cost.
+}
+
+::t24_Q6:: [Predict the output] On the same map, A* runs with `Heuristic.zero()`, and Dijkstra runs too. How do their results compare?
+{
+  = The same path cost and exactly the same number of expanded cells.
+    #Correct. With a zero heuristic, g + h is just g, which is how Dijkstra orders its queue. In this module, `DijkstraPathfinder` is A* with a zero heuristic.
+  ~ The same path cost, but A* expands far fewer cells.
+    #Incorrect. A* saves work only when the heuristic gives it a sense of direction. Zero gives it none.
+  ~ A* finds a cheaper path.
+    #Incorrect. Dijkstra already finds the cheapest path, so nothing can beat it.
+  ~ A* fails, because a heuristic of zero is not allowed.
+    #Incorrect. Zero never overestimates, so it is admissible.
+}
+
+::t24_Q7:: A* runs on the marsh map with the Manhattan heuristic multiplied by 10, instead of by 1. What happens?
+{
+  = It expands fewer cells, but returns a more expensive path.
+    #Correct. Overestimating makes the search rush towards the goal. On the marsh, the cost jumps from 14 to 46 while the expansions fall from 16 to 11.
+  ~ It expands fewer cells and still returns the cheapest path.
+    #Incorrect. That is the tempting belief. An inadmissible heuristic loses the guarantee of the cheapest path.
+  ~ It expands more cells and returns the same path.
+    #Incorrect. A larger estimate makes the search greedier, so it explores less, not more.
+  ~ It never terminates.
+    #Incorrect. The search still ends. It just stops looking for better routes too early.
+}
+
+::t24_Q8:: Why do the searches report through `SearchListener` instead of calling `System.out.println`?
+{
+  = A test can check a recorded list of cells, and a renderer can draw the same events, with no change to the search.
+    #Correct. This is the Observer pattern. Rewording a caption can no longer break a test of the algorithm.
+  ~ Calling `println` from inside an algorithm does not compile.
+    #Incorrect. It compiles. The problem is that it ties the algorithm to one way of showing its progress.
+  ~ A listener makes the search find a cheaper path.
+    #Incorrect. A listener only watches. One that changes the outcome is not an observer.
+  ~ Interfaces run faster than `System.out`.
+    #Incorrect. Speed is not the reason. The reason is keeping the search separate from what is done with its progress.
+}

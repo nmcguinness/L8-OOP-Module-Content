@@ -20,22 +20,18 @@ A shared warehouse supports two internal teams:
 - **Software Development** stores real-world stock items (electronics, furniture, etc.).
 - **Games Development** stores digital stock items (collectibles, skins, DLC bundles, etc.).
 
-Last semester, the warehouse system was built in a hurry and uses **raw types** and “anything
-goes” lists. It *works*... right up until someone ships the wrong type of item to the wrong
-place and the system falls over at runtime.
+Last semester, the warehouse system was built in a hurry and uses **raw types** and “anything goes” lists. It *works*... right up until someone ships the wrong type of item to the wrong place and the system falls over at runtime.
 
 Your job is to rebuild the core pieces of the warehouse so that:
 
 - you get **compiler errors** instead of runtime surprises, and
-- shipping items between lists is done **safely**, using the **PECS** rule (*Producer Extends,
-  Consumer Super*).
+- shipping items between lists is done **safely**, using the **PECS** rule (*Producer Extends, Consumer Super*).
 
 ---
 
 ## System overview
 
-This challenge builds a small “type-safe warehouse” where **items** live in **inventories**,
-and **utilities** operate on those inventories.
+This challenge builds a small “type-safe warehouse” where **items** live in **inventories**, and **utilities** operate on those inventories.
 
 ### Core entities
 
@@ -56,14 +52,10 @@ and **utilities** operate on those inventories.
 
 ### How these pieces interact
 
-- `WarehouseApp` creates `Item` objects (e.g., `Electronics`) and places them into inventories
-  (`List<Electronics>`, `List<Item>`, etc.).
-- `InventoryUtils.calculateTotalValue(...)` treats an inventory as a **producer** of `Item`
-  values and reads prices safely.
-- `InventoryUtils.shipItems(...)` treats the source inventory as a **producer** (`? extends
-  Item`) and the destination as a **consumer** (`? super Item`) to move items without casts.
-- `StorageBox<T>` is used early to show how generics prevent “wrong type, wrong place” errors
-  at compile-time.
+- `WarehouseApp` creates `Item` objects (e.g., `Electronics`) and places them into inventories (`List<Electronics>`, `List<Item>`, etc.).
+- `InventoryUtils.calculateTotalValue(...)` treats an inventory as a **producer** of `Item` values and reads prices safely.
+- `InventoryUtils.shipItems(...)` treats the source inventory as a **producer** (`? extends Item`) and the destination as a **consumer** (`? super Item`) to move items without casts.
+- `StorageBox<T>` is used early to show how generics prevent “wrong type, wrong place” errors at compile-time.
 
 ### Typical use case
 
@@ -86,8 +78,7 @@ A staff member (or automated tool) performs three common actions:
 
 ## Manifest format (for demo output)
 
-When printing an inventory or shipment, use a consistent single-line “manifest” format so your
-output is easy to check.
+When printing an inventory or shipment, use a consistent single-line “manifest” format so your output is easy to check.
 
 Each line must follow this pattern:
 
@@ -225,8 +216,7 @@ public static void shipItems(List<? extends Item> source, List<? super Item> des
 
 - **Producer Extends**: `List<? extends Item>` is great for reading (`get`) items safely as `Item`.
 - **Consumer Super**: `List<? super Item>` is great for adding (`add`) `Item` values safely.
-- If you see yourself writing casts like `(Item) something`, stop and ask: *why am I fighting
-  the type system?*
+- If you see yourself writing casts like `(Item) something`, stop and ask: *why am I fighting the type system?*
 
 ---
 
@@ -238,8 +228,7 @@ Pick one or two:
    - Add `List<GameCollectible>` and ship into `List<Item>`.
 
 2. **Add discounts**
-   - Add `applyDiscount(List<? extends Item> items, double percent)` that returns the
-     discounted total without mutating items.
+   - Add `applyDiscount(List<? extends Item> items, double percent)` that returns the discounted total without mutating items.
 
 3. **JUnit tests**
    - Tests for:

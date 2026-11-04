@@ -12,11 +12,9 @@ tags: [java, collections, arraylist, iteration, exercises, year2, comp-c8z03]
 ---
 # Collections I: ArrayList essentials — Exercises
 
-> These exercises build directly on **Collections I: ArrayList essentials**. Work from top to
-> bottom; each task is small and testable.
+> These exercises build directly on **Collections I: ArrayList essentials**. Work from top to bottom; each task is small and testable.
 >
-> Use **Java 17**, no streams/lambdas. Prefer tiny helper methods and quick checks printed to
-> console.
+> Use **Java 17**, no streams/lambdas. Prefer tiny helper methods and quick checks printed to console.
 
 ## How to run
 
@@ -45,8 +43,7 @@ public class Exercise {
 
 **Objective:** Practice core `ArrayList<T>` CRUD.
 
-**Task:** Create an `ArrayList<String>` of names. Append three names, insert one at index 0,
-replace the last, then remove by value.
+**Task:** Create an `ArrayList<String>` of names. Append three names, insert one at index 0, replace the last, then remove by value.
 
 **Steps:**
 1) Start with `ArrayList<String> names = new ArrayList<>();`
@@ -90,8 +87,7 @@ System.out.println(b.length == 3 && b[0]==1 && b[2]==3);
 
 **Objective:** Remove while iterating without `ConcurrentModificationException`.
 
-**Task:** Given an `ArrayList<Integer>`, remove all even numbers **in place** using
-`Iterator.remove()`.
+**Task:** Given an `ArrayList<Integer>`, remove all even numbers **in place** using `Iterator.remove()`.
 
 **Skeleton:**
 
@@ -121,8 +117,7 @@ System.out.println(xs.toString().equals("[1, 3, 5]"));
 static ArrayList<String> uniqueOrderPreserving(ArrayList<String> input);
 ```
 
-Keep the **first** time each string appears; drop later duplicates. (We’ll use sets later in
-*Collections III*—here, do it list-only.)
+Keep the **first** time each string appears; drop later duplicates. (We’ll use sets later in *Collections III*—here, do it list-only.)
 
 **Hint:** Create an empty `ArrayList<String> out` and scan `input` with `contains`.
 
@@ -211,8 +206,7 @@ System.out.println(odds(xs).toString().equals("[1, 3, 5]"));
 
 **Objective:** Classic two-pointer merge, returning a new sorted list.
 
-**Task:** Given two **individually sorted** `ArrayList<Integer>` (ascending), produce a single
-sorted `ArrayList<Integer>`.
+**Task:** Given two **individually sorted** `ArrayList<Integer>` (ascending), produce a single sorted `ArrayList<Integer>`.
 
 **Signature:**
 
@@ -234,9 +228,7 @@ System.out.println(mergeSorted(a,b).toString().equals("[1, 2, 3, 4, 5, 6]"));
 
 **Objective:** Organise items into buckets without a `Map` (yet).
 
-**Task:** Given `ArrayList<String> names`, group by **first letter** into
-`ArrayList<ArrayList<String>>`, where bucket index 0 = ‘A’, 1 = ‘B’, ... 25 = ‘Z’. Ignore
-non-letters.
+**Task:** Given `ArrayList<String> names`, group by **first letter** into `ArrayList<ArrayList<String>>`, where bucket index 0 = ‘A’, 1 = ‘B’, ... 25 = ‘Z’. Ignore non-letters.
 
 **Hints:**
 - Pre-create 26 empty buckets.

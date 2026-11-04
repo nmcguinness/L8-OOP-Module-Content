@@ -21,13 +21,13 @@ import java.util.Optional;
 public class TaskDAO implements GenericDAOInterface<Task, Integer> {
 
     // === Fields ===
-    private DatabaseConnection _dbConn;
+    private final DatabaseConnection dbConn;
 
     // === Constructors ===
 
     // Creates: a TaskDAO that uses the given DatabaseConnection for all DB operations
     public TaskDAO(DatabaseConnection dbConn) {
-        _dbConn = dbConn;
+        this.dbConn = dbConn;
     }
 
     // === Public API ===
@@ -36,7 +36,7 @@ public class TaskDAO implements GenericDAOInterface<Task, Integer> {
     @Override
     public Task insert(Task task) throws Exception {
         String sql = "INSERT INTO tasks (title, description, completed) VALUES (?, ?, ?)";
-        Connection c = _dbConn.open();
+        Connection c = dbConn.open();
         try (PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1,  task.getTitle());
             ps.setString(2,  task.getDescription());
@@ -50,7 +50,7 @@ public class TaskDAO implements GenericDAOInterface<Task, Integer> {
             return task;
         }
         finally {
-            _dbConn.close(c);
+            dbConn.close(c);
         }
     }
 
@@ -61,7 +61,7 @@ public class TaskDAO implements GenericDAOInterface<Task, Integer> {
             return Optional.empty();
 
         String sql = "SELECT task_id, title, description, completed FROM tasks WHERE task_id = ?";
-        Connection c = _dbConn.open();
+        Connection c = dbConn.open();
         try (PreparedStatement ps = c.prepareStatement(sql)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
@@ -71,7 +71,7 @@ public class TaskDAO implements GenericDAOInterface<Task, Integer> {
             return Optional.empty();
         }
         finally {
-            _dbConn.close(c);
+            dbConn.close(c);
         }
     }
 
@@ -80,7 +80,7 @@ public class TaskDAO implements GenericDAOInterface<Task, Integer> {
     public List<Task> findAll() throws Exception {
         String sql = "SELECT task_id, title, description, completed FROM tasks";
         List<Task> results = new ArrayList<>();
-        Connection c = _dbConn.open();
+        Connection c = dbConn.open();
         try (PreparedStatement ps = c.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next())
@@ -88,7 +88,7 @@ public class TaskDAO implements GenericDAOInterface<Task, Integer> {
             return results;
         }
         finally {
-            _dbConn.close(c);
+            dbConn.close(c);
         }
     }
 
@@ -99,13 +99,13 @@ public class TaskDAO implements GenericDAOInterface<Task, Integer> {
             return false;
 
         String sql = "DELETE FROM tasks WHERE task_id = ?";
-        Connection c = _dbConn.open();
+        Connection c = dbConn.open();
         try (PreparedStatement ps = c.prepareStatement(sql)) {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
         }
         finally {
-            _dbConn.close(c);
+            dbConn.close(c);
         }
     }
 

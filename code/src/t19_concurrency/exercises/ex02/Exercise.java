@@ -4,7 +4,7 @@ import java.util.concurrent.*;
 
 public class Exercise {
 
-    public static void run() throws Exception {
+    public static void run() throws InterruptedException {
         Dispatcher dispatcher = new Dispatcher();
 
         dispatcher.dispatch(new DeliveryTask("ORD-001", "Cork",     2));
@@ -20,30 +20,30 @@ public class Exercise {
 
 class Dispatcher {
 
-    private ExecutorService _pool;
+    private final ExecutorService pool;
 
     public Dispatcher() {
-        _pool = Executors.newCachedThreadPool();
+        pool = Executors.newCachedThreadPool();
     }
 
     public void dispatch(DeliveryTask task) {
         if (task == null)
             throw new IllegalArgumentException("task is required");
-        _pool.submit(task);
+        pool.submit(task);
     }
 
     public void shutdown() throws InterruptedException {
-        _pool.shutdown();
-        if (!_pool.awaitTermination(10, TimeUnit.SECONDS))
-            _pool.shutdownNow();
+        pool.shutdown();
+        if (!pool.awaitTermination(10, TimeUnit.SECONDS))
+            pool.shutdownNow();
     }
 }
 
 class DeliveryTask implements Runnable {
 
-    private String _orderId;
-    private String _destination;
-    private int _steps;
+    private final String orderId;
+    private final String destination;
+    private final int steps;
 
     public DeliveryTask(String orderId, String destination, int steps) {
         if (orderId == null || orderId.isBlank())
@@ -53,18 +53,18 @@ class DeliveryTask implements Runnable {
         if (steps < 1)
             throw new IllegalArgumentException("steps must be >= 1");
 
-        _orderId     = orderId;
-        _destination = destination;
-        _steps       = steps;
+        this.orderId     = orderId;
+        this.destination = destination;
+        this.steps       = steps;
     }
 
     @Override
     public void run() {
         String name = Thread.currentThread().getName();
 
-        for (int i = 1; i <= _steps; i++) {
-            System.out.println("[" + name + "] Order " + _orderId
-                + ": step " + i + "/" + _steps + " \u2192 " + _destination);
+        for (int i = 1; i <= steps; i++) {
+            System.out.println("[" + name + "] Order " + orderId
+                + ": step " + i + "/" + steps + " \u2192 " + destination);
 
             try {
                 Thread.sleep(200);
@@ -75,7 +75,7 @@ class DeliveryTask implements Runnable {
             }
         }
 
-        System.out.println("[" + name + "] Order " + _orderId
-            + ": DELIVERED to " + _destination);
+        System.out.println("[" + name + "] Order " + orderId
+            + ": DELIVERED to " + destination);
     }
 }

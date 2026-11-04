@@ -1,38 +1,40 @@
 package t20_json_1_jackson_basics.exercises.ex02;
 
-import java.sql.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import t20_json_1_jackson_basics.exercises.ex01.Player;
+
+import java.util.List;
 
 public class Exercise {
 
-    private static final String URL     = "jdbc:mysql://localhost:3306/game_assets_db";
-    private static final String DB_USER = "root";
-    private static final String DB_PASS = "";
+    static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public static void main(String[] args) throws Exception {
+    static String toJson(List<Player> players) throws JsonProcessingException {
+        return MAPPER.writeValueAsString(players);
+    }
 
-        try (Connection c = DriverManager.getConnection(URL, DB_USER, DB_PASS)) {
+    // List<Player>.class does not exist (type erasure), so a TypeReference carries the full type
+    static List<Player> fromJson(String json) throws JsonProcessingException {
+        return MAPPER.readValue(json, new TypeReference<List<Player>>() { });
+    }
 
-            // Metadata-only query - asset_data deliberately excluded
-            String sql = "SELECT asset_id, asset_name, asset_type, file_size FROM game_assets ORDER BY asset_id";
+    public static void run() throws JsonProcessingException {
+        List<Player> players = List.of(
+                new Player("Alice", 95),
+                new Player("Ben", 80),
+                new Player("Clara", 92));
 
-            try (PreparedStatement ps = c.prepareStatement(sql);
-                 ResultSet rs = ps.executeQuery()) {
+        String json = toJson(players);
+        System.out.println("JSON: " + json);
 
-                while (rs.next()) {
-                    int    id       = rs.getInt("asset_id");
-                    String name     = rs.getString("asset_name");
-                    String type     = rs.getString("asset_type");
-                    int    fileSize = rs.getInt("file_size");
-                    System.out.println("[" + id + "] " + name + " (" + type + ", " + fileSize + " bytes)");
-                }
-            }
+        List<Player> back = fromJson(json);
+        boolean sameFirst = back.get(0).getName().equals(players.get(0).getName());
+        System.out.println("First name matches: " + sameFirst);
+    }
 
-            try (PreparedStatement ps = c.prepareStatement("SELECT COUNT(*) FROM game_assets");
-                 ResultSet rs = ps.executeQuery()) {
-
-                rs.next();
-                System.out.println("Total assets: " + rs.getInt(1));
-            }
-        }
+    public static void main(String[] args) throws JsonProcessingException {
+        run();
     }
 }

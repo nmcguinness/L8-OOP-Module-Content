@@ -16,13 +16,11 @@ file_name: dry-notes.md
 
 ## Overview
 
-The **DRY principle — Don’t Repeat Yourself** — helps you write Java code that’s clean,
-efficient, and easy to maintain.
+The **DRY principle — Don’t Repeat Yourself** — helps you write Java code that’s clean, efficient, and easy to maintain.
 
 When code is duplicated, it quickly gets inconsistent: one version changes, the other doesn’t.
 
-Following DRY encourages **clarity**, **reuse**, and **structure**, which are essential in your
-**OOP CA** when designing entity classes, validation helpers, and report logic.
+Following DRY encourages **clarity**, **reuse**, and **structure**, which are essential in your **OOP CA** when designing entity classes, validation helpers, and report logic.
 
 ## Why DRY Matters
 
@@ -74,11 +72,9 @@ Now, one helper method handles all range checks.
 
 ## Reflection
 
-How does applying DRY make your project easier to debug and maintain?
-Write one example from your current CA where duplication could cause future errors.
+How does applying DRY make your project easier to debug and maintain? Write one example from your current CA where duplication could cause future errors.
 
 ## Further reading
 
-- [Geeks for Geeks – DRY Principle in Software
-  Development)](https://www.geeksforgeeks.org/software-engineering/dont-repeat-yourselfdry-in-software-development/)
+- [Geeks for Geeks – DRY Principle in Software Development)](https://www.geeksforgeeks.org/software-engineering/dont-repeat-yourselfdry-in-software-development/)
 - [Refactoring Guru – Don’t Repeat Yourself](https://refactoring.guru/refactoring)

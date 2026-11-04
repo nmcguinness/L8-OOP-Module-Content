@@ -7,8 +7,7 @@ This document collects the mindmaps for **topics t00–t09**. Each section has:
 - **Code snippets** showing the syntax in use.
 - **Self-assessment prompts** to test yourself before checking the notes.
 
-> :warning: This revision document is not a substitute for reading, understanding, and learning
-> the content covered in the related notes.
+> :warning: This revision document is not a substitute for reading, understanding, and learning the content covered in the related notes.
 
 | Topic | Covers | Notes |
 |:--|:--|:--|
@@ -23,8 +22,7 @@ This document collects the mindmaps for **topics t00–t09**. Each section has:
 | [t08](#t08--inheritance) | extends, overriding, abstract classes | [Notes](../../topics/t08_inheritance/t08_inheritance_notes.md) |
 | [t09](#t09--interfaces) | Contracts, polymorphism, multiple interfaces | [Notes](../../topics/t09_interface/t09_interface_notes.md) |
 
-Topics t10 onwards are in [Part 2](revision_t10_t22.md); testing, pathfinding and
-documentation are in [Part 3](revision_t23_t25.md).
+Topics t10 onwards are in [Part 2](revision_t10_t22.md); testing, pathfinding and documentation are in [Part 3](revision_t23_t25.md).
 
 ---
 
@@ -32,86 +30,130 @@ documentation are in [Part 3](revision_t23_t25.md).
 
 ### Overview
 
-A **class** is the description; an **object** is one instance built from it, holding its own
-field values.
-Encapsulation means the class keeps its fields `private` and controls every change through its
-own methods, so its validation can never be bypassed.
-Guard clauses at the top of a constructor make it impossible for an invalid object to exist in
-the first place.
+A **class** is the description; an **object** is one instance built from it, holding its own field values. Encapsulation means the class keeps its fields `private` and controls every change through its own methods, so its validation can never be bypassed. Guard clauses at the top of a constructor make it impossible for an invalid object to exist in the first place.
 
 ```mermaid
 ---
 title: "OOP Fundamentals"
 accDescr: "Mind map of OOP Fundamentals. Branches: Class versus object; Anatomy of a class; Encapsulation; Access modifiers; Guard clauses; Constructors; References and aliasing; Common mistakes."
 ---
-%%{init: { "theme": "forest" }}%%
+%%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((OOP Fundamentals))
     Class versus object
-      Class is the template or description
-      Object is one instance with its own values
-      One class can produce many objects
-      Each object has independent state
+      n1["`Class is the template
+      or description`"]
+      n2["`Object is one instance
+      with its own values`"]
+      n3["`One class can
+      produce many objects`"]
+      n4["`Each object has
+      independent state`"]
 
     Anatomy of a class
       Fields hold the state
-      Constructors build and validate
+      n5["`Constructors
+      build and validate`"]
       Methods expose behaviour
-      Naming convention makes fields obvious
+      n6["`Naming convention
+      makes fields obvious`"]
 
     Encapsulation
-      Fields are private by default
-      Public methods form the API
-      Class controls every change to its own state
-      Storage can change later without breaking callers
+      n7["`Fields are
+      private by default`"]
+      n8["`Public methods
+      form the API`"]
+      n9["`Class controls every
+      change to its own state`"]
+      n10["`Storage can change
+      later without
+      breaking callers`"]
 
     Access modifiers
       private this class only
       public any class
-      protected subclasses and same package
-      no modifier same package only
+      n11["`protected subclasses
+      and same package`"]
+      n12["`no modifier same
+      package only`"]
 
     Guard clauses
-      Validate at the top of the constructor
-      Fail fast before the object exists
-      Throw IllegalArgumentException on bad input
-      All preconditions visible in one glance
+      n13["`Validate at the top
+      of the constructor`"]
+      n14["`Fail fast before
+      the object exists`"]
+      n15["`Throw
+      IllegalArgumentException
+      on bad input`"]
+      n16["`All preconditions
+      visible in one glance`"]
 
     Constructors
-      One constructor does the real work
-      Others delegate with this dot dot dot
-      Never duplicate guards across constructors
+      n17["`One constructor
+      does the real work`"]
+      n18["`Others delegate with
+      this dot dot dot`"]
+      n19["`Never duplicate guards
+      across constructors`"]
 
     References and aliasing
-      Variables hold references not objects
-      Two names can refer to one object
-      Change through one is visible through the other
+      n20["`Variables hold
+      references not objects`"]
+      n21["`Two names can
+      refer to one object`"]
+      n22["`Change through one is
+      visible through the other`"]
 
     Common mistakes
-      Public fields that bypass validation
-      Assigning name equals name without this
-      Validating too late instead of in the constructor
+      n23["`Public fields that
+      bypass validation`"]
+      n24["`Assigning name equals
+      name without this`"]
+      n25["`Validating too
+      late instead of
+      in the constructor`"]
 ```
 
 **Diagram description**
-Mind map of **OOP Fundamentals**, organised into 8 branches:
+Mind map of **OOP Fundamentals**, with 8 branches:
 
-- **Class versus object** — Class is the template or description; Object is one instance with
-  its own values; One class can produce many objects; Each object has independent state.
-- **Anatomy of a class** — Fields hold the state; Constructors build and validate; Methods
-  expose behaviour; Naming convention makes fields obvious.
-- **Encapsulation** — Fields are private by default; Public methods form the API; Class
-  controls every change to its own state; Storage can change later without breaking callers.
-- **Access modifiers** — private this class only; public any class; protected subclasses and
-  same package; no modifier same package only.
-- **Guard clauses** — Validate at the top of the constructor; Fail fast before the object
-  exists; Throw IllegalArgumentException on bad input; All preconditions visible in one glance.
-- **Constructors** — One constructor does the real work; Others delegate with this dot dot dot;
-  Never duplicate guards across constructors.
-- **References and aliasing** — Variables hold references not objects; Two names can refer to
-  one object; Change through one is visible through the other.
-- **Common mistakes** — Public fields that bypass validation; Assigning name equals name
-  without this; Validating too late instead of in the constructor.
+- **Class versus object**
+  - Class is the template or description
+  - Object is one instance with its own values
+  - One class can produce many objects
+  - Each object has independent state
+- **Anatomy of a class**
+  - Fields hold the state
+  - Constructors build and validate
+  - Methods expose behaviour
+  - Naming convention makes fields obvious
+- **Encapsulation**
+  - Fields are private by default
+  - Public methods form the API
+  - Class controls every change to its own state
+  - Storage can change later without breaking callers
+- **Access modifiers**
+  - private this class only
+  - public any class
+  - protected subclasses and same package
+  - no modifier same package only
+- **Guard clauses**
+  - Validate at the top of the constructor
+  - Fail fast before the object exists
+  - Throw IllegalArgumentException on bad input
+  - All preconditions visible in one glance
+- **Constructors**
+  - One constructor does the real work
+  - Others delegate with this dot dot dot
+  - Never duplicate guards across constructors
+- **References and aliasing**
+  - Variables hold references not objects
+  - Two names can refer to one object
+  - Change through one is visible through the other
+- **Common mistakes**
+  - Public fields that bypass validation
+  - Assigning name equals name without this
+  - Validating too late instead of in the constructor
 
 ### Code Snippets
 
@@ -119,8 +161,8 @@ Mind map of **OOP Fundamentals**, organised into 8 branches:
 public class Player {
 
     // === Fields === (private: the class controls all changes)
-    private final String _name;
-    private int _health;
+    private final String name;
+    private int health;
 
     // === Constructor === (guards first, so an invalid Player cannot exist)
     public Player(String name, int health) {
@@ -129,8 +171,8 @@ public class Player {
         if (health <= 0)
             throw new IllegalArgumentException("health must be positive");
 
-        _name = name;
-        _health = health;
+        this.name = name;
+        this.health = health;
     }
 
     // Delegating constructor: a sensible default, validation in one place only
@@ -139,13 +181,13 @@ public class Player {
     }
 
     // === Public API ===
-    public String getName() { return _name; }
-    public int getHealth(){ return _health; }
+    public String getName() { return name; }
+    public int getHealth(){ return health; }
 
     public void takeDamage(int amount) {
         if (amount < 0)
             throw new IllegalArgumentException("damage cannot be negative");
-        _health = Math.max(0, _health - amount);
+        health = Math.max(0, health - amount);
     }
 }
 ```
@@ -165,21 +207,16 @@ System.out.println(a == b);          // false (compares references)
 
 ### Self-Assessment Prompts
 
-1. **In one sentence each, what is a class and what is an object?**
-   *(Hint: which one exists at runtime and holds values?)*
+1. **In one sentence each, what is a class and what is an object?** *(Hint: which one exists at runtime and holds values?)*
 
-2. **What can go wrong if a field is `public` instead of `private`?**
-   *(Think about the guard clauses in the constructor — can they still be trusted?)*
+2. **What can go wrong if a field is `public` instead of `private`?** *(Think about the guard clauses in the constructor — can they still be trusted?)*
 
-3. **Why put guard clauses at the top of the constructor rather than where the field is first
-   used?**
-   *(Consider how far a bad object could travel before anything complains)*
+3. **Why put guard clauses at the top of the constructor rather than where the field is first used?** *(Consider how far a bad object could travel before anything complains)*
 
 4. **`ref2 = ref1;` then `ref2.setName("Dave")`. What does `ref1.getName()` return, and why?**
    *(What exactly was copied by the assignment?)*
 
-5. **When would you add a second constructor, and what must it not do?**
-   *(Hint: `this(...)` — and what happens if guards are copied into both?)*
+5. **When would you add a second constructor, and what must it not do?** *(Hint: `this(...)` — and what happens if guards are copied into both?)*
 
 ---
 
@@ -187,70 +224,105 @@ System.out.println(a == b);          // false (compares references)
 
 ### Overview
 
-Arrays are the most basic way to store multiple values in Java. They have a fixed size and hold
-items of the same type.  You must understand arrays before learning lists, sorting, or
-searching.
-This mindmap shows how to create arrays, access elements, loop through them, and avoid common
-errors.
+Arrays are the most basic way to store multiple values in Java. They have a fixed size and hold items of the same type. You must understand arrays before learning lists, sorting, or searching. This mindmap shows how to create arrays, access elements, loop through them, and avoid common errors.
 
 ```mermaid
 ---
 title: "Arrays"
 accDescr: "Mind map of Arrays. Branches: One dimensional arrays; Two dimensional arrays."
 ---
-%%{init: { "theme": "forest" }}%%
+%%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Arrays))
     One dimensional arrays
       What it is
-        Fixed length list of values of the same type
+        n1["`Fixed length list of
+        values of the same type`"]
       Creation
         Create with values
-        Create with size and default values
+        n2["`Create with size
+        and default values`"]
       Access
-        Use **index** to read or write
+        n3["`Use **index**
+        to read or write`"]
       Length
-        Use **length** field to get number of elements
+        n4["`Use **length** field to
+        get number of elements`"]
       Iteration
-        Use **for** loop when you need index
-        Use **enhanced for** loop for simple reading
+        n5["`Use **for** loop
+        when you need index`"]
+        n6["`Use **enhanced for**
+        loop for simple reading`"]
       Common tasks
-        Find minimum or maximum value
+        n7["`Find minimum or
+        maximum value`"]
         Search for a given value
-        Count values that match a condition
+        n8["`Count values that
+        match a condition`"]
       Common mistakes
-        Using index outside valid range
-        Expecting array to grow or shrink automatically
+        n9["`Using index
+        outside valid range`"]
+        n10["`Expecting array to grow
+        or shrink automatically`"]
 
     Two dimensional arrays
       What it is
-        Array of arrays used for grids and tables
+        n11["`Array of arrays used
+        for grids and tables`"]
       Shapes
-        Rectangular all rows same length
-        Jagged rows can have different lengths
+        n12["`Rectangular all
+        rows same length`"]
+        n13["`Jagged rows can have
+        different lengths`"]
       Access
-        Use row index then column index
+        n14["`Use row index
+        then column index`"]
       Iteration
-        Nested loops outer for rows inner for columns
+        n15["`Nested loops outer for
+        rows inner for columns`"]
       Pitfalls
-        Each row has its own length in jagged arrays
-        Null rows cause errors if not checked
+        n16["`Each row has its own
+        length in jagged arrays`"]
+        n17["`Null rows cause
+        errors if not checked`"]
 ```
 
 **Diagram description**
-Mind map of **Arrays**, organised into 2 branches:
+Mind map of **Arrays**, with 2 branches:
 
-- **One dimensional arrays** — What it is; Fixed length list of values of the same type;
-  Creation; Create with values; Create with size and default values; Access; Use **index** to
-  read or write; Length; Use **length** field to get number of elements; Iteration; Use **for**
-  loop when you need index; Use **enhanced for** loop for simple reading; Common tasks; Find
-  minimum or maximum value; Search for a given value; Count values that match a condition;
-  Common mistakes; Using index outside valid range; Expecting array to grow or shrink
-  automatically.
-- **Two dimensional arrays** — What it is; Array of arrays used for grids and tables; Shapes;
-  Rectangular all rows same length; Jagged rows can have different lengths; Access; Use row
-  index then column index; Iteration; Nested loops outer for rows inner for columns; Pitfalls;
-  Each row has its own length in jagged arrays; Null rows cause errors if not checked.
+- **One dimensional arrays**
+  - What it is
+    - Fixed length list of values of the same type
+  - Creation
+    - Create with values
+    - Create with size and default values
+  - Access
+    - Use **index** to read or write
+  - Length
+    - Use **length** field to get number of elements
+  - Iteration
+    - Use **for** loop when you need index
+    - Use **enhanced for** loop for simple reading
+  - Common tasks
+    - Find minimum or maximum value
+    - Search for a given value
+    - Count values that match a condition
+  - Common mistakes
+    - Using index outside valid range
+    - Expecting array to grow or shrink automatically
+- **Two dimensional arrays**
+  - What it is
+    - Array of arrays used for grids and tables
+  - Shapes
+    - Rectangular all rows same length
+    - Jagged rows can have different lengths
+  - Access
+    - Use row index then column index
+  - Iteration
+    - Nested loops outer for rows inner for columns
+  - Pitfalls
+    - Each row has its own length in jagged arrays
+    - Null rows cause errors if not checked
 
 ### Code Snippets
 
@@ -289,11 +361,9 @@ for (int row = 0; row < grid.length; row++) {
 
 ### Self-Assessment Prompts
 
-1. **Why doesn't `array.length` have parentheses like `list.size()`?**
-   *(Hint: One is a field, the other is a method)*
+1. **Why doesn't `array.length` have parentheses like `list.size()`?** *(Hint: One is a field, the other is a method)*
 
-2. **What happens if you try to access `scores[4]` when `scores.length` is 4?**
-   *(What error do you get, and why?)*
+2. **What happens if you try to access `scores[4]` when `scores.length` is 4?** *(What error do you get, and why?)*
 
 3. **In a jagged 2D array, why must you check `grid[row].length` for each row separately?**
    *(What assumption breaks down compared to rectangular arrays?)*
@@ -307,75 +377,110 @@ for (int row = 0; row < grid.length; row++) {
 
 ### Overview
 
-A recursive method calls itself on a **smaller** version of the same problem.
-Every correct one needs two parts: a **base case** that returns without recursing, and a
-**recursive case** that moves strictly closer to it. Missing either gives `StackOverflowError`.
-Recursion suits data that is itself recursive — trees, directories, grids — where the code then
-mirrors the shape of the data.
+A recursive method calls itself on a **smaller** version of the same problem. Every correct one needs two parts: a **base case** that returns without recursing, and a **recursive case** that moves strictly closer to it. Missing either gives `StackOverflowError`. Recursion suits data that is itself recursive — trees, directories, grids — where the code then mirrors the shape of the data.
 
 ```mermaid
 ---
 title: "Recursion"
 accDescr: "Mind map of Recursion. Branches: Two mandatory parts; Call stack model; Common patterns; Efficiency trap; When not to recurse; Debugging."
 ---
-%%{init: { "theme": "forest" }}%%
+%%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Recursion))
     Two mandatory parts
-      Base case returns without recursing
-      Recursive case shrinks the problem
-      Both required or it never terminates
-      Shrinking must actually approach the base case
+      n1["`Base case returns
+      without recursing`"]
+      n2["`Recursive case
+      shrinks the problem`"]
+      n3["`Both required or
+      it never terminates`"]
+      n4["`Shrinking must actually
+      approach the base case`"]
 
     Call stack model
       Each call adds a frame
-      Frames pile up on the way down
-      Work often happens on the way back up
-      Stack unwinds when base case returns
+      n5["`Frames pile up
+      on the way down`"]
+      n6["`Work often happens
+      on the way back up`"]
+      n7["`Stack unwinds when
+      base case returns`"]
 
     Common patterns
-      Number recursion such as factorial
-      Array recursion using an index
-      String recursion such as palindrome
-      Branching recursion such as Fibonacci
-      Grid recursion such as flood fill
+      n8["`Number recursion
+      such as factorial`"]
+      n9["`Array recursion
+      using an index`"]
+      n10["`String recursion
+      such as palindrome`"]
+      n11["`Branching recursion
+      such as Fibonacci`"]
+      n12["`Grid recursion
+      such as flood fill`"]
 
     Efficiency trap
-      Naive Fibonacci recomputes subproblems
-      Cost is roughly two to the power n
-      Memoisation caches results for order n
+      n13["`Naive Fibonacci
+      recomputes subproblems`"]
+      n14["`Cost is roughly
+      two to the power n`"]
+      n15["`Memoisation caches
+      results for order n`"]
       Trade time for memory
 
     When not to recurse
-      Depth could be very large
-      Java has no tail call optimisation
+      n16["`Depth could
+      be very large`"]
+      n17["`Java has no tail
+      call optimisation`"]
       Simple loop is clearer
-      Rewrite iteratively with an explicit stack
+      n18["`Rewrite iteratively
+      with an explicit stack`"]
 
     Debugging
-      Print the argument on entry
-      Values not shrinking means no progress
-      Depth climbing past thousands means too deep
-      Watch for cycles such as symlinks
+      n19["`Print the
+      argument on entry`"]
+      n20["`Values not shrinking
+      means no progress`"]
+      n21["`Depth climbing past
+      thousands means too deep`"]
+      n22["`Watch for cycles
+      such as symlinks`"]
 ```
 
 **Diagram description**
-Mind map of **Recursion**, organised into 6 branches:
+Mind map of **Recursion**, with 6 branches:
 
-- **Two mandatory parts** — Base case returns without recursing; Recursive case shrinks the
-  problem; Both required or it never terminates; Shrinking must actually approach the base
-  case.
-- **Call stack model** — Each call adds a frame; Frames pile up on the way down; Work often
-  happens on the way back up; Stack unwinds when base case returns.
-- **Common patterns** — Number recursion such as factorial; Array recursion using an index;
-  String recursion such as palindrome; Branching recursion such as Fibonacci; Grid recursion
-  such as flood fill.
-- **Efficiency trap** — Naive Fibonacci recomputes subproblems; Cost is roughly two to the
-  power n; Memoisation caches results for order n; Trade time for memory.
-- **When not to recurse** — Depth could be very large; Java has no tail call optimisation;
-  Simple loop is clearer; Rewrite iteratively with an explicit stack.
-- **Debugging** — Print the argument on entry; Values not shrinking means no progress; Depth
-  climbing past thousands means too deep; Watch for cycles such as symlinks.
+- **Two mandatory parts**
+  - Base case returns without recursing
+  - Recursive case shrinks the problem
+  - Both required or it never terminates
+  - Shrinking must actually approach the base case
+- **Call stack model**
+  - Each call adds a frame
+  - Frames pile up on the way down
+  - Work often happens on the way back up
+  - Stack unwinds when base case returns
+- **Common patterns**
+  - Number recursion such as factorial
+  - Array recursion using an index
+  - String recursion such as palindrome
+  - Branching recursion such as Fibonacci
+  - Grid recursion such as flood fill
+- **Efficiency trap**
+  - Naive Fibonacci recomputes subproblems
+  - Cost is roughly two to the power n
+  - Memoisation caches results for order n
+  - Trade time for memory
+- **When not to recurse**
+  - Depth could be very large
+  - Java has no tail call optimisation
+  - Simple loop is clearer
+  - Rewrite iteratively with an explicit stack
+- **Debugging**
+  - Print the argument on entry
+  - Values not shrinking means no progress
+  - Depth climbing past thousands means too deep
+  - Watch for cycles such as symlinks
 
 ### Code Snippets
 
@@ -428,12 +533,9 @@ static long fib(int n) {
 2. **Trace `factorial(3)` by hand. At what moment does the first multiplication actually happen?**
    *(Hint: nothing is multiplied on the way down)*
 
-3. **Why is naive `fib(40)` unusably slow when its recursion depth is only 40?**
-   *(The problem is not stack depth — count how many times `fib(35)` is computed)*
+3. **Why is naive `fib(40)` unusably slow when its recursion depth is only 40?** *(The problem is not stack depth — count how many times `fib(35)` is computed)*
 
-4. **A method has a correct base case but still throws `StackOverflowError`. Give two possible
-   causes.**
-   *(One is about the argument; one is about legitimate depth)*
+4. **A method has a correct base case but still throws `StackOverflowError`. Give two possible causes.** *(One is about the argument; one is about legitimate depth)*
 
 5. **You must find every `.java` file under a directory. Recursion or a loop? Justify it.**
    *(What shape is the data, and how deep can it realistically get?)*
@@ -455,51 +557,80 @@ This section helps you understand their differences and how to apply them correc
 title: "Ordering"
 accDescr: "Mind map of Ordering. Branches: Why we sort; Comparable natural order; Comparator custom orders; Mistakes to avoid."
 ---
-%%{init: { "theme": "forest" }}%%
+%%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Ordering))
     Why we sort
-      Make lists easier to read
-      Find top scores or lowest prices
-      Group similar items together
+      n1["`Make lists
+      easier to read`"]
+      n2["`Find top scores
+      or lowest prices`"]
+      n3["`Group similar
+      items together`"]
 
     Comparable natural order
       Purpose
-        Give a class one default way to compare itself
+        n4["`Give a class one default
+        way to compare itself`"]
       Method
-        **compareTo** returns negative or zero or positive
+        n5["`**compareTo**
+        returns negative
+        or zero or positive`"]
       Examples
-        Sort by name alphabetically
+        n6["`Sort by name
+        alphabetically`"]
         Sort by numeric id
 
     Comparator custom orders
       Purpose
-        Allow many different sorting rules
+        n7["`Allow many different
+        sorting rules`"]
       Examples
-        Sort by score highest first
+        n8["`Sort by score
+        highest first`"]
         Sort by age then by name
       Multi step sorting
-        Use tie breakers when values are equal
+        n9["`Use tie breakers
+        when values are equal`"]
 
     Mistakes to avoid
-      Using subtraction in compare methods can overflow
-      Returning inconsistent results for the same inputs
-      Forgetting to handle equality case
+      n10["`Using subtraction
+      in compare methods
+      can overflow`"]
+      n11["`Returning
+      inconsistent results
+      for the same inputs`"]
+      n12["`Forgetting to
+      handle equality case`"]
 ```
 
 **Diagram description**
-Mind map of **Ordering**, organised into 4 branches:
+Mind map of **Ordering**, with 4 branches:
 
-- **Why we sort** — Make lists easier to read; Find top scores or lowest prices; Group similar
-  items together.
-- **Comparable natural order** — Purpose; Give a class one default way to compare itself;
-  Method; **compareTo** returns negative or zero or positive; Examples; Sort by name
-  alphabetically; Sort by numeric id.
-- **Comparator custom orders** — Purpose; Allow many different sorting rules; Examples; Sort by
-  score highest first; Sort by age then by name; Multi step sorting; Use tie breakers when
-  values are equal.
-- **Mistakes to avoid** — Using subtraction in compare methods can overflow; Returning
-  inconsistent results for the same inputs; Forgetting to handle equality case.
+- **Why we sort**
+  - Make lists easier to read
+  - Find top scores or lowest prices
+  - Group similar items together
+- **Comparable natural order**
+  - Purpose
+    - Give a class one default way to compare itself
+  - Method
+    - **compareTo** returns negative or zero or positive
+  - Examples
+    - Sort by name alphabetically
+    - Sort by numeric id
+- **Comparator custom orders**
+  - Purpose
+    - Allow many different sorting rules
+  - Examples
+    - Sort by score highest first
+    - Sort by age then by name
+  - Multi step sorting
+    - Use tie breakers when values are equal
+- **Mistakes to avoid**
+  - Using subtraction in compare methods can overflow
+  - Returning inconsistent results for the same inputs
+  - Forgetting to handle equality case
 
 ### Code Snippets
 
@@ -542,14 +673,11 @@ students.sort(Comparator.comparing(Student::getGrade)
 1. **Why is using subtraction (`return this.age - other.age`) dangerous in `compareTo` methods?**
    *(Hint: What happens with very large positive and negative numbers?)*
 
-2. **If a class implements `Comparable`, can you still sort it in different ways?**
-   *(How would you sort by a different field without changing the class?)*
+2. **If a class implements `Comparable`, can you still sort it in different ways?** *(How would you sort by a different field without changing the class?)*
 
-3. **What does `compareTo` return when two objects are equal? Why is this important?**
-   *(What breaks if you return inconsistent results for the same comparison?)*
+3. **What does `compareTo` return when two objects are equal? Why is this important?** *(What breaks if you return inconsistent results for the same comparison?)*
 
-4. **When would you use a `Comparator` instead of `Comparable`?**
-   *(Consider: Can you modify the class? Do you need multiple sort orders?)*
+4. **When would you use a `Comparator` instead of `Comparable`?** *(Consider: Can you modify the class? Do you need multiple sort orders?)*
 
 ---
 
@@ -561,69 +689,106 @@ To store custom objects correctly in sets and maps, Java needs two methods:
 - `equals`
 - `hashCode`
 
-This mindmap explains how they work together, the rules they must follow, and the problems that
-occur when the contract is broken.
+This mindmap explains how they work together, the rules they must follow, and the problems that occur when the contract is broken.
 
 ```mermaid
 ---
 title: "Equality and Hashing"
 accDescr: "Mind map of Equality and Hashing. Branches: equals method; hashCode method; Hash-based collections; Mistakes to avoid."
 ---
-%%{init: { "theme": "forest" }}%%
+%%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Equality and Hashing))
     equals method
       Why we use
-        Decide if two objects represent the same value
+        n1["`Decide if two objects
+        represent the same value`"]
       Contract
-        **Reflexive:** if an object equals itself
-        **Symmetric:** if a equals b then b equals a
-        **Transitive:** if a equals b and b equals c then a equals c
-        Consistent repeated calls give same answer
-        Non-null never equal to null
+        n2["`**Reflexive:** if an
+        object equals itself`"]
+        n3["`**Symmetric:** if a
+        equals b then b equals a`"]
+        n4["`**Transitive:** if a
+        equals b and b equals
+        c then a equals c`"]
+        n5["`Consistent repeated
+        calls give same answer`"]
+        n6["`Non-null never
+        equal to null`"]
       Implementation
-        Compare key fields such as id or email
-        Use defensive coding i.e. null safe checks
+        n7["`Compare key fields
+        such as id or email`"]
+        n8["`Use defensive coding
+        i.e. null safe checks`"]
 
     hashCode method
       Purpose
-        Provide integer fingerprint for object
+        n9["`Provide integer
+        fingerprint for object`"]
       Rule
-        If two objects are equal their hash codes must match
+        n10["`If two objects are
+        equal their hash
+        codes must match`"]
       Good practice
-        Use same fields as equals
-        Use stable fields that do not change
+        n11["`Use same fields
+        as equals`"]
+        n12["`Use stable fields
+        that do not change`"]
 
     Hash-based collections
       HashSet
         Stores unique elements
-        Uses **equals** and **hashCode** to avoid duplicates
+        n13["`Uses **equals**
+        and **hashCode**
+        to avoid duplicates`"]
       HashMap
         Stores key value pairs
-        Uses **equals** and **hashCode** on keys
+        n14["`Uses **equals** and
+        **hashCode** on keys`"]
 
     Mistakes to avoid
-      Implementing equals but not hashCode
-      Using mutable fields for equality or hashing
-      Changing key fields after adding to set or map
+      n15["`Implementing equals
+      but not hashCode`"]
+      n16["`Using mutable fields
+      for equality or hashing`"]
+      n17["`Changing key fields after
+      adding to set or map`"]
 ```
 
 **Diagram description**
-Mind map of **Equality and Hashing**, organised into 4 branches:
+Mind map of **Equality and Hashing**, with 4 branches:
 
-- **equals method** — Why we use; Decide if two objects represent the same value; Contract;
-  **Reflexive:** if an object equals itself; **Symmetric:** if a equals b then b equals a;
-  **Transitive:** if a equals b and b equals c then a equals c; Consistent repeated calls give
-  same answer; Non-null never equal to null; Implementation; Compare key fields such as id or
-  email; Use defensive coding i.e. null safe checks.
-- **hashCode method** — Purpose; Provide integer fingerprint for object; Rule; If two objects
-  are equal their hash codes must match; Good practice; Use same fields as equals; Use stable
-  fields that do not change.
-- **Hash-based collections** — HashSet; Stores unique elements; Uses **equals** and
-  **hashCode** to avoid duplicates; HashMap; Stores key value pairs; Uses **equals** and
-  **hashCode** on keys.
-- **Mistakes to avoid** — Implementing equals but not hashCode; Using mutable fields for
-  equality or hashing; Changing key fields after adding to set or map.
+- **equals method**
+  - Why we use
+    - Decide if two objects represent the same value
+  - Contract
+    - **Reflexive:** if an object equals itself
+    - **Symmetric:** if a equals b then b equals a
+    - **Transitive:** if a equals b and b equals c then a equals c
+    - Consistent repeated calls give same answer
+    - Non-null never equal to null
+  - Implementation
+    - Compare key fields such as id or email
+    - Use defensive coding i.e. null safe checks
+- **hashCode method**
+  - Purpose
+    - Provide integer fingerprint for object
+  - Rule
+    - If two objects are equal their hash codes must match
+  - Good practice
+    - Use same fields as equals
+    - Use stable fields that do not change
+- **Hash-based collections**
+  - HashSet
+    - Stores unique elements
+    - Uses **equals** and **hashCode** to avoid duplicates
+  - HashMap
+    - Stores key value pairs
+    - Uses **equals** and **hashCode** on keys
+- **Mistakes to avoid**
+  - Implementing equals but not hashCode
+  - Using mutable fields for equality or hashing
+  - Changing key fields after adding to set or map
 
 ### Code Snippets
 
@@ -671,18 +836,14 @@ System.out.println(grades.get(bob));  // null - can't find it anymore!
 
 ### Self-Assessment Prompts
 
-1. **If two objects are equal according to `equals()`, what must be true about their
-   `hashCode()` values?**
-   *(What breaks if they have different hash codes?)*
+1. **If two objects are equal according to `equals()`, what must be true about their `hashCode()` values?** *(What breaks if they have different hash codes?)*
 
-2. **Why should you use the same fields in both `equals()` and `hashCode()`?**
-   *(What happens if you use `id` in equals but not in hashCode?)*
+2. **Why should you use the same fields in both `equals()` and `hashCode()`?** *(What happens if you use `id` in equals but not in hashCode?)*
 
 3. **What goes wrong if you modify an object's key fields after adding it to a HashSet or HashMap?**
    *(Why can't the collection find it anymore?)*
 
-4. **Why do hash-based collections need both `equals()` and `hashCode()`?**
-   *(What does hashCode do first, and when does equals get called?)*
+4. **Why do hash-based collections need both `equals()` and `hashCode()`?** *(What does hashCode do first, and when does equals get called?)*
 
 ---
 
@@ -690,73 +851,104 @@ System.out.println(grades.get(bob));  // null - can't find it anymore!
 
 ### Overview
 
-`ArrayList` is Java’s most commonly used resizable list.
-It behaves like an array but grows as needed. This mindmap explains how to add, remove, and
-access items, and how performance changes depending on where you modify the list.
+`ArrayList` is Java’s most commonly used resizable list. It behaves like an array but grows as needed. This mindmap explains how to add, remove, and access items, and how performance changes depending on where you modify the list.
 
 ```mermaid
 ---
 title: "ArrayList"
 accDescr: "Mind map of ArrayList. Branches: What it is; Core operations; Iteration patterns; Performance notes; Common errors."
 ---
-%%{init: { "theme": "forest" }}%%
+%%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((ArrayList))
     What it is
-      Resizable list that grows automatically
+      n1["`Resizable list that
+      grows automatically`"]
       Keeps elements in order
-      Allows random access by index
+      n2["`Allows random
+      access by index`"]
 
     Core operations
       Add
         Add at end of list
-        Insert at specific position
+        n3["`Insert at
+        specific position`"]
       Remove
         Remove by index
-        Remove first matching value
+        n4["`Remove first
+        matching value`"]
       Read and write
         Get value at index
         Replace value at index
       Utilities
-        Check if list contains a value
+        n5["`Check if list
+        contains a value`"]
         Check if list is empty
-        Find index of first match
+        n6["`Find index of
+        first match`"]
 
     Iteration patterns
       Index loop
-        Good when you need positions
-        Good when you want to modify values
+        n7["`Good when you
+        need positions`"]
+        n8["`Good when you want
+        to modify values`"]
       Enhanced for loop
         Good for simple reading
       Iterator
-        Allows safe removal while looping
+        n9["`Allows safe removal
+        while looping`"]
 
     Performance notes
       Fast access by index
       Fast add at end
-      Slower insert or remove in the middle
+      n10["`Slower insert or
+      remove in the middle`"]
 
     Common errors
-      Concurrent modification exception when removing in **enhanced for** loop
-      Index out of range when list is small or empty
+      n11["`Concurrent modification
+      exception when removing
+      in **enhanced for** loop`"]
+      n12["`Index out of range when
+      list is small or empty`"]
 ```
 
 **Diagram description**
-Mind map of **ArrayList**, organised into 5 branches:
+Mind map of **ArrayList**, with 5 branches:
 
-- **What it is** — Resizable list that grows automatically; Keeps elements in order; Allows
-  random access by index.
-- **Core operations** — Add; Add at end of list; Insert at specific position; Remove; Remove by
-  index; Remove first matching value; Read and write; Get value at index; Replace value at
-  index; Utilities; Check if list contains a value; Check if list is empty; Find index of first
-  match.
-- **Iteration patterns** — Index loop; Good when you need positions; Good when you want to
-  modify values; Enhanced for loop; Good for simple reading; Iterator; Allows safe removal
-  while looping.
-- **Performance notes** — Fast access by index; Fast add at end; Slower insert or remove in the
-  middle.
-- **Common errors** — Concurrent modification exception when removing in **enhanced for** loop;
-  Index out of range when list is small or empty.
+- **What it is**
+  - Resizable list that grows automatically
+  - Keeps elements in order
+  - Allows random access by index
+- **Core operations**
+  - Add
+    - Add at end of list
+    - Insert at specific position
+  - Remove
+    - Remove by index
+    - Remove first matching value
+  - Read and write
+    - Get value at index
+    - Replace value at index
+  - Utilities
+    - Check if list contains a value
+    - Check if list is empty
+    - Find index of first match
+- **Iteration patterns**
+  - Index loop
+    - Good when you need positions
+    - Good when you want to modify values
+  - Enhanced for loop
+    - Good for simple reading
+  - Iterator
+    - Allows safe removal while looping
+- **Performance notes**
+  - Fast access by index
+  - Fast add at end
+  - Slower insert or remove in the middle
+- **Common errors**
+  - Concurrent modification exception when removing in **enhanced for** loop
+  - Index out of range when list is small or empty
 
 ### Code Snippets
 
@@ -809,11 +1001,9 @@ for (String name : names) {
 1. **Why is adding to the end of an ArrayList fast, but inserting in the middle slower?**
    *(Think about what happens to elements after the insertion point)*
 
-2. **What causes a `ConcurrentModificationException`, and how do you avoid it?**
-   *(When can you NOT use `names.remove()` directly?)*
+2. **What causes a `ConcurrentModificationException`, and how do you avoid it?** *(When can you NOT use `names.remove()` directly?)*
 
-3. **When would you use `get(i)` in a loop versus an enhanced for loop?**
-   *(Consider: Do you need the index? Are you modifying elements?)*
+3. **When would you use `get(i)` in a loop versus an enhanced for loop?** *(Consider: Do you need the index? Are you modifying elements?)*
 
 4. **Why does `ArrayList` use an array internally, and what happens when it runs out of space?**
    *(What's the trade-off between memory and performance?)*
@@ -824,68 +1014,97 @@ for (String name : names) {
 
 ### Overview
 
-`LinkedList` stores items using connected nodes instead of an array.
-This makes some operations fast (adding at the front) and others slow (accessing by index).
-This mindmap also explains the `ListIterator`, which is essential for safe element removal
-during iteration.
+`LinkedList` stores items using connected nodes instead of an array. This makes some operations fast (adding at the front) and others slow (accessing by index). This mindmap also explains the `ListIterator`, which is essential for safe element removal during iteration.
 
 ```mermaid
 ---
 title: "LinkedList"
 accDescr: "Mind map of LinkedList. Branches: What it is; Strengths; Weaknesses; List iterator; As queue or deque; Pitfalls."
 ---
-%%{init: { "theme": "forest" }}%%
+%%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((LinkedList))
     What it is
-      List made of linked nodes instead of array
-      Each node points to next and previous node
+      n1["`List made of linked
+      nodes instead of array`"]
+      n2["`Each node points to
+      next and previous node`"]
 
     Strengths
-      Fast add at front or back
-      Fast remove at front or back
+      n3["`Fast add at
+      front or back`"]
+      n4["`Fast remove at
+      front or back`"]
       Grows one node at a time
 
     Weaknesses
-      Slow access by index must walk nodes
-      More memory use than array based list
+      n5["`Slow access by index
+      must walk nodes`"]
+      n6["`More memory use than
+      array based list`"]
 
     List iterator
       Purpose
-        Move forward and backward through list
-        Add or remove elements while iterating
+        n7["`Move forward and
+        backward through list`"]
+        n8["`Add or remove elements
+        while iterating`"]
       Operations
         Next and previous
-        Add remove and set current element
+        n9["`Add remove and set
+        current element`"]
 
     As queue or deque
       Queue behaviour
         **Offer** adds at end
-        **Poll** removes from front
-        **Peek** looks at front without removing
+        n10["`**Poll** removes
+        from front`"]
+        n11["`**Peek** looks at
+        front without removing`"]
       Stack behaviour
         **Push** adds to top
         **Pop** removes from top
 
     Pitfalls
-      Avoid repeated get by index in large linked lists
-      After using add or remove with iterator you must move before using set
+      n12["`Avoid repeated
+      get by index in
+      large linked lists`"]
+      n13["`After using add or remove
+      with iterator you must
+      move before using set`"]
 ```
 
 **Diagram description**
-Mind map of **LinkedList**, organised into 6 branches:
+Mind map of **LinkedList**, with 6 branches:
 
-- **What it is** — List made of linked nodes instead of array; Each node points to next and
-  previous node.
-- **Strengths** — Fast add at front or back; Fast remove at front or back; Grows one node at a time.
-- **Weaknesses** — Slow access by index must walk nodes; More memory use than array based list.
-- **List iterator** — Purpose; Move forward and backward through list; Add or remove elements
-  while iterating; Operations; Next and previous; Add remove and set current element.
-- **As queue or deque** — Queue behaviour; **Offer** adds at end; **Poll** removes from front;
-  **Peek** looks at front without removing; Stack behaviour; **Push** adds to top; **Pop**
-  removes from top.
-- **Pitfalls** — Avoid repeated get by index in large linked lists; After using add or remove
-  with iterator you must move before using set.
+- **What it is**
+  - List made of linked nodes instead of array
+  - Each node points to next and previous node
+- **Strengths**
+  - Fast add at front or back
+  - Fast remove at front or back
+  - Grows one node at a time
+- **Weaknesses**
+  - Slow access by index must walk nodes
+  - More memory use than array based list
+- **List iterator**
+  - Purpose
+    - Move forward and backward through list
+    - Add or remove elements while iterating
+  - Operations
+    - Next and previous
+    - Add remove and set current element
+- **As queue or deque**
+  - Queue behaviour
+    - **Offer** adds at end
+    - **Poll** removes from front
+    - **Peek** looks at front without removing
+  - Stack behaviour
+    - **Push** adds to top
+    - **Pop** removes from top
+- **Pitfalls**
+  - Avoid repeated get by index in large linked lists
+  - After using add or remove with iterator you must move before using set
 
 ### Code Snippets
 
@@ -930,14 +1149,11 @@ String top = stack.pop();  // Remove from top: "Top"
 
 ### Self-Assessment Prompts
 
-1. **Why is accessing `list.get(1000)` slow in a LinkedList but fast in an ArrayList?**
-   *(What must LinkedList do that ArrayList doesn't?)*
+1. **Why is accessing `list.get(1000)` slow in a LinkedList but fast in an ArrayList?** *(What must LinkedList do that ArrayList doesn't?)*
 
-2. **When would you choose LinkedList over ArrayList?**
-   *(Consider: Where are you adding/removing elements? Do you need index access?)*
+2. **When would you choose LinkedList over ArrayList?** *(Consider: Where are you adding/removing elements? Do you need index access?)*
 
-3. **Why can ListIterator move backward but a regular Iterator cannot?**
-   *(What's different about the underlying structure?)*
+3. **Why can ListIterator move backward but a regular Iterator cannot?** *(What's different about the underlying structure?)*
 
 4. **After calling `iterator.remove()`, why can't you immediately call `iterator.set()`?**
    *(What element would `set()` operate on after a removal?)*
@@ -948,82 +1164,125 @@ String top = stack.pop();  // Remove from top: "Top"
 
 ### Overview
 
-A **Set** stores unique elements; a **Map** stores key-value pairs for fast lookup by key; a
-**PriorityQueue** always hands you the smallest remaining element.
-`HashSet` and `HashMap` depend directly on the `equals`/`hashCode` contract from t04 — get that
-wrong and duplicates leak in or lookups fail.
-Choosing the right one is usually about a single question: do you need *order*, *uniqueness*,
-or *lookup by key*?
+A **Set** stores unique elements; a **Map** stores key-value pairs for fast lookup by key; a **PriorityQueue** always hands you the smallest remaining element. `HashSet` and `HashMap` depend directly on the `equals`/`hashCode` contract from t04 — get that wrong and duplicates leak in or lookups fail. Choosing the right one is usually about a single question: do you need *order*, *uniqueness*, or *lookup by key*?
 
 ```mermaid
 ---
 title: "Set Map and PriorityQueue"
 accDescr: "Mind map of Set Map and PriorityQueue. Branches: Set unique elements; Map keyed lookup; Depends on t04; Compute patterns; PriorityQueue; Choosing a collection; Common mistakes."
 ---
-%%{init: { "theme": "forest" }}%%
+%%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Set Map and PriorityQueue))
     Set unique elements
-      HashSet fast no order guarantee
-      LinkedHashSet keeps insertion order
-      TreeSet sorted order costs log n
-      add returns false if already present
+      n1["`HashSet fast no
+      order guarantee`"]
+      n2["`LinkedHashSet keeps
+      insertion order`"]
+      n3["`TreeSet sorted
+      order costs log n`"]
+      n4["`add returns false
+      if already present`"]
 
     Map keyed lookup
-      HashMap fast average constant time
-      LinkedHashMap keeps insertion order
-      TreeMap sorted keys and range queries
-      Keys unique values may repeat
+      n5["`HashMap fast average
+      constant time`"]
+      n6["`LinkedHashMap keeps
+      insertion order`"]
+      n7["`TreeMap sorted keys
+      and range queries`"]
+      n8["`Keys unique
+      values may repeat`"]
 
     Depends on t04
-      hashCode picks the bucket
-      equals compares within the bucket
-      Both must be overridden together
-      Key fields must be immutable
+      n9["`hashCode picks
+      the bucket`"]
+      n10["`equals compares
+      within the bucket`"]
+      n11["`Both must be
+      overridden together`"]
+      n12["`Key fields must
+      be immutable`"]
 
     Compute patterns
       merge for counting
-      computeIfAbsent for grouping
-      getOrDefault for a safe read
-      putIfAbsent to fill only when missing
+      n13["`computeIfAbsent
+      for grouping`"]
+      n14["`getOrDefault
+      for a safe read`"]
+      n15["`putIfAbsent to fill
+      only when missing`"]
 
     PriorityQueue
-      Head is always the smallest
-      Comparator can reverse or customise
-      poll removes the smallest
-      Iteration order is NOT sorted
+      n16["`Head is always
+      the smallest`"]
+      n17["`Comparator can
+      reverse or customise`"]
+      n18["`poll removes
+      the smallest`"]
+      n19["`Iteration order
+      is NOT sorted`"]
 
     Choosing a collection
-      Need uniqueness choose a Set
-      Need lookup by key choose a Map
-      Need sorted keys choose TreeMap
-      Need insertion order choose LinkedHash variants
+      n20["`Need uniqueness
+      choose a Set`"]
+      n21["`Need lookup by
+      key choose a Map`"]
+      n22["`Need sorted keys
+      choose TreeMap`"]
+      n23["`Need insertion order
+      choose LinkedHash variants`"]
 
     Common mistakes
-      Mutating a key after insertion
-      Expecting HashSet to preserve order
-      Printing a PriorityQueue and expecting sorted output
-      get returns null and causes NullPointerException
+      n24["`Mutating a key
+      after insertion`"]
+      n25["`Expecting HashSet
+      to preserve order`"]
+      n26["`Printing a
+      PriorityQueue and
+      expecting sorted output`"]
+      n27["`get returns null and
+      causes NullPointerException`"]
 ```
 
 **Diagram description**
-Mind map of **Set Map and PriorityQueue**, organised into 7 branches:
+Mind map of **Set Map and PriorityQueue**, with 7 branches:
 
-- **Set unique elements** — HashSet fast no order guarantee; LinkedHashSet keeps insertion
-  order; TreeSet sorted order costs log n; add returns false if already present.
-- **Map keyed lookup** — HashMap fast average constant time; LinkedHashMap keeps insertion
-  order; TreeMap sorted keys and range queries; Keys unique values may repeat.
-- **Depends on t04** — hashCode picks the bucket; equals compares within the bucket; Both must
-  be overridden together; Key fields must be immutable.
-- **Compute patterns** — merge for counting; computeIfAbsent for grouping; getOrDefault for a
-  safe read; putIfAbsent to fill only when missing.
-- **PriorityQueue** — Head is always the smallest; Comparator can reverse or customise; poll
-  removes the smallest; Iteration order is NOT sorted.
-- **Choosing a collection** — Need uniqueness choose a Set; Need lookup by key choose a Map;
-  Need sorted keys choose TreeMap; Need insertion order choose LinkedHash variants.
-- **Common mistakes** — Mutating a key after insertion; Expecting HashSet to preserve order;
-  Printing a PriorityQueue and expecting sorted output; get returns null and causes
-  NullPointerException.
+- **Set unique elements**
+  - HashSet fast no order guarantee
+  - LinkedHashSet keeps insertion order
+  - TreeSet sorted order costs log n
+  - add returns false if already present
+- **Map keyed lookup**
+  - HashMap fast average constant time
+  - LinkedHashMap keeps insertion order
+  - TreeMap sorted keys and range queries
+  - Keys unique values may repeat
+- **Depends on t04**
+  - hashCode picks the bucket
+  - equals compares within the bucket
+  - Both must be overridden together
+  - Key fields must be immutable
+- **Compute patterns**
+  - merge for counting
+  - computeIfAbsent for grouping
+  - getOrDefault for a safe read
+  - putIfAbsent to fill only when missing
+- **PriorityQueue**
+  - Head is always the smallest
+  - Comparator can reverse or customise
+  - poll removes the smallest
+  - Iteration order is NOT sorted
+- **Choosing a collection**
+  - Need uniqueness choose a Set
+  - Need lookup by key choose a Map
+  - Need sorted keys choose TreeMap
+  - Need insertion order choose LinkedHash variants
+- **Common mistakes**
+  - Mutating a key after insertion
+  - Expecting HashSet to preserve order
+  - Printing a PriorityQueue and expecting sorted output
+  - get returns null and causes NullPointerException
 
 ### Code Snippets
 
@@ -1066,21 +1325,15 @@ System.out.println(pq.poll());   // 5
 
 ### Self-Assessment Prompts
 
-1. **Why does `HashSet` need `equals` and `hashCode` when `ArrayList.add` does not?**
-   *(What question is each collection built to answer?)*
+1. **Why does `HashSet` need `equals` and `hashCode` when `ArrayList.add` does not?** *(What question is each collection built to answer?)*
 
-2. **Two objects share a hash code but are not equal. What does a `HashSet` do with them?**
-   *(Is this a bug, and which of `equals`/`hashCode` resolves it?)*
+2. **Two objects share a hash code but are not equal. What does a `HashSet` do with them?** *(Is this a bug, and which of `equals`/`hashCode` resolves it?)*
 
-3. **You have a million strings and need millions of membership checks. Which collection, and
-   why not the others?**
-   *(Compare the cost of one lookup in a List, a HashSet and a TreeSet)*
+3. **You have a million strings and need millions of membership checks. Which collection, and why not the others?** *(Compare the cost of one lookup in a List, a HashSet and a TreeSet)*
 
-4. **When is `TreeMap` worth its O(log n) cost over `HashMap`?**
-   *(What can it do that HashMap simply cannot?)*
+4. **When is `TreeMap` worth its O(log n) cost over `HashMap`?** *(What can it do that HashMap simply cannot?)*
 
-5. **You print a `PriorityQueue` and the output is not sorted. Is it broken?**
-   *(What exactly does a PriorityQueue guarantee — and about which operation?)*
+5. **You print a `PriorityQueue` and the output is not sorted. Is it broken?** *(What exactly does a PriorityQueue guarantee — and about which operation?)*
 
 6. **What breaks if you change a field used by `hashCode` after adding the object to a `HashSet`?**
    *(Can you still find it? Can you still remove it?)*
@@ -1091,68 +1344,105 @@ System.out.println(pq.poll());   // 5
 
 ### Overview
 
-Inheritance lets you create a hierarchy of related classes.  A superclass defines common
-behaviour; subclasses extend or customise it.
-This mindmap shows how `extends`, `super`, overriding, abstract classes, and polymorphism work
-together.
+Inheritance lets you create a hierarchy of related classes. A superclass defines common behaviour; subclasses extend or customise it. This mindmap shows how `extends`, `super`, overriding, abstract classes, and polymorphism work together.
 
 ```mermaid
 ---
 title: "Inheritance"
 accDescr: "Mind map of Inheritance. Branches: What it is; Extends keyword; Method overriding; Abstract classes; Polymorphism; Common mistakes."
 ---
-%%{init: { "theme": "forest" }}%%
+%%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Inheritance))
     What it is
-      Share code between related classes
-      Subclass is a more specific version of superclass
+      n1["`Share code between
+      related classes`"]
+      n2["`Subclass is a more
+      specific version
+      of superclass`"]
 
     Extends keyword
-      Subclass inherits **public** and **protected** fields and methods
-      Can add new fields and methods
-      Constructor must call **super** as first statement
+      n3["`Subclass inherits
+      **public** and **protected**
+      fields and methods`"]
+      n4["`Can add new
+      fields and methods`"]
+      n5["`Constructor must
+      call **super** as
+      first statement`"]
 
     Method overriding
-      Subclass may **override** inherited methods
-      Use **override** annotation to catch mistakes
-      Polymorphism chooses method based on actual object type
+      n6["`Subclass may **override**
+      inherited methods`"]
+      n7["`Use **override** annotation
+      to catch mistakes`"]
+      n8["`Polymorphism chooses
+      method based on
+      actual object type`"]
 
     Abstract classes
-      Can not create objects directly
-      Can have abstract methods with no body
-      Subclasses must implement missing methods
-      Useful when all subclasses share base behaviour
+      n9["`Can not create
+      objects directly`"]
+      n10["`Can have abstract
+      methods with no body`"]
+      n11["`Subclasses must
+      implement missing methods`"]
+      n12["`Useful when all subclasses
+      share base behaviour`"]
 
     Polymorphism
-      Use superclass reference to hold many subclass objects
-      Example list of entities containing **Cars** and **Airplanes** are all stored in a list of **Vehicles**
-      Code calls methods on base type and the correct overridden method in the subclass runs
+      n13["`Use superclass
+      reference to hold
+      many subclass objects`"]
+      n14["`Example list of entities
+      containing **Cars**
+      and **Airplanes**
+      are all stored in
+      a list of **Vehicles**`"]
+      n15["`Code calls methods
+      on base type and the
+      correct overridden method
+      in the subclass runs`"]
 
     Common mistakes
-      Confusing **overloading** with **overriding**
-      Forgetting to call **super** constructor when needed
-      Putting too many common fields or methods into subclasses instead of base class
+      n16["`Confusing **overloading**
+      with **overriding**`"]
+      n17["`Forgetting to call
+      **super** constructor
+      when needed`"]
+      n18["`Putting too many
+      common fields or
+      methods into subclasses
+      instead of base class`"]
 ```
 
 **Diagram description**
-Mind map of **Inheritance**, organised into 6 branches:
+Mind map of **Inheritance**, with 6 branches:
 
-- **What it is** — Share code between related classes; Subclass is a more specific version of
-  superclass.
-- **Extends keyword** — Subclass inherits **public** and **protected** fields and methods; Can
-  add new fields and methods; Constructor must call **super** as first statement.
-- **Method overriding** — Subclass may **override** inherited methods; Use **override**
-  annotation to catch mistakes; Polymorphism chooses method based on actual object type.
-- **Abstract classes** — Can not create objects directly; Can have abstract methods with no
-  body; Subclasses must implement missing methods; Useful when all subclasses share base
-  behaviour.
-- **Polymorphism** — Use superclass reference to hold many subclass objects; Example list of
-  entities containing **Cars** and **Airplanes** are all stored in a list of **Vehicles**; Code
-  calls methods on base type and the correct overridden method in the subclass runs.
-- **Common mistakes** — Confusing **overloading** with **overriding**; Forgetting to call
-  **super** constructor when needed; Putting too many common fields or methods into subclasses
-  instead of base class.
+- **What it is**
+  - Share code between related classes
+  - Subclass is a more specific version of superclass
+- **Extends keyword**
+  - Subclass inherits **public** and **protected** fields and methods
+  - Can add new fields and methods
+  - Constructor must call **super** as first statement
+- **Method overriding**
+  - Subclass may **override** inherited methods
+  - Use **override** annotation to catch mistakes
+  - Polymorphism chooses method based on actual object type
+- **Abstract classes**
+  - Can not create objects directly
+  - Can have abstract methods with no body
+  - Subclasses must implement missing methods
+  - Useful when all subclasses share base behaviour
+- **Polymorphism**
+  - Use superclass reference to hold many subclass objects
+  - Example list of entities containing **Cars** and **Airplanes** are all stored in a list of **Vehicles**
+  - Code calls methods on base type and the correct overridden method in the subclass runs
+- **Common mistakes**
+  - Confusing **overloading** with **overriding**
+  - Forgetting to call **super** constructor when needed
+  - Putting too many common fields or methods into subclasses instead of base class
 
 ### Code Snippets
 
@@ -1218,18 +1508,13 @@ for (Vehicle v : fleet) {
 
 ### Self-Assessment Prompts
 
-1. **What's the difference between overriding and overloading?**
-   *(Hint: One changes behavior, one adds behavior)*
+1. **What's the difference between overriding and overloading?** *(Hint: One changes behavior, one adds behavior)*
 
-2. **Why must you call `super()` in a subclass constructor, and why must it be the first
-   statement?**
-   *(What happens if the parent isn't fully constructed?)*
+2. **Why must you call `super()` in a subclass constructor, and why must it be the first statement?** *(What happens if the parent isn't fully constructed?)*
 
-3. **When would you use an abstract class versus a concrete class?**
-   *(Consider: Do all subclasses share common implementation? Can you create instances?)*
+3. **When would you use an abstract class versus a concrete class?** *(Consider: Do all subclasses share common implementation? Can you create instances?)*
 
-4. **How does polymorphism work at runtime?**
-   *(If you have `Vehicle v = new Car()`, which `start()` method runs and why?)*
+4. **How does polymorphism work at runtime?** *(If you have `Vehicle v = new Car()`, which `start()` method runs and why?)*
 
 ---
 
@@ -1237,69 +1522,106 @@ for (Vehicle v : fleet) {
 
 ### Overview
 
-Interfaces define *behaviour* without defining *data*.  They allow unrelated classes to share
-capabilities, support flexibility, and allow patterns such as “strategy” or “pluggable
-behaviours.”
+Interfaces define *behaviour* without defining *data*. They allow unrelated classes to share capabilities, support flexibility, and allow patterns such as “strategy” or “pluggable behaviours.”
 
 ```mermaid
 ---
 title: "Interfaces"
 accDescr: "Mind map of Interfaces. Branches: What it is; Why use interfaces; Features; Using interfaces; Common uses; Common mistakes."
 ---
-%%{init: { "theme": "forest" }}%%
+%%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Interfaces))
     What it is
-      Describe behaviour that a class must provide
-      Contain method **signatures** but no **instance** fields
-      Used as capability labels on classes (i.e. this class implements Interactable)
+      n1["`Describe behaviour that
+      a class must provide`"]
+      n2["`Contain method
+      **signatures** but no
+      **instance** fields`"]
+      n3["`Used as capability
+      labels on classes (i.e.
+      this class implements
+      Interactable)`"]
 
     Why use interfaces
-      Different classes can share the same behaviour
-      Works even when classes do not share a superclass
-      Helps design flexible and testable code
+      n4["`Different classes can
+      share the same behaviour`"]
+      n5["`Works even when
+      classes do not
+      share a superclass`"]
+      n6["`Helps design flexible
+      and testable code`"]
 
     Features
       Methods
-        **Abstract** methods that must be implemented
-        **Default** methods with a shared implementation
-        **Static** methods as helpers
+        n7["`**Abstract** methods
+        that must be implemented`"]
+        n8["`**Default** methods with
+        a shared implementation`"]
+        n9["`**Static**
+        methods as helpers`"]
       Constants
-        **public static final** values shared by all
+        n10["`**public static final**
+        values shared by all`"]
 
     Using interfaces
-      Class declares that it implements one or many interfaces
-      Objects can be referenced by interface type
-      Example Door and CokeMachine both implement Interactable
+      n11["`Class declares that
+      it implements one
+      or many interfaces`"]
+      n12["`Objects can be referenced
+      by interface type`"]
+      n13["`Example Door and
+      CokeMachine both
+      implement Interactable`"]
 
     Common uses
-      Lists of mixed types using one shared interface
-      Separating interface from implementation in large systems
+      n14["`Lists of mixed types
+      using one shared interface`"]
+      n15["`Separating interface
+      from implementation
+      in large systems`"]
 
     Common mistakes
-      Trying to store per object state in interface (e.g. Player::name, Connection::IPAddress)
-      Creating many tiny interfaces without clear purpose
-      Forgetting to implement all required methods
+      n16["`Trying to store per
+      object state in interface
+      (e.g. Player::name,
+      Connection::IPAddress)`"]
+      n17["`Creating many tiny
+      interfaces without
+      clear purpose`"]
+      n18["`Forgetting to implement
+      all required methods`"]
 ```
 
 **Diagram description**
-Mind map of **Interfaces**, organised into 6 branches:
+Mind map of **Interfaces**, with 6 branches:
 
-- **What it is** — Describe behaviour that a class must provide; Contain method **signatures**
-  but no **instance** fields; Used as capability labels on classes (i.e. this class implements
-  Interactable.
-- **Why use interfaces** — Different classes can share the same behaviour; Works even when
-  classes do not share a superclass; Helps design flexible and testable code.
-- **Features** — Methods; **Abstract** methods that must be implemented; **Default** methods
-  with a shared implementation; **Static** methods as helpers; Constants; **public static
-  final** values shared by all.
-- **Using interfaces** — Class declares that it implements one or many interfaces; Objects can
-  be referenced by interface type; Example Door and CokeMachine both implement Interactable.
-- **Common uses** — Lists of mixed types using one shared interface; Separating interface from
-  implementation in large systems.
-- **Common mistakes** — Trying to store per object state in interface (e.g. Player::name,
-  Connection::IPAddress; Creating many tiny interfaces without clear purpose; Forgetting to
-  implement all required methods.
+- **What it is**
+  - Describe behaviour that a class must provide
+  - Contain method **signatures** but no **instance** fields
+  - Used as capability labels on classes (i.e. this class implements Interactable)
+- **Why use interfaces**
+  - Different classes can share the same behaviour
+  - Works even when classes do not share a superclass
+  - Helps design flexible and testable code
+- **Features**
+  - Methods
+    - **Abstract** methods that must be implemented
+    - **Default** methods with a shared implementation
+    - **Static** methods as helpers
+  - Constants
+    - **public static final** values shared by all
+- **Using interfaces**
+  - Class declares that it implements one or many interfaces
+  - Objects can be referenced by interface type
+  - Example Door and CokeMachine both implement Interactable
+- **Common uses**
+  - Lists of mixed types using one shared interface
+  - Separating interface from implementation in large systems
+- **Common mistakes**
+  - Trying to store per object state in interface (e.g. Player::name, Connection::IPAddress)
+  - Creating many tiny interfaces without clear purpose
+  - Forgetting to implement all required methods
 
 ### Code Snippets
 
@@ -1361,17 +1683,13 @@ for (Interactable obj : objects) {
 
 ### Self-Assessment Prompts
 
-1. **What's the key difference between an interface and an abstract class?**
-   *(Consider: Can you extend multiple? Can you have instance fields?)*
+1. **What's the key difference between an interface and an abstract class?** *(Consider: Can you extend multiple? Can you have instance fields?)*
 
-2. **When would you use a default method in an interface?**
-   *(What happens to existing implementations if you add a new method to an interface?)*
+2. **When would you use a default method in an interface?** *(What happens to existing implementations if you add a new method to an interface?)*
 
-3. **Why can't interfaces have instance fields, only constants?**
-   *(Think about what an interface represents versus what a class represents)*
+3. **Why can't interfaces have instance fields, only constants?** *(Think about what an interface represents versus what a class represents)*
 
-4. **How do interfaces enable polymorphism with unrelated classes?**
-   *(Can Door and VendingMachine share a superclass? How can they still be treated uniformly?)*
+4. **How do interfaces enable polymorphism with unrelated classes?** *(Can Door and VendingMachine share a superclass? How can they still be treated uniformly?)*
 
 ---
 
@@ -1379,24 +1697,19 @@ for (Interactable obj : objects) {
 
 ## Capability label
 
-A simple interface used to indicate that a class *can* do something (e.g., `Interactable`,
-`Moveable`).
-It acts like a “tag” describing behaviour.
+A simple interface used to indicate that a class *can* do something (e.g., `Interactable`, `Moveable`). It acts like a “tag” describing behaviour.
 
 ## Polymorphism
 
-The ability to treat different objects through the same type (e.g., a list of `Entity` holding
-`Player`, `Enemy`, etc.) and still call the correct method at runtime.
+The ability to treat different objects through the same type (e.g., a list of `Entity` holding `Player`, `Enemy`, etc.) and still call the correct method at runtime.
 
 ## Iterator
 
-A special object used to safely walk through a collection.  Allows removal while iterating
-without errors.
+A special object used to safely walk through a collection. Allows removal while iterating without errors.
 
 ## ListIterator
 
-A more advanced iterator that can move *both forward and backward*, and can add or modify items
-while iterating.
+A more advanced iterator that can move *both forward and backward*, and can add or modify items while iterating.
 
 ## Natural order
 

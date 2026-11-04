@@ -17,4 +17,10 @@ public class NPC implements Interactable {
     public String getDescription() {
         return "NPC " + name;
     }
+
+    // NPCs can be talked to from further away than doors or chests
+    @Override
+    public int interactionRange() {
+        return 4;
+    }
 }

@@ -2,348 +2,172 @@
 title: "Design Patterns II — Exercises"
 subtitle: "COMP C8Z03 — Year 2 OOP"
 topic_code: t14_design_patterns_2
-description: "Six exercises applying Factory, Observer and Adapter across parsers, enemy spawning, event listeners, and legacy system integration."
+description: "Six step-by-step exercises applying Factory, Observer and Adapter: parsers chosen by file extension, enemies chosen by difficulty, button and sensor listeners, a legacy logger, and a payment gateway."
 created: 2026-02-06
-last_updated: 2026-09-10
-version: 1.0
+last_updated: 2026-11-03
+version: 1.1
 status: published
 authors: ["OOP Teaching Team"]
 tags: [java, design-patterns, factory, observer, adapter, coordination, architecture, oop, exercises, year2, comp-c8z03]
 ---
 # Design Patterns II — Exercises
 
-> These exercises build directly on the Design Patterns II — Structure, Coordination &
-> Extension notes. This set focuses on Factory, Observer, and Adapter in a small, runnable
-> task-processing mini-system.
->
-> You will practise creation boundaries (Factory), completion events and plug-in features
-> (Observer), and integrating incompatible APIs (Adapter).
+These exercises practise the three patterns in the [t14 notes](../t14_design_patterns_2_notes.md), two exercises each:
 
-## Ground rules
+- **Factory** keeps the decision "which class do I create?" in one place, so the rest of the program never writes `new` for those classes.
+- **Observer** lets one object announce that something happened, and any number of listeners react, without the announcer knowing who they are.
+- **Adapter** wraps a class whose methods do not match what your program expects, so the rest of the program can use it through your own interface.
 
-* Keep selection logic out of “core” classes (avoid giant `if`/`switch` in the wrong place).
-* Avoid `instanceof` checks to decide behaviour unless explicitly required.
-* Prefer simple loops over streams unless asked otherwise.
-* Print small outputs in `run()` so behaviour can be verified quickly.
-* Keep listener “feature code” inside listeners (not inside the queue).
+Every exercise follows the same layout: a goal, the steps, a worked example, the rules, hints you can open if you are stuck, and a checklist. Each one ends with a link to a worked solution and its tests.
+
+| Exercise | You practise | Difficulty |
+| :-- | :-- | :-- |
+| 01 Parsers by file extension | Factory | Foundation |
+| 02 Enemies by difficulty | Factory with an enum | Foundation |
+| 03 Button click listeners | Observer | Foundation |
+| 04 Temperature events | Observer with a value passed along | Intermediate |
+| 05 A legacy logger | Adapter | Foundation |
+| 06 A payment gateway | Adapter that converts data | Intermediate |
+
+## Rules for every exercise
+
+- The decision about which class to use lives in one place: the factory, or the listener.
+- No `instanceof` checks to decide behaviour.
+- Use ordinary loops, not streams.
+- Print a few short lines in `run()` so you can see the behaviour at a glance.
 
 ## How to run
 
-Each exercise includes an `Exercise` class with a static entry point:
+Each exercise goes in its own package, `t14_design_patterns_2.exercises.exNN`. Create a class `Exercise` in that package with a static `run()` method, and call `Exercise.run()` from `Main`.
+
+---
+
+## Exercise 01 — Parsers by file extension
+
+**Goal:** Build a factory that gives you the right parser for a file extension. The code that uses the parsers never creates one with `new`.
+
+**You will need:** [Pattern 1: Factory](../t14_design_patterns_2_notes.md#pattern-1-factory) and [Concrete factory](../t14_design_patterns_2_notes.md#concrete-factory).
+
+**Steps**
+
+1. Create an interface `Parser` with one method, `int parseCount(String input)`. It returns how many records the input holds.
+2. Create `CsvParser`. It counts the lines that are not blank.
+3. Create `JsonParser`. It counts the `{` characters, treating each one as the start of a record.
+4. Both parsers return 0 for `null` input.
+5. Create `ParserFactory` with the method below. It ignores case, so `"CSV"` works too.
+6. For any other extension, throw `IllegalArgumentException("Unsupported extension: " + extension)`.
+7. In `run()`, ask the factory for a CSV parser and a JSON parser, and count the records in a small sample of each.
 
 ```java
-package t14_design_patterns_2.exercises.eXX;
-
-public class Exercise {
-    public static void run() {
-        // call your methods here; print results for quick checks
-    }
+public interface Parser {
+    int parseCount(String input);
 }
+
+public Parser createFor(String extension)
 ```
 
-## Exercise 01 — ParserFactory by file extension (Factory)
-
-**Objective:** Build a tiny factory that returns the correct `Parser` implementation based on a
-file extension (e.g., `"csv"`, `"json"`). Functionally, your solution must support:
-
-* creating the correct parser via `ParserFactory.createFor(extension)`,
-* parsing two different inputs via two different parsers,
-* demonstrating in `Exercise.run()` that client code **never** calls `new CsvParser()` / `new
-  JsonParser()` directly.
-
-### Required API
-
-```java
-interface Parser { int parseCount(String input); }
-
-class CsvParser implements Parser { ... }
-class JsonParser implements Parser { ... }
-
-class ParserFactory {
-    Parser createFor(String extension);
-}
-```
-
-### Tasks
-
-1. Implement `CsvParser.parseCount()` as: **count non-empty lines** (split by `\n`).
-2. Implement `JsonParser.parseCount()` as: **count occurrences of '{'** (treat each `{` as a
-   record start).
-3. Implement `ParserFactory.createFor(extension)` (case-insensitive):
-
-* `"csv"` to `CsvParser`
-* `"json"` to `JsonParser`
-  * otherwise throw `IllegalArgumentException("Unsupported extension: " + extension)`
-1. In `Exercise.run()`:
-
-   * create a factory,
-   * request a csv parser, parse a sample csv string, print the count,
-   * request a json parser, parse a sample json string, print the count.
-
-### Sample output
+**Example** (the CSV sample has three lines; the JSON sample has two objects)
 
 ```text
 CSV count = 3
 JSON count = 2
 ```
 
-### Constraints
+**Rules**
 
-* No direct `new CsvParser()` / `new JsonParser()` in `run()`.
+- `run()` never writes `new CsvParser()` or `new JsonParser()`.
 
-### Done when...
+<details>
+<summary>Hints</summary>
 
-* The correct parser is selected purely by the factory.
-* Unsupported extensions throw a clear exception.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">? Solution</summary>
-
-```java
-package t14_design_patterns_2.exercises.ex01;
-
-public class Exercise {
-    public static void run() {
-        ParserFactory factory = new ParserFactory();
-
-        Parser csv = factory.createFor("csv");
-        String csvData = "a,b,c\n1,2,3\n4,5,6\n";
-        System.out.println("CSV count = " + csv.parseCount(csvData));
-
-        Parser json = factory.createFor("json");
-        String jsonData = "{ \"id\": 1 }\n{ \"id\": 2 }\n";
-        System.out.println("JSON count = " + json.parseCount(jsonData));
-    }
-}
-
-interface Parser {
-    int parseCount(String input);
-}
-
-class CsvParser implements Parser {
-    @Override
-    public int parseCount(String input) {
-        if (input == null)
-            return 0;
-
-        String[] lines = input.split("\n");
-        int count = 0;
-
-        for (String line : lines)
-            if (!line.trim().isEmpty())
-                count++;
-
-        return count;
-    }
-}
-
-class JsonParser implements Parser {
-    @Override
-    public int parseCount(String input) {
-        if (input == null)
-            return 0;
-
-        int count = 0;
-        for (int i = 0; i < input.length(); i++)
-            if (input.charAt(i) == '{')
-                count++;
-
-        return count;
-    }
-}
-
-class ParserFactory {
-    public Parser createFor(String extension) {
-        if (extension == null || extension.isBlank())
-            throw new IllegalArgumentException("extension is null/blank.");
-
-        String ext = extension.trim().toLowerCase();
-
-        if (ext.equals("csv"))
-            return new CsvParser();
-
-        if (ext.equals("json"))
-            return new JsonParser();
-
-        throw new IllegalArgumentException("Unsupported extension: " + extension);
-    }
-}
-```
+1. `input.split("\n")` gives the lines, and `line.isBlank()` spots the empty ones.
+2. Normalise the extension once: `String ext = extension.trim().toLowerCase();`
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints the two lines shown.
+- [ ] `createFor("xml")` throws an exception whose message names `xml`.
+
+**Package:** `t14_design_patterns_2.exercises.ex01`
+
+**Solution:** [t14 exercise 01 solution code](../../../../code/src/t14_design_patterns_2/exercises/ex01/).
+**Tests:** [t14 exercise 01 tests](../../../../code/test/t14_design_patterns_2/exercises/ex01/).
+
 ---
 
-## Exercise 02 — EnemyFactory by difficulty (Factory)
+## Exercise 02 — Enemies by difficulty
 
-**Objective:** Build an enemy factory that creates a “Slime” enemy differently depending on
-difficulty. Functionally, your solution must support:
+**Goal:** Let a factory decide which kind of slime to create for each difficulty, so the game code just asks for "a slime" and gets the right one.
 
-* selecting enemy configuration in the factory (not the game loop),
-* creating `Enemy` instances via `EnemyFactory.createSlime(difficulty)`,
-* showing different stats for `EASY` vs `HARD` in `run()`.
+**You will need:** [Factory — spawning pickups from a level file](../t14_design_patterns_2_notes.md#factory--spawning-pickups-from-a-level-file).
 
-### Required API
+**Steps**
+
+1. Create an enum `Difficulty` with `EASY` and `HARD`.
+2. Create an interface `Enemy` with three methods: `name()`, `hp()` and `damage()`.
+3. Create `Slime` (hp 20, damage 3) and `ArmouredSlime` (hp 45, damage 6, name `Armoured Slime`).
+4. Create `EnemyFactory` with the method below. `EASY` gives a `Slime`; `HARD` gives an `ArmouredSlime`. A `null` difficulty throws an `IllegalArgumentException`.
+5. In `run()`, create one slime for each difficulty and print its name, hp and damage.
 
 ```java
-enum Difficulty { EASY, HARD }
-
-interface Enemy { String name(); int hp(); int damage(); }
-
-class EnemyFactory {
-    Enemy createSlime(Difficulty difficulty);
-}
+public Enemy createSlime(Difficulty difficulty)
 ```
 
-### Tasks
-
-1. Implement two enemy classes:
-
-   * `Slime` (e.g., hp 20, damage 3)
-   * `ArmouredSlime` (e.g., hp 45, damage 6)
-2. Implement `EnemyFactory.createSlime(difficulty)`:
-
-* EASY to `Slime`
-* HARD to `ArmouredSlime`
-1. In `run()` create and print both enemies.
-
-### Sample output
+**Example**
 
 ```text
 EASY -> Slime (hp=20, dmg=3)
 HARD -> Armoured Slime (hp=45, dmg=6)
 ```
 
-### Constraints
+**Rules**
 
-* Difficulty branching must happen in the factory, not in `run()` printing logic.
+- The choice of class happens in the factory only. `run()` treats both as an `Enemy`.
 
-### Done when...
+<details>
+<summary>Hints</summary>
 
-* Swapping the difficulty changes which class is created.
-* The caller treats everything as `Enemy`.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">? Solution</summary>
-
-```java
-package t14_design_patterns_2.exercises.ex02;
-
-public class Exercise {
-    public static void run() {
-        EnemyFactory factory = new EnemyFactory();
-
-        Enemy easy = factory.createSlime(Difficulty.EASY);
-        Enemy hard = factory.createSlime(Difficulty.HARD);
-
-        System.out.println("EASY -> " + format(easy));
-        System.out.println("HARD -> " + format(hard));
-    }
-
-    private static String format(Enemy e) {
-        return e.name() + " (hp=" + e.hp() + ", dmg=" + e.damage() + ")";
-    }
-}
-
-enum Difficulty {
-    EASY,
-    HARD
-}
-
-interface Enemy {
-    String name();
-    int hp();
-    int damage();
-}
-
-class Slime implements Enemy {
-    @Override
-    public String name() {
-        return "Slime";
-    }
-
-    @Override
-    public int hp() {
-        return 20;
-    }
-
-    @Override
-    public int damage() {
-        return 3;
-    }
-}
-
-class ArmouredSlime implements Enemy {
-    @Override
-    public String name() {
-        return "Armoured Slime";
-    }
-
-    @Override
-    public int hp() {
-        return 45;
-    }
-
-    @Override
-    public int damage() {
-        return 6;
-    }
-}
-
-class EnemyFactory {
-    public Enemy createSlime(Difficulty difficulty) {
-        if (difficulty == null)
-            throw new IllegalArgumentException("difficulty is null.");
-
-        if (difficulty == Difficulty.EASY)
-            return new Slime();
-
-        return new ArmouredSlime();
-    }
-}
-```
+1. A `switch` on the enum is a tidy way to choose: `return switch (difficulty) { case EASY -> new Slime(); case HARD -> new ArmouredSlime(); };`
+2. Write one small `format(Enemy e)` method in `Exercise` for the printing.
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints the two lines shown.
+- [ ] Adding a `MEDIUM` difficulty would mean changing the factory only.
+
+**Package:** `t14_design_patterns_2.exercises.ex02`
+
+**Solution:** [t14 exercise 02 solution code](../../../../code/src/t14_design_patterns_2/exercises/ex02/).
+**Tests:** [t14 exercise 02 tests](../../../../code/test/t14_design_patterns_2/exercises/ex02/).
+
 ---
 
-## Exercise 03 — Button click listeners (Observer)
+## Exercise 03 — Button click listeners
 
-**Objective:** Implement a `Button` that notifies multiple listeners when clicked.
-Functionally, your solution must support:
+**Goal:** Build a button that tells every interested listener when it is clicked. Listeners can sign up and leave at any time, and the button never needs to change.
 
-* registering listeners (`addListener`),
-* removing listeners (`removeListener`),
-* notifying all listeners in registration order when `click()` is called,
-* demonstrating add/remove behaviour in `run()`.
+**You will need:** [Pattern 2: Observer](../t14_design_patterns_2_notes.md#pattern-2-observer) and [Subject (publisher)](../t14_design_patterns_2_notes.md#subject-publisher).
 
-### Required API
+**Steps**
+
+1. Create an interface `ClickListener` with one method, `void onClick()`.
+2. Create `SoundListener`, which prints `SFX: click`, and `AnalyticsListener`, which prints `ANALYTICS: click`.
+3. Create `Button` with a private `List<ClickListener>`.
+4. `addListener` adds to the list and `removeListener` removes from it. Both reject `null`.
+5. `click()` calls `onClick()` on every listener, in the order they were added.
+6. In `run()`, add both listeners and click twice. Then remove the sound listener and click once more.
 
 ```java
-interface ClickListener { void onClick(); }
-
-class Button {
-    void addListener(ClickListener l);
-    boolean removeListener(ClickListener l);
-    void click();
-}
+public void addListener(ClickListener listener)
+public boolean removeListener(ClickListener listener)
+public void click()
 ```
 
-### Tasks
-
-1. Implement `Button` with an internal list of listeners.
-2. Implement two listeners:
-
-   * `SoundListener`: prints `SFX: click`
-   * `AnalyticsListener`: prints `ANALYTICS: click`
-3. In `run()`:
-
-   * add both listeners, click twice,
-   * remove one listener, click once more.
-
-### Sample output
+**Example**
 
 ```text
 SFX: click
@@ -353,339 +177,150 @@ ANALYTICS: click
 ANALYTICS: click
 ```
 
-### Constraints
+**Rules**
 
-* `Button` must not contain special-case code for specific listener types.
+- `Button` contains no code about any particular kind of listener.
 
-### Done when...
+<details>
+<summary>Hints</summary>
 
-* Listeners can be added/removed without changing `Button`.
-* Click calls notify all current listeners exactly once per click.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">? Solution</summary>
-
-```java
-package t14_design_patterns_2.exercises.ex03;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class Exercise {
-    public static void run() {
-        Button button = new Button();
-
-        ClickListener sfx = new SoundListener();
-        ClickListener analytics = new AnalyticsListener();
-
-        button.addListener(sfx);
-        button.addListener(analytics);
-
-        button.click();
-        button.click();
-
-        button.removeListener(sfx);
-
-        button.click();
-    }
-}
-
-interface ClickListener {
-    void onClick();
-}
-
-class SoundListener implements ClickListener {
-    @Override
-    public void onClick() {
-        System.out.println("SFX: click");
-    }
-}
-
-class AnalyticsListener implements ClickListener {
-    @Override
-    public void onClick() {
-        System.out.println("ANALYTICS: click");
-    }
-}
-
-class Button {
-    private List<ClickListener> _listeners = new ArrayList<>();
-
-    public void addListener(ClickListener l) {
-        if (l == null)
-            throw new IllegalArgumentException("listener is null.");
-
-        _listeners.add(l);
-    }
-
-    public boolean removeListener(ClickListener l) {
-        if (l == null)
-            throw new IllegalArgumentException("listener is null.");
-
-        return _listeners.remove(l);
-    }
-
-    public void click() {
-        for (ClickListener l : _listeners)
-            l.onClick();
-    }
-}
-```
+1. Keep a reference to the sound listener in a variable, so you can pass the same object to `removeListener` later.
+2. `list.remove(object)` returns `true` if it found and removed the object.
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints the five lines shown.
+- [ ] Each click notifies each current listener exactly once.
+
+**Package:** `t14_design_patterns_2.exercises.ex03`
+
+**Solution:** [t14 exercise 03 solution code](../../../../code/src/t14_design_patterns_2/exercises/ex03/).
+**Tests:** [t14 exercise 03 tests](../../../../code/test/t14_design_patterns_2/exercises/ex03/).
+
 ---
 
-## Exercise 04 — TemperatureSensor events with payload (Observer)
+## Exercise 04 — Temperature events
 
-**Objective:** Implement a `TemperatureSensor` that publishes temperature changes to listeners
-with a payload. Functionally, your solution must support:
+**Goal:** Build a sensor that tells its listeners the new temperature each time it changes. This time the event carries a value, and each listener decides what to do with it.
 
-* setting a temperature via `setTemperature(double)`,
-* notifying all listeners with the *new* value,
-* implementing two independent listeners (display + alarm),
-* demonstrating in `run()` that adding listeners doesn’t require editing the sensor.
+**You will need:** [Observer interface](../t14_design_patterns_2_notes.md#observer-interface) and [Observer — reacting to the player's health](../t14_design_patterns_2_notes.md#observer--reacting-to-the-players-health).
 
-### Required API
+**Steps**
+
+1. Create an interface `TemperatureListener` with `void onTemperatureChanged(double celsius)`.
+2. Create `ConsoleDisplayListener`, which prints `TEMP: <value>C` every time.
+3. Create `OverheatAlarmListener`. Its constructor takes a threshold, and it prints `ALARM: <value>C` only when the value is at or above the threshold.
+4. Create `TemperatureSensor` with `addListener`, `removeListener` and `setTemperature`. `setTemperature` passes the new value to every listener.
+5. In `run()`, add both listeners with a threshold of 55.0, then set the temperature to 35.0, 60.0, 54.9 and 55.0.
 
 ```java
-interface TemperatureListener { void onTemperatureChanged(double celsius); }
-
-class TemperatureSensor {
-    void addListener(TemperatureListener l);
-    boolean removeListener(TemperatureListener l);
-    void setTemperature(double celsius);
-}
+public void setTemperature(double celsius)
 ```
 
-### Tasks
-
-1. Create `ConsoleDisplayListener`: prints `TEMP: <value>C`
-2. Create `OverheatAlarmListener(threshold)`: prints `ALARM: <value>C` only when value >= threshold
-3. In `run()`:
-
-   * add both listeners,
-   * call `setTemperature()` with a few values (below and above threshold).
-
-### Sample output
+**Example**
 
 ```text
 TEMP: 35.0C
 TEMP: 60.0C
 ALARM: 60.0C
+TEMP: 54.9C
+TEMP: 55.0C
+ALARM: 55.0C
 ```
 
-### Constraints
+**Rules**
 
-* Sensor doesn’t “know” what an alarm is; it only notifies listeners.
+- The sensor does not know what an alarm is. It only passes values on.
 
-### Done when...
+<details>
+<summary>Hints</summary>
 
-* Listeners receive the correct payload values.
-* Alarm triggers only when threshold is crossed.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">? Solution</summary>
-
-```java
-package t14_design_patterns_2.exercises.ex04;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class Exercise {
-    public static void run() {
-        TemperatureSensor sensor = new TemperatureSensor();
-
-        sensor.addListener(new ConsoleDisplayListener());
-        sensor.addListener(new OverheatAlarmListener(55.0));
-
-        sensor.setTemperature(35.0);
-        sensor.setTemperature(60.0);
-        sensor.setTemperature(54.9);
-        sensor.setTemperature(55.0);
-    }
-}
-
-interface TemperatureListener {
-    void onTemperatureChanged(double celsius);
-}
-
-class ConsoleDisplayListener implements TemperatureListener {
-    @Override
-    public void onTemperatureChanged(double celsius) {
-        System.out.println("TEMP: " + celsius + "C");
-    }
-}
-
-class OverheatAlarmListener implements TemperatureListener {
-    private double _threshold;
-
-    public OverheatAlarmListener(double threshold) {
-        _threshold = threshold;
-    }
-
-    @Override
-    public void onTemperatureChanged(double celsius) {
-        if (celsius >= _threshold)
-            System.out.println("ALARM: " + celsius + "C");
-    }
-}
-
-class TemperatureSensor {
-    private List<TemperatureListener> _listeners = new ArrayList<>();
-
-    public void addListener(TemperatureListener l) {
-        if (l == null)
-            throw new IllegalArgumentException("listener is null.");
-
-        _listeners.add(l);
-    }
-
-    public boolean removeListener(TemperatureListener l) {
-        if (l == null)
-            throw new IllegalArgumentException("listener is null.");
-
-        return _listeners.remove(l);
-    }
-
-    public void setTemperature(double celsius) {
-        notifyListeners(celsius);
-    }
-
-    private void notifyListeners(double celsius) {
-        for (TemperatureListener l : _listeners)
-            l.onTemperatureChanged(celsius);
-    }
-}
-```
+1. The alarm's check is `if (celsius >= threshold)`. Notice the `>=`: exactly 55.0 sounds the alarm.
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints the six lines shown.
+- [ ] You could add a `LoggingListener` without changing `TemperatureSensor`.
+
+**Package:** `t14_design_patterns_2.exercises.ex04`
+
+**Solution:** [t14 exercise 04 solution code](../../../../code/src/t14_design_patterns_2/exercises/ex04/).
+**Tests:** [t14 exercise 04 tests](../../../../code/test/t14_design_patterns_2/exercises/ex04/).
+
 ---
 
-## Exercise 05 — LegacyLoggerAdapter (Adapter)
+## Exercise 05 — A legacy logger
 
-**Objective:** Adapt an incompatible legacy logger API to your project’s `Logger` interface.
-Functionally, your solution must support:
+**Goal:** Your program logs through a `Logger` interface, but the only logger available is an old class with a different method name. Write an adapter so the program can use it unchanged.
 
-* using `Logger.log(String)` from app code,
-* delegating to `LegacyLogger.logMessage(String)` via an adapter,
-* demonstrating in `run()` that app code depends only on `Logger`.
+**You will need:** [Pattern 3: Adapter](../t14_design_patterns_2_notes.md#pattern-3-adapter) and [Adapter example](../t14_design_patterns_2_notes.md#adapter-example).
 
-### Required API
+**Steps**
 
-```java
-interface Logger { void log(String msg); }
-
-class LegacyLogger { void logMessage(String msg); }
-
-class LegacyLoggerAdapter implements Logger {
-    LegacyLoggerAdapter(LegacyLogger legacy);
-    void log(String msg);
-}
-```
-
-### Tasks
-
-1. Implement `LegacyLogger` (prints `LEGACY: <msg>`).
-2. Implement `LegacyLoggerAdapter` forwarding `log()` to `logMessage()`.
-3. In `run()` use `Logger` variable type and log two messages.
-
-### Constraints
-
-* Do not change `LegacyLogger` method names.
-
-### Done when...
-
-* App code compiles using only `Logger` and the adapter hides the legacy API.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">? Solution</summary>
+1. Create an interface `Logger` with `void log(String msg)`. This is what your program uses.
+2. Create `LegacyLogger` with `void logMessage(String msg)`, which prints `LEGACY: <msg>`. Treat this class as code you are not allowed to change.
+3. Create `LegacyLoggerAdapter`, which implements `Logger`. Its constructor takes a `LegacyLogger`, and `log` passes the message to `logMessage`.
+4. In `run()`, declare a variable of type `Logger`, assign an adapter to it, and log two messages.
 
 ```java
-package t14_design_patterns_2.exercises.ex05;
-
-public class Exercise {
-    public static void run() {
-        LegacyLogger legacy = new LegacyLogger();
-        Logger logger = new LegacyLoggerAdapter(legacy);
-
-        logger.log("Server started");
-        logger.log("Player connected");
-    }
-}
-
-interface Logger {
-    void log(String msg);
-}
-
-class LegacyLogger {
-    public void logMessage(String msg) {
-        System.out.println("LEGACY: " + msg);
-    }
-}
-
-class LegacyLoggerAdapter implements Logger {
-    private LegacyLogger _legacy;
-
-    public LegacyLoggerAdapter(LegacyLogger legacy) {
-        if (legacy == null)
-            throw new IllegalArgumentException("legacy is null.");
-
-        _legacy = legacy;
-    }
-
-    @Override
-    public void log(String msg) {
-        _legacy.logMessage(msg);
-    }
-}
+public LegacyLoggerAdapter(LegacyLogger legacy)
+public void log(String msg)
 ```
+
+**Example**
+
+```text
+LEGACY: Server started
+LEGACY: Player connected
+```
+
+**Rules**
+
+- Do not rename or change `LegacyLogger`'s method.
+- After creating the adapter, `run()` only uses the `Logger` variable.
+
+<details>
+<summary>Hints</summary>
+
+1. The whole of `log` is one line: `legacy.logMessage(msg);`
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints the two lines shown.
+
+**Package:** `t14_design_patterns_2.exercises.ex05`
+
+**Solution:** [t14 exercise 05 solution code](../../../../code/src/t14_design_patterns_2/exercises/ex05/).
+**Tests:** [t14 exercise 05 tests](../../../../code/test/t14_design_patterns_2/exercises/ex05/).
+
 ---
 
-## Exercise 06 — GatewayCheckoutAdapter (Adapter)
+## Exercise 06 — A payment gateway
 
-**Objective:** Adapt a third-party payment gateway API to your `CheckoutService`. Functionally,
-your solution must support:
+**Goal:** Your shop works in whole cents, but a third-party payment gateway wants a euro amount as text, such as `"12.99"`. Write an adapter that converts between the two.
 
-* taking an `int cents` price in `CheckoutService.checkout(int cents)`,
-* converting that to a euro string (e.g., `1299` to `"12.99"`),
-* calling `ThirdPartyGateway.makePayment(String euroAmount)`,
-* demonstrating success/failure cases in `run()`.
+**You will need:** [Adapter — a legacy payment gateway](../t14_design_patterns_2_notes.md#adapter--a-legacy-payment-gateway).
 
-### Required API
+**Steps**
+
+1. Create an interface `CheckoutService` with `boolean checkout(int cents)`.
+2. Create `ThirdPartyGateway` with `boolean makePayment(String euroAmount)`. It returns `false` for `"0.00"`. Otherwise it prints `PAID: <euroAmount>` and returns `true`.
+3. Create `GatewayCheckoutAdapter`, which implements `CheckoutService`. Its constructor takes the gateway.
+4. In `checkout`, reject a negative amount, convert the cents to a euro string, and pass it to `makePayment`.
+5. In `run()`, check out 0, 199, 1299 and 1205 cents, printing what `checkout` returns each time.
 
 ```java
-interface CheckoutService { boolean checkout(int cents); }
-
-class ThirdPartyGateway { boolean makePayment(String euroAmount); }
-
-class GatewayCheckoutAdapter implements CheckoutService {
-    GatewayCheckoutAdapter(ThirdPartyGateway gateway);
-    boolean checkout(int cents);
-}
+public GatewayCheckoutAdapter(ThirdPartyGateway gateway)
+public boolean checkout(int cents)
 ```
 
-### Tasks
-
-1. Implement `ThirdPartyGateway.makePayment(euroAmount)`:
-
-   * return `false` if the string starts with `"0.00"` or equals `"0.00"`,
-   * otherwise print `PAID: <euroAmount>` and return `true`.
-2. Implement the adapter converting cents to euro string:
-
-   * `int euros = cents / 100`, `int remainder = cents % 100`
-* format remainder with 2 digits (e.g., 5 to `"05"`)
-1. In `run()` attempt checkouts for `0`, `199`, `1299`, print the returned boolean each time.
-
-### Sample output
+**Example**
 
 ```text
 checkout(0) -> false
@@ -693,84 +328,30 @@ PAID: 1.99
 checkout(199) -> true
 PAID: 12.99
 checkout(1299) -> true
+PAID: 12.05
+checkout(1205) -> true
 ```
 
-### Constraints
+**Rules**
 
-* App code must depend on `CheckoutService`, not the gateway.
-* Conversion logic lives in the adapter.
+- The conversion lives in the adapter, not in the gateway or in `run()`.
+- 1205 cents is `12.05`, not `12.5`.
 
-### Done when...
+<details>
+<summary>Hints</summary>
 
-* Values are formatted correctly (`12.05`, not `12.5`).
-* Gateway API is usable through the project interface without changing gateway code.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">? Solution</summary>
-
-```java
-package t14_design_patterns_2.exercises.ex06;
-
-public class Exercise {
-    public static void run() {
-        ThirdPartyGateway gateway = new ThirdPartyGateway();
-        CheckoutService checkout = new GatewayCheckoutAdapter(gateway);
-
-        System.out.println("checkout(0) -> " + checkout.checkout(0));
-        System.out.println("checkout(199) -> " + checkout.checkout(199));
-        System.out.println("checkout(1299) -> " + checkout.checkout(1299));
-        System.out.println("checkout(1205) -> " + checkout.checkout(1205));
-    }
-}
-
-interface CheckoutService {
-    boolean checkout(int cents);
-}
-
-class ThirdPartyGateway {
-    public boolean makePayment(String euroAmount) {
-        if (euroAmount == null || euroAmount.equals("0.00"))
-            return false;
-
-        if (euroAmount.startsWith("0.00"))
-            return false;
-
-        System.out.println("PAID: " + euroAmount);
-        return true;
-    }
-}
-
-class GatewayCheckoutAdapter implements CheckoutService {
-    private ThirdPartyGateway _gateway;
-
-    public GatewayCheckoutAdapter(ThirdPartyGateway gateway) {
-        if (gateway == null)
-            throw new IllegalArgumentException("gateway is null.");
-
-        _gateway = gateway;
-    }
-
-    @Override
-    public boolean checkout(int cents) {
-        if (cents < 0)
-            throw new IllegalArgumentException("cents must be >= 0.");
-
-        String euroAmount = formatEuro(cents);
-        return _gateway.makePayment(euroAmount);
-    }
-
-    private String formatEuro(int cents) {
-        int euros = cents / 100;
-        int remainder = cents % 100;
-
-        String rem = String.valueOf(remainder);
-        if (remainder < 10)
-            rem = "0" + rem;
-
-        return euros + "." + rem;
-    }
-}
-```
+1. `cents / 100` gives the euros and `cents % 100` gives the cents left over.
+2. `String.format("%d.%02d", euros, remainder)` pads the cents to two digits.
 
 </details>
+
+**Done when**
+
+- [ ] `run()` prints the seven lines shown.
+
+**Think about it:** the shop stores money as whole cents in an `int`, not as a `double`. Why? (t10 Exercise 05 gives a clue.)
+
+**Package:** `t14_design_patterns_2.exercises.ex06`
+
+**Solution:** [t14 exercise 06 solution code](../../../../code/src/t14_design_patterns_2/exercises/ex06/).
+**Tests:** [t14 exercise 06 tests](../../../../code/test/t14_design_patterns_2/exercises/ex06/).

@@ -14,24 +14,24 @@ import java.sql.SQLException;
 public class DatabaseConnection {
 
     // === Fields ===
-    private String _url;
-    private String _user;
-    private String _pass;
+    private final String url;
+    private final String user;
+    private final String pass;
 
     // === Constructors ===
 
     // Creates: a DatabaseConnection with the given JDBC URL and credentials
     public DatabaseConnection(String url, String user, String pass) {
-        _url  = url;
-        _user = user;
-        _pass = pass;
+        this.url = url;
+        this.user = user;
+        this.pass = pass;
     }
 
     // === Public API ===
 
     // Opens: a new JDBC Connection using the stored credentials; caller must close it
     public Connection open() throws SQLException {
-        return open(_url, _user, _pass);
+        return open(url, user, pass);
     }
 
     public Connection open(String url, String user, String pass) throws SQLException {

@@ -24,7 +24,7 @@ public class TaskClient {
 
     // === Constants ===
     private static final String HOST = "localhost";
-    private static final int    PORT = 9_300;
+    private static final int PORT = 9_300;
 
     // === Entry point ===
 
@@ -64,13 +64,13 @@ public class TaskClient {
             System.out.println(send(out, in, mapper, "DELETE_BY_ID", deletePayload));
 
             // --- DISCONNECT ---
-            send(out, in, mapper, "DISCONNECT", new LinkedHashMap<>());
+            System.out.println(send(out, in, mapper, "DISCONNECT", new LinkedHashMap<>()));
         }
     }
 
     // === Helpers ===
 
-    // Sends: a JSON request and returns the raw JSON response line; returns "" for DISCONNECT
+    // Sends: a JSON request and returns the raw JSON response line
     private static String send(PrintWriter out, BufferedReader in,
                                 ObjectMapper mapper, String requestType,
                                 Map<String, Object> payload) throws Exception {
@@ -78,9 +78,6 @@ public class TaskClient {
         request.put("requestType", requestType);
         request.put("payload",     payload);
         out.println(mapper.writeValueAsString(request));
-
-        if ("DISCONNECT".equals(requestType))
-            return "";
 
         return in.readLine();
     }

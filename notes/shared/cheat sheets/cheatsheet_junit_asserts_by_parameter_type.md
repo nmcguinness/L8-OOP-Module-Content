@@ -1,7 +1,6 @@
 # JUnit Cheatsheet — by Parameter Type
 
-> Goal: help students decide **what tests & asserts** to write for a method’s parameters so
-> they hit the usual edge-cases and validation paths.
+> Goal: help students decide **what tests & asserts** to write for a method’s parameters so they hit the usual edge-cases and validation paths.
 
 ---
 

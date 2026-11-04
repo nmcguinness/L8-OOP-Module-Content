@@ -1,5 +1,7 @@
 package assessments.gca.gca2.server;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Generic wrapper for all server replies.
  * Use the static factories ok() and error() to create responses.
@@ -11,24 +13,24 @@ package assessments.gca.gca2.server;
 public class ServerResponse<T> {
 
     // === Fields ===
-    private String _status;
-    private String _message;
-    private T      _data;
+    private String status;
+    private String message;
+    private T data;
 
     // === Constructors ===
 
     // Creates: an empty ServerResponse required by Jackson for deserialisation
     public ServerResponse() {
-        _status  = "";
-        _message = "";
-        _data    = null;
+        status = "";
+        message = "";
+        data = null;
     }
 
     // Creates: a ServerResponse with all fields set
     private ServerResponse(String status, String message, T data) {
-        _status  = status;
-        _message = message;
-        _data    = data;
+        this.status = status;
+        this.message = message;
+        this.data = data;
     }
 
     // === Public API ===
@@ -44,23 +46,24 @@ public class ServerResponse<T> {
     }
 
     // Checks: whether this response has status OK
-    public boolean isOk() { return "OK".equals(_status); }
+    @JsonIgnore
+    public boolean isOk() { return "OK".equals(status); }
 
     // Gets: the status string - either "OK" or "ERROR"
-    public String getStatus()  { return _status; }
+    public String getStatus()  { return status; }
 
     // Gets: the human-readable outcome message
-    public String getMessage() { return _message; }
+    public String getMessage() { return message; }
 
     // Gets: the data payload; null when this is an error response
-    public T getData() { return _data; }
+    public T getData() { return data; }
 
     // Sets: the status (used by Jackson during deserialisation)
-    public void setStatus(String status)   { _status  = status; }
+    public void setStatus(String status)   { this.status  = status; }
 
     // Sets: the message (used by Jackson during deserialisation)
-    public void setMessage(String message) { _message = message; }
+    public void setMessage(String message) { this.message = message; }
 
     // Sets: the data payload (used by Jackson during deserialisation)
-    public void setData(T data)            { _data    = data; }
+    public void setData(T data)            { this.data    = data; }
 }

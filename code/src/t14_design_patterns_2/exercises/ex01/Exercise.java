@@ -21,15 +21,18 @@ interface Parser {
 class CsvParser implements Parser {
     @Override
     public int parseCount(String input) {
-        if (input == null)
+        if (input == null) {
             return 0;
+        }
 
         String[] lines = input.split("\n");
         int count = 0;
 
-        for (String line : lines)
-            if (!line.trim().isEmpty())
+        for (String line : lines) {
+            if (!line.trim().isEmpty()) {
                 count++;
+            }
+        }
 
         return count;
     }
@@ -38,13 +41,16 @@ class CsvParser implements Parser {
 class JsonParser implements Parser {
     @Override
     public int parseCount(String input) {
-        if (input == null)
+        if (input == null) {
             return 0;
+        }
 
         int count = 0;
-        for (int i = 0; i < input.length(); i++)
-            if (input.charAt(i) == '{')
+        for (int i = 0; i < input.length(); i++) {
+            if (input.charAt(i) == '{') {
                 count++;
+            }
+        }
 
         return count;
     }
@@ -52,16 +58,19 @@ class JsonParser implements Parser {
 
 class ParserFactory {
     public Parser createFor(String extension) {
-        if (extension == null || extension.isBlank())
+        if (extension == null || extension.isBlank()) {
             throw new IllegalArgumentException("extension is null/blank.");
+        }
 
         String ext = extension.trim().toLowerCase();
 
-        if (ext.equals("csv"))
+        if (ext.equals("csv")) {
             return new CsvParser();
+        }
 
-        if (ext.equals("json"))
+        if (ext.equals("json")) {
             return new JsonParser();
+        }
 
         throw new IllegalArgumentException("Unsupported extension: " + extension);
     }

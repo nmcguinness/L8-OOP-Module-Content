@@ -14,8 +14,7 @@ tags: [java, recursion, call-stack, base-case, factorial, fibonacci, binary-sear
 
 ## Exercise 01 — Power function
 
-Write a recursive static method `power(int base, int exp)` that returns `base` raised to the
-power `exp`.
+Write a recursive static method `power(int base, int exp)` that returns `base` raised to the power `exp`.
 
 - Guard: if `exp < 0`, throw `IllegalArgumentException`.
 - Base case: `exp == 0` returns `1`.
@@ -33,8 +32,7 @@ Write a `main` method that tests:
 
 ## Exercise 02 — Count occurrences in a string
 
-Write a recursive static method `countOccurrences(String s, char c)` that counts how many times
-character `c` appears in string `s`.
+Write a recursive static method `countOccurrences(String s, char c)` that counts how many times character `c` appears in string `s`.
 
 - Base case: empty string returns `0`.
 - Recursive case: check first character; add 1 if it matches, then recurse on `s.substring(1)`.
@@ -50,8 +48,7 @@ Write a `main` method that tests:
 
 ## Exercise 03 — Recursive array maximum
 
-Write a recursive static method `max(int[] xs, int i)` that returns the maximum value in `xs`
-from index `i` to the end.
+Write a recursive static method `max(int[] xs, int i)` that returns the maximum value in `xs` from index `i` to the end.
 
 - Guard (public wrapper): if `xs` is null or empty, throw `IllegalArgumentException`.
 - Base case: `i == xs.length - 1` returns `xs[i]`.
@@ -69,8 +66,7 @@ Test:
 
 ## Exercise 04 — Palindrome checker
 
-Write a recursive static method `isPalindrome(String s)` that returns `true` if `s` reads the
-same forwards and backwards (case-sensitive).
+Write a recursive static method `isPalindrome(String s)` that returns `true` if `s` reads the same forwards and backwards (case-sensitive).
 
 - Base case: length ≤ 1 to `true`.
 - Short-circuit: first and last characters differ to `false`.

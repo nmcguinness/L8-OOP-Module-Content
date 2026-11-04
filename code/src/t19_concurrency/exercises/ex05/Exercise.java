@@ -5,14 +5,14 @@ import java.util.concurrent.*;
 
 public class Exercise {
 
-    public static void run() throws Exception {
+    public static void run() throws InterruptedException, ExecutionException {
         new DispatchSimulation().run();
     }
 }
 
 class DispatchSimulation {
 
-    public void run() throws Exception {
+    public void run() throws InterruptedException, ExecutionException {
         ExecutorService pool = Executors.newFixedThreadPool(3);
 
         List<DeliveryJob> jobs = List.of(
@@ -55,9 +55,9 @@ class DispatchSimulation {
 
 class DeliveryJob implements Callable<DeliveryResult> {
 
-    private String _orderId;
-    private String _destination;
-    private double _cost;
+    private final String orderId;
+    private final String destination;
+    private final double cost;
 
     public DeliveryJob(String orderId, String destination, double cost) {
         if (orderId == null || orderId.isBlank())
@@ -67,36 +67,36 @@ class DeliveryJob implements Callable<DeliveryResult> {
         if (cost <= 0)
             throw new IllegalArgumentException("cost must be > 0");
 
-        _orderId     = orderId;
-        _destination = destination;
-        _cost        = cost;
+        this.orderId     = orderId;
+        this.destination = destination;
+        this.cost        = cost;
     }
 
     @Override
     public DeliveryResult call() throws InterruptedException {
         Thread.sleep(300);
         System.out.println("[" + Thread.currentThread().getName() + "] Completing "
-            + _orderId + " \u2192 " + _destination);
-        return new DeliveryResult(_orderId, _destination, _cost, true);
+            + orderId + " \u2192 " + destination);
+        return new DeliveryResult(orderId, destination, cost, true);
     }
 }
 
 class DeliveryResult {
 
-    private String _orderId;
-    private String _destination;
-    private double _cost;
-    private boolean _success;
+    private final String orderId;
+    private final String destination;
+    private final double cost;
+    private final boolean success;
 
     public DeliveryResult(String orderId, String destination, double cost, boolean success) {
-        _orderId     = orderId;
-        _destination = destination;
-        _cost        = cost;
-        _success     = success;
+        this.orderId     = orderId;
+        this.destination = destination;
+        this.cost        = cost;
+        this.success     = success;
     }
 
-    public String orderId()     { return _orderId; }
-    public String destination() { return _destination; }
-    public double cost()        { return _cost; }
-    public boolean success()    { return _success; }
+    public String orderId()     { return orderId; }
+    public String destination() { return destination; }
+    public double cost()        { return cost; }
+    public boolean success()    { return success; }
 }

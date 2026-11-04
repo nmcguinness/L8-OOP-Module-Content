@@ -4,7 +4,7 @@ import java.util.concurrent.*;
 
 public class Exercise {
 
-    public static void run() throws Exception {
+    public static void run() throws InterruptedException, ExecutionException {
         ExecutorService pool = Executors.newFixedThreadPool(2);
 
         Future<Double> f1 = pool.submit(new CostEstimateTask("ORD-001", 2.50, 45));
@@ -24,9 +24,9 @@ public class Exercise {
 
 class CostEstimateTask implements Callable<Double> {
 
-    private String _orderId;
-    private double _baseRate;
-    private int _distance;
+    private final String orderId;
+    private final double baseRate;
+    private final int distance;
 
     public CostEstimateTask(String orderId, double baseRate, int distance) {
         if (orderId == null || orderId.isBlank())
@@ -36,15 +36,15 @@ class CostEstimateTask implements Callable<Double> {
         if (distance < 1)
             throw new IllegalArgumentException("distance must be >= 1");
 
-        _orderId  = orderId;
-        _baseRate = baseRate;
-        _distance = distance;
+        this.orderId  = orderId;
+        this.baseRate = baseRate;
+        this.distance = distance;
     }
 
     @Override
     public Double call() throws InterruptedException {
         Thread.sleep(500);
-        System.out.println("[" + Thread.currentThread().getName() + "] Estimating " + _orderId + "...");
-        return _baseRate * _distance;
+        System.out.println("[" + Thread.currentThread().getName() + "] Estimating " + orderId + "...");
+        return baseRate * distance;
     }
 }

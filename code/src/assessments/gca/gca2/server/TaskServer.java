@@ -25,21 +25,21 @@ public class TaskServer {
     private static final String URL     = "jdbc:mysql://localhost:3306/gca2_support_db";
     private static final String DB_USER = "root";
     private static final String DB_PASS = "";
-    private static final int    PORT    = 9_300;
-    private static final int    THREADS = 10;
+    private static final int PORT    = 9_300;
+    private static final int THREADS = 10;
 
     // === Fields ===
-    private int              _port;
-    private ClientDispatcher _dispatcher;
-    private ObjectMapper     _mapper;
+    private final int port;
+    private final ClientDispatcher dispatcher;
+    private final ObjectMapper mapper;
 
     // === Constructors ===
 
     // Creates: a TaskServer bound to the given port using the given dispatcher
     public TaskServer(int port, ClientDispatcher dispatcher, ObjectMapper mapper) {
-        _port       = port;
-        _dispatcher = dispatcher;
-        _mapper     = mapper;
+        this.port = port;
+        this.dispatcher = dispatcher;
+        this.mapper = mapper;
     }
 
     // === Public API ===
@@ -47,11 +47,11 @@ public class TaskServer {
     // Starts: the accept loop; submits each new connection to the thread pool until interrupted
     public void start() throws Exception {
         ExecutorService pool = Executors.newFixedThreadPool(THREADS);
-        try (ServerSocket serverSocket = new ServerSocket(_port)) {
-            System.out.println("TaskServer listening on port " + _port + " ...");
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
+            System.out.println("TaskServer listening on port " + port + " ...");
             while (!Thread.currentThread().isInterrupted()) {
                 Socket clientSocket = serverSocket.accept();
-                pool.submit(new ClientHandler(clientSocket, _dispatcher, _mapper));
+                pool.submit(new ClientHandler(clientSocket, dispatcher, mapper));
             }
         }
         finally {

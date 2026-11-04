@@ -4,7 +4,7 @@ subtitle: "COMP C8Z03 — Year 2 OOP"
 topic_code: t12_generics_2
 description: "Invariance, wildcards (? extends / ? super), the PECS rule, and how to design flexible, type-safe generic APIs."
 created: 2026-01-22
-last_updated: 2026-04-14
+last_updated: 2026-11-04
 version: 1.0
 status: published
 authors: ["OOP Teaching Team"]
@@ -24,17 +24,22 @@ prerequisites:
 > - You understand `Box<T>`, generic methods, and bounds like `T extends Comparable<T>`
 > - You can use `List<T>` and basic loops
 
+---
+
 ## In this topic
 
 - [What you'll learn](#what-youll-learn)
 - [Why this matters](#why-this-matters)
 - [How this builds on previous content](#how-this-builds-on-previous-content)
+- [Key terms](#key-terms)
 - [Core Ideas / Concepts](#core-ideas--concepts)
 - [Progressive examples (A then B then C)](#progressive-examples-a-then-b-then-c)
-- [Games Example — Event bus payloads (producer vs
-  consumer)](#games-example--event-bus-payloads-producer-vs-consumer)
+- [Games Example — Event bus payloads (producer vs consumer)](#games-example--event-bus-payloads-producer-vs-consumer)
+- [Common mistakes](#common-mistakes)
 - [Debugging and pitfalls](#debugging-and-pitfalls)
+- [Practice tasks](#practice-tasks)
 - [Reflective questions](#reflective-questions)
+- [Further reading](#further-reading)
 - [Appendix A — Quick reference (wildcards)](#appendix-a--quick-reference-wildcards)
 
 ---
@@ -50,10 +55,11 @@ prerequisites:
 | Create | Implement a type-safe `copy` / `addAll` style method using wildcards. |
 | Debug | Fix compile errors caused by wildcard misuse and interpret “capture of ?” messages. |
 
+---
+
 ## Why this matters
 
-Java generics are **invariant** by default. That surprises people and causes real friction when
-you want APIs to work across type hierarchies.
+Java generics are **invariant** by default. That surprises people and causes real friction when you want APIs to work across type hierarchies.
 
 Example: If `Enemy` extends `Entity`, many students expect:
 
@@ -64,6 +70,8 @@ java.util.List<Entity> entities = enemies; // expected? but NOT allowed
 
 Week 2 gives you the tools to express *variance* safely using **wildcards**.
 
+---
+
 ## How this builds on previous content
 
 | Earlier topic | Concept carried forward |
@@ -73,10 +81,35 @@ Week 2 gives you the tools to express *variance* safely using **wildcards**.
 | [t05](../t05_collections_1/t05_collections_1_notes.md)–[t07 Collections](../t07_collections_3_set_map/t07_collections_3_set_map_notes.md) | Every method here takes or returns a collection; PECS is about writing those signatures well |
 | [t03 Ordering](../t03_ordering/t03_ordering_notes.md) | `Comparator<? super T>` finally explains a wildcard you have already been using without noticing |
 
-Where this goes next: PECS is what makes the generic wrappers in [t20 JSON
-I](../t20_json_1_jackson_basics/t20_json_1_jackson_basics_notes.md) and the `ServerResponse<T>`
-of [t22 Networking](../t22_networking/t22_networking_notes.md) flexible enough to be reused
-across every entity in a project.
+Where this goes next: PECS is what makes the generic wrappers in [t20 JSON I](../t20_json_1_jackson_basics/t20_json_1_jackson_basics_notes.md) and the `ServerResponse<T>` of [t22 Networking](../t22_networking/t22_networking_notes.md) flexible enough to be reused across every entity in a project.
+
+---
+
+## Key terms
+
+### Invariance
+
+**Invariance** means `List<Enemy>` is not a `List<Entity>`, even though an `Enemy` is an `Entity`.
+
+### Wildcard
+
+The **wildcard** `?` stands for "some type, I do not know which".
+
+### Upper bound
+
+`? extends T` is an **upper bound**: the list holds T or a subtype of T. You can read from it as T.
+
+### Lower bound
+
+`? super T` is a **lower bound**: the list holds T or a supertype of T. You can add a T to it.
+
+### PECS
+
+**PECS** stands for Producer Extends, Consumer Super. It tells you which bound to choose.
+
+### Wildcard capture
+
+**Capture** is the compiler giving an unknown `?` a temporary name, which you see in errors that say "capture of ?".
 
 ---
 
@@ -107,16 +140,13 @@ public static void demo() {
 
 #### Snippet explanation
 
-If `List<Enemy>` could be treated as `List<Entity>`, then someone could add a `Pickup` into a
-list that is meant to contain only `Enemy`.
-So Java forbids it: **generic types are invariant**.
+If `List<Enemy>` could be treated as `List<Entity>`, then someone could add a `Pickup` into a list that is meant to contain only `Enemy`. So Java forbids it: **generic types are invariant**.
 
 ### Core Idea 2 — Wildcards: “some type” (`?`) and why `List<?>` is read-only for adding
 
 #### Explanation
 
-`?` means “an unknown type”.
-If you have `List<?>`, the compiler doesn’t know what element type it really holds.
+`?` means “an unknown type”. If you have `List<?>`, the compiler doesn’t know what element type it really holds.
 
 ```java
 public static void demo(java.util.List<?> items) {
@@ -132,15 +162,13 @@ public static void demo(java.util.List<?> items) {
 
 #### Snippet explanation
 
-You can **read** from a `List<?>` as `Object`.
-You can’t safely **add** a non-null value, because you don’t know the list’s true element type.
+You can **read** from a `List<?>` as `Object`. You can’t safely **add** a non-null value, because you don’t know the list’s true element type.
 
 ### Core Idea 3 — Upper-bounded wildcards: `? extends T` (Producer Extends)
 
 #### Explanation
 
-`List<? extends T>` means: “a list of **some subtype** of `T`”.
-This is used when you want to **read T values out** (the list *produces* values).
+`List<? extends T>` means: “a list of **some subtype** of `T`”. This is used when you want to **read T values out** (the list *produces* values).
 
 ```java
 public static double sumNumbers(java.util.List<? extends Number> nums) {
@@ -163,8 +191,7 @@ public static void demo() {
 
 #### Snippet explanation
 
-Both `List<Integer>` and `List<Double>` can be passed as `List<? extends Number>` because they
-are lists of something that *is a Number*.
+Both `List<Integer>` and `List<Double>` can be passed as `List<? extends Number>` because they are lists of something that *is a Number*.
 
 #### Important rule
 
@@ -184,8 +211,7 @@ Because the list might actually be `List<Integer>`, and adding a `Double` would 
 
 #### Explanation
 
-`List<? super T>` means: “a list of `T` or any **supertype** of `T`”.
-This is used when you want to **add T values into** the list (the list *consumes* values).
+`List<? super T>` means: “a list of `T` or any **supertype** of `T`”. This is used when you want to **add T values into** the list (the list *consumes* values).
 
 ```java
 class Entity { }
@@ -209,8 +235,7 @@ public static void demo() {
 
 #### Snippet explanation
 
-All three lists can *consume* `Enemy` values because they are typed to accept `Enemy` or
-something more general.
+All three lists can *consume* `Enemy` values because they are typed to accept `Enemy` or something more general.
 
 #### Important rule
 
@@ -265,8 +290,7 @@ public static void demo() {
 
 #### Snippet explanation
 
-`src` produces values of type `T` (or subtype), so we use `? extends T`.
-`dst` consumes values of type `T`, so we use `? super T`.
+`src` produces values of type `T` (or subtype), so we use `? extends T`. `dst` consumes values of type `T`, so we use `? super T`.
 
 This is PECS in practice.
 
@@ -298,15 +322,13 @@ public static void demo() {
 
 #### Snippet explanation
 
-Sorting “consumes” elements for comparison.
-So allowing a comparator of a *supertype* is safe and useful.
+Sorting “consumes” elements for comparison. So allowing a comparator of a *supertype* is safe and useful.
 
 ### Core Idea 8 — “Capture of ?” errors (what they mean)
 
 #### Explanation
 
-Sometimes the compiler says things like “capture of ?” when the wildcard type can’t be named
-directly.
+Sometimes the compiler says things like “capture of ?” when the wildcard type can’t be named directly.
 
 Example:
 
@@ -316,8 +338,7 @@ public static void swapFirstTwo(java.util.List<?> items) {
 }
 ```
 
-A common pattern is to **capture** the wildcard by delegating to a helper method with a type
-parameter:
+A common pattern is to **capture** the wildcard by delegating to a helper method with a type parameter:
 
 ```java
 public static void swapFirstTwo(java.util.List<?> items) {
@@ -338,8 +359,9 @@ private static <T> void swapFirstTwoCaptured(java.util.List<T> items) {
 
 #### Snippet explanation
 
-`List<?>` can’t be safely written to (except `null`), but once we capture the unknown type as
-`T`, we can operate consistently on that same `T`.
+`List<?>` can’t be safely written to (except `null`), but once we capture the unknown type as `T`, we can operate consistently on that same `T`.
+
+---
 
 ## Progressive examples (A then B then C)
 
@@ -385,6 +407,8 @@ public static void spawnEnemies(java.util.List<? super Enemy> out, int count) {
 
 Any list that can accept `Enemy` objects is valid, including `List<Entity>` and `List<Object>`.
 
+---
+
 ## Games Example — Event bus payloads (producer vs consumer)
 
 Imagine an event system where listeners read events and handlers push events into a queue.
@@ -408,6 +432,19 @@ public static void publishAll(java.util.List<? extends GameEvent> events,
 
 This pattern appears constantly in real code (queues, pipelines, logging, batching).
 
+---
+
+## Common mistakes
+
+| Mistake | What happens | Fix |
+| :- | :- | :- |
+| Using a wildcard in a return type | Every caller has to deal with an unknown type | Use wildcards on parameters, and return a specific type |
+| Adding wildcards to every parameter | Signatures get harder to read, with no gain when callers only ever pass one type | Add one when a caller needs the flexibility |
+| Using `? extends T` and `? super T` the wrong way round | The method body will not compile | Ask: does the method read from this list, or add to it? |
+| Using `<T>` where `<?>` is enough | A type parameter that is only used once adds nothing | Use `List<?>` when you never need to name the type |
+
+---
+
 ## Debugging and pitfalls
 
 | Pitfall | What you did | Why it fails | Fix |
@@ -417,6 +454,18 @@ This pattern appears constantly in real code (queues, pipelines, logging, batchi
 | “I wrote `List<T>` and now it rejects `List<SubT>`” | invariant parameter type | `List<SubT>` is not `List<T>` | Use `List<? extends T>` if read-only |
 | Raw types creep back in | `List items = ...` | Type info is lost | Always use type arguments; avoid raw types |
 | Confusing `extends` for “inheritance only” | `T extends Runnable` | In generics `extends` means “is a subtype of” | It works for interfaces too |
+
+---
+
+## Practice tasks
+
+1. Write `double total(List<? extends Number> values)`. Call it with a `List<Integer>` and a `List<Double>`.
+2. Write `void addOnes(List<? super Integer> out)`. Which of `List<Integer>`, `List<Number>`, `List<Object>` and `List<Double>` can you pass?
+3. Find a method in `java.util.Collections` that uses a wildcard. Explain its signature using PECS.
+
+For step-by-step practice with worked solutions, see the [t12 exercises](exercises/t12_generics_2_exercises.md).
+
+---
 
 ## Reflective questions
 
@@ -433,8 +482,7 @@ padding:0.9rem 1rem; margin:1rem 0;">
   </summary>
 
 **Why `List<Enemy>` is not a `List<Entity>`.**
-Generics are **invariant**: `Enemy extends Entity` says nothing about the relationship between
-`List<Enemy>` and `List<Entity>`. That looks unhelpful until you see what it prevents.
+Generics are **invariant**: `Enemy extends Entity` says nothing about the relationship between `List<Enemy>` and `List<Entity>`. That looks unhelpful until you see what it prevents.
 
 If the assignment were allowed, this would compile:
 
@@ -445,31 +493,19 @@ entities.add(new Player());         // Player is an Entity - looks fine
 Enemy e = enemies.get(0);           // ClassCastException at runtime
 ```
 
-Both names refer to **one list**. Widening the reference to `List<Entity>` would let you insert
-any `Entity`, including a `Player`, into a list everyone else believes contains only `Enemy`.
-The crash lands on the innocent `get`, far from the `add` that caused it. Invariance rejects
-line 2 instead, at compile time.
+Both names refer to **one list**. Widening the reference to `List<Entity>` would let you insert any `Entity`, including a `Player`, into a list everyone else believes contains only `Enemy`. The crash lands on the innocent `get`, far from the `add` that caused it. Invariance rejects line 2 instead, at compile time.
 
-Worth contrasting: **arrays are covariant** (`Enemy[]` *is* an `Entity[]`), which is exactly
-why they throw `ArrayStoreException` at runtime — Java made the unsafe choice for arrays and
-the safe one for generics.
+Worth contrasting: **arrays are covariant** (`Enemy[]` *is* an `Entity[]`), which is exactly why they throw `ArrayStoreException` at runtime — Java made the unsafe choice for arrays and the safe one for generics.
 
 **Producer or consumer?**
 
-- `sum(List<? extends Number> nums)` — it **reads** values to total them, so it is a
-  **producer**: `extends`. This lets you pass `List<Integer>`, `List<Double>` or `List<Long>`;
-  with a plain `List<Number>` only an exact `List<Number>` would be accepted. You cannot `add`
-  to it (except `null`), which is fine — summing does not add.
-- `fill(List<? super T> out, T value)` — it **writes** values in, so it is a **consumer**:
-  `super`. `fill(List<? super Integer>, Integer)` accepts a `List<Integer>`, a `List<Number>`
-  or a `List<Object>`, because an `Integer` is safe to store in any of them. Reading gives back
-  only `Object`, which is fine — filling does not read.
+- `sum(List<? extends Number> nums)` — it **reads** values to total them, so it is a **producer**: `extends`. This lets you pass `List<Integer>`, `List<Double>` or `List<Long>`; with a plain `List<Number>` only an exact `List<Number>` would be accepted. You cannot `add` to it (except `null`), which is fine — summing does not add.
+- `fill(List<? super T> out, T value)` — it **writes** values in, so it is a **consumer**: `super`. `fill(List<? super Integer>, Integer)` accepts a `List<Integer>`, a `List<Number>` or a `List<Object>`, because an `Integer` is safe to store in any of them. Reading gives back only `Object`, which is fine — filling does not read.
 
 That is **PECS**: Producer `extends`, Consumer `super`.
 
 **The `copy` bug if both parameters were `List<T>`.**
-The method still works, but only for the case where source and destination hold *exactly* the
-same type — so it becomes far less useful than it should be:
+The method still works, but only for the case where source and destination hold *exactly* the same type — so it becomes far less useful than it should be:
 
 ```java
 // Too rigid
@@ -479,18 +515,25 @@ static <T> void copy(List<T> dest, List<T> src)
 static <T> void copy(List<? super T> dest, List<? extends T> src)
 ```
 
-With the rigid signature, `copy(numbers, integers)` where `dest` is `List<Number>` and `src` is
-`List<Integer>` **fails to compile**, because `T` cannot simultaneously be `Number` and
-`Integer`. Yet the operation is perfectly safe — every `Integer` *is* a `Number`, so storing
-them in a `List<Number>` can never break anything.
+With the rigid signature, `copy(numbers, integers)` where `dest` is `List<Number>` and `src` is `List<Integer>` **fails to compile**, because `T` cannot simultaneously be `Number` and `Integer`. Yet the operation is perfectly safe — every `Integer` *is* a `Number`, so storing them in a `List<Number>` can never break anything.
 
-So the "bug" is not a crash, it is a **needlessly rejected safe program**: the compiler forces
-callers into casts, raw types, or copying the list first — reintroducing exactly the unsafety
-generics existed to remove. The wildcard version states the real requirement — *read something
-at least as specific as `T`, write into something at least as general as `T`* — which is why
-`Collections.copy` in the standard library is declared precisely that way.
+So the "bug" is not a crash, it is a **needlessly rejected safe program**: the compiler forces callers into casts, raw types, or copying the list first — reintroducing exactly the unsafety generics existed to remove. The wildcard version states the real requirement — *read something at least as specific as `T`, write into something at least as general as `T`* — which is why `Collections.copy` in the standard library is declared precisely that way.
 
 </details>
+
+---
+
+## Further reading
+
+- **Oracle Java Tutorials: Guidelines for Wildcard Use**
+  <https://docs.oracle.com/javase/tutorial/java/generics/wildcardGuidelines.html>
+  When to use `extends`, `super`, or no wildcard.
+
+- **Oracle Java Tutorials: Wildcard Capture**
+  <https://docs.oracle.com/javase/tutorial/java/generics/capture.html>
+  What "capture of ?" means, and the helper method fix.
+
+---
 
 ## Appendix A — Quick reference (wildcards)
 

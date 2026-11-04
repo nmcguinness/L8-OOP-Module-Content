@@ -28,7 +28,7 @@ Where possible, establish which of the following a reader is using, because the 
 - **Refreshable braille display** — line width and horizontal structure matter most. Wide tables and long code lines are the worst offenders.
 - **Screen magnification or high-contrast** (for a reader with residual vision) — reflow, line length, and colour dependence matter instead.
 
-The rules below are written to be safe for all three. For a speech-only reader, Rule 12 (line length) can be deprioritised; for a braille reader it becomes one of the most important.
+The rules below are written to be safe for all three.
 
 It is also worth knowing which markdown renderer is in use (VS Code preview, Obsidian, a Pandoc HTML build, or raw text in an editor). Mermaid accessibility in particular depends on the renderer actually producing SVG.
 
@@ -107,19 +107,15 @@ Guidance on writing the description:
 
 #### Exception: `mindmap` does not support `accTitle` / `accDescr`
 
-Mermaid's mindmap parser is indentation-sensitive and reads the whole block as a node
-tree, so an `accTitle:` or `accDescr:` line is parsed as **a node**. The diagram then fails
-to render with:
+Mermaid's mindmap parser is indentation-sensitive and reads the whole block as a node tree, so an `accTitle:` or `accDescr:` line is parsed as **a node**. The diagram then fails to render with:
 
 ```text
 There can be only one root. No parent could be found for ("accDescr: ...")
 ```
 
-Verified against Mermaid 11.17. `flowchart`, `sequenceDiagram`, `classDiagram`,
-`stateDiagram-v2` and `erDiagram` all accept the inline directives; `mindmap` does not.
+Verified against Mermaid 11.17. `flowchart`, `sequenceDiagram`, `classDiagram`, `stateDiagram-v2` and `erDiagram` all accept the inline directives; `mindmap` does not.
 
-For a mind map, put the metadata in **YAML frontmatter** at the top of the block instead,
-which the frontmatter parser handles before the diagram parser sees it:
+For a mind map, put the metadata in **YAML frontmatter** at the top of the block instead, which the frontmatter parser handles before the diagram parser sees it:
 
 ````markdown
 ```mermaid
@@ -137,14 +133,10 @@ mindmap
 
 Two details that matter:
 
-- **Quote the values.** An unquoted value containing a colon — which any sentence with
-  `Branches: ...` will have — is read as a nested YAML mapping and fails with
-  `bad indentation of a mapping entry`.
+- **Quote the values.** An unquoted value containing a colon — which any sentence with `Branches: ...` will have — is read as a nested YAML mapping and fails with `bad indentation of a mapping entry`.
 - Frontmatter must come **first** in the block, before any `%%{init}%%` directive.
 
-Because the inline directives are unavailable here, the prose **Diagram description** is
-the only thing carrying the information for a mind map. Write it as a nested list mirroring
-the branches, not a summary — a mind map *is* a nested list, so the list form loses nothing.
+Because the inline directives are unavailable here, the prose **Diagram description** is the only thing carrying the information for a mind map. Write it as a nested list mirroring the branches, not a summary — a mind map *is* a nested list, so the list form loses nothing.
 
 ### R2 — Replace ASCII and box-drawing diagrams
 
@@ -255,18 +247,21 @@ Predictability is worth more than polish. Once a reader has learned the shape of
 
 The canonical `##` section order for a topic notes file:
 
-1. `## What you'll learn`
-2. `## Why this matters`
-3. `## How this builds on previous content`
-4. `## Core Ideas / Concepts`
-5. `## Worked examples`
-6. `## Common mistakes`
-7. `## Debugging and pitfalls`
-8. `## Practice tasks`
-9. `## Reflective questions`
-10. `## Key terms`
+1. `## In this topic`
+2. `## What you'll learn`
+3. `## Why this matters`
+4. `## How this builds on previous content`
+5. `## Key terms`
+6. The topic's own content sections, such as `## Core Ideas / Concepts`, `## Part 1: ...` or `## Section 1 — ...`, numbered from 1 in each file
+7. `## Common mistakes`
+8. `## Debugging and pitfalls`
+9. `## Practice tasks`
+10. `## Reflective questions`
 11. `## Further reading`
-12. `## Lesson Context`
+12. Any `## Appendix ...`
+13. `## Lesson Context`
+
+Key terms come before the content, so a reader meets the vocabulary before it is used. Topics t00 to t06 still use the older order, with Key terms after Reflective questions, until they can be changed next academic year.
 
 Current inconsistencies to fix:
 
@@ -405,11 +400,7 @@ Avoid raw HTML in markdown generally. Where a container is genuinely needed for 
 
 ### R12 — Line length
 
-Keep source lines under roughly 100 characters, including inside code blocks. This matters most for braille display users, who read a fixed window (typically 40 or 80 cells) and must pan horizontally across anything longer.
-
-Current worst offenders: `t16` (~135 long lines), `t14` (~43), `t15` (~37), `t06` (~34).
-
-For prose, this means wrapping at sentence boundaries rather than mid-clause. For code, prefer breaking long chained calls and long parameter lists across lines.
+There is no column limit for notes. Write each paragraph and each list item as one unbroken line, and let the reader's screen wrap it. A screen reader, a braille display and a browser all reflow an unbroken line to fit; typed line breaks only fragment it. See [Markdown prose](style-guide.md#markdown-prose) in the style guide.
 
 ### R13 — Link text must make sense out of context
 
@@ -449,33 +440,30 @@ pandoc t08_generics_1_notes.md -s --toc --mathml -o t08_generics_1_notes.html
 
 ## 5. Per-file work list
 
-Regenerated 2026-09-09 against the current filenames. Rules R1–R5, R8, R11 and R14 are
-complete; the table lists only what is still outstanding. Counts drift as edits land, so
-regenerate it with the `accessibility-report` script rather than editing it by hand.
-(The `scripts/` folder is lecturer-local and is not published to GitHub.)
+Regenerated 2026-09-09 against the current filenames. Rules R1–R5, R8, R11 and R14 are complete; the table lists only what is still outstanding. Counts drift as edits land, so regenerate it with the `accessibility-report` script rather than editing it by hand. (The `scripts/` folder is lecturer-local and is not published to GitHub.)
 
-| File | Mermaid | Trailing comments (R6) | Code >100 (R12) | Table rows >100 (R10) | Tables >8 rows (R10) |
-|:-|-:|-:|-:|-:|-:|
-| `shared/mind maps/revision_t00_t09.md` | 10 | 63 | 10 | 10 | 1 |
-| `shared/mind maps/revision_t10_t22.md` | 13 | 44 | 13 | 13 | 1 |
-| `topics/t21_json_2_jackson_advanced/t21_json_2_jackson_advanced_notes.md` | 3 | 12 | 8 | 28 | 2 |
-| `topics/t02_recursion/t02_recursion_notes.md` | — | 18 | — | 17 | — |
-| `topics/t25_documenting_a_project/t25_documenting_a_project_notes.md` | 7 | — | 12 | 21 | 2 |
-| `topics/t00_oop_fundamentals/t00_oop_fundamentals_notes.md` | — | 15 | 1 | 14 | — |
-| `topics/t07_collections_3_set_map/t07_collections_3_set_map_notes.md` | — | 24 | — | 6 | — |
-| `topics/t23_unit_testing/t23_unit_testing_notes.md` | 1 | 4 | 3 | 17 | 2 |
-| `topics/t20_json_1_jackson_basics/t20_json_1_jackson_basics_notes.md` | — | — | — | 21 | 2 |
-| `topics/t22_networking/exercises/t22_networking_exercises.md` | — | 4 | 19 | — | — |
-| `topics/t16_functional_interfaces/t16_functional_interfaces_notes.md` | — | 5 | 1 | 15 | — |
-| `topics/t22_networking/t22_networking_notes.md` | — | 6 | 4 | 10 | — |
-| `topics/t01_arrays/t01_arrays_notes.md` | — | 7 | — | 12 | — |
-| `topics/t05_collections_1/t05_collections_1_notes.md` | — | 17 | — | 2 | — |
-| `topics/t06_collections_2/t06_collections_2_notes.md` | — | 14 | — | 5 | — |
-| `shared/cheat sheets/cheatsheet_junit_asserts_by_parameter_type.md` | — | 2 | 16 | — | — |
-| `topics/t12_generics_2/t12_generics_2_notes.md` | — | 8 | — | 10 | — |
-| `topics/t17_streams_api/t17_streams_api_notes.md` | — | 9 | — | 9 | — |
-| `topics/t18_io/t18_io_notes.md` | — | 9 | — | 8 | 1 |
-| `topics/t19_concurrency/t19_concurrency_notes.md` | 1 | 8 | 2 | 7 | — |
+| File | Mermaid | Trailing comments (R6) | Table rows >100 (R10) | Tables >8 rows (R10) |
+|:-|-:|-:|-:|-:|
+| `shared/mind maps/revision_t00_t09.md` | 10 | 63 | 10 | 1 |
+| `shared/mind maps/revision_t10_t22.md` | 13 | 44 | 13 | 1 |
+| `topics/t21_json_2_jackson_advanced/t21_json_2_jackson_advanced_notes.md` | 3 | 12 | 28 | 2 |
+| `topics/t02_recursion/t02_recursion_notes.md` | — | 18 | 17 | — |
+| `topics/t25_documenting_a_project/t25_documenting_a_project_notes.md` | 7 | — | 21 | 2 |
+| `topics/t00_oop_fundamentals/t00_oop_fundamentals_notes.md` | — | 15 | 14 | — |
+| `topics/t07_collections_3_set_map/t07_collections_3_set_map_notes.md` | — | 24 | 6 | — |
+| `topics/t23_unit_testing/t23_unit_testing_notes.md` | 1 | 4 | 17 | 2 |
+| `topics/t20_json_1_jackson_basics/t20_json_1_jackson_basics_notes.md` | — | — | 21 | 2 |
+| `topics/t22_networking/exercises/t22_networking_exercises.md` | — | 4 | — | — |
+| `topics/t16_functional_interfaces/t16_functional_interfaces_notes.md` | — | 5 | 15 | — |
+| `topics/t22_networking/t22_networking_notes.md` | — | 6 | 10 | — |
+| `topics/t01_arrays/t01_arrays_notes.md` | — | 7 | 12 | — |
+| `topics/t05_collections_1/t05_collections_1_notes.md` | — | 17 | 2 | — |
+| `topics/t06_collections_2/t06_collections_2_notes.md` | — | 14 | 5 | — |
+| `shared/cheat sheets/cheatsheet_junit_asserts_by_parameter_type.md` | — | 2 | — | — |
+| `topics/t12_generics_2/t12_generics_2_notes.md` | — | 8 | 10 | — |
+| `topics/t17_streams_api/t17_streams_api_notes.md` | — | 9 | 9 | — |
+| `topics/t18_io/t18_io_notes.md` | — | 9 | 8 | 1 |
+| `topics/t19_concurrency/t19_concurrency_notes.md` | 1 | 8 | 7 | — |
 
 Suggested order of work, highest value first:
 
@@ -485,24 +473,20 @@ Suggested order of work, highest value first:
 4. **R8** — symbol replacement. Mechanical and scriptable.
 5. **R11** — remove trailing double-spaces, fix the `<br>` chains in the briefs.
 6. **R4 and R5** — heading normalisation and contents lists.
-7. **R6, R10, R12** — code formatting, table splitting, line length. Most effortful; do last and per-file.
+7. **R6, R10** — code formatting and table splitting. Most effortful; do last and per-file.
 
 ---
 
 ## 6. Verification
 
-The reliable check is the maintenance scripts, which are fence-aware and understand the
-exceptions (arrows are allowed inside code and Mermaid; frontmatter is never wrapped).
-These live in the lecturer-local `scripts/` folder, which is gitignored and therefore not
-available in a fresh clone:
+The reliable check is the maintenance scripts, which are fence-aware and understand the exceptions (arrows are allowed inside code and Mermaid; frontmatter is never wrapped). These live in the lecturer-local `scripts/` folder, which is gitignored and therefore not available in a fresh clone:
 
 ```bash
 node scripts/accessibility-report.mjs        # counts per rule, per file
 node scripts/validate-mermaid.mjs            # parses every diagram, flags missing accDescr
 ```
 
-The one-liners below are useful for a quick look, but read the notes on each — several
-obvious-looking greps are wrong.
+The one-liners below are useful for a quick look, but read the notes on each — several obvious-looking greps are wrong.
 
 ```bash
 # R1: mermaid blocks without an accDescr.
@@ -533,10 +517,6 @@ grep -rn '→\|←\|↑\|↓\|‑\|…\|&amp;' --include='*.md' notes
 # NOTE: '[ \t]$' does NOT work - in a bracket expression \t is a literal 't',
 # so it matches every line ending in the letter t. Use -P, or a literal tab.
 grep -rnP '[ \t]$' --include='*.md' notes
-
-# R12: long lines. Table rows, headings and YAML frontmatter cannot be wrapped,
-# so subtract those before judging the number.
-awk 'length>100 {print FILENAME":"FNR}' $(find notes -name '*.md') | wc -l
 
 # R14: CRLF line endings. Quote the path - several folders contain spaces.
 find notes -name '*.md' -print0 | xargs -0 file | grep CRLF
@@ -586,7 +566,7 @@ prerequisites:
 
 #### Explanation
 
-Prose. No trailing double-spaces. Lines under 100 characters. Symbols written as words.
+Prose, with each paragraph on one unbroken line. No trailing double-spaces. Symbols written as words.
 
 ```java
 // what this line does

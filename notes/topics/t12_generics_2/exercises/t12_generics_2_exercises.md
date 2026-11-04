@@ -2,886 +2,604 @@
 title: "Generics II — Exercises"
 subtitle: "COMP C8Z03 — Year 2 OOP"
 topic_code: t12_generics_2
-description: "Ten exercises on wildcards, variance and PECS (week 2 of 2), including producer and consumer methods, wildcard capture, and repairing a broken API signature."
+description: "Eleven step-by-step exercises on wildcards, variance and PECS: invariance, reading any list, producer and consumer methods, copy, a supertype comparator, wildcard capture, and repairing a too-strict signature."
 created: 2026-01-24
-last_updated: 2026-09-10
-version: 2.3
+last_updated: 2026-11-03
+version: 2.4
 status: published
 authors: ["OOP Teaching Team"]
 tags: [java, generics, wildcards, pecs, variance, collections, exercises, year2, comp-c8z03]
 ---
 # Generics II — Exercises
 
-> These exercises build directly on the **Generics II** notes.
-> This week is about learning to *read* wildcard types and *choose* the right wildcard when
-> you’re designing a method.
+These exercises practise reading wildcard types and choosing the right one when you design a method, from the [t12 notes](../t12_generics_2_notes.md). Three ideas come up again and again:
 
-## Ground rules
+- **Invariance:** a `List<Enemy>` is **not** a `List<Entity>`, even though an `Enemy` is an `Entity`.
+- **Producer extends:** if a method only **reads** from a list, write `List<? extends T>`.
+- **Consumer super:** if a method only **adds** to a list, write `List<? super T>`.
 
-- Don’t “fix” wildcard errors using casts.
-- Don’t use raw types.
-- When an exercise is compile-time focused, keep the “failing line” commented out.
-- Prefer simple loops (no streams) unless an exercise explicitly says otherwise.
+The last two together are called **PECS**: Producer Extends, Consumer Super.
+
+Most exercises use a small class hierarchy: `Entity`, with subclasses `Enemy` and `Pickup`. Each has a name, which `toString()` returns.
+
+Every exercise follows the same layout: a goal, the steps, a worked example, the rules, hints you can open if you are stuck, and a checklist. Each one ends with a link to a worked solution, and to its tests where there are some.
+
+| Exercise | You practise | Difficulty |
+| :-- | :-- | :-- |
+| 01 Prove invariance | why `List<Enemy>` is not a `List<Entity>` | Foundation |
+| 02 Print any list | `List<?>` | Foundation |
+| 03 Sum any numbers | `? extends Number` (a producer) | Foundation |
+| 04 Fill a list | `? super T` (a consumer) | Intermediate |
+| 05 Copy between lists | PECS: `extends` and `super` together | Intermediate |
+| 06 Build the world list | PECS on your own class hierarchy | Intermediate |
+| 07 Fix a too-strict signature | spotting a consumer parameter | Intermediate |
+| 08 Sort with a supertype comparator | `Comparator<? super T>` | Intermediate |
+| 09 Swap the first two | wildcard capture | Stretch |
+| 10 What can I add, what can I read? | a written cheat sheet | Intermediate |
+| 11 Merge two lists (optional) | two producers, one consumer | Stretch |
+
+## Rules for every exercise
+
+- Do not fix a wildcard error with a cast or a raw type.
+- When an exercise asks you to show a compile error, write the line, read the error, then comment the line out so the program still builds.
+- Use ordinary loops, not streams.
 
 ## How to run
 
-Each exercise assumes a package like:
-
-```java
-t12_generics_2.exercises.exNN
-```
-
-Create a class `Exercise` in that package with a static entry point:
-
-```java
-package t12_generics_2.exercises.ex01;
-
-public class Exercise {
-    public static void run() {
-        // call your methods here; print results for quick checks
-    }
-}
-```
+Each exercise goes in its own package, `t12_generics_2.exercises.exNN`. Create a class `Exercise` in that package with a static `run()` method, and call `Exercise.run()` from `Main`.
 
 ---
 
-## Exercise 01 — Prove invariance (compile-time)
+## Exercise 01 — Prove invariance
 
-**Objective:** Prove (with a compile error) that `List<Child>` is not a `List<Parent>`.
+**Goal:** Show, with a compile error, that a list of enemies cannot be used as a list of entities, and explain why Java has to forbid it.
 
-**Context (software + games):**
-- **Software dev:** `AdminUser extends User`, but `List<AdminUser>` still isn’t a `List<User>`.
-- **Games dev:** `Enemy extends Entity`, but `List<Enemy>` still isn’t a `List<Entity>`.
+**You will need:**
+[Core Idea 1](../t12_generics_2_notes.md#core-idea-1--invariance-the-root-problem) and [Step A](../t12_generics_2_notes.md#step-a--the-invariance-surprise).
 
-### What you are building
+**Steps**
 
-A tiny class hierarchy plus a deliberately failing assignment that you keep commented-out.
-Your job is to **understand** and **explain** why the compiler must reject it.
+1. Create a class `Entity` with a `name` field, a constructor, `getName()` and a `toString()` that returns the name.
+2. Create `Enemy` and `Pickup`, which both extend `Entity`.
+3. In `run()`, store a `new Enemy("Orc")` in a variable of type `Entity` and print it. Ordinary inheritance allows this.
+4. Create a `List<Enemy>`, add a `Goblin`, and print it.
+5. Write `List<Entity> entities = enemies;`. Read the compiler error, then comment the line out.
+6. Under it, write a comment: what could go wrong if Java allowed that line?
 
-Create these types:
+**Example**
 
-- `Entity`
-- `Enemy extends Entity`
-- `Pickup extends Entity`
-
-Then create these variables:
-
-- `java.util.List<Enemy> enemies`
-- `java.util.List<Entity> entities`
-
-...and attempt the assignment:
-
-```java
-// entities = enemies; // should not compile (leave commented out)
+```text
+An Enemy is an Entity: Orc
+Enemies: [Goblin]
 ```
 
-### Tasks
+**Rules**
 
-1. Implement the three classes (empty bodies are fine).
-2. In `Exercise.run()`:
-   - show regular inheritance works:
-     - `Entity e = new Enemy();`
-   - create `ArrayList<Enemy>` and `ArrayList<Entity>`
-   - add the commented-out failing line above
-3. Add a short explanation comment answering:
-   - “What bad thing could happen if Java allowed this assignment?”
+- The failing line stays in your code, commented out, with your explanation under it.
 
-### Done when...
+<details>
+<summary>Hints</summary>
 
-- You can explain the failure using this idea:
-  - if `List<Enemy>` could be treated as `List<Entity>`, someone could add a `Pickup` into it.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    ✅ Solution
-  </summary>
-
-```java
- class Entity { }
-
- class Enemy extends Entity { }
-
- class Pickup extends Entity { }
-
-public class Exercise {
-    public static void run() {
-        Enemy e = new Enemy();
-        Entity x = e; // normal inheritance works
-
-        java.util.List<Enemy> enemies = new java.util.ArrayList<>();
-
-        // java.util.List<Entity> entities = enemies;
-        // Not allowed: List<Enemy> is not a List<Entity> (generics are invariant).
-        System.out.println(x);
-        System.out.println(enemies.size());
-    }
-}
-```
+1. Imagine the line compiled. What would stop `entities.add(new Pickup("Coin"))`? And what would `enemies.get(1)` hand back?
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints the two lines shown.
+- [ ] Your comment explains how a `Pickup` could end up in a list of enemies.
+
+**Package:** `t12_generics_2.exercises.ex01`
+
+**Solution:** [t12 exercise 01 solution code](../../../../code/src/t12_generics_2/exercises/ex01/).
+
 ---
 
-## Exercise 02 — printAll(List<?>)
+## Exercise 02 — Print any list
 
-**Objective:** Accept “any list” safely and print its contents.
+**Goal:** Write one method that prints a list of anything: strings, numbers or entities. The wildcard `?` means "some type, I do not know which".
 
-**Context (software + games):**
-- **Software dev:** a logging helper that prints any list (users, orders, strings).
-- **Games dev:** a debug helper that prints any list (entities, scores, item names).
+**You will need:** [Core Idea 2](../t12_generics_2_notes.md#core-idea-2--wildcards-some-type--and-why-list-is-read-only-for-adding).
 
-### What you are building
+**Steps**
 
-A utility method that works with **any** `List<T>` and prints each element on a new line.
-
-You must implement **exactly** this signature:
-
-```java
-public static void printAll(java.util.List<?> items)
-```
-
-Your method should behave like:
-
-- if `items` is `null` to do nothing (no crash)
-- otherwise to print each element using `System.out.println(element)`
-
-### Tasks
-
-1. Create a class `Lists` (or `DebugLists`) and add `printAll`.
-2. In `Exercise.run()` create and print:
-   - `List<String>` with at least 3 strings
-   - `List<Integer>` with at least 3 numbers
-   - `List<Entity>` containing `Enemy` and `Pickup`
-3. Add one commented-out line that shows you cannot safely `add(...)` to `List<?>`.
-
-### Done when...
-
-- The same `printAll` method works for all three list types without overloads or casts.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    ✅ Solution
-  </summary>
+1. Copy your `Entity`, `Enemy` and `Pickup` classes into this package.
+2. Create a class `Lists` with a private constructor and the static method below.
+3. If `items` is `null`, return without printing. Otherwise print each element on its own line, indented by two spaces.
+4. In `run()`, print a `List<String>`, a `List<Integer>` and a `List<Entity>` with the same method.
+5. Try to `add` an `Enemy` to a `List<?>`. Read the error, then comment the line out.
 
 ```java
-
-class Entity { }
-
-class Lists {
-    public static void printAll(java.util.List<?> items) {
-        if (items == null)
-            return;
-
-        for (Object obj : items)
-            System.out.println(obj);
-    }
-}
-
-public class Exercise {
-    public static void run() {
-        Lists.printAll(java.util.List.of("A", "B"));
-        Lists.printAll(java.util.List.of(10, 20));
-
-        java.util.List<Entity> entities = java.util.List.of(new Entity(), new Entity());
-        Lists.printAll(entities);
-    }
-}
+public static void printAll(List<?> items)
 ```
+
+**Example**
+
+```text
+Strings:
+  sword
+  shield
+  bow
+Integers:
+  10
+  20
+  30
+Entities:
+  Orc
+  Coin
+```
+
+**Rules**
+
+- One method, no overloads, no casts.
+
+<details>
+<summary>Hints</summary>
+
+1. Each element of a `List<?>` can be read as an `Object`: `for (Object item : items) { ... }`.
+2. Why not `List<Object>`? Because, by Exercise 01, a `List<String>` is not a `List<Object>`.
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints the output shown.
+- [ ] `printAll(null)` prints nothing and does not crash.
+
+**Package:** `t12_generics_2.exercises.ex02`
+
+**Solution:** [t12 exercise 02 solution code](../../../../code/src/t12_generics_2/exercises/ex02/).
+**Tests:** [t12 exercise 02 tests](../../../../code/test/t12_generics_2/exercises/ex02/).
+
 ---
 
-## Exercise 03 — Producer method: sumNumbers(List<? extends Number>)
+## Exercise 03 — Sum any numbers
 
-**Objective:** Use an `extends` wildcard to read numbers from a list of *some* numeric subtype.
+**Goal:** Add up a list of integers or a list of doubles with the same method. The list **produces** numbers for you to read, so it uses `extends`.
 
-**Context (software + games):**
-- **Software dev:** sum invoices, analytics counters, or response times.
-- **Games dev:** sum damage events, XP ticks, or score deltas.
+**You will need:** [Core Idea 3](../t12_generics_2_notes.md#core-idea-3--upper-bounded-wildcards--extends-t-producer-extends).
 
-### What you are building
+**Steps**
 
-A method that sums values from a list that produces `Number` values.
-
-Implement **exactly** this signature:
-
-```java
-public static double sumNumbers(java.util.List<? extends Number> nums)
-```
-
-Rules/behaviour:
-
-- `nums == null` to return `0.0`
-- `nums.isEmpty()` returns return `0.0`
-- otherwise to sum all values using `n.doubleValue()`
-
-### Tasks
-
-1. Implement `sumNumbers` in a utility class (e.g., `Numbers`).
-2. In `Exercise.run()` verify results with:
-- `List<Integer>` to `[1, 2, 3]` should produce `6.0`
-- `List<Double>` to `[0.5, 1.5, 2.0]` should produce `4.0`
-1. Add a commented-out line that demonstrates you cannot add `Integer` to `List<? extends Number>`.
-
-### Done when...
-
-- The method compiles and runs for both integer and double lists using the same implementation.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    ✅ Solution
-  </summary>
+1. Create a class `Numbers` with a private constructor and the static method below.
+2. If `nums` is `null`, return `0.0`.
+3. Loop over the list and add up `n.doubleValue()` for each number.
+4. In `run()`, sum `[1, 2, 3]`, `[0.5, 1.5, 2.0]` and `null`.
+5. Try to `add(1)` to a `List<? extends Number>`. Read the error, then comment the line out.
 
 ```java
-public class Numbers {
-    public static double sumNumbers(java.util.List<? extends Number> nums) {
-        if (nums == null || nums.isEmpty())
-            return 0.0;
-
-        double sum = 0.0;
-
-        for (Number n : nums)
-            sum += n.doubleValue();
-
-        return sum;
-    }
-}
-
-public class Exercise {
-    public static void run() {
-        System.out.println(Numbers.sumNumbers(java.util.List.of(1, 2, 3)));      // 6.0
-        System.out.println(Numbers.sumNumbers(java.util.List.of(0.5, 1.5, 2.0))); // 4.0
-        System.out.println(Numbers.sumNumbers(null));                             // 0.0
-    }
-}
+public static double sumNumbers(List<? extends Number> nums)
 ```
+
+**Example**
+
+```text
+Integers: 6.0
+Doubles: 4.0
+Null: 0.0
+```
+
+**Rules**
+
+- One method handles both list types.
+
+<details>
+<summary>Hints</summary>
+
+1. Every element can be read as a `Number`, and every `Number` has `doubleValue()`.
+2. The `add` fails because the list might really be a `List<Double>`. An `Integer` does not belong in that.
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints the three lines shown.
+
+**Package:** `t12_generics_2.exercises.ex03`
+
+**Solution:** [t12 exercise 03 solution code](../../../../code/src/t12_generics_2/exercises/ex03/).
+**Tests:** [t12 exercise 03 tests](../../../../code/test/t12_generics_2/exercises/ex03/).
+
 ---
 
-## Exercise 04 — Consumer method: fill(List<? super T>, T, int)
+## Exercise 04 — Fill a list
 
-**Objective:** Use a `super` wildcard so a method can **add** values into a more general
-destination list.
+**Goal:** Write a method that adds the same value to a list several times. The list **consumes** values, so it uses `super`, and it can be a list of a more general type.
 
-**Context (software + games):**
-- **Software dev:** generate placeholder rows/test data quickly.
-- **Games dev:** fill a spawn queue or placeholder debug events.
+**You will need:** [Core Idea 4](../t12_generics_2_notes.md#core-idea-4--lower-bounded-wildcards--super-t-consumer-super).
 
-### What you are building
+**Steps**
 
-A generic `fill` method that repeatedly adds the same value into a list.
-
-Implement **exactly** this signature:
+1. Create a class `Fillers` with a private constructor and the static method below.
+2. If `out` is `null`, throw a `NullPointerException`. If `count` is negative, throw an `IllegalArgumentException`.
+3. Add `value` to `out` exactly `count` times.
+4. In `run()`, fill a `List<Object>` with `"hi"` three times, and a `List<Number>` with `5` twice.
 
 ```java
-public static <T> void fill(java.util.List<? super T> out, T value, int count)
+public static <T> void fill(List<? super T> out, T value, int count)
 ```
 
-Rules/behaviour:
+**Example**
 
-- `out == null` to throw `NullPointerException`
-- `count < 0` to throw `IllegalArgumentException`
-- `count == 0` to do nothing
-- otherwise to add `value` exactly `count` times
-
-### Tasks
-
-1. Implement `fill`.
-2. In `Exercise.run()` demo **two** call sites:
-   - `List<Object> out = new ArrayList<>(); fill(out, "hi", 3);`
-   - `List<Number> out2 = new ArrayList<>(); fill(out2, 5, 2);`
-3. Print both lists and confirm the counts.
-
-### Done when...
-
-- Your method supports destinations that are *supertypes* of the inserted value type.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    ✅ Solution
-  </summary>
-
-```java
-public class Fillers {
-    public static <T> void fill(java.util.List<? super T> out, T value, int count) {
-        if (out == null)
-            throw new NullPointerException("out must not be null");
-
-        if (count < 0)
-            throw new IllegalArgumentException("count must be >= 0");
-
-        for (int i = 0; i < count; i++)
-            out.add(value);
-    }
-}
-
-public class Exercise {
-    public static void run() {
-        java.util.ArrayList<Object> out = new java.util.ArrayList<>();
-        Fillers.fill(out, "hi", 3);
-
-        System.out.println(out); // [hi, hi, hi]
-    }
-}
+```text
+Objects: [hi, hi, hi]
+Numbers: [5, 5]
 ```
+
+**Rules**
+
+- A count of 0 adds nothing and does not throw.
+
+<details>
+<summary>Hints</summary>
+
+1. In the first call `T` is `String`, and a `List<Object>` is a list of a supertype of `String`, so `? super String` accepts it.
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints the two lines shown.
+
+**Package:** `t12_generics_2.exercises.ex04`
+
+**Solution:** [t12 exercise 04 solution code](../../../../code/src/t12_generics_2/exercises/ex04/).
+**Tests:** [t12 exercise 04 tests](../../../../code/test/t12_generics_2/exercises/ex04/).
+
 ---
 
-## Exercise 05 — PECS in action: copy(src extends T, dst super T)
+## Exercise 05 — Copy between lists
 
-**Objective:** Apply PECS (**P**roducer **E**xtends, **C**onsumer **S**uper) to copy items
-between lists.
+**Goal:** Copy items from one list into another, where the destination may hold a more general type. The source produces (`extends`); the destination consumes (`super`).
 
-**Context (software + games):**
-- **Software dev:** copy `List<Integer>` into `List<Number>` when preparing chart data.
-- **Games dev:** copy `List<Enemy>` into `List<Entity>` when building a scene list.
+**You will need:**
+[Core Idea 5](../t12_generics_2_notes.md#core-idea-5--pecs-the-rule-of-thumb) and [Core Idea 6](../t12_generics_2_notes.md#core-idea-6--the-classic-api-copy-uses-both-extends-and-super).
 
-### What you are building
+**Steps**
 
-A generic `copy` method that preserves order and compiles for “widening” destination lists.
-
-Implement **exactly** this signature:
-
-```java
-public static <T> void copy(java.util.List<? extends T> src,
-                            java.util.List<? super T> dst)
-```
-
-Rules/behaviour:
-
-- `src == null` or `dst == null` to throw `NullPointerException`
-- copy in order using a loop
-- do not clear destination (append)
-
-### Tasks
-
-1. Implement `copy`.
-2. In `Exercise.run()`:
-   - create `List<Integer> src = List.of(1, 2, 3);`
-   - copy into `ArrayList<Number>` and print
-   - copy into `ArrayList<Object>` and print
-3. Also test appending by:
-   - putting something already in the destination and verifying it remains.
-
-### Done when...
-
-- Both destination lists contain previous contents plus the copied values, in order.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    ✅ Solution
-  </summary>
+1. Create a class `Copier` with a private constructor and the static method below.
+2. If either list is `null`, throw a `NullPointerException`.
+3. Loop over `src` and add each item to `dst`. Do not clear `dst` first.
+4. In `run()`, copy `[1, 2, 3]` into a `List<Number>` that already holds `0.5`, and into a `List<Object>` that already holds `"start"`.
 
 ```java
-public class Copier {
-    public static <T> void copy(java.util.List<? extends T> src, java.util.List<? super T> dst) {
-        if (src == null)
-            throw new NullPointerException("src must not be null");
-
-        if (dst == null)
-            throw new NullPointerException("dst must not be null");
-
-        for (T item : src)
-            dst.add(item);
-    }
-}
-
-public class Exercise {
-    public static void run() {
-        java.util.List<Integer> src = java.util.List.of(1, 2, 3);
-
-        java.util.ArrayList<Number> dst1 = new java.util.ArrayList<>();
-        java.util.ArrayList<Object> dst2 = new java.util.ArrayList<>();
-
-        Copier.copy(src, dst1);
-        Copier.copy(src, dst2);
-
-        System.out.println(dst1); // [1, 2, 3]
-        System.out.println(dst2); // [1, 2, 3]
-    }
-}
+public static <T> void copy(List<? extends T> src, List<? super T> dst)
 ```
+
+**Example**
+
+```text
+Numbers: [0.5, 1, 2, 3]
+Objects: [start, 1, 2, 3]
+```
+
+**Rules**
+
+- Keep the order. Anything already in `dst` stays at the front.
+
+<details>
+<summary>Hints</summary>
+
+1. Inside the loop, each item from `src` can be read as a `T`, and a `T` can be added to `dst`.
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints the two lines shown.
+
+**Package:** `t12_generics_2.exercises.ex05`
+
+**Solution:** [t12 exercise 05 solution code](../../../../code/src/t12_generics_2/exercises/ex05/).
+**Tests:** [t12 exercise 05 tests](../../../../code/test/t12_generics_2/exercises/ex05/).
+
 ---
 
-## Exercise 06 — addAllEntities (domain-specific: extends to super)
+## Exercise 06 — Build the world list
 
-**Objective:** Use wildcards on a class hierarchy in a way that feels like real code.
+**Goal:** Use PECS on your own classes: put enemies and pickups into one list of entities, without a cast.
 
-**Context (software + games):**
-- **Software dev:** merge subtype lists into one base-type list.
-- **Games dev:** merge enemies + pickups into one “world entities” list.
+**You will need:** [Core Idea 5](../t12_generics_2_notes.md#core-idea-5--pecs-the-rule-of-thumb).
 
-### What you are building
+**Steps**
 
-A domain-specific copy helper for the `Entity` hierarchy.
-
-Implement **exactly** this signature:
-
-```java
-public static void addAllEntities(java.util.List<? extends Entity> src,
-                                  java.util.List<? super Entity> dst)
-```
-
-Rules/behaviour:
-
-- `src == null` or `dst == null` to throw `NullPointerException`
-- append all items from `src` into `dst` in order
-
-### Tasks
-
-1. Create:
-   - `ArrayList<Enemy> enemies`
-   - `ArrayList<Pickup> pickups`
-   - `ArrayList<Entity> world`
-2. Add at least 2 enemies and 2 pickups.
-3. Call `addAllEntities(enemies, world)` and then `addAllEntities(pickups, world)`.
-4. Print:
-   - `world.size()`
-   - `world.get(0).getClass().getSimpleName()` (or similar) to show mixed types.
-
-### Done when...
-
-- `world` contains both enemies and pickups without casts.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    ✅ Solution
-  </summary>
+1. Copy your `Entity`, `Enemy` and `Pickup` classes into this package.
+2. Create a class `Entities` with a private constructor and the static method below.
+3. If either list is `null`, throw a `NullPointerException`. Otherwise add every entity from `src` to `dst`, in order.
+4. In `run()`, make a `List<Enemy>` (`Orc`, `Goblin`), a `List<Pickup>` (`Coin`, `Potion`) and an empty `List<Entity>` called `world`.
+5. Add both lists to `world`, print its size, and print each entity with its class name.
 
 ```java
-public class Entities {
-    public static void addAllEntities(java.util.List<? extends Entity> src,
-                                      java.util.List<? super Entity> dst) {
-
-        if (src == null)
-            throw new NullPointerException("src must not be null");
-
-        if (dst == null)
-            throw new NullPointerException("dst must not be null");
-
-        for (Entity e : src)
-            dst.add(e);
-    }
-}
-
-public class Exercise {
-    public static void run() {
-        java.util.List<Enemy> enemies = java.util.List.of(new Enemy(), new Enemy());
-        java.util.List<Pickup> pickups = java.util.List.of(new Pickup());
-
-        java.util.ArrayList<Entity> all = new java.util.ArrayList<>();
-        Entities.addAllEntities(enemies, all);
-        Entities.addAllEntities(pickups, all);
-
-        System.out.println(all.size()); // 3
-    }
-}
+public static void addAllEntities(List<? extends Entity> src, List<? super Entity> dst)
 ```
+
+**Example**
+
+```text
+World size: 4
+  Orc (Enemy)
+  Goblin (Enemy)
+  Coin (Pickup)
+  Potion (Pickup)
+```
+
+**Rules**
+
+- No casts.
+
+<details>
+<summary>Hints</summary>
+
+1. `entity.getClass().getSimpleName()` gives the class name, such as `Enemy`.
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints the five lines shown.
+
+**Package:** `t12_generics_2.exercises.ex06`
+
+**Solution:** [t12 exercise 06 solution code](../../../../code/src/t12_generics_2/exercises/ex06/).
+**Tests:** [t12 exercise 06 tests](../../../../code/test/t12_generics_2/exercises/ex06/).
+
 ---
 
-## Exercise 07 — Fix a broken API signature (consumer list)
+## Exercise 07 — Fix a too-strict signature
 
-**Objective:** Identify a *consumer* parameter and loosen the signature so more callers can use it.
+**Goal:** A method that adds enemies to a list only accepts a `List<Enemy>`. Change its signature so it also accepts a `List<Entity>` or a `List<Object>`.
 
-**Context (software + games):**
-- **Software dev:** a method that adds audit events should accept `List<BaseEvent>` or even
-  `List<Object>`.
-- **Games dev:** a method that adds enemies should accept `List<Entity>` or even `List<Object>`.
+**You will need:** [Step C](../t12_generics_2_notes.md#step-c--fix-write-methods-with-super).
 
-### What you are building
-
-A method that *adds enemies* into a list parameter.
-
-Starting point (too strict):
+The starting point:
 
 ```java
-public static void addEnemies(java.util.List<Enemy> out)
+public static void addEnemies(List<Enemy> out)
 ```
 
-You must change the signature so callers can pass:
+**Steps**
 
-- `List<Enemy>`
-- `List<Entity>`
-- `List<Object>`
+1. Copy your `Entity` and `Enemy` classes into this package.
+2. In a class `Spawner`, write `addEnemies` with the signature above. It adds two enemies, `Orc` and `Goblin`, and throws a `NullPointerException` if `out` is `null`.
+3. In `run()`, call it with a new `ArrayList<Enemy>`, a new `ArrayList<Entity>` and a new `ArrayList<Object>`. Two of the three calls fail to compile.
+4. Decide whether `out` is a producer or a consumer, and change the signature to match.
+5. Print each list.
 
-Rules/behaviour:
+**Example**
 
-- `out == null` to throw `NullPointerException`
-- add at least **two** `Enemy` instances to the list
-
-### Tasks
-
-1. Update the signature (no overloads).
-2. Implement the body (add 2 enemies).
-3. In `Exercise.run()` call it three times with:
-   - `new ArrayList<Enemy>()`
-   - `new ArrayList<Entity>()`
-   - `new ArrayList<Object>()`
-4. Print the size of each list after the call.
-
-### Done when...
-
-- All three calls compile, and each list ends up with at least 2 items.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    ✅ Solution
-  </summary>
-
-```java
-public class Spawner {
-    public static void addEnemies(java.util.List<? super Enemy> out) {
-        if (out == null)
-            throw new NullPointerException("out must not be null");
-
-        out.add(new Enemy());
-        out.add(new Enemy());
-    }
-}
-
-public class Exercise {
-    public static void run() {
-        java.util.ArrayList<Enemy> a = new java.util.ArrayList<>();
-        java.util.ArrayList<Entity> b = new java.util.ArrayList<>();
-        java.util.ArrayList<Object> c = new java.util.ArrayList<>();
-
-        Spawner.addEnemies(a);
-        Spawner.addEnemies(b);
-        Spawner.addEnemies(c);
-
-        System.out.println(a.size()); // 2
-        System.out.println(b.size()); // 2
-        System.out.println(c.size()); // 2
-    }
-}
+```text
+List<Enemy>: [Orc, Goblin]
+List<Entity>: [Orc, Goblin]
+List<Object>: [Orc, Goblin]
 ```
+
+**Rules**
+
+- Change the signature only. No overloads.
+
+<details>
+<summary>Hints</summary>
+
+1. The method only **adds** to `out`. It never reads from it.
+2. A list that can accept an `Enemy` is a list of `Enemy` or of any supertype of `Enemy`.
 
 </details>
 
+**Done when**
+
+- [ ] All three calls compile, and `run()` prints the three lines shown.
+
+**Package:** `t12_generics_2.exercises.ex07`
+
+**Solution:** [t12 exercise 07 solution code](../../../../code/src/t12_generics_2/exercises/ex07/).
+**Tests:** [t12 exercise 07 tests](../../../../code/test/t12_generics_2/exercises/ex07/).
+
 ---
 
-## Exercise 08 — Comparator<? super T> practice
+## Exercise 08 — Sort with a supertype comparator
 
-**Objective:** Understand why Java libraries often take `Comparator<? super T>`.
+**Goal:** Sort a list of enemies with a comparator written for **entities**. This is why so many Java library methods take a `Comparator<? super T>`.
 
-**Context (software + games):**
-- **Software dev:** sort `List<Employee>` using a `Comparator<Person>`.
-- **Games dev:** sort `List<Enemy>` using a `Comparator<Entity>`.
+**You will need:** [Core Idea 7](../t12_generics_2_notes.md#core-idea-7--comparator-super-t-why-many-java-apis-use-super).
 
-### What you are building
+**Steps**
 
-A helper that sorts a list using a comparator defined on a **supertype**.
-
-Implement **exactly** this signature:
-
-```java
-public static <T> void sortWith(java.util.List<T> items,
-                                java.util.Comparator<? super T> cmp)
-```
-
-Rules/behaviour:
-
-- if `items` or `cmp` is null to throw `NullPointerException`
-- sort in-place using `items.sort(cmp)`
-
-### Tasks
-
-1. Implement `sortWith`.
-2. In `Exercise.run()`:
-   - create a `List<Enemy>` with at least 3 enemies
-   - create a `Comparator<Entity>` (it can return 0 if you don’t have a field to compare yet)
-   - call `sortWith(enemies, entityComparator)`
-3. Print the list before and after (even if order doesn’t change, compilation is the main win).
-
-### Done when...
-
-- Your method compiles with `Comparator<Entity>` + `List<Enemy>`.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    ✅ Solution
-  </summary>
+1. Copy your `Entity` and `Enemy` classes into this package.
+2. Create a class `Sorters` with a private constructor and the static method below.
+3. If either argument is `null`, throw a `NullPointerException`. Otherwise call `items.sort(cmp)`.
+4. In `run()`, make a `List<Enemy>` holding `Zombie`, `Orc` and `Goblin`, and a `Comparator<Entity>` that orders by name.
+5. Print the list, sort it with your method, and print it again.
 
 ```java
-public class Sorters {
-    public static <T> void sortWith(java.util.List<T> items, java.util.Comparator<? super T> cmp) {
-        if (items == null)
-            throw new NullPointerException("items must not be null");
-
-        if (cmp == null)
-            throw new NullPointerException("cmp must not be null");
-
-        items.sort(cmp);
-    }
-}
-
-public class Exercise {
-    public static void run() {
-        java.util.ArrayList<Enemy> enemies = new java.util.ArrayList<>();
-        enemies.add(new Enemy());
-        enemies.add(new Enemy());
-
-        java.util.Comparator<Entity> cmp = (a, b) -> 0;
-        Sorters.sortWith(enemies, cmp);
-
-        System.out.println(enemies.size()); // 2
-    }
-}
+public static <T> void sortWith(List<T> items, Comparator<? super T> cmp)
 ```
+
+**Example**
+
+```text
+Before: [Zombie, Orc, Goblin]
+After: [Goblin, Orc, Zombie]
+```
+
+**Rules**
+
+- The comparator's type is `Comparator<Entity>`, not `Comparator<Enemy>`.
+
+<details>
+<summary>Hints</summary>
+
+1. `Comparator.comparing(Entity::getName)` builds a comparator that orders by name.
+2. Anything that can compare two entities can compare two enemies, because every enemy is an entity.
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints the two lines shown.
+
+**Package:** `t12_generics_2.exercises.ex08`
+
+**Solution:** [t12 exercise 08 solution code](../../../../code/src/t12_generics_2/exercises/ex08/).
+**Tests:** [t12 exercise 08 tests](../../../../code/test/t12_generics_2/exercises/ex08/).
+
 ---
 
-## Exercise 09 — Wildcard capture: swapFirstTwo(List<?>)
+## Exercise 09 — Swap the first two
 
-**Objective:** Fix “capture of ?” properly using a helper method that captures the wildcard.
+**Goal:** Swap the first two items of a list of any type. You will hit a "capture of ?" compiler error, and fix it properly with a helper method.
 
-**Context (software + games):**
-- **Software dev:** swap the first two entries in a generic “recent items” list.
-- **Games dev:** swap the first two inventory slots regardless of item type.
+**You will need:**
+[Core Idea 8](../t12_generics_2_notes.md#core-idea-8--capture-of--errors-what-they-mean).
 
-### What you are building
+**Steps**
 
-A `swapFirstTwo` operation that works for `List<String>`, `List<Integer>`, `List<Entity>` ...
-any list.
-
-Required API:
-
-```java
-public static void swapFirstTwo(java.util.List<?> items)
-```
-
-...and a helper method that captures the unknown type:
+1. Create a class `Swaps` with a private constructor.
+2. Write the public method below. If the list is `null` or has fewer than two items, return.
+3. Try writing the swap directly inside it with `get` and `set`. Read the error.
+4. Move the swap into the private generic helper below, and call the helper from the public method.
+5. In `run()`, swap the first two of `["A", "B", "C"]` and of `[10, 20]`, printing before and after.
 
 ```java
-private static <T> void swapFirstTwoCaptured(java.util.List<T> items)
+public static void swapFirstTwo(List<?> items)
+private static <T> void swapFirstTwoCaptured(List<T> items)
 ```
 
-Rules/behaviour:
+**Example**
 
-- if `items == null` to do nothing
-- if `items.size() < 2` returns do nothing
-- otherwise to swap index 0 and 1
-
-### Tasks
-
-1. Implement the public method and helper.
-2. In `Exercise.run()`:
-   - swap a `List<String>` and print before/after
-   - swap a `List<Integer>` and print before/after
-3. Add a short comment explaining why the helper is needed (“capture of ?”).
-
-### Done when...
-
-- Both demos compile without casts or raw types.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    ✅ Solution
-  </summary>
-
-```java
-public class Swaps {
-    public static void swapFirstTwo(java.util.List<?> items) {
-        if (items == null || items.size() < 2)
-            return;
-
-        swapFirstTwoCaptured(items);
-    }
-
-    private static <T> void swapFirstTwoCaptured(java.util.List<T> items) {
-        T a = items.get(0);
-        T b = items.get(1);
-
-        items.set(0, b);
-        items.set(1, a);
-    }
-}
-
-public class Exercise {
-    public static void run() {
-        java.util.ArrayList<String> a = new java.util.ArrayList<>();
-        a.add("A");
-        a.add("B");
-
-        Swaps.swapFirstTwo(a);
-        System.out.println(a); // [B, A]
-
-        java.util.ArrayList<Integer> b = new java.util.ArrayList<>();
-        b.add(10);
-        b.add(20);
-
-        Swaps.swapFirstTwo(b);
-        System.out.println(b); // [20, 10]
-    }
-}
+```text
+Before: [A, B, C]
+After: [B, A, C]
+Before: [10, 20]
+After: [20, 10]
 ```
+
+**Rules**
+
+- No casts and no raw types.
+- Write a comment above the helper explaining why it is needed.
+
+<details>
+<summary>Hints</summary>
+
+1. With `List<?>`, the compiler cannot prove that what `get(0)` returns may be passed to `set(1, ...)`. Each `?` could be a different unknown type.
+2. Calling the helper gives the unknown type a name, `T`, so the compiler can check that both items have the same type.
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints the four lines shown.
+
+**Package:** `t12_generics_2.exercises.ex09`
+
+**Solution:** [t12 exercise 09 solution code](../../../../code/src/t12_generics_2/exercises/ex09/).
+**Tests:** [t12 exercise 09 tests](../../../../code/test/t12_generics_2/exercises/ex09/).
+
 ---
 
-## Exercise 10 — What can I add? What can I read?
+## Exercise 10 — What can I add, what can I read?
 
-**Objective:** Build your “wildcard instincts”: what is safe to add and what is safe to read.
+**Goal:** Build your instincts for wildcards by writing a short cheat sheet, then check one line of it in code.
 
-**Context (software + games):**
-- **Software dev:** you’re debugging wildcard-heavy APIs and need quick rules.
-- **Games dev:** you’re wiring systems together and want to avoid type mistakes.
+**You will need:** [Appendix A — Quick reference](../t12_generics_2_notes.md#appendix-a--quick-reference-wildcards).
 
-### What you are building
+**Steps**
 
-A short written “cheat sheet” inside your `Exercise` class as a block comment.
-
-For each declaration below, you must write:
-
-- what you can safely **add**
-- what you can safely **read**
+1. In a block comment at the top of `Exercise`, write two short answers for each declaration below: what can you safely **add**, and what can you safely **read** it as?
+2. In `run()`, read the first element of a `List<? extends Number>` into a `Number` variable and print it.
+3. Add `42` to a `List<? super Integer>`, read it back into an `Object` variable, and print it.
 
 ```java
-java.util.List<?> a;
-java.util.List<? extends Number> b;
-java.util.List<? super Integer> c;
+List<?> a;
+List<? extends Number> b;
+List<? super Integer> c;
 ```
 
-### Requirements
+**Example**
 
-- Keep each answer 2–4 lines.
-- Use phrases like:
-  - “read as Object”
-  - “add null only”
-  - “read as Number”
-  - “can add Integer”
+```text
+Read as Number: 1
+Read as Object: 42
+```
 
-### Done when...
+**Rules**
 
-- Your answers match what the compiler would allow.
+- Keep each answer to two to four lines. Use phrases like "read as Object", "add null only" and "can add Integer".
 
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    ✅ Solution
-  </summary>
+<details>
+<summary>Hints</summary>
+
+1. For each one, ask: what is the most specific type **every** possible list behind this declaration could hand back? And what type would **every** possible list accept?
+
+</details>
+
+**Done when**
+
+- [ ] `run()` prints the two lines shown.
+- [ ] Your answers match what the compiler allows.
+
+<details>
+<summary>Answer</summary>
 
 - `List<?> a`
-  - Add: `null` only
-  - Read: `Object` (because element type is unknown)
-
+  - Add: `null` only.
+  - Read: as `Object`, because the element type is unknown.
 - `List<? extends Number> b`
-  - Add: `null` only
-  - Read: `Number` (safe upper bound)
-
+  - Add: `null` only. It might be a `List<Integer>` or a `List<Double>`.
+  - Read: as `Number`.
 - `List<? super Integer> c`
-  - Add: `Integer` (and its subclasses), plus `null`
-  - Read: `Object` (because the list might actually be `List<Object>`)
+  - Add: `Integer`, and `null`.
+  - Read: as `Object` only, because it might really be a `List<Number>` or a `List<Object>`.
 
 </details>
 
+**Package:** `t12_generics_2.exercises.ex10`
+
+**Solution:** [t12 exercise 10 solution code](../../../../code/src/t12_generics_2/exercises/ex10/).
+
 ---
 
-## Optional challenge — merge two producers into one consumer
+## Exercise 11 — Merge two lists (optional)
 
-**Objective:** Combine PECS constraints into one “real utility” method.
+**Goal:** Combine what you have learned into one useful method: read from two producer lists and add everything to one consumer list, in order.
 
-**Context (software + games):**
-- **Software dev:** merge cached results + live results into one output list.
-- **Games dev:** merge base content + DLC content into one output list.
+**You will need:** [Core Idea 5](../t12_generics_2_notes.md#core-idea-5--pecs-the-rule-of-thumb).
 
-### What you are building
+**Steps**
 
-A method that merges two producer lists into one consumer list, preserving order.
-
-Implement **exactly** this signature:
-
-```java
-public static <T> void merge(java.util.List<? extends T> a,
-                             java.util.List<? extends T> b,
-                             java.util.List<? super T> out)
-```
-
-Rules/behaviour:
-
-- `out == null` to throw `NullPointerException`
-- treat `a == null` as empty
-- treat `b == null` as empty
-- append `a` then append `b`
-- do not clear `out`
-
-### Done when...
-
-- You can merge two `List<Integer>` into an `ArrayList<Number>` without casts.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    ✅ Solution
-  </summary>
+1. Create a class `Merge` with a private constructor and the static method below.
+2. If `out` is `null`, throw a `NullPointerException`.
+3. Treat a `null` input list as empty.
+4. Add every item of `a`, then every item of `b`, to `out`. Do not clear `out`.
+5. In `run()`, merge `[1, 2]` and `[3]` into a `List<Number>`. Then merge `null` and `[2.5]` into another.
 
 ```java
-public class Merge {
-    public static <T> void merge(java.util.List<? extends T> a,
-                                 java.util.List<? extends T> b,
-                                 java.util.List<? super T> out) {
-
-        if (out == null)
-            throw new NullPointerException("out must not be null");
-
-        if (a != null) {
-            for (T x : a)
-                out.add(x);
-        }
-
-        if (b != null) {
-            for (T x : b)
-                out.add(x);
-        }
-    }
-}
-
-public class Exercise {
-    public static void run() {
-        java.util.List<Integer> a = java.util.List.of(1, 2);
-        java.util.List<Integer> b = java.util.List.of(3);
-
-        java.util.ArrayList<Number> out = new java.util.ArrayList<>();
-        Merge.merge(a, b, out);
-
-        System.out.println(out); // [1, 2, 3]
-    }
-}
+public static <T> void merge(List<? extends T> a, List<? extends T> b, List<? super T> out)
 ```
+
+**Example**
+
+```text
+Merged: [1, 2, 3]
+With a null first list: [2.5]
+```
+
+**Rules**
+
+- No casts.
+
+<details>
+<summary>Hints</summary>
+
+1. The two loops are the same apart from the list. Write a private helper that copies one list, and call it twice.
 
 </details>
 
----
+**Done when**
 
-## Lesson Context
+- [ ] `run()` prints the two lines shown.
 
-```yaml
-linked_lesson:
-  topic_code: "t12_generics_2"
-  week_in_topic: "2_of_2"
-  primary_domain_emphasis: "Balanced"
-  difficulty_tier: "Intermediate"
-```
+**Package:** `t12_generics_2.exercises.ex11`
+
+**Solution:** [t12 exercise 11 solution code](../../../../code/src/t12_generics_2/exercises/ex11/).
+**Tests:** [t12 exercise 11 tests](../../../../code/test/t12_generics_2/exercises/ex11/).

@@ -41,11 +41,13 @@ class ArmouredSlime implements Enemy {
 
 class EnemyFactory {
     public Enemy createSlime(Difficulty difficulty) {
-        if (difficulty == null)
+        if (difficulty == null) {
             throw new IllegalArgumentException("difficulty is null.");
+        }
 
-        if (difficulty == Difficulty.EASY)
+        if (difficulty == Difficulty.EASY) {
             return new Slime();
+        }
 
         return new ArmouredSlime();
     }

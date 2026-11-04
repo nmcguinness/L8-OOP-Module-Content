@@ -4,7 +4,7 @@ import java.util.concurrent.*;
 
 public class Exercise {
 
-    public static void run() throws Exception {
+    public static void run() throws InterruptedException {
 
         DeliveryCounter unsafe = new DeliveryCounter();
         SynchronizedDeliveryCounter safe = new SynchronizedDeliveryCounter();
@@ -32,26 +32,26 @@ public class Exercise {
 // both add 1, and write back the same result, losing one increment.
 class DeliveryCounter {
 
-    private int _total = 0;
+    private int total = 0;
 
     public void increment() {
-        _total++;
+        total++;
     }
 
     public int getTotal() {
-        return _total;
+        return total;
     }
 }
 
 class SynchronizedDeliveryCounter {
 
-    private int _total = 0;
+    private int total = 0;
 
     public synchronized void increment() {
-        _total++;
+        total++;
     }
 
     public synchronized int getTotal() {
-        return _total;
+        return total;
     }
 }

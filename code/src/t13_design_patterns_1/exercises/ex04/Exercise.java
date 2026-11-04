@@ -24,33 +24,33 @@ interface Command
 
 class PrintCommand implements Command
 {
-    private String _message;
+    private final String message;
 
     public PrintCommand(String message)
     {
-        _message = message;
+        this.message = message;
     }
 
     @Override
     public void execute()
     {
-        System.out.println(_message);
+        System.out.println(message);
     }
 }
 
 class MacroCommand implements Command
 {
-    private List<Command> _commands = new ArrayList<>();
+    private final List<Command> commands = new ArrayList<>();
 
     public void add(Command command)
     {
-        _commands.add(command);
+        commands.add(command);
     }
 
     @Override
     public void execute()
     {
-        for (Command c : _commands)
+        for (Command c : commands)
         {
             c.execute();
         }

@@ -12,8 +12,7 @@ tags: [java, collections, linkedlist, deque, iterator, exercises, year2, comp-c8
 ---
 # Collections II: LinkedList & iteration patterns — Exercises
 
-> These activities match the lesson **Collections II: LinkedList & iteration patterns**.
-> We’ll use **plain Java**. Keep lists short so you can easily read the output.
+> These activities match the lesson **Collections II: LinkedList & iteration patterns**. We’ll use **plain Java**. Keep lists short so you can easily read the output.
 
 ---
 
@@ -42,11 +41,9 @@ public final class Exercise {
 ## Exercise 01 — Remove while you walk (Foundations)
 
 **What you’ll practice:** Using a `ListIterator` to safely remove items during a scan.
-**Why this matters:** Index-based removal on a `LinkedList` is clumsy and easy to break; the
-iterator makes it simple and safe.
+**Why this matters:** Index-based removal on a `LinkedList` is clumsy and easy to break; the iterator makes it simple and safe.
 
-**Task:** Start with `[-2, -1, 0, 1, 2, 3, 4]`. Remove all **non-positive** numbers (≤ 0)
-**while iterating**. No extra list.
+**Task:** Start with `[-2, -1, 0, 1, 2, 3, 4]`. Remove all **non-positive** numbers (≤ 0) **while iterating**. No extra list.
 
 **Steps:**
 1) Put the numbers into a `LinkedList<Integer>`.
@@ -62,11 +59,9 @@ iterator makes it simple and safe.
 ## Exercise 02 — Put markers between groups (Foundations)
 
 **What you’ll practice:** Inserting during iteration with `it.add(...)`.
-**Why this matters:** Linked lists are great when you want to change the structure *as you
-traverse*.
+**Why this matters:** Linked lists are great when you want to change the structure *as you traverse*.
 
-**Task:** Turn `a a a b b c c c` into `a a a | b b | c c c` by placing a `'|'` when the letter
-changes.
+**Task:** Turn `a a a b b c c c` into `a a a | b b | c c c` by placing a `'|'` when the letter changes.
 
 **Steps:**
 1) Load characters into `LinkedList<Character>`.
@@ -84,16 +79,13 @@ changes.
 **What you’ll practice:** Using `hasPrevious()/previous()` to move **backwards**.
 **Why this matters:** `ListIterator` is bidirectional; this is a core linked-list skill.
 
-**Task:** Given a list of words, print the sentence **forward**, then print the same words **in
-reverse** using the same iterator.
+**Task:** Given a list of words, print the sentence **forward**, then print the same words **in reverse** using the same iterator.
 
 **Steps:**
-1) Build `LinkedList<String> words = List.of("Java","is","fun")` returns as a new
-   `LinkedList<>(...)`.
+1) Build `LinkedList<String> words = List.of("Java","is","fun")` returns as a new `LinkedList<>(...)`.
 2) Use `it.next()` to print `"Java is fun"`.
 3) Without creating a new iterator, loop with `hasPrevious()/previous()` to print `"fun is Java"`.
-4) (Optional) If the last word equals `"foo"`, replace it with `it.set("bar")` before the
-   reverse print.
+4) (Optional) If the last word equals `"foo"`, replace it with `it.set("bar")` before the reverse print.
 
 **Quick check:** You see both forward and reverse prints.
 **Hint:** `previous()` returns the item **before** the cursor.
@@ -107,19 +99,16 @@ reverse** using the same iterator.
 
 **Scenario:** Jobs arrive in this order: `"build"`, `"test"`, `"package"`, `"deploy"`.
 
-**Task:** Enqueue with `offer(...)`, process with `poll()`. After you dequeue `"test"`,
-**insert** a `"lint"` job immediately after it (simulating a pipeline rule change).
+**Task:** Enqueue with `offer(...)`, process with `poll()`. After you dequeue `"test"`, **insert** a `"lint"` job immediately after it (simulating a pipeline rule change).
 
 **Steps:**
 1) Use `Deque<String> q = new LinkedList<>();` then `offer(...)` jobs.
 2) Process in a loop: take `String job = q.poll();` and print it.
-3) Right after you process `"test"`, insert `"lint"` using a `ListIterator` positioned at the
-   current spot.
+3) Right after you process `"test"`, insert `"lint"` using a `ListIterator` positioned at the current spot.
 4) Finish processing and print the final order you executed.
 
 **Quick check:** Execution order shows `"build" → "test" → "lint" → "package" → "deploy"`.
-**Hint:** Prefer `offer/poll/peek` (return `null` on empty) over `add/remove/element` (throw
-exceptions).
+**Hint:** Prefer `offer/poll/peek` (return `null` on empty) over `add/remove/element` (throw exceptions).
 
 ---
 
@@ -128,9 +117,7 @@ exceptions).
 **What you’ll practice:** Two-stack (two-deque) **undo/redo** pattern.
 **Why this matters:** Editors, level tools, and UIs use this exact approach.
 
-**Task:** Implement `type(text)`, `undo()`, and `redo()` methods. Try this sequence: type
-`"a"`, then `"b"`, then `"c"` then undo twice then redo once then type `"Z"` then print the
-final state.
+**Task:** Implement `type(text)`, `undo()`, and `redo()` methods. Try this sequence: type `"a"`, then `"b"`, then `"c"` then undo twice then redo once then type `"Z"` then print the final state.
 
 **Steps:**
 1) Keep a `String state`, and two `Deque<String>`: `undo` and `redo`.
@@ -149,8 +136,7 @@ final state.
 **What you’ll practice:** Modifying a list as you process it.
 **Why this matters:** Real-time systems often inject or cancel actions during handling.
 
-**Task:** Start with a `LinkedList<InputEvent>` containing `"Move"`, `"Attack"`, `"Heal"`.
-While scanning:
+**Task:** Start with a `LinkedList<InputEvent>` containing `"Move"`, `"Attack"`, `"Heal"`. While scanning:
 - If you see `"Attack"`, insert a `"CameraShake"` **right after** it.
 - If you see `"Heal"`, remove it.
 
@@ -171,8 +157,7 @@ While scanning:
 **What you’ll practice:** Circular traversal and removal with a linked list.
 **Why this matters:** It forces you to manage iterator position carefully.
 
-**Task:** `N` players sit in a circle. Remove every `k`-th player until one remains. For
-example, `N=7`, `k=3` to winner is `4`.
+**Task:** `N` players sit in a circle. Remove every `k`-th player until one remains. For example, `N=7`, `k=3` to winner is `4`.
 
 **Steps:**
 1) Build `LinkedList<Integer>` of players `1..N`.
@@ -191,15 +176,12 @@ example, `N=7`, `k=3` to winner is `4`.
 **What you’ll practice:** In-place ordered merge using **two iterators**.
 **Why this matters:** Avoids extra lists and highlights iterator power.
 
-**Task:** Merge sorted list `B` into sorted list `A` (ascending order), **without creating a
-third list**.
+**Task:** Merge sorted list `B` into sorted list `A` (ascending order), **without creating a third list**.
 
 **Steps:**
 1) Make copies: `A = new LinkedList<>(List.of(...))`, `B = new LinkedList<>(List.of(...))`.
-2) Hold `ListIterator<Integer> ai = A.listIterator();` and standard `Iterator<Integer> bi =
-   B.iterator();` (or another `ListIterator`).
-3) While `bi` has items, peek the next `b`. Move `ai` forward until `a >= b`, then `ai.add(b)`
-   and advance only `bi`.
+2) Hold `ListIterator<Integer> ai = A.listIterator();` and standard `Iterator<Integer> bi = B.iterator();` (or another `ListIterator`).
+3) While `bi` has items, peek the next `b`. Move `ai` forward until `a >= b`, then `ai.add(b)` and advance only `bi`.
 4) When `ai` hits the end, `add` the rest of `B`.
 5) Print `A` to confirm order.
 
@@ -213,8 +195,7 @@ third list**.
 **What you’ll practice:** Using a deque of **indices** to track a window maximum in O(n).
 **Why this matters:** The pattern appears in streaming analytics and UIs.
 
-**Task:** Implement `int[] maxWindow(int[] a, int w)` using a `Deque<Integer>` (back holds
-**potential** max indices in **descending** value order).
+**Task:** Implement `int[] maxWindow(int[] a, int w)` using a `Deque<Integer>` (back holds **potential** max indices in **descending** value order).
 
 **Steps:**
 1) Walk the array `i=0..n-1`.
@@ -233,15 +214,13 @@ third list**.
 **What you’ll practice:** Multiple `Deque`s and simple scheduling rules.
 **Why this matters:** Many games and servers process work in priority bands.
 
-**Task:** Maintain three queues: `hi`, `mid`, `lo`. Each “tick”: process **one** action—the
-head of the **highest non-empty** deque.
+**Task:** Maintain three queues: `hi`, `mid`, `lo`. Each “tick”: process **one** action—the head of the **highest non-empty** deque.
 
 **Steps:**
 1) Create three `Deque<Action>` (use `LinkedList<>`).
 2) Enqueue some actions across the three deques.
 3) Write `Action next()` that returns from `hi`, else `mid`, else `lo`.
-4) (Stretch) After executing a high-priority action, **demote** any stale remaining high
-   actions to `mid` by walking `hi` with an iterator and moving nodes.
+4) (Stretch) After executing a high-priority action, **demote** any stale remaining high actions to `mid` by walking `hi` with an iterator and moving nodes.
 
 **Quick check:** Your log shows the scheduler always prefers `hi`, then `mid`, then `lo`.
 **Hint:** Moving nodes = `remove()` on one deque, then `addLast()` on another.
@@ -253,9 +232,7 @@ head of the **highest non-empty** deque.
 **What you’ll practice:** `addLast/removeFirst/removeLast` symmetry checks.
 **Why this matters:** Nice hands-on with both ends of a deque.
 
-**Task:** Read a string, keep only letters and digits, and lowercase it. Put chars into a
-`Deque<Character>`. While `size()>1`, compare and remove from **both ends**. Return `true` only
-if all pairs match.
+**Task:** Read a string, keep only letters and digits, and lowercase it. Put chars into a `Deque<Character>`. While `size()>1`, compare and remove from **both ends**. Return `true` only if all pairs match.
 
 **Steps:**
 1) Normalise input (letters/digits only, lowercase).
@@ -270,8 +247,7 @@ if all pairs match.
 
 ## Exercise 12 — Time-ordered command buffer (Games)
 
-**What you’ll practice:** Keeping a linked list **sorted** by timestamp while inserting and
-draining.
+**What you’ll practice:** Keeping a linked list **sorted** by timestamp while inserting and draining.
 **Why this matters:** Many systems buffer future commands/events and release them when due.
 
 **Task:** Store `(timestampMillis, command)` tuples in ascending time order. Implement:
@@ -284,8 +260,7 @@ draining.
 3) For drain, iterate from the head removing due items, stop at the first future item.
 4) Return the drained items (preserve their original order).
 
-**Quick check:** After inserting out-of-order times, a full print of the list shows
-**ascending** timestamps.
+**Quick check:** After inserting out-of-order times, a full print of the list shows **ascending** timestamps.
 **Hint:** Keep both operations **linear** in the number of items touched—no full resort needed.
 
 ---

@@ -8,35 +8,25 @@ version: 1.0
 
 ## What Is This?
 
-TaskHub is a **longitudinal applied case study** that runs alongside the core teaching topics
-in Year 2 OOP. It demonstrates how individual programming concepts combine into a realistic
-multi-tier system.
+TaskHub is a **longitudinal applied case study** that runs alongside the core teaching topics in Year 2 OOP. It demonstrates how individual programming concepts combine into a realistic multi-tier system.
 
-This document serves as an index to all parts of the case study and provides guidance on how to
-use it.
+This document serves as an index to all parts of the case study and provides guidance on how to use it.
 
-The complete TaskHub implementation (all layers, tests, Docker configuration) is maintained in
-a separate repository and is available to students
-[the Applied Case Study repository](https://github.com/nmcguinness/L8-OOP-Module-Content-Applied-Case-Study.git).
+The complete TaskHub implementation (all layers, tests, Docker configuration) is maintained in a separate repository and is available to students [the Applied Case Study repository](https://github.com/nmcguinness/L8-OOP-Module-Content-Applied-Case-Study.git).
 
 ---
 
 ## How to Use the Case Study
 
-1. **Learn the concept first.** The core topic notes (e.g., `t08_generics_1_notes.md`) teach
-   the programming concept in isolation with small, focused examples.
+1. **Learn the concept first.** The core topic notes (e.g., `t08_generics_1_notes.md`) teach the programming concept in isolation with small, focused examples.
 
-2. **Then see it applied.** Each case study part shows how that concept addresses a real design
-   pressure in TaskHub.
+2. **Then see it applied.** Each case study part shows how that concept addresses a real design pressure in TaskHub.
 
-3. **The case study is optional but recommended.** You can understand the core topics without
-   reading the case study, but the case study helps you see *why* the concepts matter.
+3. **The case study is optional but recommended.** You can understand the core topics without reading the case study, but the case study helps you see *why* the concepts matter.
 
-4. **Don't read ahead.** Each part deliberately avoids concepts from future topics. Reading
-   Part 3 before you've studied concurrency will be confusing.
+4. **Don't read ahead.** Each part deliberately avoids concepts from future topics. Reading Part 3 before you've studied concurrency will be confusing.
 
-5. **Each part is self-contained.** Parts can reference earlier parts but must not assume
-   students have read later parts.
+5. **Each part is self-contained.** Parts can reference earlier parts but must not assume students have read later parts.
 
 6. **Code is illustrative, not exhaustive.** The complete reference implementation is separate.
 
@@ -54,8 +44,7 @@ a separate repository and is available to students
 | 6 | Dockerisation | ⏳ Planned |
 | 7 | Integration | ⏳ Planned |
 
-> Planned parts are listed without links until the note exists. Each will live in
-> a folder named after its topic code, matching `notes/topics/`.
+> Planned parts are listed without links until the note exists. Each will live in a folder named after its topic code, matching `notes/topics/`.
 
 ---
 
@@ -131,7 +120,7 @@ a separate repository and is available to students
     - TaskHubServer.java
     - ClientHandler.java (Runnable)
     - TaskHubProtocol.java
-    - RequestRouter.java
+    - RequestDispatcher.java
   - client/
     - TaskHubConsoleClient.java
 

@@ -9,34 +9,21 @@ version: 1.0
 
 ## Overview
 
-This is **Part 1** of the TaskHub Applied Case Study, corresponding to the **Generics** topic
-(Weeks 1–2).
+This is **Part 1** of the TaskHub Applied Case Study, corresponding to the **Generics** topic (Weeks 1–2).
 
-TaskHub is a collaborative task management system that we build incrementally throughout this
-semester. Each part of this case study introduces a new design pressure and shows how the
-corresponding programming concept addresses it.
+TaskHub is a collaborative task management system that we build incrementally throughout this semester. Each part of this case study introduces a new design pressure and shows how the corresponding programming concept addresses it.
 
-In this part, we face the challenge of storing and retrieving different types of entities
-(Tasks, Users, Projects) without duplicating code or sacrificing type safety. Generics allow us
-to write reusable infrastructure that works with any entity type while letting the compiler
-catch type errors before runtime.
+In this part, we face the challenge of storing and retrieving different types of entities (Tasks, Users, Projects) without duplicating code or sacrificing type safety. Generics allow us to write reusable infrastructure that works with any entity type while letting the compiler catch type errors before runtime.
 
-We also introduce `Result<T>`, a generic type that represents operations that might fail,
-replacing scattered exception handling with explicit, type-safe success-or-failure values.
+We also introduce `Result<T>`, a generic type that represents operations that might fail, replacing scattered exception handling with explicit, type-safe success-or-failure values.
 
-**Prerequisites:** Before reading this case study, you should have completed the core topic
-notes on Generics. This document assumes familiarity with type parameters, bounded types, and
-wildcards.
+**Prerequisites:** Before reading this case study, you should have completed the core topic notes on Generics. This document assumes familiarity with type parameters, bounded types, and wildcards.
 
-**Runnable Code:** A complete, self-contained Java file demonstrating all concepts from this
-part is available
-[the Applied Case Study repository](https://github.com/nmcguinness/L8-OOP-Module-Content-Applied-Case-Study.git).
+**Runnable Code:** A complete, self-contained Java file demonstrating all concepts from this part is available [the Applied Case Study repository](https://github.com/nmcguinness/L8-OOP-Module-Content-Applied-Case-Study.git).
 
-**What this document is:** A guided narrative showing how generics enable reusable, type-safe
-infrastructure in a realistic system.
+**What this document is:** A guided narrative showing how generics enable reusable, type-safe infrastructure in a realistic system.
 
-**What this document is not:** A tutorial on generics syntax (see the core topic notes) or a
-complete implementation (see Appendix A for runnable code).
+**What this document is not:** A tutorial on generics syntax (see the core topic notes) or a complete implementation (see Appendix A for runnable code).
 
 ---
 
@@ -331,8 +318,7 @@ public final class User implements Validatable {
 
 ### The Pressure
 
-TaskHub needs to store and retrieve different kinds of entities. Today we have Tasks and Users;
-tomorrow we'll add Projects, Comments, and AuditLogs.
+TaskHub needs to store and retrieve different kinds of entities. Today we have Tasks and Users; tomorrow we'll add Projects, Comments, and AuditLogs.
 
 The naive approach is to write a separate storage class for each type:
 
@@ -411,8 +397,7 @@ This eliminates duplication but introduces worse problems:
 
 ### The Insight
 
-The storage logic is identical for all entity types — only the *type itself* changes. If we
-could parameterise the class by a type, we'd write it once and reuse it safely for any entity.
+The storage logic is identical for all entity types — only the *type itself* changes. If we could parameterise the class by a type, we'd write it once and reuse it safely for any entity.
 
 This is exactly what generics provide.
 
@@ -523,8 +508,7 @@ public interface Repository<T, ID> {
 
 ## Section 3: An In-Memory Implementation
 
-Now we implement the interface. This version stores entities in a `HashMap` — fast and simple,
-perfect for development and testing.
+Now we implement the interface. This version stores entities in a `HashMap` — fast and simple, perfect for development and testing.
 
 ```java
 import java.util.*;
@@ -666,15 +650,11 @@ public final class InMemoryRepository<T, ID> implements Repository<T, ID> {
 
 **Key implementation details:**
 
-1. **The `idExtractor` function**: This is how we get the ID from any entity type.
-   `Task::getId` becomes a `Function<Task, String>` that the repository calls when saving.
+1. **The `idExtractor` function**: This is how we get the ID from any entity type. `Task::getId` becomes a `Function<Task, String>` that the repository calls when saving.
 
-2. **Defensive null checks**: We reject null entities and null IDs, but `findById(null)`
-   returns `Optional.empty()` rather than throwing — a reasonable interpretation of "not
-   found".
+2. **Defensive null checks**: We reject null entities and null IDs, but `findById(null)` returns `Optional.empty()` rather than throwing — a reasonable interpretation of "not found".
 
-3. **Unmodifiable collection**: `findAll()` returns a wrapped collection that throws if callers
-   try to modify it. This protects internal state.
+3. **Unmodifiable collection**: `findAll()` returns a wrapped collection that throws if callers try to modify it. This protects internal state.
 
 ---
 
@@ -741,8 +721,7 @@ The compiler enforces that only `Task` objects go into `taskRepo`. No casts, no 
 
 ### The Pressure
 
-Our repository stores and retrieves entities, but it doesn't validate them. Watch what happens
-with invalid data:
+Our repository stores and retrieves entities, but it doesn't validate them. Watch what happens with invalid data:
 
 ```java
 // These tasks have problems, but the repository accepts them silently
@@ -786,16 +765,13 @@ This works but has problems:
 
 ### The Insight
 
-An operation that might fail has two possible outcomes: **success** (with a result value) or
-**failure** (with an error message). If we represent this explicitly as a return type, callers
-must handle both cases — the type system enforces it.
+An operation that might fail has two possible outcomes: **success** (with a result value) or **failure** (with an error message). If we represent this explicitly as a return type, callers must handle both cases — the type system enforces it.
 
 ---
 
 ## Section 6: `Result<T>` — Explicit Success or Failure
 
-We create a generic type that represents either a successful outcome (containing a value) or a
-failed outcome (containing an error message):
+We create a generic type that represents either a successful outcome (containing a value) or a failed outcome (containing an error message):
 
 ```java
 import java.util.Objects;
@@ -1388,8 +1364,7 @@ The infrastructure is solid, but the `TaskService` is starting to accumulate con
 - Soon it will need to order task lists by different criteria
 - Soon it will need to notify listeners when tasks change
 
-Each new feature means editing `TaskService`. The class is becoming a "god object" that knows
-too much.
+Each new feature means editing `TaskService`. The class is becoming a "god object" that knows too much.
 
 In **Part 2 — Design Patterns**, we'll introduce:
 - **Strategy pattern** for interchangeable ordering algorithms
@@ -1407,18 +1382,15 @@ Use these questions to check your understanding:
 
 1. Why does `Repository<T, ID>` have two type parameters instead of just one?
 
-2. What would happen if `InMemoryRepository` stored entities in a `List` instead of a `Map`?
-   How would this affect the `findById` method?
+2. What would happen if `InMemoryRepository` stored entities in a `List` instead of a `Map`? How would this affect the `findById` method?
 
 3. Why does `findById` return `Optional<T>` instead of just `T`?
 
 4. In `Result<T>`, why is the constructor private? What would go wrong if it were public?
 
-5. The bound `T extends Validatable` restricts what types can be used with `Validator`. What
-   error would you get if you tried to create a `Validator<String>`?
+5. The bound `T extends Validatable` restricts what types can be used with `Validator`. What error would you get if you tried to create a `Validator<String>`?
 
-6. `TaskService.assignTo` uses `flatMap` to chain operations. Rewrite it using `if` statements
-   and explain which version is clearer.
+6. `TaskService.assignTo` uses `flatMap` to chain operations. Rewrite it using `if` statements and explain which version is clearer.
 
 7. What's the difference between `map` and `flatMap` on `Result<T>`? When would you use each?
 

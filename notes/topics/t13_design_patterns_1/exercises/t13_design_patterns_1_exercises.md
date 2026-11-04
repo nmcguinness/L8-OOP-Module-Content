@@ -2,1119 +2,459 @@
 title: "Design Patterns I — Exercises"
 subtitle: "COMP C8Z03 — Year 2 OOP"
 topic_code: t13_design_patterns_1
-description: "Six exercises applying Strategy and Command, from swappable combat AI and pricing rules to macro commands and an undo stack."
+description: "Seven step-by-step exercises applying Strategy and Command, from swappable combat AI and pricing rules to macro commands, an undo stack, and a two-part café ticket dispatcher."
 created: 2026-02-03
-last_updated: 2026-09-10
-version: 1.0
+last_updated: 2026-11-03
+version: 1.1
 status: published
 authors: ["OOP Teaching Team"]
 tags: [java, design-patterns, strategy, command, decoupling, oop, exercises, year2, comp-c8z03]
 ---
 # Design Patterns I — Exercises
 
-> These exercises build directly on the **Design Patterns I** notes.
-> This set focuses on **Strategy** and **Command**, including two exercises where you combine
-> both patterns in the same mini-system.
+These exercises practise the two patterns in the [t13 notes](../t13_design_patterns_1_notes.md):
 
-## Ground rules
+- **Strategy** puts a rule that can vary (how much damage, what price) in its own object, so you can swap the rule without changing the class that uses it.
+- **Command** turns a piece of work into an object, so it can be stored, queued, combined or undone before or after it runs.
 
-- Keep selection logic out of your “core” classes (no giant `if`/`switch` blocks in the wrong
-  place).
-- No `instanceof` checks to decide behaviour.
-- Print small outputs in `run()` so you can quickly verify behaviour.
+Exercises 03, 06 and 07 use both patterns together.
+
+Every exercise follows the same layout: a goal, the steps, a worked example, the rules, hints you can open if you are stuck, and a checklist. Each one ends with a link to a worked solution and its tests.
+
+| Exercise | You practise | Difficulty |
+| :-- | :-- | :-- |
+| 01 Combat attacks | Strategy | Foundation |
+| 02 Pricing rules | Strategy | Foundation |
+| 03 A task with a policy | Strategy inside a Command | Intermediate |
+| 04 A macro command | a Command made of Commands | Intermediate |
+| 05 An undo stack | `execute` and `undo`, `ArrayDeque` as a stack | Intermediate |
+| 06 Café tickets, part 1 | policies, commands and a FIFO queue | Intermediate |
+| 07 Café tickets, part 2 | choosing a policy in one place | Intermediate |
+
+## Rules for every exercise
+
+- The class that **uses** a strategy or command never checks which kind it has. No `if` or `switch` on a type, and no `instanceof`.
+- Print a few short lines in `run()` so you can see the behaviour at a glance.
 
 ## How to run
 
-Each exercise assumes a package like:
-
-```java
-t13_design_patterns_1.exercises.exNN
-````
-
-Create a class `Exercise` in that package with a static entry point:
-
-```java
-package t13_design_patterns_1.exercises.ex01;
-
-public class Exercise {
-    public static void run() {
-        // call your methods here; print results for quick checks
-    }
-}
-```
+Each exercise goes in its own package, `t13_design_patterns_1.exercises.exNN`. Create a class `Exercise` in that package with a static `run()` method, and call `Exercise.run()` from `Main`.
 
 ---
 
-## Exercise 01 — Combat AI attack behaviour (Strategy)
+## Exercise 01 — Combat attacks
 
-**Objective:** Build a tiny combat model where an `Enemy` can attack at a given distance, but
-the **rules for how damage is computed** live outside the `Enemy` class.
+**Goal:** Give two enemies different ways of attacking without writing "if melee ... else if ranged" anywhere. The `Enemy` class hands the damage calculation to a strategy object.
 
-Your finished solution should let you:
-- create multiple enemies using the **same** `Enemy` class
-- give each enemy a different `AttackStrategy` (e.g., melee vs ranged)
-- call `enemy.attack(distanceMeters)` and get damage back based on that strategy’s rules
+**You will need:** [Pattern 1: Strategy](../t13_design_patterns_1_notes.md#pattern-1-strategy) and [Strategy — AI behaviour that changes at runtime](../t13_design_patterns_1_notes.md#strategy--ai-behaviour-that-changes-at-runtime).
 
-In other words: `Enemy` should *not* contain “if melee then ... else if ranged then ...”.
-Instead, the `Enemy` delegates damage calculation to the strategy object you supplied. In
-`run()`, you should be able to show the *same distances* producing different results for
-different enemy strategies.
+**Steps**
 
-**Context (software + games):**
-
-- **Software dev:** avoid giant conditional logic for “modes” by encapsulating behaviour.
-- **Games dev:** enemies often share the same base stats but differ in combat behaviour (melee,
-  ranged, cautious, aggressive).
-
-### What you are building
-
-A tiny combat model where:
-
-- an enemy has a **base damage**
-- an enemy has an **AttackStrategy**
-- the strategy decides the damage based on distance
-
-### Required API
-
-Implement these types:
+1. Create an interface `AttackStrategy` with the method below.
+2. Create `MeleeAttack`. It returns `baseDamage + 5` when the distance is 2 metres or less, and 0 otherwise.
+3. Create `RangedAttack`. It returns `baseDamage` when the distance is 10 metres or less, and 0 otherwise.
+4. Create `Enemy`, which stores a name, a base damage and an `AttackStrategy`, all set in the constructor.
+5. Give `Enemy` a method `attack(int distanceMeters)` that returns whatever its strategy calculates.
+6. In `run()`, create a `Skeleton` (base damage 10, melee) and an `Archer` (base damage 10, ranged). Print each one's damage at 1, 5 and 12 metres.
 
 ```java
 interface AttackStrategy {
     int computeDamage(int baseDamage, int distanceMeters);
 }
 
-class Enemy {
-    public Enemy(String name, int baseDamage, AttackStrategy strategy) { }
-    public String getName() { return ""; }
-    public int attack(int distanceMeters) { return 0; }
-}
+public Enemy(String name, int baseDamage, AttackStrategy strategy)
+public int attack(int distanceMeters)
 ```
 
-### Tasks
+**Example**
 
-1. Create an interface `AttackStrategy` with:
-   `int computeDamage(int baseDamage, int distanceMeters)`
-2. Implement two strategies:
-
-   - `MeleeAttack`: returns `baseDamage + 5` only when `distanceMeters <= 2` (else return 0)
-   - `RangedAttack`: returns `baseDamage` only when `distanceMeters <= 10` (else return 0)
-3. Create an `Enemy` class that stores `name`, `baseDamage`, and an `AttackStrategy`.
-4. Add `int attack(int distanceMeters)` on `Enemy` that delegates to the strategy.
-5. In `run()`, create one melee enemy and one ranged enemy and print damage at distances `1`,
-   `5`, `12`.
-
-### Done when...
-
-- Your `Enemy` class contains **no** “mode selection” logic (`if`/`switch` on enemy type).
-- Damage gating (distance checks) is inside the strategies.
-- You can swap strategy objects without changing `Enemy` code.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    Solution
-  </summary>
-
-```java
-package t13_design_patterns_1.exercises.ex01;
-
-public class Exercise
-{
-    public static void run()
-    {
-        Enemy skeleton = new Enemy("Skeleton", 10, new MeleeAttack());
-        Enemy archer = new Enemy("Archer", 10, new RangedAttack());
-
-        int[] distances = new int[] { 1, 5, 12 };
-
-        for (int d : distances)
-        {
-            System.out.println(skeleton.getName() + " at " + d + "m: " + skeleton.attack(d));
-        }
-
-        for (int d : distances)
-        {
-            System.out.println(archer.getName() + " at " + d + "m: " + archer.attack(d));
-        }
-    }
-}
-
-interface AttackStrategy
-{
-    int computeDamage(int baseDamage, int distanceMeters);
-}
-
-class MeleeAttack implements AttackStrategy
-{
-    @Override
-    public int computeDamage(int baseDamage, int distanceMeters)
-    {
-        if (distanceMeters > 2)
-            return 0;
-
-        return baseDamage + 5;
-    }
-}
-
-class RangedAttack implements AttackStrategy
-{
-    @Override
-    public int computeDamage(int baseDamage, int distanceMeters)
-    {
-        if (distanceMeters > 10)
-            return 0;
-
-        return baseDamage;
-    }
-}
-
-class Enemy
-{
-    private String _name;
-    private int _baseDamage;
-    private AttackStrategy _strategy;
-
-    public Enemy(String name, int baseDamage, AttackStrategy strategy)
-    {
-        _name = name;
-        _baseDamage = baseDamage;
-        _strategy = strategy;
-    }
-
-    public String getName()
-    {
-        return _name;
-    }
-
-    public int attack(int distanceMeters)
-    {
-        return _strategy.computeDamage(_baseDamage, distanceMeters);
-    }
-}
+```text
+Skeleton at 1m: 15
+Skeleton at 5m: 0
+Skeleton at 12m: 0
+Archer at 1m: 10
+Archer at 5m: 10
+Archer at 12m: 0
 ```
+
+**Rules**
+
+- The distance checks live inside the strategies, not in `Enemy`.
+- `Enemy.attack` is one line long.
+
+<details>
+<summary>Hints</summary>
+
+1. `return strategy.computeDamage(baseDamage, distanceMeters);`
+2. Loop over the distances with `for (int d : new int[] {1, 5, 12})`.
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints the six lines shown.
+- [ ] You could add a `MagicAttack` without changing `Enemy`.
+
+**Package:** `t13_design_patterns_1.exercises.ex01`
+
+**Solution:** [t13 exercise 01 solution code](../../../../code/src/t13_design_patterns_1/exercises/ex01/).
+**Tests:** [t13 exercise 01 tests](../../../../code/test/t13_design_patterns_1/exercises/ex01/).
+
 ---
 
-## Exercise 02 — Pricing rules (Strategy)
+## Exercise 02 — Pricing rules
 
-**Objective:** Build a checkout/pricing component where the **final price calculation** is
-fully controlled by a `PriceStrategy`.
+**Goal:** Build a checkout whose final price comes entirely from a pricing rule you plug in. Changing the rule means passing in a different object, not editing `Checkout`.
 
-Your finished solution should let you:
-- take a `basePrice` and produce a `finalPrice` using a chosen pricing rule
-- swap pricing rules without changing the `Checkout` class (only swap the strategy object)
-- keep “special business rules” (like a minimum price floor) inside the strategy that owns that rule
+**You will need:** [Step A — Strategy interface](../t13_design_patterns_1_notes.md#step-a--strategy-interface) to [Step C — Context uses the strategy](../t13_design_patterns_1_notes.md#step-c--context-uses-the-strategy).
 
-In `run()`, you should be able to compute prices for the same base value using multiple
-strategies and clearly see different results (including a case that triggers the “never below
-€5.00” behaviour).
+**Steps**
 
-**Context (software + games):**
-
-- **Software dev:** pricing rules evolve constantly (discounts, promos, minimum price floors).
-- **Games dev:** in-game stores often apply different pricing rules (membership discounts,
-  events, bundles).
-
-### What you are building
-
-A mini checkout that can swap pricing rules by passing a different strategy object.
-
-### Required API
+1. Create an interface `PriceStrategy` with the method below.
+2. Create `NoDiscount`, which returns the base price unchanged.
+3. Create `StudentDiscount`, which takes 10% off.
+4. Create `BlackFridayDiscount`, which takes 30% off but never returns less than €5.00.
+5. Create `Checkout`. Its constructor takes a `PriceStrategy`, and `price(double basePrice)` returns what the strategy calculates.
+6. In `run()`, make one `Checkout` for each strategy, and print the price for base prices 10.00 and 4.00.
 
 ```java
 interface PriceStrategy {
     double finalPrice(double basePrice);
 }
 
-class Checkout {
-    public Checkout(PriceStrategy pricing) { }
-    public double price(double basePrice) { return 0.0; }
-}
+public Checkout(PriceStrategy pricing)
+public double price(double basePrice)
 ```
 
-### Tasks
+**Example**
 
-1. Create `PriceStrategy` with:
-   `double finalPrice(double basePrice)`
-2. Implement strategies:
-
-   - `NoDiscount`: returns base price
-   - `StudentDiscount`: 10% off
-   - `BlackFridayDiscount`: 30% off, but never below €5.00
-3. Create `Checkout` that stores a `PriceStrategy` and exposes:
-   `double price(double basePrice)`
-4. In `run()`, show results for base prices `10.00` and `4.00` using all three strategies.
-
-### Done when...
-
-- `Checkout` contains **no** `if`/`switch` logic for which discount to apply.
-- Your “never below €5.00” clamp rule lives inside `BlackFridayDiscount`.
-- You can add another pricing strategy without changing `Checkout`.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    Solution
-  </summary>
-
-```java
-package t13_design_patterns_1.exercises.ex02;
-
-public class Exercise
-{
-    public static void run()
-    {
-        double[] basePrices = new double[] { 10.00, 4.00 };
-
-        Checkout none = new Checkout(new NoDiscount());
-        Checkout student = new Checkout(new StudentDiscount());
-        Checkout bf = new Checkout(new BlackFridayDiscount());
-
-        for (double p : basePrices)
-        {
-            System.out.println("Base " + p + " -> none: " + none.price(p));
-            System.out.println("Base " + p + " -> student: " + student.price(p));
-            System.out.println("Base " + p + " -> black friday: " + bf.price(p));
-        }
-    }
-}
-
-interface PriceStrategy
-{
-    double finalPrice(double basePrice);
-}
-
-class NoDiscount implements PriceStrategy
-{
-    @Override
-    public double finalPrice(double basePrice)
-    {
-        return basePrice;
-    }
-}
-
-class StudentDiscount implements PriceStrategy
-{
-    @Override
-    public double finalPrice(double basePrice)
-    {
-        return basePrice * 0.9;
-    }
-}
-
-class BlackFridayDiscount implements PriceStrategy
-{
-    @Override
-    public double finalPrice(double basePrice)
-    {
-        double discounted = basePrice * 0.7;
-
-        if (discounted < 5.0)
-            return 5.0;
-
-        return discounted;
-    }
-}
-
-class Checkout
-{
-    private PriceStrategy _pricing;
-
-    public Checkout(PriceStrategy pricing)
-    {
-        _pricing = pricing;
-    }
-
-    public double price(double basePrice)
-    {
-        return _pricing.finalPrice(basePrice);
-    }
-}
+```text
+Base 10.0 -> none: 10.0
+Base 10.0 -> student: 9.0
+Base 10.0 -> black friday: 7.0
+Base 4.0 -> none: 4.0
+Base 4.0 -> student: 3.6
+Base 4.0 -> black friday: 5.0
 ```
+
+**Rules**
+
+- The "never below €5.00" rule lives inside `BlackFridayDiscount` and nowhere else.
+- `Checkout` contains no `if` or `switch`.
+
+<details>
+<summary>Hints</summary>
+
+1. 30% off is `basePrice * 0.7`. Work that out first, then compare it with 5.0.
+2. `Math.max(5.0, discounted)` does the comparison in one call.
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints the six lines shown.
+- [ ] You could add a `MemberDiscount` without changing `Checkout`.
+
+**Think about it:** look at the last line. A €4.00 item costs €5.00 on Black Friday. Is that a bug in the code, or a badly written rule? Who should decide?
+
+**Package:** `t13_design_patterns_1.exercises.ex02`
+
+**Solution:** [t13 exercise 02 solution code](../../../../code/src/t13_design_patterns_1/exercises/ex02/).
+**Tests:** [t13 exercise 02 tests](../../../../code/test/t13_design_patterns_1/exercises/ex02/).
+
 ---
 
-## Exercise 03 — Execute a task with a policy (Strategy + Command)
+## Exercise 03 — A task with a policy
 
-**Objective:** Build a mini job runner where:
-- a **Command** represents “a piece of work that can be triggered”
-- a **Strategy** represents “the policy for how that work is executed”
+**Goal:** Run the same task in two different ways, fast or safe. The command says **what** to run; a strategy inside it says **how**.
 
-Your finished solution should let you:
-- define one `Task` (the thing that ultimately runs)
-- execute the *same* task under different policies (e.g., fast vs safe)
-- keep the policy decision out of the task itself (the task should not decide whether it runs
-  validated or unchecked)
+**You will need:** [Pattern 1: Strategy](../t13_design_patterns_1_notes.md#pattern-1-strategy) and [Pattern 2: Command](../t13_design_patterns_1_notes.md#pattern-2-command).
 
-In `run()`, you should execute the same task twice and show different behaviour/output
-depending on whether you chose a “fast/unchecked” execution strategy or a “safe/validated”
-execution strategy.
+**Steps**
 
-**Context (software + games):**
-
-- **Software dev:** run jobs with different policies (fast vs safe, strict vs permissive).
-- **Games dev:** run gameplay actions under different rules (e.g., debug mode vs release mode).
-
-### What you are building
-
-A task executor where the same “execute task” command can run under different execution strategies.
-
-### Required API
+1. Create a class `Task` with a `name` and three methods: `validate()` prints `Validating: <name>`, `run()` prints `Running: <name>`, and `runUnchecked()` prints `Running unchecked: <name>`.
+2. Create an interface `TaskExecutionStrategy` with `void execute(Task task)`.
+3. Create `FastExecution`, which calls `task.runUnchecked()`.
+4. Create `SafeExecution`, which calls `task.validate()` and then `task.run()`.
+5. Create an interface `Command` with `void execute()`.
+6. Create `ExecuteTaskCommand`. Its constructor takes a `Task` and a `TaskExecutionStrategy`, and `execute()` passes the task to the strategy.
+7. In `run()`, make one task called `Export leaderboard`. Execute it once with each strategy.
 
 ```java
-interface Command {
-    void execute();
-}
-
-interface TaskExecutionStrategy {
-    void execute(Task task);
-}
-
-class ExecuteTaskCommand implements Command {
-    public ExecuteTaskCommand(Task task, TaskExecutionStrategy strategy) { }
-}
+public ExecuteTaskCommand(Task task, TaskExecutionStrategy strategy)
 ```
 
-### Tasks
+**Example**
 
-1. Create a `Task` with:
-
-   - `String name`
-   - `void validate()` prints `Validating: <name>`
-   - `void run()` prints `Running: <name>`
-   - `void runUnchecked()` prints `Running unchecked: <name>`
-2. Create `TaskExecutionStrategy` with `void execute(Task task)`.
-3. Implement:
-
-   - `FastExecution`: uses `task.runUnchecked()`
-   - `SafeExecution`: uses `task.validate()` then `task.run()`
-4. Create `Command` with `void execute()`.
-5. Create `ExecuteTaskCommand(Task task, TaskExecutionStrategy strategy)`.
-6. In `run()`, execute the same task twice (fast then safe).
-
-### Done when...
-
-- The command does not contain selection logic; it just delegates to its strategy.
-- You can add another strategy (e.g., “DryRunExecution”) without changing the command.
-- The same `Task` can be executed in multiple ways by swapping strategy objects.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    Solution
-  </summary>
-
-```java
-package t13_design_patterns_1.exercises.ex03;
-
-public class Exercise
-{
-    public static void run()
-    {
-        Task task = new Task("Export leaderboard");
-
-        Command fast = new ExecuteTaskCommand(task, new FastExecution());
-        Command safe = new ExecuteTaskCommand(task, new SafeExecution());
-
-        System.out.println("--- FAST ---");
-        fast.execute();
-
-        System.out.println("--- SAFE ---");
-        safe.execute();
-    }
-}
-
-interface Command
-{
-    void execute();
-}
-
-class ExecuteTaskCommand implements Command
-{
-    private Task _task;
-    private TaskExecutionStrategy _strategy;
-
-    public ExecuteTaskCommand(Task task, TaskExecutionStrategy strategy)
-    {
-        _task = task;
-        _strategy = strategy;
-    }
-
-    @Override
-    public void execute()
-    {
-        _strategy.execute(_task);
-    }
-}
-
-interface TaskExecutionStrategy
-{
-    void execute(Task task);
-}
-
-class FastExecution implements TaskExecutionStrategy
-{
-    @Override
-    public void execute(Task task)
-    {
-        task.runUnchecked();
-    }
-}
-
-class SafeExecution implements TaskExecutionStrategy
-{
-    @Override
-    public void execute(Task task)
-    {
-        task.validate();
-        task.run();
-    }
-}
-
-class Task
-{
-    private String _name;
-
-    public Task(String name)
-    {
-        _name = name;
-    }
-
-    public void validate()
-    {
-        System.out.println("Validating: " + _name);
-    }
-
-    public void run()
-    {
-        System.out.println("Running: " + _name);
-    }
-
-    public void runUnchecked()
-    {
-        System.out.println("Running unchecked: " + _name);
-    }
-}
+```text
+--- FAST ---
+Running unchecked: Export leaderboard
+--- SAFE ---
+Validating: Export leaderboard
+Running: Export leaderboard
 ```
+
+**Rules**
+
+- `Task` does not decide whether to validate. Only the strategy does.
+- `ExecuteTaskCommand.execute()` is one line long.
+
+<details>
+<summary>Hints</summary>
+
+1. `strategy.execute(task);` is the whole body of `ExecuteTaskCommand.execute()`.
+2. Two separate interfaces are both called `execute`. That is fine: one takes no arguments, the other takes a `Task`.
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints the five lines shown.
+- [ ] You could add a `DryRunExecution` without changing the command or the task.
+
+**Package:** `t13_design_patterns_1.exercises.ex03`
+
+**Solution:** [t13 exercise 03 solution code](../../../../code/src/t13_design_patterns_1/exercises/ex03/).
+**Tests:** [t13 exercise 03 tests](../../../../code/test/t13_design_patterns_1/exercises/ex03/).
+
 ---
 
-## Exercise 04 — MacroCommand (commands as building blocks)
+## Exercise 04 — A macro command
 
-**Objective:** Build a `MacroCommand` that behaves like a normal `Command`, but internally runs
-**a list of commands in order**.
+**Goal:** Combine several small commands into one bigger command. The macro is itself a `Command`, so anything that can run a command can run a whole sequence.
 
-Your finished solution should let you:
-- create small commands that each perform one step (here: printing a message)
-- combine them into a macro that represents a larger workflow
-- execute the macro with one call to `execute()`, producing the same order of steps you added
+**You will need:** [Command interface](../t13_design_patterns_1_notes.md#command-interface) and [Concrete command](../t13_design_patterns_1_notes.md#concrete-command).
 
-In `run()`, calling `macro.execute()` once should produce a clear multi-step output (e.g.,
-`start → validate → execute → done`). The key requirement is that the macro is treated just
-like any other command, meaning it implements the same interface.
+**Steps**
 
-**Context (software + games):**
-
-- **Software dev:** “apply preset” or “run workflow” made of smaller steps.
-- **Games dev:** combo actions, scripted sequences, or tool pipelines (export, bake, package).
-
-### What you are building
-
-A `MacroCommand` that contains multiple commands and executes them in order.
-
-### Required API
+1. Create an interface `Command` with `void execute()`.
+2. Create `PrintCommand`. Its constructor takes a message, and `execute()` prints it.
+3. Create `MacroCommand`, which implements `Command` and holds a `List<Command>`.
+4. Give `MacroCommand` a method `add(Command command)` that adds to the list.
+5. Make `MacroCommand.execute()` execute every command in the list, in the order they were added.
+6. In `run()`, build a macro of four print commands (`start`, `validate`, `execute`, `done`) and call `execute()` on it **once**.
 
 ```java
-interface Command {
-    void execute();
-}
-
-class MacroCommand implements Command {
-    public void add(Command command) { }
-}
+public void add(Command command)
+public void execute()
 ```
 
-### Tasks
+**Example**
 
-1. Create `Command` with `void execute()`.
-2. Implement `PrintCommand(String message)` that prints the message.
-3. Implement `MacroCommand` that contains a `List<Command>`.
-4. `MacroCommand.execute()` must execute all inner commands in order.
-5. In `run()`, create a macro that prints `start`, then 2–3 steps, then `done`.
-
-### Done when...
-
-- `MacroCommand` implements the same `Command` interface as the commands it contains.
-- You can pass a `MacroCommand` anywhere a `Command` is expected.
-- The macro prints messages in the same order they were added.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    Solution
-  </summary>
-
-```java
-package t13_design_patterns_1.exercises.ex04;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class Exercise
-{
-    public static void run()
-    {
-        MacroCommand macro = new MacroCommand();
-        macro.add(new PrintCommand("start"));
-        macro.add(new PrintCommand("validate"));
-        macro.add(new PrintCommand("execute"));
-        macro.add(new PrintCommand("done"));
-
-        macro.execute();
-    }
-}
-
-interface Command
-{
-    void execute();
-}
-
-class PrintCommand implements Command
-{
-    private String _message;
-
-    public PrintCommand(String message)
-    {
-        _message = message;
-    }
-
-    @Override
-    public void execute()
-    {
-        System.out.println(_message);
-    }
-}
-
-class MacroCommand implements Command
-{
-    private List<Command> _commands = new ArrayList<>();
-
-    public void add(Command command)
-    {
-        _commands.add(command);
-    }
-
-    @Override
-    public void execute()
-    {
-        for (Command c : _commands)
-        {
-            c.execute();
-        }
-    }
-}
+```text
+start
+validate
+execute
+done
 ```
+
+**Rules**
+
+- `MacroCommand` implements the same `Command` interface as the commands it holds.
+
+<details>
+<summary>Hints</summary>
+
+1. `for (Command command : commands) { command.execute(); }`
+2. Because a `MacroCommand` **is a** `Command`, you can add one macro to another.
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints the four lines shown from a single `execute()` call.
+- [ ] A macro added to another macro runs all of its steps in the right place.
+
+**Package:** `t13_design_patterns_1.exercises.ex04`
+
+**Solution:** [t13 exercise 04 solution code](../../../../code/src/t13_design_patterns_1/exercises/ex04/).
+**Tests:** [t13 exercise 04 tests](../../../../code/test/t13_design_patterns_1/exercises/ex04/).
+
 ---
 
-## Exercise 05 — Undoable commands (undo stack)
+## Exercise 05 — An undo stack
 
-**Objective:** Build an undo system where each user action is represented as an object that can
-both:
-- apply the change (`execute()`)
-- reverse the same change (`undo()`)
+**Goal:** Build undo. Each change is an object that knows how to apply itself and how to reverse itself, and a stack remembers the order so the newest change is undone first.
 
-Your finished solution should let you:
-- apply multiple changes to a shared receiver object (a `Counter`)
-- push each executed command onto a history stack
-- undo the *most recent* command(s) in reverse order (LIFO)
-- verify that state returns to the correct previous values after each undo
+**You will need:** [Command — undoable text editor operations](../t13_design_patterns_1_notes.md#command--undoable-text-editor-operations).
 
-In `run()`, you should demonstrate a sequence like “+5, +2, +10” and then undo the last two
-actions, showing the counter stepping back correctly. The undo logic should not “guess” — it
-should be the exact inverse of what was executed.
+**Steps**
 
-**Context (software + games):**
-
-- **Software dev:** undo/redo in editors, admin tools, form builders.
-- **Games dev:** tool history, level editor actions, replayable input/actions.
-
-### What you are building
-
-A `Counter` that can be changed via undoable commands and reverted using a history stack.
-
-### Required API
+1. Create a class `Counter` with a private `int value`, a method `add(int amount)` and a getter `getValue()`.
+2. Create an interface `UndoableCommand` with `void execute()` and `void undo()`.
+3. Create `AddNumberCommand`. Its constructor takes a `Counter` and an amount. `execute()` adds the amount and `undo()` subtracts it.
+4. In `run()`, create an `ArrayDeque<UndoableCommand>` called `history`.
+5. Execute three commands that add 5, 2 and 10. After each, `push` it onto `history` and print the counter.
+6. Undo twice: `pop` a command from `history`, call `undo()`, and print the counter.
 
 ```java
-interface UndoableCommand {
-    void execute();
-    void undo();
-}
-
-class AddNumberCommand implements UndoableCommand {
-    public AddNumberCommand(Counter counter, int amount) { }
-}
+public AddNumberCommand(Counter counter, int amount)
 ```
 
-### Tasks
+**Example**
 
-1. Create `Counter` with:
-
-   - private field `_value`
-   - `void add(int amount)`
-   - `int getValue()`
-2. Create `UndoableCommand` with `execute()` and `undo()`.
-3. Implement `AddNumberCommand(Counter counter, int amount)`:
-
-   - `execute()` adds the amount
-   - `undo()` subtracts the same amount
-4. In `run()`:
-
-   - Create `ArrayDeque<UndoableCommand> history`
-   - Execute: add 5, add 2, add 10 (counter should be 17)
-   - Undo last two (counter should be 5)
-   - Print counter after each step
-
-### Done when...
-
-- Undo reverses exactly what execute did.
-- Undo order is LIFO (stack behaviour).
-- Your history structure does not throw exceptions for normal usage.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    Solution
-  </summary>
-
-```java
-package t13_design_patterns_1.exercises.ex05;
-
-import java.util.ArrayDeque;
-
-public class Exercise
-{
-    public static void run()
-    {
-        Counter counter = new Counter();
-        ArrayDeque<UndoableCommand> history = new ArrayDeque<>();
-
-        executeAndRecord(history, new AddNumberCommand(counter, 5));
-        System.out.println("After +5: " + counter.getValue());
-
-        executeAndRecord(history, new AddNumberCommand(counter, 2));
-        System.out.println("After +2: " + counter.getValue());
-
-        executeAndRecord(history, new AddNumberCommand(counter, 10));
-        System.out.println("After +10: " + counter.getValue());
-
-        undoLast(history);
-        System.out.println("After undo: " + counter.getValue());
-
-        undoLast(history);
-        System.out.println("After undo: " + counter.getValue());
-    }
-
-    private static void executeAndRecord(ArrayDeque<UndoableCommand> history, UndoableCommand command)
-    {
-        command.execute();
-        history.push(command);
-    }
-
-    private static void undoLast(ArrayDeque<UndoableCommand> history)
-    {
-        if (history.isEmpty())
-            return;
-
-        history.pop().undo();
-    }
-}
-
-interface UndoableCommand
-{
-    void execute();
-    void undo();
-}
-
-class AddNumberCommand implements UndoableCommand
-{
-    private Counter _counter;
-    private int _amount;
-
-    public AddNumberCommand(Counter counter, int amount)
-    {
-        _counter = counter;
-        _amount = amount;
-    }
-
-    @Override
-    public void execute()
-    {
-        _counter.add(_amount);
-    }
-
-    @Override
-    public void undo()
-    {
-        _counter.add(-_amount);
-    }
-}
-
-class Counter
-{
-    private int _value;
-
-    public void add(int amount)
-    {
-        _value += amount;
-    }
-
-    public int getValue()
-    {
-        return _value;
-    }
-}
+```text
+After +5: 5
+After +2: 7
+After +10: 17
+After undo: 7
+After undo: 5
 ```
+
+**Rules**
+
+- `undo()` reverses exactly what `execute()` did. It never guesses.
+- The newest command is undone first (last in, first out).
+
+<details>
+<summary>Hints</summary>
+
+1. `history.push(command)` adds to the front and `history.pop()` takes from the front, so an `ArrayDeque` works as a stack.
+2. `pop()` throws on an empty stack. Check `history.isEmpty()` before you undo.
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints the five lines shown.
+- [ ] Undoing all three commands returns the counter to 0.
+
+**Package:** `t13_design_patterns_1.exercises.ex05`
+
+**Solution:** [t13 exercise 05 solution code](../../../../code/src/t13_design_patterns_1/exercises/ex05/).
+**Tests:** [t13 exercise 05 tests](../../../../code/test/t13_design_patterns_1/exercises/ex05/).
+
 ---
 
-## Exercise 06 — Café order tickets dispatcher (Command + Strategy)
+## Exercises 06 and 07 — The café ticket dispatcher
 
-**Objective:** Build a simple order-ticket dispatcher where:
-- each ticket is processed via a **Command** (so tickets can be queued and executed later)
-- the processing behaviour is selected via a **Strategy** (so different tickets can be handled
-  differently)
+A café takes orders at the counter, a kiosk and an app. Each order becomes a **ticket**, and the tickets wait in a queue until the barista is ready. Not every ticket is handled the same way:
 
-In `run()`, you should enqueue multiple tickets that trigger each policy and show distinct
-outputs (`IMMEDIATE MAKE ...`, `VALIDATED MAKE ...`, `REJECT ...`, `TRAINING ...`). The
-important part is that the queue does not contain the selection logic — it simply runs commands
-— and the strategy selection is done in one place (the selector).
+- a small, ordinary order is made straight away;
+- a large order, or one that looks wrong, is checked first, so stock is not wasted;
+- a ticket entered by a new member of staff in **training** is only printed, never made.
 
-### Context
+Each ticket in the queue is a **Command**. The way it is handled is a **Strategy**. Exercise 06 builds the parts and chooses each ticket's policy by hand. Exercise 07 adds one class that chooses the policy automatically.
 
-You are building a tiny “order processing” system for a café. Orders arrive from different
-places (counter staff, self-service kiosk, mobile app). The café wants a consistent way to
-handle these orders without copying logic everywhere.
+---
 
-Instead of processing orders immediately, we represent each order as a ticket and add it to a
-queue. Later, the kitchen/barista station processes tickets in order.
+## Exercise 06 — Café tickets, part 1: policies and a queue
 
-To keep behaviour flexible, the café uses different processing policies:
-- Some tickets can be processed immediately.
-- Big / expensive tickets must be validated first (to reduce mistakes).
-- Training-mode tickets should not create real orders — they should only print what would happen.
+**Goal:** Build the ticket, three handling policies, a command that pairs a ticket with a policy, and a queue that runs the commands in the order they arrived.
 
-This problem is perfect for Command + Strategy together:
+**You will need:** [Pattern 2: Command](../t13_design_patterns_1_notes.md#pattern-2-command) and [Invoker](../t13_design_patterns_1_notes.md#invoker).
 
-Command = “this is a unit of work that can be queued”
-Strategy = “this is the policy for how that work should run”
+**Steps**
 
-Typical use cases include the following:
-- Queueing: During a rush, tickets pile up and are processed FIFO.
-- Validation: Large orders should be double-checked (e.g., “12 coffees + 6 sandwiches”) so you
-  don’t waste stock.
-- Training mode: New staff can practise entering orders without actually sending them to the
-  kitchen.
-
-### What you are building
-
-A tiny order-ticket system for a café:
-
-- Orders arrive from the counter, kiosk, or app.
-- Each order becomes a **ticket** and is queued FIFO.
-- A selector chooses how each ticket is processed:
-
-  - normal tickets process immediately
-  - big orders are validated first
-  - training tickets do a dry-run print only
-
-### Required API
+1. Create `OrderTicket` with four fields: `ticketId`, `description`, `totalEuro` and `itemCount`, a constructor and a getter for each.
+2. Add `isValid()`. A ticket is valid when the description is not blank, the total is above 0, and there is at least one item.
+3. Add `summary()`, which returns text like `201 1 cappuccino (€7.80)`.
+4. Create an interface `OrderProcessingStrategy` with `void process(OrderTicket ticket)`.
+5. Create three strategies:
+   - `ImmediateProcess` prints `IMMEDIATE MAKE` and the summary.
+   - `ValidatedProcess` prints `REJECT <id> invalid` for an invalid ticket, otherwise `VALIDATED MAKE` and the summary.
+   - `DryRunTraining` prints `TRAINING would make` and the summary.
+6. Create an interface `Command` with `void execute()`, and `ProcessTicketCommand`, which holds a ticket and a strategy and calls `strategy.process(ticket)`.
+7. Create `TicketQueue`. It holds a `Queue<Command>` and has `add`, `size` and `processAll`. `processAll` runs and removes every command, oldest first.
+8. In `run()`, queue four tickets, each with a policy you choose by hand, and process them.
 
 ```java
-interface Command {
-    void execute();
-}
-
-interface OrderProcessingStrategy {
+public interface OrderProcessingStrategy {
     void process(OrderTicket ticket);
 }
 
-class ProcessingPolicySelector {
-    public OrderProcessingStrategy select(OrderTicket ticket) { return null; }
-}
-
-class TicketQueue {
-    public void add(Command command) { }
-    public void processAll() { }
-}
+public ProcessTicketCommand(OrderTicket ticket, OrderProcessingStrategy strategy)
+public void processAll()
 ```
 
-### Tasks
+**Example**
 
-#### Part A — model the ticket
-
-1. Create `OrderTicket` with:
-
-   - `int ticketId`
-   - `String description` (e.g., `"2 lattes, 1 muffin"`)
-   - `double totalEuro`
-   - `int itemCount`
-2. Add `boolean isValid()` with rules:
-
-   - description must not be blank
-   - `totalEuro > 0`
-   - `itemCount > 0`
-
-#### Part B — define processing strategies
-
-1. Create `OrderProcessingStrategy` with: `void process(OrderTicket ticket)`
-2. Implement:
-
-   - `ImmediateProcess`: prints `MAKE <id> <description> (€<total>)`
-   - `ValidatedProcess`: if invalid prints `REJECT <id> invalid` and returns; else prints `MAKE ...`
-   - `DryRunTraining`: prints `TRAINING <id> would make: <description> (€<total>)`
-
-#### Part C — command + queue
-
-1. Create `Command` with `void execute()`.
-2. Create `ProcessTicketCommand(OrderTicket ticket, OrderProcessingStrategy strategy)`.
-3. Create `TicketQueue` using `Queue<Command>` (`ArrayDeque`) with `add(...)` and `processAll()`.
-
-#### Part D — strategy selection
-
-1. Create `ProcessingPolicySelector` with: `OrderProcessingStrategy select(OrderTicket ticket)`
-2. Rules:
-
-   - If description contains `"training"` (case-insensitive), use `DryRunTraining`
-   - Else if `totalEuro >= 30` or `itemCount >= 6`, use `ValidatedProcess`
-   - Else use `ImmediateProcess`
-
-#### Part E — demo in `run()`
-
- 1. Create 4 tickets:
-
-- normal small order
-- invalid order (blank description or total 0)
-- training-mode ticket (description contains “training”)
-- large/high-risk order (forces validated)
-
-Enqueue a command for each ticket, then process the queue.
-
-### Done when...
-
-- Strategy selection happens in `ProcessingPolicySelector`, not inside the queue or command.
-- The queue keeps processing even after one ticket is rejected.
-- You can add another processing strategy without changing the queue.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
-padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; margin:0;">
-    Solution
-  </summary>
-
-```java
-package t13_design_patterns_1.exercises.ex06;
-
-import java.util.ArrayDeque;
-import java.util.Queue;
-
-public class Exercise
-{
-    public static void run()
-    {
-        ProcessingPolicySelector selector = new ProcessingPolicySelector();
-        TicketQueue queue = new TicketQueue();
-
-        OrderTicket t1 = new OrderTicket(201, "1 cappuccino, 1 croissant", 7.80, 2);
-        OrderTicket t2 = new OrderTicket(202, "   ", 5.00, 1);
-        OrderTicket t3 = new OrderTicket(203, "training: 2 lattes, 1 muffin", 12.50, 3);
-        OrderTicket t4 = new OrderTicket(204, "8 americanos, 2 toasties", 42.00, 10);
-
-        enqueue(queue, selector, t1);
-        enqueue(queue, selector, t2);
-        enqueue(queue, selector, t3);
-        enqueue(queue, selector, t4);
-
-        queue.processAll();
-    }
-
-    private static void enqueue(TicketQueue queue, ProcessingPolicySelector selector, OrderTicket ticket)
-    {
-        OrderProcessingStrategy strategy = selector.select(ticket);
-        queue.add(new ProcessTicketCommand(ticket, strategy));
-    }
-}
-
-interface Command
-{
-    void execute();
-}
-
-class ProcessTicketCommand implements Command
-{
-    private OrderTicket _ticket;
-    private OrderProcessingStrategy _strategy;
-
-    public ProcessTicketCommand(OrderTicket ticket, OrderProcessingStrategy strategy)
-    {
-        _ticket = ticket;
-        _strategy = strategy;
-    }
-
-    @Override
-    public void execute()
-    {
-        _strategy.process(_ticket);
-    }
-}
-
-interface OrderProcessingStrategy
-{
-    void process(OrderTicket ticket);
-}
-
-class ImmediateProcess implements OrderProcessingStrategy
-{
-    @Override
-    public void process(OrderTicket ticket)
-    {
-        System.out.println("IMMEDIATE MAKE " + ticket.getTicketId() + " " + ticket.getDescription() + " (€" + ticket.getTotalEuro() + ")");
-    }
-}
-
-class ValidatedProcess implements OrderProcessingStrategy
-{
-    @Override
-    public void process(OrderTicket ticket)
-    {
-        if (!ticket.isValid())
-        {
-            System.out.println("REJECT " + ticket.getTicketId() + " invalid");
-            return;
-        }
-
-        System.out.println("VALIDATED MAKE " + ticket.getTicketId() + " " + ticket.getDescription() + " (€" + ticket.getTotalEuro() + ")");
-    }
-}
-
-class DryRunTraining implements OrderProcessingStrategy
-{
-    @Override
-    public void process(OrderTicket ticket)
-    {
-        System.out.println("TRAINING " + ticket.getTicketId() + " would make: " + ticket.getDescription() + " (€" + ticket.getTotalEuro() + ")");
-    }
-}
-
-class ProcessingPolicySelector
-{
-    private OrderProcessingStrategy _immediate = new ImmediateProcess();
-    private OrderProcessingStrategy _validated = new ValidatedProcess();
-    private OrderProcessingStrategy _training = new DryRunTraining();
-
-    public OrderProcessingStrategy select(OrderTicket ticket)
-    {
-        String desc = ticket.getDescription();
-
-        if (desc != null && desc.toLowerCase().contains("training"))
-            return _training;
-
-        if (ticket.getTotalEuro() >= 30.0 || ticket.getItemCount() >= 6)
-            return _validated;
-
-        return _immediate;
-    }
-}
-
-class TicketQueue
-{
-    private Queue<Command> _queue = new ArrayDeque<>();
-
-    public void add(Command command)
-    {
-        _queue.add(command);
-    }
-
-    public void processAll()
-    {
-        while (!_queue.isEmpty())
-        {
-            _queue.poll().execute();
-        }
-    }
-}
-
-class OrderTicket
-{
-    private int _ticketId;
-    private String _description;
-    private double _totalEuro;
-    private int _itemCount;
-
-    public OrderTicket(int ticketId, String description, double totalEuro, int itemCount)
-    {
-        _ticketId = ticketId;
-        _description = description;
-        _totalEuro = totalEuro;
-        _itemCount = itemCount;
-    }
-
-    public int getTicketId()
-    {
-        return _ticketId;
-    }
-
-    public String getDescription()
-    {
-        return _description;
-    }
-
-    public double getTotalEuro()
-    {
-        return _totalEuro;
-    }
-
-    public int getItemCount()
-    {
-        return _itemCount;
-    }
-
-    public boolean isValid()
-    {
-        if (_description == null)
-            return false;
-
-        if (_totalEuro <= 0)
-            return false;
-
-        if (_itemCount <= 0)
-            return false;
-
-        return !_description.trim().isEmpty();
-    }
-}
+```text
+Queued: 4
+IMMEDIATE MAKE 201 1 cappuccino, 1 croissant (€7.80)
+REJECT 202 invalid
+TRAINING would make 203 2 lattes, 1 muffin (€12.50)
+VALIDATED MAKE 204 8 americanos, 2 toasties (€42.00)
+Queued: 0
 ```
+
+**Rules**
+
+- Make each class `public`, in its own file. Exercise 07 imports them.
+- `TicketQueue` never looks inside a command. It only calls `execute()`.
+- A rejected ticket does not stop the queue.
+
+<details>
+<summary>Hints</summary>
+
+1. Use an `ArrayDeque` as the queue: `offer` or `add` puts a command at the back, and `poll` takes one from the front.
+2. `while (!queue.isEmpty()) { queue.poll().execute(); }`
+3. `String.format("%d %s (€%.2f)", ticketId, description, totalEuro)` builds the summary.
 
 </details>
 
+**Done when**
+
+- [ ] `run()` prints the six lines shown.
+- [ ] The queue is empty after `processAll()`.
+
+**Package:** `t13_design_patterns_1.exercises.ex06`
+
+**Solution:** [t13 exercise 06 solution code](../../../../code/src/t13_design_patterns_1/exercises/ex06/).
+**Tests:** [t13 exercise 06 tests](../../../../code/test/t13_design_patterns_1/exercises/ex06/).
+
 ---
 
-## Lesson Context
+## Exercise 07 — Café tickets, part 2: choosing the policy
 
-```yaml
-linked_lesson:
-  topic_code: "t13_design_patterns_1"
-  patterns: ["strategy", "command"]
-  primary_domain_emphasis: "Balanced"
-  difficulty_tier: "Intermediate → Advanced"
+**Goal:** Stop choosing policies by hand. One class looks at each ticket and picks its policy, so the rules for "which policy?" live in exactly one place.
+
+**You will need:** [Trade-offs: Strategy](../t13_design_patterns_1_notes.md#trade-offs-strategy) and your classes from Exercise 06.
+
+**Steps**
+
+1. Create `ProcessingPolicySelector` with the method below.
+2. If the description contains `training`, in any case, return a `DryRunTraining`.
+3. Otherwise, if the ticket is not valid, or the total is €30 or more, or there are 6 or more items, return a `ValidatedProcess`.
+4. Otherwise, return an `ImmediateProcess`.
+5. In `run()`, create the four tickets shown in the example, add a command for each using the selector, and process the queue.
+
+```java
+public OrderProcessingStrategy select(OrderTicket ticket)
 ```
+
+**Example**
+
+```text
+IMMEDIATE MAKE 201 1 cappuccino, 1 croissant (€7.80)
+REJECT 202 invalid
+TRAINING would make 203 training: 2 lattes, 1 muffin (€12.50)
+VALIDATED MAKE 204 8 americanos, 2 toasties (€42.00)
+```
+
+**Rules**
+
+- Import the Exercise 06 classes. Do not copy them.
+- The selector is the **only** class with `if` statements about policies.
+- Check for training first. A large training ticket is still only a practice run.
+
+<details>
+<summary>Hints</summary>
+
+1. `description.toLowerCase(Locale.ROOT).contains("training")` ignores case. Check the description is not `null` first.
+2. Create the three strategies once, as fields of the selector, and return the same objects each time. They hold no data, so they can be shared.
+
+</details>
+
+**Done when**
+
+- [ ] `run()` prints the four lines shown.
+- [ ] Ticket 202, which is blank, is rejected rather than made.
+- [ ] Adding a new policy means changing the selector only, not the queue or the command.
+
+**Think about it:** without the "not valid" check in step 3, ticket 202 (blank, €5.00, one item) would go to `ImmediateProcess`, and the café would make an empty order. Why does that check belong in the selector rather than in `ImmediateProcess`?
+
+**Package:** `t13_design_patterns_1.exercises.ex07`
+
+**Solution:** [t13 exercise 07 solution code](../../../../code/src/t13_design_patterns_1/exercises/ex07/).
+**Tests:** [t13 exercise 07 tests](../../../../code/test/t13_design_patterns_1/exercises/ex07/).

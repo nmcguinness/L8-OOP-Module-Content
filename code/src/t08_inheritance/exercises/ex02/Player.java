@@ -1,7 +1,7 @@
 package t08_inheritance.exercises.ex02;
 
 public class Player extends Entity {
-    private int score;
+    private final int score;
 
     public Player(String name, int score) {
         super(name);

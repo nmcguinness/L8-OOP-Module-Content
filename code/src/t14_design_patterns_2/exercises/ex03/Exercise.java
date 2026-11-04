@@ -41,24 +41,27 @@ class AnalyticsListener implements ClickListener {
 }
 
 class Button {
-    private List<ClickListener> _listeners = new ArrayList<>();
+    private final List<ClickListener> listeners = new ArrayList<>();
 
     public void addListener(ClickListener l) {
-        if (l == null)
+        if (l == null) {
             throw new IllegalArgumentException("listener is null.");
+        }
 
-        _listeners.add(l);
+        listeners.add(l);
     }
 
     public boolean removeListener(ClickListener l) {
-        if (l == null)
+        if (l == null) {
             throw new IllegalArgumentException("listener is null.");
+        }
 
-        return _listeners.remove(l);
+        return listeners.remove(l);
     }
 
     public void click() {
-        for (ClickListener l : _listeners)
+        for (ClickListener l : listeners) {
             l.onClick();
+        }
     }
 }

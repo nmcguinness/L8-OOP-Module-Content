@@ -16,15 +16,11 @@ file_name: defensive-coding-notes.md
 
 ## Overview
 
-Defensive coding means **writing code that assumes things can go wrong** — invalid data, nulls,
-missing files, or bad input.
-It’s not about fear; it’s about responsibility.
+Defensive coding means **writing code that assumes things can go wrong** — invalid data, nulls, missing files, or bad input. It’s not about fear; it’s about responsibility.
 
-Professional developers build software that **handles errors gracefully** and **protects data
-integrity**.
+Professional developers build software that **handles errors gracefully** and **protects data integrity**.
 
-In your OOP CA, defensive coding ensures your CSV loader and entity setters stay stable even
-when the data isn’t perfect.
+In your OOP CA, defensive coding ensures your CSV loader and entity setters stay stable even when the data isn’t perfect.
 
 ## Why It Matters
 
@@ -57,22 +53,18 @@ Even when some rows are invalid, the program continues loading the rest safely.
 
 ## Try It / Fix It
 
-1. Review your CA’s `CsvLoader` class.
-   What happens if a line is empty or has too few columns?
-   Add a check to skip and log these lines.
+1. Review your CA’s `CsvLoader` class. What happens if a line is empty or has too few columns? Add a check to skip and log these lines.
 
 2. Add one new setter to your entity that includes validation (e.g., reject negative IDs).
 
 ## Reflection
 
-Why is defensive coding about **thinking ahead**, not just adding `if` statements?
-Consider in one sentence how it improves user experience and code reliability.
+Why is defensive coding about **thinking ahead**, not just adding `if` statements? Consider in one sentence how it improves user experience and code reliability.
 
 ## Further reading
 
 - [Medium – Code with Confidence — Part 1](https://refactoring.guru/refactoring)
-- [Oracle Java Tutorials – Exceptions and Defensive
-  Programming](https://docs.oracle.com/javase/tutorial/essential/exceptions/)
+- [Oracle Java Tutorials – Exceptions and Defensive Programming](https://docs.oracle.com/javase/tutorial/essential/exceptions/)
 
 ## Appendix A: Defensive Patterns
 

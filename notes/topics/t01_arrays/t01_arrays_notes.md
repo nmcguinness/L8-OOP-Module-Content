@@ -32,10 +32,8 @@ prerequisites:
 - [How this builds on previous content](#how-this-builds-on-previous-content)
 - [Core Ideas — 1D Arrays](#core-ideas--1d-arrays)
 - [Core Ideas — 2D Arrays (step by step)](#core-ideas--2d-arrays-step-by-step)
-- [Try it step-by-step (progressive code that builds
-  up)](#try-it-step-by-step-progressive-code-that-builds-up)
-- [Build a small project: cinema seating
-  (end-to-end)](#build-a-small-project-cinema-seating-end-to-end)
+- [Try it step-by-step (progressive code that builds up)](#try-it-step-by-step-progressive-code-that-builds-up)
+- [Build a small project: cinema seating (end-to-end)](#build-a-small-project-cinema-seating-end-to-end)
 - [Practice tasks](#practice-tasks)
 - [Useful snippets (copy-paste)](#useful-snippets-copy-paste)
 - [Reflective questions](#reflective-questions)
@@ -57,14 +55,9 @@ A quick summary of what **you** should be able to do after this lesson:
 
 ## Why this matters
 
-An array is the first way you meet a **collection of values under one name**, and the
-first place indexing, bounds and iteration all matter at once. Almost every bug students
-hit in this module for the rest of the year is a descendant of one met here: an
-off-by-one, an unchecked `null`, or an assumption that every row is the same length.
+An array is the first way you meet a **collection of values under one name**, and the first place indexing, bounds and iteration all matter at once. Almost every bug students hit in this module for the rest of the year is a descendant of one met here: an off-by-one, an unchecked `null`, or an assumption that every row is the same length.
 
-Arrays are also the foundation the rest of the module builds on. `ArrayList` is an array
-underneath, sorting operates on arrays, and the index-based traversal you learn here
-becomes the shrinking parameter in recursion.
+Arrays are also the foundation the rest of the module builds on. `ArrayList` is an array underneath, sorting operates on arrays, and the index-based traversal you learn here becomes the shrinking parameter in recursion.
 
 ---
 
@@ -76,11 +69,7 @@ becomes the shrinking parameter in recursion.
 | [t00 Guard clauses](../t00_oop_fundamentals/t00_oop_fundamentals_notes.md) | The same fail-fast checks now guard against `null` arrays and out-of-range indices |
 | Year 1 loops | A `for` loop over an index is how you visit every slot; the enhanced `for` reads without an index |
 
-Where this goes next: arrays are **fixed size**, which is the limitation [t05 Collections
-I](../t05_collections_1/t05_collections_1_notes.md) removes with `ArrayList`. The index-based
-traversal you learn here is also the foundation for [t02
-Recursion](../t02_recursion/t02_recursion_notes.md), where the index becomes the shrinking
-parameter.
+Where this goes next: arrays are **fixed size**, which is the limitation [t05 Collections I](../t05_collections_1/t05_collections_1_notes.md) removes with `ArrayList`. The index-based traversal you learn here is also the foundation for [t02 Recursion](../t02_recursion/t02_recursion_notes.md), where the index becomes the shrinking parameter.
 
 ---
 
@@ -331,12 +320,9 @@ System.out.println(average2(new int[]{2,2}) == 2.0);
 
 ## Build a small project: cinema seating (end-to-end)
 
-**Goal:** You’ll create a tiny system to manage seating in a cinema where rows can have
-different lengths (a jagged 2D array). You’ll book a couple of seats and count how many are
-free.
+**Goal:** You’ll create a tiny system to manage seating in a cinema where rows can have different lengths (a jagged 2D array). You’ll book a couple of seats and count how many are free.
 
-> *IPO means **Input then Process then Output** — a simple way to plan programs by listing what
-> comes in, what you do, and what comes out.*
+> *IPO means **Input then Process then Output** — a simple way to plan programs by listing what comes in, what you do, and what comes out.*
 
 | Inputs | Process | Output |
 |:------|:---------|:--------|
@@ -409,18 +395,12 @@ static void print2D(int[][] g) {
 
 ## Reflective questions
 
-- In your own words, explain **IPO** for the cinema example. What are the inputs, the key
-  steps, and the final output?
-- Where did you add **guards** (safety checks) in 1D and 2D code? Could any be turned into
-  reusable helpers?
-- Pick one bug you hit (or could hit): what **symptom** would you see, and what **fix** would
-  you apply?
-- For 2D arrays, how would you adapt your loops if the grid became **jagged** mid-run (rows
-  resized)?
-- What naming choice did you change to make your code clearer? Why is the new name better for a
-  future reader?
-- If you had to test your `min`, `indexOf`, or `find2D` methods, what **3 test cases** would
-  you start with and why?
+- In your own words, explain **IPO** for the cinema example. What are the inputs, the key steps, and the final output?
+- Where did you add **guards** (safety checks) in 1D and 2D code? Could any be turned into reusable helpers?
+- Pick one bug you hit (or could hit): what **symptom** would you see, and what **fix** would you apply?
+- For 2D arrays, how would you adapt your loops if the grid became **jagged** mid-run (rows resized)?
+- What naming choice did you change to make your code clearer? Why is the new name better for a future reader?
+- If you had to test your `min`, `indexOf`, or `find2D` methods, what **3 test cases** would you start with and why?
 
 <details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
 padding:0.9rem 1rem; margin:1rem 0;">
@@ -429,40 +409,22 @@ padding:0.9rem 1rem; margin:1rem 0;">
   </summary>
 
 **IPO for the cinema example.**
-*Input* — the seating grid plus the row/seat a customer asks for. *Process* — check the indices
-are in bounds, check the seat is free, mark it taken, update the count. *Output* — a booking
-confirmation (or a refusal) and the updated grid. Naming the three parts before coding tells
-you what the method signature and return type must be.
+*Input* — the seating grid plus the row/seat a customer asks for. *Process* — check the indices are in bounds, check the seat is free, mark it taken, update the count. *Output* — a booking confirmation (or a refusal) and the updated grid. Naming the three parts before coding tells you what the method signature and return type must be.
 
 **Guards.**
-Typical ones: `xs == null`, `xs.length == 0`, and `row/col` within bounds. In 2D you need one
-extra that 1D does not have — the *inner row* can itself be `null` on a jagged array. Yes,
-these are worth extracting: `inBounds(g, r, c)` used everywhere beats the same three
-comparisons copied into six methods, and there is then exactly one place to fix.
+Typical ones: `xs == null`, `xs.length == 0`, and `row/col` within bounds. In 2D you need one extra that 1D does not have — the *inner row* can itself be `null` on a jagged array. Yes, these are worth extracting: `inBounds(g, r, c)` used everywhere beats the same three comparisons copied into six methods, and there is then exactly one place to fix.
 
 **A bug, its symptom and its fix.**
-`for (int i = 0; i <= xs.length; i++)` — *symptom*: `ArrayIndexOutOfBoundsException: Index 5
-out of bounds for length 5`, thrown on the last iteration only, so it looks intermittent if the
-array is sometimes empty. *Fix*: `i < xs.length`. Valid indices run `0 .. length-1`, so `<=`
-always overshoots by exactly one.
+`for (int i = 0; i <= xs.length; i++)` — *symptom*: `ArrayIndexOutOfBoundsException: Index 5 out of bounds for length 5`, thrown on the last iteration only, so it looks intermittent if the array is sometimes empty. *Fix*: `i < xs.length`. Valid indices run `0 .. length-1`, so `<=` always overshoots by exactly one.
 
 **Jagged grids.**
-Never hoist the column count out of the loop. `g[r].length` must be read *per row*, inside the
-outer loop — `for (int c = 0; c < g[r].length; c++)`. Code that computes `int cols =
-g[0].length;` once is correct for a rectangle and wrong the moment a row is resized. Guard
-`g[r] != null` too.
+Never hoist the column count out of the loop. `g[r].length` must be read *per row*, inside the outer loop — `for (int c = 0; c < g[r].length; c++)`. Code that computes `int cols = g[0].length;` once is correct for a rectangle and wrong the moment a row is resized. Guard `g[r] != null` too.
 
 **Naming.**
-A good answer names a specific change and the reason. `int[] a` then `int[] scores`; `f(x, y)`
-then `seatIsFree(row, seat)`. The test is whether a reader can predict what the method does
-*without* reading its body — a name that needs a comment to explain it is a name that should be
-changed.
+A good answer names a specific change and the reason. `int[] a` then `int[] scores`; `f(x, y)` then `seatIsFree(row, seat)`. The test is whether a reader can predict what the method does *without* reading its body — a name that needs a comment to explain it is a name that should be changed.
 
 **Three test cases.**
-Start with **normal**, **boundary**, and **invalid**: a typical array where you know the answer
-by hand; a single-element array (and, for `indexOf`, a target that is absent, expecting `-1`);
-and `null`/empty, where you assert whatever contract you chose — `0`, or a thrown
-`IllegalArgumentException`. Those three catch far more than ten variations of the normal case.
+Start with **normal**, **boundary**, and **invalid**: a typical array where you know the answer by hand; a single-element array (and, for `indexOf`, a target that is absent, expecting `-1`); and `null`/empty, where you assert whatever contract you chose — `0`, or a thrown `IllegalArgumentException`. Those three catch far more than ten variations of the normal case.
 
 </details>
 

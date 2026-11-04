@@ -4,7 +4,7 @@ subtitle: "COMP C8Z03 — Year 2 OOP"
 topic_code: t19_concurrency
 description: "What threads are, how the JVM schedules them, and how to manage pools of them cleanly using ExecutorService — the foundation for a multi-client server."
 created: 2026-02-20
-last_updated: 2026-04-14
+last_updated: 2026-11-04
 version: 1.0
 status: published
 authors: ["OOP Teaching Team"]
@@ -27,6 +27,8 @@ prerequisites:
 
 ---
 
+---
+
 ## In this topic
 
 - [What you'll learn](#what-youll-learn)
@@ -37,9 +39,9 @@ prerequisites:
 - [Part 2: The ExecutorService](#part-2-the-executorservice)
 - [Part 3: Callable and Future (brief)](#part-3-callable-and-future-brief)
 - [Part 4: Race conditions and synchronisation](#part-4-race-conditions-and-synchronisation)
+- [Patterns and concepts used here](#patterns-and-concepts-used-here)
 - [Common mistakes](#common-mistakes)
 - [Practice tasks](#practice-tasks)
-- [Patterns and concepts used here](#patterns-and-concepts-used-here)
 - [Reflective questions](#reflective-questions)
 - [Further reading](#further-reading)
 
@@ -61,25 +63,19 @@ prerequisites:
 
 ## Why this matters
 
-Every program you have written so far has run on a **single thread**: one instruction at a
-time, top to bottom.
+Every program you have written so far has run on a **single thread**: one instruction at a time, top to bottom.
 
-That works fine for one user doing one thing. It breaks down the moment you want a server to
-handle two clients simultaneously, or a game to process input while also updating physics.
+That works fine for one user doing one thing. It breaks down the moment you want a server to handle two clients simultaneously, or a game to process input while also updating physics.
 
-**Concurrency** is the ability of a program to make progress on multiple tasks at the same time
-(or appear to). In Java, the unit of concurrency is the **thread**.
+**Concurrency** is the ability of a program to make progress on multiple tasks at the same time (or appear to). In Java, the unit of concurrency is the **thread**.
 
-This topic gives you exactly what you need to implement GCA2 Stage 2: a server that handles
-each connected client on its own thread without blocking the rest.
+This topic gives you exactly what you need to implement GCA2 Stage 2: a server that handles each connected client on its own thread without blocking the rest.
 
 ---
 
 ## How this builds on previous content
 
-You already know that an interface defines a contract — what a type can do — without specifying
-how. `Runnable` is simply an interface with one method: `run()`. Submitting a `Runnable` to a
-thread pool is just another example of programming to an interface.
+You already know that an interface defines a contract — what a type can do — without specifying how. `Runnable` is simply an interface with one method: `run()`. Submitting a `Runnable` to a thread pool is just another example of programming to an interface.
 
 You also know lambdas. Any place this topic uses `Runnable`, you can substitute a lambda.
 
@@ -89,38 +85,27 @@ You also know lambdas. Any place this topic uses `Runnable`, you can substitute 
 
 ### Thread
 
-A **thread** is an independent sequence of instructions running inside the JVM. All threads in
-a JVM share the same heap (objects in memory), but each thread has its own call stack (method
-frames, local variables).
+A **thread** is an independent sequence of instructions running inside the JVM. All threads in a JVM share the same heap (objects in memory), but each thread has its own call stack (method frames, local variables).
 
 ### Process vs thread
 
-A **process** is an entire running program (its own memory space, managed by the OS). A
-**thread** is a lightweight unit of execution *inside* a process. One process can have many
-threads sharing its memory.
+A **process** is an entire running program (its own memory space, managed by the OS). A **thread** is a lightweight unit of execution *inside* a process. One process can have many threads sharing its memory.
 
 ### Concurrency vs parallelism
 
-**Concurrency** means multiple tasks can make progress — the CPU switches between them rapidly
-(interleaving). **Parallelism** means tasks genuinely run at the same instant on separate CPU
-cores. In Java you write concurrent code; whether it runs in parallel depends on the hardware
-and JVM scheduler.
+**Concurrency** means multiple tasks can make progress — the CPU switches between them rapidly (interleaving). **Parallelism** means tasks genuinely run at the same instant on separate CPU cores. In Java you write concurrent code; whether it runs in parallel depends on the hardware and JVM scheduler.
 
 ### Race condition
 
-A **race condition** occurs when two threads read and write shared data without coordination,
-and the outcome depends on which thread runs first. Race conditions produce inconsistent,
-hard-to-reproduce bugs.
+A **race condition** occurs when two threads read and write shared data without coordination, and the outcome depends on which thread runs first. Race conditions produce inconsistent, hard-to-reproduce bugs.
 
 ### Synchronisation
 
-**Synchronisation** is a mechanism for ensuring only one thread executes a block of code at a
-time, preventing race conditions on shared state.
+**Synchronisation** is a mechanism for ensuring only one thread executes a block of code at a time, preventing race conditions on shared state.
 
 ### Thread pool
 
-A **thread pool** is a set of pre-created threads that pick up submitted tasks from a queue.
-Pools avoid the overhead of creating a new thread for every task.
+A **thread pool** is a set of pre-created threads that pick up submitted tasks from a queue. Pools avoid the overhead of creating a new thread for every task.
 
 ---
 
@@ -134,8 +119,8 @@ The simplest way to define work for a thread is to implement `Runnable`:
 public class PrintTask implements Runnable {
 
     // === Fields ===
-    private String _message;
-    private int _count;
+    private String message;
+    private int count;
 
     // === Constructors ===
     // Creates: a task that prints the message the given number of times
@@ -145,16 +130,16 @@ public class PrintTask implements Runnable {
         if (count <= 0)
             throw new IllegalArgumentException("count must be positive");
 
-        _message = message;
-        _count = count;
+        this.message = message;
+        this.count = count;
     }
 
     // === Public API ===
     // Runs: the print loop — called by the thread when it starts
     @Override
     public void run() {
-        for (int i = 0; i < _count; i++) {
-            System.out.println(Thread.currentThread().getName() + " -> " + _message);
+        for (int i = 0; i < count; i++) {
+            System.out.println(Thread.currentThread().getName() + " -> " + message);
         }
     }
 }
@@ -169,8 +154,7 @@ t.start();   // <--- correct: asks the JVM to schedule this thread
 // t.run(); // WRONG: calls run() on the current thread — no new thread is created
 ```
 
-> **Common mistake:** calling `t.run()` instead of `t.start()`. Both compile. Only `start()`
-> creates a new thread.
+> **Common mistake:** calling `t.run()` instead of `t.start()`. Both compile. Only `start()` creates a new thread.
 
 ---
 
@@ -202,15 +186,9 @@ stateDiagram-v2
 ```
 
 **Diagram description**
-A thread begins in `NEW`, created but not yet started. Calling `start()` moves it to
-`RUNNABLE`, where it is eligible to run and waiting for the JVM scheduler. When the
-scheduler selects it, it becomes `RUNNING`.
+A thread begins in `NEW`, created but not yet started. Calling `start()` moves it to `RUNNABLE`, where it is eligible to run and waiting for the JVM scheduler. When the scheduler selects it, it becomes `RUNNING`.
 
-From `RUNNING` there are two exits. If it waits for a lock, for I/O, or for a timed
-sleep, it becomes `BLOCKED`; once that condition is satisfied it returns to `RUNNABLE`,
-not to `NEW`, because a thread can only be started once. If instead `run()` returns
-normally or an unhandled exception ends it, the thread becomes `TERMINATED` and is
-finished for good.
+From `RUNNING` there are two exits. If it waits for a lock, for I/O, or for a timed sleep, it becomes `BLOCKED`; once that condition is satisfied it returns to `RUNNABLE`, not to `NEW`, because a thread can only be started once. If instead `run()` returns normally or an unhandled exception ends it, the thread becomes `TERMINATED` and is finished for good.
 
 A thread moves through these states:
 
@@ -220,8 +198,7 @@ A thread moves through these states:
 - **BLOCKED / WAITING** — waiting for a lock, I/O, or a timed sleep.
 - **TERMINATED** — `run()` has returned or an unhandled exception ended it.
 
-You do not control exactly when a thread runs. The JVM scheduler decides. This is what makes
-concurrent code tricky.
+You do not control exactly when a thread runs. The JVM scheduler decides. This is what makes concurrent code tricky.
 
 ---
 
@@ -242,20 +219,17 @@ Thread t = new Thread(() -> {
 t.start();
 ```
 
-`sleep()` throws `InterruptedException`, which must be handled. The pattern above — catching it
-and calling `interrupt()` again — is the correct response in most cases.
+`sleep()` throws `InterruptedException`, which must be handled. The pattern above — catching it and calling `interrupt()` again — is the correct response in most cases.
 
 ---
 
 ## Part 2: The ExecutorService
 
-Creating a raw `Thread` for every task is wasteful and difficult to manage. For a server that
-handles dozens of simultaneous clients, you need a **thread pool**.
+Creating a raw `Thread` for every task is wasteful and difficult to manage. For a server that handles dozens of simultaneous clients, you need a **thread pool**.
 
 ### Why a thread pool?
 
-Thread creation is expensive. A pool creates threads up front (or on demand) and reuses them.
-When a task finishes, the thread returns to the pool and picks up the next task.
+Thread creation is expensive. A pool creates threads up front (or on demand) and reuses them. When a task finishes, the thread returns to the pool and picks up the next task.
 
 ### Creating a pool with `Executors`
 
@@ -271,8 +245,7 @@ ExecutorService pool = Executors.newCachedThreadPool();
 ExecutorService fixed = Executors.newFixedThreadPool(4);
 ```
 
-For a GCA2 server where each client is handled independently, `newCachedThreadPool()` is
-appropriate: it grows when demand spikes and shrinks when clients disconnect.
+For a GCA2 server where each client is handled independently, `newCachedThreadPool()` is appropriate: it grows when demand spikes and shrinks when clients disconnect.
 
 ---
 
@@ -286,15 +259,13 @@ pool.submit(() -> System.out.println("task 2 on " + Thread.currentThread().getNa
 pool.submit(() -> System.out.println("task 3 on " + Thread.currentThread().getName()));
 ```
 
-You call `submit()` or `execute()`. The pool assigns a free thread to the task. Output order is
-not guaranteed.
+You call `submit()` or `execute()`. The pool assigns a free thread to the task. Output order is not guaranteed.
 
 ---
 
 ### Shutting down cleanly
 
-An `ExecutorService` keeps running until you tell it to stop. If you omit the shutdown, your
-JVM may hang after `main()` returns.
+An `ExecutorService` keeps running until you tell it to stop. If you omit the shutdown, your JVM may hang after `main()` returns.
 
 ```java
 pool.shutdown();          // no new tasks; wait for current tasks to finish
@@ -327,40 +298,40 @@ import java.util.concurrent.Executors;
 public class ServerSimulation {
 
     // === Fields ===
-    private ExecutorService _pool;
+    private ExecutorService pool;
 
     // === Constructors ===
     // Creates: a simulation with a cached thread pool
     public ServerSimulation() {
-        _pool = Executors.newCachedThreadPool();
+        pool = Executors.newCachedThreadPool();
     }
 
     // === Public API ===
     // Submits: a simulated client handler task to the pool
     public void acceptClient(int clientId) {
-        _pool.submit(new ClientHandler(clientId));
+        pool.submit(new ClientHandler(clientId));
     }
 
     // Shuts: the pool down — no new clients accepted, existing handlers finish
     public void stop() {
-        _pool.shutdown();
+        pool.shutdown();
     }
 
     // === Helpers ===
     // Models: the work done per connected client
     private static class ClientHandler implements Runnable {
 
-        private int _clientId;
+        private int clientId;
 
         // Creates: a handler for the given client ID
         public ClientHandler(int clientId) {
-            _clientId = clientId;
+            this.clientId = clientId;
         }
 
         // Runs: the client session — reads requests and sends responses
         @Override
         public void run() {
-            System.out.println("Client " + _clientId + " connected on " + Thread.currentThread().getName());
+            System.out.println("Client " + clientId + " connected on " + Thread.currentThread().getName());
 
             try {
                 Thread.sleep(500);  // simulate request processing
@@ -369,7 +340,7 @@ public class ServerSimulation {
                 Thread.currentThread().interrupt();
             }
 
-            System.out.println("Client " + _clientId + " done");
+            System.out.println("Client " + clientId + " done");
         }
     }
 
@@ -395,8 +366,7 @@ Notice:
 
 ## Part 3: Callable and Future (brief)
 
-`Runnable` runs work but returns nothing. When you need a result back from a background thread,
-use `Callable<T>`:
+`Runnable` runs work but returns nothing. When you need a result back from a background thread, use `Callable<T>`:
 
 ```java
 import java.util.concurrent.*;
@@ -418,9 +388,7 @@ System.out.println(result);
 pool.shutdown();
 ```
 
-`Future.get()` blocks the calling thread until the task finishes. In GCA2 your server threads
-will not typically need `Future` — you submit `Runnable` handlers — but `Callable` is useful
-when you need to aggregate results.
+`Future.get()` blocks the calling thread until the task finishes. In GCA2 your server threads will not typically need `Future` — you submit `Runnable` handlers — but `Callable` is useful when you need to aggregate results.
 
 ---
 
@@ -432,24 +400,22 @@ when you need to aggregate results.
 public class Counter {
 
     // === Fields ===
-    private int _count = 0;
+    private int count = 0;
 
     // === Public API ===
     // Increments: the counter — NOT thread-safe
     public void increment() {
-        _count++;     // read, add 1, write back — three operations, not one
+        count++;     // read, add 1, write back — three operations, not one
     }
 
     // Gets: the current count
     public int getCount() {
-        return _count;
+        return count;
     }
 }
 ```
 
-If two threads call `increment()` at the same moment, both may read the same value of `_count`,
-both add 1, and both write back the same result — effectively losing one increment. This is a
-**race condition**.
+If two threads call `increment()` at the same moment, both may read the same value of `count`, both add 1, and both write back the same result — effectively losing one increment. This is a **race condition**.
 
 ---
 
@@ -478,35 +444,42 @@ System.out.println("Count: " + counter.getCount());
 public class SafeCounter {
 
     // === Fields ===
-    private int _count = 0;
+    private int count = 0;
 
     // === Public API ===
     // Increments: the counter — thread-safe via synchronized
     public synchronized void increment() {
-        _count++;
+        count++;
     }
 
     // Gets: the current count — thread-safe
     public synchronized int getCount() {
-        return _count;
+        return count;
     }
 }
 ```
 
-`synchronized` on an instance method means only one thread can execute that method on the same
-object at a time. Others wait at the entrance until the lock is released.
+`synchronized` on an instance method means only one thread can execute that method on the same object at a time. Others wait at the entrance until the lock is released.
 
 ---
 
 ### When do you need synchronisation in GCA2?
 
-In the GCA2 server, each client handler runs on its own thread. The DAO accesses the database,
-which handles its own concurrency. However, if your server maintains any **shared in-memory
-state** (a cache, a session registry, a counter), that state must be synchronised.
+In the GCA2 server, each client handler runs on its own thread. The DAO accesses the database, which handles its own concurrency. However, if your server maintains any **shared in-memory state** (a cache, a session registry, a counter), that state must be synchronised.
 
-If each handler only reads/writes the database (via its own connection) and has no shared
-in-memory state, you may not need explicit synchronisation in your handlers at all. But you
-must be able to reason about this at your demo.
+If each handler only reads/writes the database (via its own connection) and has no shared in-memory state, you may not need explicit synchronisation in your handlers at all. But you must be able to reason about this at your demo.
+
+---
+
+## Patterns and concepts used here
+
+### Thread pool (Object Pool pattern)
+
+Rather than creating an object (thread) for each task, a pool creates and reuses a set of objects. `ExecutorService` is Java's implementation of this idea.
+
+### Command pattern
+
+`Runnable` and `Callable` are essentially the Command pattern: work is encapsulated as an object and submitted to an executor. The executor decides when and how to run it.
 
 ---
 
@@ -524,28 +497,10 @@ must be able to reason about this at your demo.
 
 ## Practice tasks
 
-1. Create a `CountdownTask` that counts from 10 to 1, sleeping 100ms between each count. Run
-   three instances simultaneously using an `ExecutorService`.
-2. Extend `ServerSimulation` above so each client handler receives a simulated string request
-   and prints a simulated response.
-3. Reproduce the race condition with `Counter` above, then fix it with `synchronized` and
-   verify the count is correct.
-4. Modify `ServerSimulation` to use `newFixedThreadPool(2)` and observe what happens when 10
-   clients connect simultaneously.
-
----
-
-## Patterns and concepts used here
-
-### Thread pool (Object Pool pattern)
-
-Rather than creating an object (thread) for each task, a pool creates and reuses a set of
-objects. `ExecutorService` is Java's implementation of this idea.
-
-### Command pattern
-
-`Runnable` and `Callable` are essentially the Command pattern: work is encapsulated as an
-object and submitted to an executor. The executor decides when and how to run it.
+1. Create a `CountdownTask` that counts from 10 to 1, sleeping 100ms between each count. Run three instances simultaneously using an `ExecutorService`.
+2. Extend `ServerSimulation` above so each client handler receives a simulated string request and prints a simulated response.
+3. Reproduce the race condition with `Counter` above, then fix it with `synchronized` and verify the count is correct.
+4. Modify `ServerSimulation` to use `newFixedThreadPool(2)` and observe what happens when 10 clients connect simultaneously.
 
 ---
 
@@ -553,10 +508,8 @@ object and submitted to an executor. The executor decides when and how to run it
 
 1. Why does calling `run()` directly not create a new thread?
 2. What is the difference between `execute()` and `submit()` on an `ExecutorService`?
-3. Why is `newCachedThreadPool()` appropriate for handling client connections rather than
-   `newFixedThreadPool(1)`?
-4. Give an example of shared mutable state in a multi-client server. What goes wrong without
-   synchronisation?
+3. Why is `newCachedThreadPool()` appropriate for handling client connections rather than `newFixedThreadPool(1)`?
+4. Give an example of shared mutable state in a multi-client server. What goes wrong without synchronisation?
 5. What would happen if you never called `pool.shutdown()` in a server that ran indefinitely?
 
 <details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
@@ -566,74 +519,35 @@ padding:0.9rem 1rem; margin:1rem 0;">
   </summary>
 
 **1. Why calling `run()` directly creates no thread.**
-`run()` is an ordinary method. Calling it executes the body **on the calling thread**,
-synchronously, and the caller blocks until it returns — you have written a normal method call
-that happens to live inside a `Runnable`.
+`run()` is an ordinary method. Calling it executes the body **on the calling thread**, synchronously, and the caller blocks until it returns — you have written a normal method call that happens to live inside a `Runnable`.
 
-`start()` is the method that asks the JVM to allocate a new OS thread and *then* invoke `run()`
-on it, returning immediately to the caller. The give-away when debugging is printing
-`Thread.currentThread().getName()`: with `run()` every task reports `main`; with `start()` you
-see `Thread-0`, `Thread-1`. (Also: `start()` may be called only once per `Thread` — a second
-call throws `IllegalThreadStateException`.)
+`start()` is the method that asks the JVM to allocate a new OS thread and *then* invoke `run()` on it, returning immediately to the caller. The give-away when debugging is printing `Thread.currentThread().getName()`: with `run()` every task reports `main`; with `start()` you see `Thread-0`, `Thread-1`. (Also: `start()` may be called only once per `Thread` — a second call throws `IllegalThreadStateException`.)
 
 **2. `execute()` vs `submit()`.**
-`execute(Runnable)` returns `void`. `submit(...)` accepts a `Runnable` *or* a `Callable<T>` and
-returns a **`Future<T>`** you can use to wait for completion (`get()`), check status, or
-cancel.
+`execute(Runnable)` returns `void`. `submit(...)` accepts a `Runnable` *or* a `Callable<T>` and returns a **`Future<T>`** you can use to wait for completion (`get()`), check status, or cancel.
 
-The difference that matters most in practice is **error visibility**. If a task throws,
-`execute` hands the exception to the thread's uncaught-exception handler and it usually prints
-to stderr — noisy but visible. With `submit`, the exception is *captured inside the `Future`*
-and is silent until someone calls `get()`, which then throws `ExecutionException`. Submit a
-task, never call `get()`, and a failure disappears without trace — a genuinely nasty bug to
-chase. Use `execute` for fire-and-forget work; use `submit` when you need the result or want to
-handle failure, and then actually call `get()`.
+The difference that matters most in practice is **error visibility**. If a task throws, `execute` hands the exception to the thread's uncaught-exception handler and it usually prints to stderr — noisy but visible. With `submit`, the exception is *captured inside the `Future`* and is silent until someone calls `get()`, which then throws `ExecutionException`. Submit a task, never call `get()`, and a failure disappears without trace — a genuinely nasty bug to chase. Use `execute` for fire-and-forget work; use `submit` when you need the result or want to handle failure, and then actually call `get()`.
 
 **3. Why `newCachedThreadPool()` for client connections.**
-Because client work is **bursty and mostly blocked on I/O**. A cached pool creates threads on
-demand, reuses idle ones, and retires threads unused for 60 seconds — so it matches an
-unpredictable connection count without you having to guess a number.
+Because client work is **bursty and mostly blocked on I/O**. A cached pool creates threads on demand, reuses idle ones, and retires threads unused for 60 seconds — so it matches an unpredictable connection count without you having to guess a number.
 
-`newFixedThreadPool(1)` would serialise everything: one client at a time, with every other
-client queued behind it. Since a handler spends nearly all its life blocked reading a socket, a
-single thread leaves the CPU idle while clients wait — the server appears hung under trivial
-load.
+`newFixedThreadPool(1)` would serialise everything: one client at a time, with every other client queued behind it. Since a handler spends nearly all its life blocked reading a socket, a single thread leaves the CPU idle while clients wait — the server appears hung under trivial load.
 
-The honest caveat, worth stating: a cached pool is **unbounded**, so a flood of connections can
-create a flood of threads and exhaust memory. Production servers usually prefer a bounded pool
-with a queue; a cached pool is the right teaching default because it removes the "what number?"
-question while the concept is being learned.
+The honest caveat, worth stating: a cached pool is **unbounded**, so a flood of connections can create a flood of threads and exhaust memory. Production servers usually prefer a bounded pool with a queue; a cached pool is the right teaching default because it removes the "what number?" question while the concept is being learned.
 
 **4. Shared mutable state in a multi-client server.**
-Anything reachable from more than one handler: a client registry (`List<ClientHandler>`), a
-shared counter (`_requestCount++`), an in-memory cache or scoreboard, a shared
-`SimpleDateFormat`, or a `DaoRegistry` holding stateful objects.
+Anything reachable from more than one handler: a client registry (`List<ClientHandler>`), a shared counter (`requestCount++`), an in-memory cache or scoreboard, a shared `SimpleDateFormat`, or a `DaoRegistry` holding stateful objects.
 
-Without synchronisation you get **lost updates** and **corrupt structures**. `_requestCount++`
-is not atomic — it is read, add, write, so two threads can both read 5, both write 6, and one
-increment vanishes. Worse, an `ArrayList` mutated from two threads can be left internally
-inconsistent: elements silently dropped, `ArrayIndexOutOfBoundsException` from within
-`ArrayList` itself, or an infinite loop. These bugs are timing-dependent, so they pass every
-test on your machine and appear in the demo.
+Without synchronisation you get **lost updates** and **corrupt structures**. `requestCount++` is not atomic — it is read, add, write, so two threads can both read 5, both write 6, and one increment vanishes. Worse, an `ArrayList` mutated from two threads can be left internally inconsistent: elements silently dropped, `ArrayIndexOutOfBoundsException` from within `ArrayList` itself, or an infinite loop. These bugs are timing-dependent, so they pass every test on your machine and appear in the demo.
 
-Fixes: confine state to one thread where possible; otherwise use `synchronized` on a private
-lock, or the concurrent types — `AtomicInteger` for counters, `ConcurrentHashMap`,
-`CopyOnWriteArrayList` for a listener list.
+Fixes: confine state to one thread where possible; otherwise use `synchronized` on a private lock, or the concurrent types — `AtomicInteger` for counters, `ConcurrentHashMap`, `CopyOnWriteArrayList` for a listener list.
 
 **5. Never calling `pool.shutdown()` in a long-running server.**
-For a server *designed* to run forever, this is largely fine while it is running — the pool is
-meant to stay alive, and a cached pool retires idle threads by itself.
+For a server *designed* to run forever, this is largely fine while it is running — the pool is meant to stay alive, and a cached pool retires idle threads by itself.
 
-The real consequence is at **exit**. `Executors` threads are **non-daemon** by default, so the
-JVM will not terminate while any of them exists — `main` returns and the process just hangs,
-which looks like a crash-free freeze and is a common "why won't my program stop?" report. You
-also lose orderly shutdown: in-flight requests are not given a chance to finish, and cleanup in
-a `finally` may never run.
+The real consequence is at **exit**. `Executors` threads are **non-daemon** by default, so the JVM will not terminate while any of them exists — `main` returns and the process just hangs, which looks like a crash-free freeze and is a common "why won't my program stop?" report. You also lose orderly shutdown: in-flight requests are not given a chance to finish, and cleanup in a `finally` may never run.
 
-The correct pattern is a shutdown hook or an explicit stop path calling `shutdown()` (stop
-accepting new tasks, let running ones finish), then `awaitTermination(...)`, then
-`shutdownNow()` if the timeout expires. Note the distinction: `shutdown()` is graceful;
-`shutdownNow()` interrupts running tasks and returns those never started.
+The correct pattern is a shutdown hook or an explicit stop path calling `shutdown()` (stop accepting new tasks, let running ones finish), then `awaitTermination(...)`, then `shutdownNow()` if the timeout expires. Note the distinction: `shutdown()` is graceful; `shutdownNow()` interrupts running tasks and returns those never started.
 
 </details>
 

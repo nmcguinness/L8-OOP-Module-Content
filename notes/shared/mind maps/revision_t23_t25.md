@@ -1,15 +1,13 @@
 # COMP C8Z03 — Revision Mindmaps, Part 3 (t23–t25)
 
-This document collects the mindmaps for **topics t23–t25** — proving a project works, an
-algorithmic finale, and how the work is finally *judged*. Each section has:
+This document collects the mindmaps for **topics t23–t25** — proving a project works, an algorithmic finale, and how the work is finally *judged*. Each section has:
 
 - A short explanation of what the topic covers.
 - A Mermaid **mindmap** you can use to review key ideas.
 - **Code snippets** showing the syntax in use.
 - **Self-assessment prompts** to test yourself before checking the notes.
 
-> :warning: This revision document is not a substitute for reading, understanding, and learning
-> the content covered in the related notes.
+> :warning: This revision document is not a substitute for reading, understanding, and learning the content covered in the related notes.
 
 | Topic | Covers | Notes |
 |:--|:--|:--|
@@ -25,98 +23,147 @@ Earlier topics are in [Part 1](revision_t00_t09.md) and [Part 2](revision_t10_t2
 
 ### Overview
 
-A good test states a **specific expectation** and fails loudly when it is broken. A test
-that runs code without checking anything still counts towards coverage while proving nothing.
-**Arrange–Act–Assert** keeps each test to one scenario, and the name
-`method_scenario_expectedBehaviour` means a failure report tells you what broke without opening
-the file.
-Coverage is a **floor, not a goal**: it reliably shows what you have *not* tested, and says
-very little about what you have.
+A good test states a **specific expectation** and fails loudly when it is broken. A test that runs code without checking anything still counts towards coverage while proving nothing. **Arrange–Act–Assert** keeps each test to one scenario, and the name `method_scenario_expectedBehaviour` means a failure report tells you what broke without opening the file. Coverage is a **floor, not a goal**: it reliably shows what you have *not* tested, and says very little about what you have.
 
 ```mermaid
 ---
 title: "Unit Testing"
 accDescr: "Mind map of Unit Testing. Branches: Anatomy of a good test; Naming convention; Worthless tests; Unit versus integration; DAO testing; What to test; Round trip tests; Coverage; Testability is a design signal."
 ---
-%%{init: { "theme": "forest" }}%%
+%%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Unit Testing))
     Anatomy of a good test
-      Arrange the inputs and objects
+      n1["`Arrange the
+      inputs and objects`"]
       Act by calling one thing
-      Assert the expected outcome
+      n2["`Assert the
+      expected outcome`"]
       One test one scenario
 
     Naming convention
-      method underscore scenario underscore expected
+      n3["`Pattern:
+      method_scenario_expectedBehaviour`"]
       findById_nonexistentId_returnsEmpty
-      Failure report reads without opening the file
-      testOne tells you nothing
+      n4["`Failure report reads
+      without opening the file`"]
+      n5["`testOne tells
+      you nothing`"]
 
     Worthless tests
-      assertNotNull on a new object
+      n6["`assertNotNull
+      on a new object`"]
       Testing a plain getter
-      Calling a method and asserting nothing
-      Inflates coverage proves nothing
+      n7["`Calling a method and
+      asserting nothing`"]
+      n8["`Inflates coverage
+      proves nothing`"]
 
     Unit versus integration
-      Unit touches one class no external system
-      Integration crosses classes or systems
-      DAO tests are integration tests
-      Keep the fast ones separate
+      n9["`Unit touches one class
+      no external system`"]
+      n10["`Integration crosses
+      classes or systems`"]
+      n11["`DAO tests are
+      integration tests`"]
+      n12["`Keep the fast
+      ones separate`"]
 
     DAO testing
-      Use a dedicated test database
-      BeforeEach resets to a known state
-      Never point tests at development data
-      Tests must be independent and repeatable
+      n13["`Use a dedicated
+      test database`"]
+      n14["`BeforeEach resets
+      to a known state`"]
+      n15["`Never point tests
+      at development data`"]
+      n16["`Tests must be independent
+      and repeatable`"]
 
     What to test
-      Guard clauses reject invalid input
-      Found and not found paths
+      n17["`Guard clauses
+      reject invalid input`"]
+      n18["`Found and not
+      found paths`"]
       Empty collection results
       Boundary values
 
     Round trip tests
-      Serialise then deserialise
-      Assert equal to the original
-      Requires a correct equals
-      Catches missing getters and setters
+      n19["`Serialise then
+      deserialise`"]
+      n20["`Assert equal
+      to the original`"]
+      n21["`Requires a
+      correct equals`"]
+      n22["`Catches missing
+      getters and setters`"]
 
     Coverage
-      Measures lines executed not correctness
-      Seventy percent is a floor
-      Uncovered lines cluster in error handling
-      Green suite still allows production bugs
+      n23["`Measures lines executed
+      not correctness`"]
+      n24["`Seventy percent
+      is a floor`"]
+      n25["`Uncovered lines cluster
+      in error handling`"]
+      n26["`Green suite still
+      allows production bugs`"]
 
-    Testability is a design signal
-      Hard to test means doing too much
-      Extract logic that needs no socket
-      Split the class rather than fight it
+    n27["`Testability is
+    a design signal`"]
+      n28["`Hard to test means
+      doing too much`"]
+      n29["`Extract logic that
+      needs no socket`"]
+      n30["`Split the class
+      rather than fight it`"]
 ```
 
 **Diagram description**
-Mind map of **Unit Testing**, organised into 9 branches:
+Mind map of **Unit Testing**, with 9 branches:
 
-- **Anatomy of a good test** — Arrange the inputs and objects; Act by calling one thing; Assert
-  the expected outcome; One test one scenario.
-- **Naming convention** — method underscore scenario underscore expected;
-  findById_nonexistentId_returnsEmpty; Failure report reads without opening the file; testOne
-  tells you nothing.
-- **Worthless tests** — assertNotNull on a new object; Testing a plain getter; Calling a method
-  and asserting nothing; Inflates coverage proves nothing.
-- **Unit versus integration** — Unit touches one class no external system; Integration crosses
-  classes or systems; DAO tests are integration tests; Keep the fast ones separate.
-- **DAO testing** — Use a dedicated test database; BeforeEach resets to a known state; Never
-  point tests at development data; Tests must be independent and repeatable.
-- **What to test** — Guard clauses reject invalid input; Found and not found paths; Empty
-  collection results; Boundary values.
-- **Round trip tests** — Serialise then deserialise; Assert equal to the original; Requires a
-  correct equals; Catches missing getters and setters.
-- **Coverage** — Measures lines executed not correctness; Seventy percent is a floor; Uncovered
-  lines cluster in error handling; Green suite still allows production bugs.
-- **Testability is a design signal** — Hard to test means doing too much; Extract logic that
-  needs no socket; Split the class rather than fight it.
+- **Anatomy of a good test**
+  - Arrange the inputs and objects
+  - Act by calling one thing
+  - Assert the expected outcome
+  - One test one scenario
+- **Naming convention**
+  - Pattern: method_scenario_expectedBehaviour
+  - findById_nonexistentId_returnsEmpty
+  - Failure report reads without opening the file
+  - testOne tells you nothing
+- **Worthless tests**
+  - assertNotNull on a new object
+  - Testing a plain getter
+  - Calling a method and asserting nothing
+  - Inflates coverage proves nothing
+- **Unit versus integration**
+  - Unit touches one class no external system
+  - Integration crosses classes or systems
+  - DAO tests are integration tests
+  - Keep the fast ones separate
+- **DAO testing**
+  - Use a dedicated test database
+  - BeforeEach resets to a known state
+  - Never point tests at development data
+  - Tests must be independent and repeatable
+- **What to test**
+  - Guard clauses reject invalid input
+  - Found and not found paths
+  - Empty collection results
+  - Boundary values
+- **Round trip tests**
+  - Serialise then deserialise
+  - Assert equal to the original
+  - Requires a correct equals
+  - Catches missing getters and setters
+- **Coverage**
+  - Measures lines executed not correctness
+  - Seventy percent is a floor
+  - Uncovered lines cluster in error handling
+  - Green suite still allows production bugs
+- **Testability is a design signal**
+  - Hard to test means doing too much
+  - Extract logic that needs no socket
+  - Split the class rather than fight it
 
 ### Code Snippets
 
@@ -129,7 +176,7 @@ void insert_validPlayer_returnsPositiveId() throws Exception {
     String position = "Striker";
 
     // Act
-    int id = _playerDao.insert(name, position);
+    int id = playerDao.insert(name, position);
 
     // Assert
     assertTrue(id > 0, "generated id must be positive");
@@ -159,22 +206,22 @@ void constructor_nullName_throwsIllegalArgument() {
 // DAO integration test: dedicated test DB, reset before every test
 class PlayerDaoTest {
 
-    private PlayerDao _dao;
+    private PlayerDao dao;
 
     @BeforeEach
     void setUp() throws Exception {
-        _dao = new JdbcPlayerDao(TEST_DB_URL, TEST_USER, TEST_PASS);
-        _dao.deleteAll();                 // known state - tests stay independent
+        dao = new JdbcPlayerDao(TEST_DB_URL, TEST_USER, TEST_PASS);
+        dao.deleteAll();                 // known state - tests stay independent
     }
 
     @Test
     void findById_nonexistentId_returnsEmpty() throws Exception {
-        assertTrue(_dao.findById(999_999).isEmpty());
+        assertTrue(dao.findById(999_999).isEmpty());
     }
 
     @Test
     void findAll_emptyTable_returnsEmptyListNotNull() throws Exception {
-        List<Player> all = _dao.findAll();
+        List<Player> all = dao.findAll();
         assertNotNull(all);
         assertTrue(all.isEmpty());
     }
@@ -197,22 +244,15 @@ void player_roundTrip_equalsOriginal() throws Exception {
 1. **Why is `assertNotNull(new Player(...))` worthless even though it executes the constructor?**
    *(Delete the constructor body — does the test still pass?)*
 
-2. **Are your DAO tests unit tests or integration tests? Justify the answer.**
-   *(What has to be running for them to pass?)*
+2. **Are your DAO tests unit tests or integration tests? Justify the answer.** *(What has to be running for them to pass?)*
 
-3. **A team has 80% coverage and a green suite, yet a bug reaches production. Give three ways
-   that can happen.**
-   *(What does coverage actually measure?)*
+3. **A team has 80% coverage and a green suite, yet a bug reaches production. Give three ways that can happen.** *(What does coverage actually measure?)*
 
-4. **What happens if you point DAO tests at the development database?**
-   *(Consider what `@BeforeEach` does, and whether it can be undone)*
+4. **What happens if you point DAO tests at the development database?** *(Consider what `@BeforeEach` does, and whether it can be undone)*
 
-5. **Why does a round-trip test fail on a correct class that has no `equals` override?**
-   *(What does `assertEquals` call, and what does the default do?)*
+5. **Why does a round-trip test fail on a correct class that has no `equals` override?** *(What does `assertEquals` call, and what does the default do?)*
 
-6. **A class is hard to test because it reads a socket, parses JSON and calls a DAO. What is
-   that telling you?**
-   *(Is the fix a cleverer test, or a different design?)*
+6. **A class is hard to test because it reads a socket, parses JSON and calls a DAO. What is that telling you?** *(Is the fix a cleverer test, or a different design?)*
 
 ---
 
@@ -220,59 +260,84 @@ void player_roundTrip_equalsOriginal() throws Exception {
 
 ### Overview
 
-Three searches share one loop and differ only in **how the frontier is ordered**. A FIFO queue
-gives breadth-first search, which finds the route with the fewest steps. A priority queue
-ordered by cost-so-far gives Dijkstra, which finds the cheapest route once terrain costs vary.
-Adding an estimate of the cost remaining gives A\*, which finds the same cheapest route while
-examining far fewer cells — provided the estimate never over-estimates.
+Three searches share one loop and differ only in **how the frontier is ordered**. A FIFO queue gives breadth-first search, which finds the route with the fewest steps. A priority queue ordered by cost-so-far gives Dijkstra, which finds the cheapest route once terrain costs vary. Adding an estimate of the cost remaining gives A\*, which finds the same cheapest route while examining far fewer cells — provided the estimate never over-estimates.
 
 ```mermaid
 ---
 title: "Pathfinding"
 accDescr: "Mind map of Pathfinding. Branches: The frontier decides the algorithm; Steps versus cost; Heuristics; What to measure; Where it breaks."
 ---
-%%{init: { "theme": "forest" }}%%
+%%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Pathfinding))
-    The frontier decides the algorithm
-      FIFO queue gives breadth-first
-      Cheapest so far gives Dijkstra
-      Cost plus estimate gives A star
+    n1["`The frontier decides
+    the algorithm`"]
+      n2["`FIFO queue gives
+      breadth-first`"]
+      n3["`Cheapest so far
+      gives Dijkstra`"]
+      n4["`Cost plus estimate
+      gives A star`"]
       Same loop every time
     Steps versus cost
       Steps counts moves
       Cost counts terrain
-      Equal only on flat ground
-      BFS optimises steps not cost
+      n5["`Equal only on
+      flat ground`"]
+      n6["`BFS optimises
+      steps not cost`"]
     Heuristics
       h estimates what remains
-      Manhattan for four way moves
-      Zero heuristic is Dijkstra
-      Admissible means never over-estimates
+      n7["`Manhattan for
+      four way moves`"]
+      n8["`Zero heuristic
+      is Dijkstra`"]
+      n9["`Admissible means
+      never over-estimates`"]
     What to measure
-      Cells expanded is the work
+      n10["`Cells expanded
+      is the work`"]
       Path cost is the quality
-      Never judge one by the other
+      n11["`Never judge one
+      by the other`"]
     Where it breaks
-      Over-estimating loses optimality
-      Marking visited on queueing
-      Mutating a cell used as a key
-      Unreachable goal must terminate
+      n12["`Over-estimating
+      loses optimality`"]
+      n13["`Marking visited
+      on queueing`"]
+      n14["`Mutating a cell
+      used as a key`"]
+      n15["`Unreachable goal
+      must terminate`"]
 ```
 
 **Diagram description**
-Mind map of **Pathfinding**, organised into 5 branches:
+Mind map of **Pathfinding**, with 5 branches:
 
-- **The frontier decides the algorithm** — FIFO queue gives breadth-first; cheapest so far
-  gives Dijkstra; cost plus estimate gives A star; same loop every time.
-- **Steps versus cost** — steps counts moves; cost counts terrain; equal only on flat ground;
-  BFS optimises steps not cost.
-- **Heuristics** — h estimates what remains; Manhattan for four-way moves; zero heuristic is
-  Dijkstra; admissible means never over-estimates.
-- **What to measure** — cells expanded is the work; path cost is the quality; never judge one
-  by the other.
-- **Where it breaks** — over-estimating loses optimality; marking visited on queueing;
-  mutating a cell used as a key; unreachable goal must terminate.
+- **The frontier decides the algorithm**
+  - FIFO queue gives breadth-first
+  - Cheapest so far gives Dijkstra
+  - Cost plus estimate gives A star
+  - Same loop every time
+- **Steps versus cost**
+  - Steps counts moves
+  - Cost counts terrain
+  - Equal only on flat ground
+  - BFS optimises steps not cost
+- **Heuristics**
+  - h estimates what remains
+  - Manhattan for four way moves
+  - Zero heuristic is Dijkstra
+  - Admissible means never over-estimates
+- **What to measure**
+  - Cells expanded is the work
+  - Path cost is the quality
+  - Never judge one by the other
+- **Where it breaks**
+  - Over-estimating loses optimality
+  - Marking visited on queueing
+  - Mutating a cell used as a key
+  - Unreachable goal must terminate
 
 ### Code Snippets
 
@@ -323,23 +388,17 @@ public interface SearchListener {
 
 ### Self-Assessment Prompts
 
-1. **A\* with a zero heuristic is which algorithm, and why?**
-   *(Substitute h = 0 into f = g + h and read what is left)*
+1. **A\* with a zero heuristic is which algorithm, and why?** *(Substitute h = 0 into f = g + h and read what is left)*
 
-2. **On a map with rough ground, BFS returns 10 steps costing 46 while Dijkstra returns 14
-   steps costing 14. Is BFS wrong?**
-   *(Consider what each one was asked to optimise)*
+2. **On a map with rough ground, BFS returns 10 steps costing 46 while Dijkstra returns 14 steps costing 14. Is BFS wrong?** *(Consider what each one was asked to optimise)*
 
-3. **An over-estimating heuristic expanded fewer cells than an admissible one. Why is that
-   bad news rather than good?**
+3. **An over-estimating heuristic expanded fewer cells than an admissible one. Why is that bad news rather than good?**
 
 4. **Why can BFS mark a cell as visited when it is queued, while Dijkstra cannot?**
 
-5. **Which structure holds the frontier for each of the three algorithms, and what does that
-   cost per expansion?**
+5. **Which structure holds the frontier for each of the three algorithms, and what does that cost per expansion?**
 
-6. **Name two things the listener seam makes possible that printing from inside the search
-   would not.**
+6. **Name two things the listener seam makes possible that printing from inside the search would not.**
 
 ---
 
@@ -347,98 +406,150 @@ public interface SearchListener {
 
 ### Overview
 
-Documentation exists so that a reader — a marker, a teammate, or you in six months — can
-understand the system without reading every line.
-**Javadoc** documents the *contract*: what a method promises, what it rejects, what it returns.
-**Mermaid diagrams** are plain text, so they live beside the code, get reviewed in pull
-requests, and cannot silently drift out of date the way an exported image does.
+Documentation exists so that a reader — a marker, a teammate, or you in six months — can understand the system without reading every line. **Javadoc** documents the *contract*: what a method promises, what it rejects, what it returns. **Mermaid diagrams** are plain text, so they live beside the code, get reviewed in pull requests, and cannot silently drift out of date the way an exported image does.
 
 ```mermaid
 ---
 title: "Documenting a Project"
 accDescr: "Mind map of Documenting a Project. Branches: Javadoc basics; Common tags; What to document; What not to document; Mermaid advantages; ER diagram; Flowchart; Sequence diagram; Architecture diagram; Common mistakes."
 ---
-%%{init: { "theme": "forest" }}%%
+%%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Documenting a Project))
     Javadoc basics
-      Slash star star above the member
-      First sentence is the summary
-      Documents the contract not the code
-      Extracted into browsable HTML
+      n1["`Slash star star
+      above the member`"]
+      n2["`First sentence
+      is the summary`"]
+      n3["`Documents the
+      contract not the code`"]
+      n4["`Extracted into
+      browsable HTML`"]
 
     Common tags
       param for each parameter
-      return for the value meaning
-      throws for the failure condition
-      author and version at class level
+      n5["`return for the
+      value meaning`"]
+      n6["`throws for the
+      failure condition`"]
+      n7["`author and version
+      at class level`"]
 
     What to document
-      Constructors with guard clauses
-      Methods that can return null or empty
+      n8["`Constructors with
+      guard clauses`"]
+      n9["`Methods that can
+      return null or empty`"]
       Anything that throws
-      Non obvious constraints and units
+      n10["`Non obvious
+      constraints and units`"]
 
     What not to document
-      Plain getters and setters
-      Comments restating the method name
-      Code that already reads clearly
+      n11["`Plain getters
+      and setters`"]
+      n12["`Comments restating
+      the method name`"]
+      n13["`Code that already
+      reads clearly`"]
 
     Mermaid advantages
-      Plain text so it diffs and reviews
-      Lives beside the code it describes
-      Renders on GitHub without tooling
-      Cannot silently go stale like an image
+      n14["`Plain text so it
+      diffs and reviews`"]
+      n15["`Lives beside the
+      code it describes`"]
+      n16["`Renders on GitHub
+      without tooling`"]
+      n17["`Cannot silently go
+      stale like an image`"]
 
     ER diagram
-      Entities attributes and keys
-      Cardinality between tables
-      Documents the database schema
+      n18["`Entities
+      attributes and keys`"]
+      n19["`Cardinality
+      between tables`"]
+      n20["`Documents the
+      database schema`"]
 
     Flowchart
-      Decision and process flow
-      Good for an algorithm or a pipeline
+      n21["`Decision and
+      process flow`"]
+      n22["`Good for an algorithm
+      or a pipeline`"]
 
     Sequence diagram
-      Participants across the top
+      n23["`Participants
+      across the top`"]
       Messages in time order
-      Shows a full request cycle
-      Client server DAO database and back
+      n24["`Shows a full
+      request cycle`"]
+      n25["`Client server DAO
+      database and back`"]
 
     Architecture diagram
-      Tiers and their dependencies
-      Presentation service DAO database
+      n26["`Tiers and their
+      dependencies`"]
+      n27["`Presentation
+      service DAO database`"]
       Belongs in the README
 
     Common mistakes
-      Javadoc that repeats the signature
-      Diagrams that contradict the code
-      Documentation kept outside version control
+      n28["`Javadoc that repeats
+      the signature`"]
+      n29["`Diagrams that
+      contradict the code`"]
+      n30["`Documentation kept
+      outside version control`"]
       No README entry point
 ```
 
 **Diagram description**
-Mind map of **Documenting a Project**, organised into 10 branches:
+Mind map of **Documenting a Project**, with 10 branches:
 
-- **Javadoc basics** — Slash star star above the member; First sentence is the summary;
-  Documents the contract not the code; Extracted into browsable HTML.
-- **Common tags** — param for each parameter; return for the value meaning; throws for the
-  failure condition; author and version at class level.
-- **What to document** — Constructors with guard clauses; Methods that can return null or
-  empty; Anything that throws; Non obvious constraints and units.
-- **What not to document** — Plain getters and setters; Comments restating the method name;
-  Code that already reads clearly.
-- **Mermaid advantages** — Plain text so it diffs and reviews; Lives beside the code it
-  describes; Renders on GitHub without tooling; Cannot silently go stale like an image.
-- **ER diagram** — Entities attributes and keys; Cardinality between tables; Documents the
-  database schema.
-- **Flowchart** — Decision and process flow; Good for an algorithm or a pipeline.
-- **Sequence diagram** — Participants across the top; Messages in time order; Shows a full
-  request cycle; Client server DAO database and back.
-- **Architecture diagram** — Tiers and their dependencies; Presentation service DAO database;
-  Belongs in the README.
-- **Common mistakes** — Javadoc that repeats the signature; Diagrams that contradict the code;
-  Documentation kept outside version control; No README entry point.
+- **Javadoc basics**
+  - Slash star star above the member
+  - First sentence is the summary
+  - Documents the contract not the code
+  - Extracted into browsable HTML
+- **Common tags**
+  - param for each parameter
+  - return for the value meaning
+  - throws for the failure condition
+  - author and version at class level
+- **What to document**
+  - Constructors with guard clauses
+  - Methods that can return null or empty
+  - Anything that throws
+  - Non obvious constraints and units
+- **What not to document**
+  - Plain getters and setters
+  - Comments restating the method name
+  - Code that already reads clearly
+- **Mermaid advantages**
+  - Plain text so it diffs and reviews
+  - Lives beside the code it describes
+  - Renders on GitHub without tooling
+  - Cannot silently go stale like an image
+- **ER diagram**
+  - Entities attributes and keys
+  - Cardinality between tables
+  - Documents the database schema
+- **Flowchart**
+  - Decision and process flow
+  - Good for an algorithm or a pipeline
+- **Sequence diagram**
+  - Participants across the top
+  - Messages in time order
+  - Shows a full request cycle
+  - Client server DAO database and back
+- **Architecture diagram**
+  - Tiers and their dependencies
+  - Presentation service DAO database
+  - Belongs in the README
+- **Common mistakes**
+  - Javadoc that repeats the signature
+  - Diagrams that contradict the code
+  - Documentation kept outside version control
+  - No README entry point
 
 ### Code Snippets
 
@@ -452,7 +563,7 @@ Mind map of **Documenting a Project**, organised into 10 branches:
  * @param id the primary key to look up; must be positive
  * @return an {@code Optional} containing the track, or empty if no row matches
  * @throws IllegalArgumentException if {@code id} is zero or negative
- * @throws DataAccessException      if the query cannot be executed
+ * @throws DaoException      if the query cannot be executed
  */
 public Optional<Track> findById(int id) { ... }
 ````
@@ -502,21 +613,16 @@ sequenceDiagram
 
 ### Self-Assessment Prompts
 
-1. **Which of your methods genuinely need Javadoc, and which do not?**
-   *(What does a comment on a plain getter add?)*
+1. **Which of your methods genuinely need Javadoc, and which do not?** *(What does a comment on a plain getter add?)*
 
-2. **Write the `@throws` line for a constructor that rejects a blank name.**
-   *(State the condition, not just the exception type)*
+2. **Write the `@throws` line for a constructor that rejects a blank name.** *(State the condition, not just the exception type)*
 
-3. **Which diagram type answers "what tables exist and how do they relate?", and which answers
-   "what happens when a client sends a request?"**
-   *(Two different questions, two different diagram types)*
+3. **Which diagram type answers "what tables exist and how do they relate?", and which answers "what happens when a client sends a request?"** *(Two different questions, two different diagram types)*
 
 4. **Why is a Mermaid diagram in the repo better than a PNG exported from a drawing tool?**
    *(Think about what happens six months later when the schema changes)*
 
-5. **Where should the whole-system architecture diagram live, and why there?**
-   *(Where does a new reader — or a marker — look first?)*
+5. **Where should the whole-system architecture diagram live, and why there?** *(Where does a new reader — or a marker — look first?)*
 
 ---
 
@@ -524,70 +630,56 @@ sequenceDiagram
 
 ## AAA (Arrange–Act–Assert)
 
-The three-part structure of a readable test: set up the inputs, call the one thing under test,
-then check the result.
+The three-part structure of a readable test: set up the inputs, call the one thing under test, then check the result.
 
 ## Unit test
 
-A test of a single class with no dependency on an external system. Fast, deterministic, and a
-failure points at one place.
+A test of a single class with no dependency on an external system. Fast, deterministic, and a failure points at one place.
 
 ## Integration test
 
-A test exercising several components together, often including a database or network. Slower,
-and can fail for reasons outside the code under test.
+A test exercising several components together, often including a database or network. Slower, and can fail for reasons outside the code under test.
 
 ## Test database
 
-A separate database used only by tests, reset to a known state before each one so tests stay
-independent and repeatable.
+A separate database used only by tests, reset to a known state before each one so tests stay independent and repeatable.
 
 ## Line coverage
 
-The percentage of executable lines run during the test suite. It measures execution, not
-correctness — a line can be covered by a test that asserts nothing.
+The percentage of executable lines run during the test suite. It measures execution, not correctness — a line can be covered by a test that asserts nothing.
 
 ## Trivial test
 
-A test that cannot fail for any meaningful reason, such as `assertNotNull` on a freshly
-constructed object. It raises coverage without adding safety.
+A test that cannot fail for any meaningful reason, such as `assertNotNull` on a freshly constructed object. It raises coverage without adding safety.
 
 ## assertThrows
 
-The JUnit 5 assertion that a given call throws a specified exception — the correct way to test
-a guard clause.
+The JUnit 5 assertion that a given call throws a specified exception — the correct way to test a guard clause.
 
 ## @BeforeEach
 
-A JUnit 5 method run before every test, used to build fresh objects and reset shared state such
-as a test table.
+A JUnit 5 method run before every test, used to build fresh objects and reset shared state such as a test table.
 
 ## Javadoc
 
-Structured comments (`/** ... */`) placed above a class, method or field, extracted into
-browsable HTML documentation.
+Structured comments (`/** ... */`) placed above a class, method or field, extracted into browsable HTML documentation.
 
 ## Javadoc tag
 
-A marker inside a Javadoc comment describing one aspect of the contract — `@param`, `@return`,
-`@throws`.
+A marker inside a Javadoc comment describing one aspect of the contract — `@param`, `@return`, `@throws`.
 
 ## Mermaid
 
-A text-based diagram syntax rendered by GitHub and most Markdown viewers, so diagrams live in
-version control beside the code.
+A text-based diagram syntax rendered by GitHub and most Markdown viewers, so diagrams live in version control beside the code.
 
 ## ER diagram
 
-An entity-relationship diagram showing tables, their columns and keys, and the cardinality of
-relationships between them.
+An entity-relationship diagram showing tables, their columns and keys, and the cardinality of relationships between them.
 
 ## Sequence diagram
 
-A diagram showing participants and the messages passed between them in time order — ideal for a
-full client-to-server request cycle.
+A diagram showing participants and the messages passed between them in time order — ideal for a full client-to-server request cycle.
 
 ## Architecture diagram
 
-A high-level view of a system's tiers and their dependencies, such as presentation then service
-then DAO then database.
+A high-level view of a system's tiers and their dependencies, such as presentation then service then DAO then database.

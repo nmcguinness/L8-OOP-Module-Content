@@ -23,7 +23,7 @@ class ExerciseTest {
     @Test
     void sortWith_comparatorOfASupertype_isAccepted() {
         // A Comparator<Entity> can order a List<Enemy> - that is what ? super T buys.
-        ArrayList<Enemy> enemies = new ArrayList<>(List.of(new Enemy(), new Enemy()));
+        ArrayList<Enemy> enemies = new ArrayList<>(List.of(new Enemy("Orc"), new Enemy("Orc")));
         Comparator<Entity> cmp = (a, b) -> 0;
         Sorters.sortWith(enemies, cmp);
         assertEquals(2, enemies.size());

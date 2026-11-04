@@ -21,17 +21,18 @@ class LegacyLogger {
 }
 
 class LegacyLoggerAdapter implements Logger {
-    private LegacyLogger _legacy;
+    private final LegacyLogger legacy;
 
     public LegacyLoggerAdapter(LegacyLogger legacy) {
-        if (legacy == null)
+        if (legacy == null) {
             throw new IllegalArgumentException("legacy is null.");
+        }
 
-        _legacy = legacy;
+        this.legacy = legacy;
     }
 
     @Override
     public void log(String msg) {
-        _legacy.logMessage(msg);
+        legacy.logMessage(msg);
     }
 }

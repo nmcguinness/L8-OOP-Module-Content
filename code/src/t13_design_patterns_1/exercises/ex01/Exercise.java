@@ -52,24 +52,24 @@ class RangedAttack implements AttackStrategy
 
 class Enemy
 {
-    private String _name;
-    private int _baseDamage;
-    private AttackStrategy _strategy;
+    private final String name;
+    private final int baseDamage;
+    private final AttackStrategy strategy;
 
     public Enemy(String name, int baseDamage, AttackStrategy strategy)
     {
-        _name = name;
-        _baseDamage = baseDamage;
-        _strategy = strategy;
+        this.name = name;
+        this.baseDamage = baseDamage;
+        this.strategy = strategy;
     }
 
     public String getName()
     {
-        return _name;
+        return name;
     }
 
     public int attack(int distanceMeters)
     {
-        return _strategy.computeDamage(_baseDamage, distanceMeters);
+        return strategy.computeDamage(baseDamage, distanceMeters);
     }
 }

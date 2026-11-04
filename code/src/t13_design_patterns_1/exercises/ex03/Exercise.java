@@ -24,19 +24,19 @@ interface Command
 
 class ExecuteTaskCommand implements Command
 {
-    private Task _task;
-    private TaskExecutionStrategy _strategy;
+    private final Task task;
+    private final TaskExecutionStrategy strategy;
 
     public ExecuteTaskCommand(Task task, TaskExecutionStrategy strategy)
     {
-        _task = task;
-        _strategy = strategy;
+        this.task = task;
+        this.strategy = strategy;
     }
 
     @Override
     public void execute()
     {
-        _strategy.execute(_task);
+        strategy.execute(task);
     }
 }
 
@@ -66,25 +66,25 @@ class SafeExecution implements TaskExecutionStrategy
 
 class Task
 {
-    private String _name;
+    private final String name;
 
     public Task(String name)
     {
-        _name = name;
+        this.name = name;
     }
 
     public void validate()
     {
-        System.out.println("Validating: " + _name);
+        System.out.println("Validating: " + name);
     }
 
     public void run()
     {
-        System.out.println("Running: " + _name);
+        System.out.println("Running: " + name);
     }
 
     public void runUnchecked()
     {
-        System.out.println("Running unchecked: " + _name);
+        System.out.println("Running unchecked: " + name);
     }
 }

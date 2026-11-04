@@ -16,13 +16,11 @@ tags: [java, oop, classes, objects, encapsulation, constructors, access-modifier
 
 Define a `Book` class with private fields `title` (String) and `pageCount` (int).
 
-- Constructor: validate that `title` is not blank and `pageCount` > 0; throw
-  `IllegalArgumentException` otherwise.
+- Constructor: validate that `title` is not blank and `pageCount` > 0; throw `IllegalArgumentException` otherwise.
 - Getters for both fields.
 - Override `toString()` to return `"Title (N pages)"`.
 
-Write a `main` method that creates two `Book` objects, prints them, and demonstrates that an
-invalid `Book` throws an exception.
+Write a `main` method that creates two `Book` objects, prints them, and demonstrates that an invalid `Book` throws an exception.
 
 **Package:** `t00_oop_fundamentals.exercises.ex01`
 
@@ -34,8 +32,7 @@ Define a `BankAccount` class with a private `double _balance` field.
 
 - Constructor: sets initial balance (must be ≥ 0).
 - `deposit(double amount)` — adds to balance; rejects negative amounts.
-- `withdraw(double amount)` — deducts from balance; rejects negative amounts and amounts
-  exceeding the balance.
+- `withdraw(double amount)` — deducts from balance; rejects negative amounts and amounts exceeding the balance.
 - `getBalance()` — returns current balance.
 - Override `toString()`.
 

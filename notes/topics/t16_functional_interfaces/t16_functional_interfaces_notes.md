@@ -4,7 +4,7 @@ subtitle: "COMP C8Z03 — Year 2 OOP"
 topic_code: t16_functional_interfaces
 description: "Core functional interfaces in java.util.function; how to read their types, use them with lambdas and method references, and apply them with collections APIs. Includes balanced Games/Software examples and common composition patterns."
 created: 2026-02-04
-last_updated: 2026-04-14
+last_updated: 2026-11-04
 version: 1.0
 status: published
 authors: ["OOP Teaching Team"]
@@ -27,28 +27,31 @@ prerequisites:
 
 ---
 
+---
+
 ## In this topic
 
 - [What you'll learn](#what-youll-learn)
 - [Why this matters](#why-this-matters)
 - [How this builds on previous content](#how-this-builds-on-previous-content)
+- [Key terms](#key-terms)
 - [The big idea: one abstract method](#the-big-idea-one-abstract-method)
 - [The core set](#the-core-set)
 - [Reading the types quickly](#reading-the-types-quickly)
 - [Using them with collections APIs](#using-them-with-collections-apis)
 - [Games example: event hooks with Consumer](#games-example-event-hooks-with-consumer)
-- [Software example: validation rules with
-  Predicate](#software-example-validation-rules-with-predicate)
+- [Software example: validation rules with Predicate](#software-example-validation-rules-with-predicate)
 - [`Bi...` variants: when you need two inputs](#bi-variants-when-you-need-two-inputs)
 - [Operators: specialised Function forms](#operators-specialised-function-forms)
 - [Method references](#method-references)
 - [Composing behaviour](#composing-behaviour)
 - [Primitive variants and boxing](#primitive-variants-and-boxing)
-- [Common mistakes](#common-mistakes)
 - [Key takeaways](#key-takeaways)
+- [Common mistakes](#common-mistakes)
+- [Practice tasks](#practice-tasks)
 - [Reflective questions](#reflective-questions)
-- [Appendix A: Mapping from common C# delegate
-  names](#appendix-a-mapping-from-common-c-delegate-names)
+- [Further reading](#further-reading)
+- [Appendix A: Mapping from common C# delegate names](#appendix-a-mapping-from-common-c-delegate-names)
 
 ---
 
@@ -69,12 +72,9 @@ A quick summary of what **you** should be able to do after this lesson:
 
 ## Why this matters
 
-Modern Java APIs are designed around **passing behaviour** as a parameter: “for each element,
-do X”, “keep items that match Y”, “transform A into B”.
+Modern Java APIs are designed around **passing behaviour** as a parameter: “for each element, do X”, “keep items that match Y”, “transform A into B”.
 
-These interfaces are the *standard vocabulary* for that behaviour. If you recognise them, you
-can read Java code faster and write reusable utilities without inventing your own callback
-types.
+These interfaces are the *standard vocabulary* for that behaviour. If you recognise them, you can read Java code faster and write reusable utilities without inventing your own callback types.
 
 ---
 
@@ -87,18 +87,33 @@ types.
 | [t11 Generics I](../t11_generics_1/t11_generics_1_notes.md) | `Predicate<T>`, `Function<T,R>` and friends are generic types — reading their signatures is reading type parameters |
 | [t05](../t05_collections_1/t05_collections_1_notes.md)–[t07 Collections](../t07_collections_3_set_map/t07_collections_3_set_map_notes.md) | `removeIf`, `forEach` and `computeIfAbsent` already take these interfaces; now you can write your own |
 
-Where this goes next: this is the foundation of [t17
-Streams](../t17_streams_api/t17_streams_api_notes.md), where `filter` takes a `Predicate` and
-`map` takes a `Function`. The same idea powers the Strategy pattern in
-[t13](../t13_design_patterns_1/t13_design_patterns_1_notes.md) — a strategy with one method
-*is* a functional interface.
+Where this goes next: this is the foundation of [t17 Streams](../t17_streams_api/t17_streams_api_notes.md), where `filter` takes a `Predicate` and `map` takes a `Function`. The same idea powers the Strategy pattern in [t13](../t13_design_patterns_1/t13_design_patterns_1_notes.md) — a strategy with one method *is* a functional interface.
+
+---
+
+## Key terms
+
+### Functional interface
+
+A **functional interface** has exactly one abstract method, so a lambda can implement it.
+
+### Lambda expression
+
+A **lambda** is a short way to write that one method: `x -> x * 2`.
+
+### Method reference
+
+A **method reference** such as `String::length` is a shorter lambda that just calls an existing method.
+
+### The core four
+
+`Predicate<T>` tests a value, `Function<T, R>` converts one, `Consumer<T>` uses one, and `Supplier<T>` produces one.
 
 ---
 
 ## The big idea: one abstract method
 
-A **functional interface** is (effectively) an interface with **one abstract method**.
-That single method means Java can treat a lambda as an instance of the interface.
+A **functional interface** is (effectively) an interface with **one abstract method**. That single method means Java can treat a lambda as an instance of the interface.
 
 You’ll see these interfaces mostly from the package:
 
@@ -202,18 +217,18 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class DamageEventBus {
-    private List<Consumer<Integer>> _listeners;
+    private List<Consumer<Integer>> listeners;
 
     public DamageEventBus() {
-        _listeners = new ArrayList<>();
+        listeners = new ArrayList<>();
     }
 
     public void subscribe(Consumer<Integer> listener) {
-        _listeners.add(listener);
+        listeners.add(listener);
     }
 
     public void publishDamage(int amount) {
-        for (Consumer<Integer> listener : _listeners)
+        for (Consumer<Integer> listener : listeners)
             listener.accept(amount);
     }
 }
@@ -272,23 +287,23 @@ import java.util.function.BiPredicate;
 
 public class Point
 {
-    private float _x;
-    private float _y;
+    private float x;
+    private float y;
 
     public Point(float x, float y)
     {
-        _x = x;
-        _y = y;
+        this.x = x;
+        this.y = y;
     }
 
     public float getX()
     {
-        return _x;
+        return x;
     }
 
     public float getY()
     {
-        return _y;
+        return y;
     }
 }
 
@@ -406,8 +421,7 @@ If you’re processing lots of values, consider primitive interfaces such as:
 - `IntConsumer`, `LongConsumer`, `DoubleConsumer`
 - `IntPredicate`, `LongPredicate`, `DoublePredicate`
 - `IntSupplier`, `LongSupplier`, `DoubleSupplier`
-- `IntFunction<R>`, `ToIntFunction<T>`, `IntUnaryOperator`, `IntBinaryOperator` (and similar
-  for long/double)
+- `IntFunction<R>`, `ToIntFunction<T>`, `IntUnaryOperator`, `IntBinaryOperator` (and similar for long/double)
 
 Example:
 
@@ -417,6 +431,16 @@ import java.util.function.IntUnaryOperator;
 IntUnaryOperator clampTo0_100 = x -> Math.max(0, Math.min(100, x));
 System.out.println(clampTo0_100.applyAsInt(120)); // 100
 ```
+
+---
+
+## Key takeaways
+
+- These interfaces are the standard “function types” of Java: input-only, boolean, transform, and factory.
+- Most modern collection APIs accept one of these interfaces.
+- Use method references when it improves readability.
+- Prefer predicates without side effects; keep mutation in consumers.
+- Consider primitive interfaces when performance matters.
 
 ---
 
@@ -432,25 +456,21 @@ System.out.println(clampTo0_100.applyAsInt(120)); // 100
 
 ---
 
-## Key takeaways
+## Practice tasks
 
-- These interfaces are the standard “function types” of Java: input-only, boolean, transform,
-  and factory.
-- Most modern collection APIs accept one of these interfaces.
-- Use method references when it improves readability.
-- Prefer predicates without side effects; keep mutation in consumers.
-- Consider primitive interfaces when performance matters.
+1. Write a `Predicate<String>` for "longer than 5 letters" and another for "starts with A". Combine them with `and` and with `negate`.
+2. Rewrite a lambda from your own code as a method reference. Is it clearer?
+3. Write a `Function<String, Integer>` and a `Function<Integer, String>`, and join them with `andThen`. What type is the result?
+
+For step-by-step practice with worked solutions, see the [t16 exercises](exercises/t16_functional_interfaces_exercises.md).
 
 ---
 
 ## Reflective questions
 
-- In your current project, where do you already pass behaviour as parameters (sorting,
-  filtering, callbacks)?
-- Which operations are better expressed as **predicates** (yes/no rules) vs **functions**
-  (transformations)?
-- Can you spot any places where you invented a custom interface that could be replaced with
-  `java.util.function`?
+- In your current project, where do you already pass behaviour as parameters (sorting, filtering, callbacks)?
+- Which operations are better expressed as **predicates** (yes/no rules) vs **functions** (transformations)?
+- Can you spot any places where you invented a custom interface that could be replaced with `java.util.function`?
 
 <details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
 padding:0.9rem 1rem; margin:1rem 0;">
@@ -459,31 +479,16 @@ padding:0.9rem 1rem; margin:1rem 0;">
   </summary>
 
 **Where you already pass behaviour as a parameter.**
-More places than you expect, because several are hidden behind familiar APIs. Every
-`Comparator` handed to `sort` is behaviour-as-data. So is the lambda in `list.removeIf(...)`,
-the body of `forEach`, the mapping function in `map.computeIfAbsent(key, k -> new
-ArrayList<>())`, and any listener or callback you register. In your own code, look for a method
-taking a `boolean` flag that selects between two behaviours (`process(list, true)`) — that flag
-is a `Predicate` or `Consumer` trying to get out, and replacing it removes the branch *and*
-makes the call site readable.
+More places than you expect, because several are hidden behind familiar APIs. Every `Comparator` handed to `sort` is behaviour-as-data. So is the lambda in `list.removeIf(...)`, the body of `forEach`, the mapping function in `map.computeIfAbsent(key, k -> new ArrayList<>())`, and any listener or callback you register. In your own code, look for a method taking a `boolean` flag that selects between two behaviours (`process(list, true)`) — that flag is a `Predicate` or `Consumer` trying to get out, and replacing it removes the branch *and* makes the call site readable.
 
 **Predicates vs functions.**
 The split is on **what comes back**.
 
-A **`Predicate<T>`** answers a yes/no question about one value and returns `boolean` —
-`isOverdue`, `isValidEmail`, `hasHighScore`. Use it wherever you *select*: filtering,
-validating, searching, partitioning. Its payoff is composition:
-`isActive.and(isOverdue.negate())` builds a new rule without a new class.
+A **`Predicate<T>`** answers a yes/no question about one value and returns `boolean` — `isOverdue`, `isValidEmail`, `hasHighScore`. Use it wherever you *select*: filtering, validating, searching, partitioning. Its payoff is composition: `isActive.and(isOverdue.negate())` builds a new rule without a new class.
 
-A **`Function<T,R>`** turns a value into a *different* value — `Task` then `String`, `String`
-then `Integer`. Use it wherever you *transform*: mapping, extracting a field, formatting,
-parsing.
+A **`Function<T,R>`** turns a value into a *different* value — `Task` then `String`, `String` then `Integer`. Use it wherever you *transform*: mapping, extracting a field, formatting, parsing.
 
-Two corrections worth making early. A method that returns `boolean` but *changes* something is
-not a predicate — predicates must be side-effect-free, because a stream may call them in any
-order or not at all. And `Predicate<T>` is really just `Function<T, Boolean>` specialised to
-avoid boxing; prefer `Predicate` when the answer is a test, because it reads better and brings
-`and`/`or`/`negate`.
+Two corrections worth making early. A method that returns `boolean` but *changes* something is not a predicate — predicates must be side-effect-free, because a stream may call them in any order or not at all. And `Predicate<T>` is really just `Function<T, Boolean>` specialised to avoid boxing; prefer `Predicate` when the answer is a test, because it reads better and brings `and`/`or`/`negate`.
 
 **Custom interfaces that `java.util.function` already covers.**
 Check any single-abstract-method interface you wrote against the four shapes:
@@ -496,18 +501,27 @@ Check any single-abstract-method interface you wrote against the four shapes:
 | `interface IdGenerator { String next(); }` | `Supplier<String>` |
 | `interface Combiner { int merge(int a, int b); }` | `BinaryOperator<Integer>` / `IntBinaryOperator` |
 
-Replacing them buys interoperability: your method now accepts any lambda or method reference
-and composes with `andThen`, `compose`, `and`, `or`, `negate` for free — and readers already
-know the type.
+Replacing them buys interoperability: your method now accepts any lambda or method reference and composes with `andThen`, `compose`, `and`, `or`, `negate` for free — and readers already know the type.
 
-Keep a custom interface when the **name carries domain meaning** that `Function<Order,
-BigDecimal>` does not (`PricingRule` is clearer, and can be extended later with a second
-method), when you need **more than one abstract method**, or when you want to declare a
-**checked exception** — the standard interfaces cannot throw one, which is why `Files`-based
-lambdas force you into try/catch. Naming is a real benefit, so this is a judgement call, not a
-rule; just make it deliberately rather than by inventing an interface without checking.
+Keep a custom interface when the **name carries domain meaning** that `Function<Order, BigDecimal>` does not (`PricingRule` is clearer, and can be extended later with a second method), when you need **more than one abstract method**, or when you want to declare a **checked exception** — the standard interfaces cannot throw one, which is why `Files`-based lambdas force you into try/catch. Naming is a real benefit, so this is a judgement call, not a rule; just make it deliberately rather than by inventing an interface without checking.
 
 </details>
+
+---
+
+## Further reading
+
+- **Java API: java.util.function**
+  <https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/function/package-summary.html>
+  Every functional interface in the standard library.
+
+- **Oracle Java Tutorials: Lambda Expressions**
+  <https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html>
+  Lambdas from the beginning, with a worked example.
+
+- **Oracle Java Tutorials: Method References**
+  <https://docs.oracle.com/javase/tutorial/java/javaOO/methodreferences.html>
+  The four kinds of method reference.
 
 ---
 

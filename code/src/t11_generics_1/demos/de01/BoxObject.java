@@ -1,7 +1,7 @@
 package t11_generics_1.demos.de01;
 
 class BoxObject {
-    private Object value;
+    private final Object value;
 
     public BoxObject(Object value) {
         this.value = value;

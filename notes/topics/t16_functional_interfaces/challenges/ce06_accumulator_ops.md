@@ -16,8 +16,7 @@ prerequisites: ["t16_functional_interfaces_notes.md", "t03_ordering_notes.md", "
 
 You are building a tiny **telemetry triage** tool that can be used in two domains:
 
-- **Games**: playtest sessions generate events like FPS samples, ping, deaths, level completion
-  time.
+- **Games**: playtest sessions generate events like FPS samples, ping, deaths, level completion time.
 - **Software**: services generate events like response time, payload size, retries, error rate.
 
 You receive a list of **telemetry events** (messy, sometimes invalid), and your job is to:
@@ -39,8 +38,7 @@ Keep it simple. Keep it robust. Keep it readable.
 By completing this challenge, you should be able to:
 
 - Use **functional interfaces** to pass behaviour into methods/classes
-- Apply **Predicate** for rules, **Function / ToDoubleFunction** for extraction, **Consumer**
-  for actions
+- Apply **Predicate** for rules, **Function / ToDoubleFunction** for extraction, **Consumer** for actions
 - Build and use **Comparator** strategies (including a comparator factory)
 - Apply **generics + PECS** correctly when designing helper methods
 - Produce a small, testable program with clear output
@@ -57,10 +55,8 @@ Suggested fields (you may add more):
 
 - `id` (String)
 - `timestampUtc` (long)
-- `source` (String)
-  examples: `"game"`, `"server"`, `"client"`
-- `category` (String)
-  examples: `"fps"`, `"ping"`, `"deaths"`, `"response_time"`, `"payload_kb"`
+- `source` (String) examples: `"game"`, `"server"`, `"client"`
+- `category` (String) examples: `"fps"`, `"ping"`, `"deaths"`, `"response_time"`, `"payload_kb"`
 - `value` (double)
 - `unit` (String)
 - `notes` (String)
@@ -106,15 +102,12 @@ You must use the accumulator in a “pipeline” style by supplying:
 - a **measurer** function (extracts a numeric value from an event), and
 - a **filter** predicate (accept/reject rules).
 
-> You are allowed to extend the accumulator (e.g., improve `reset()`, add better validation, or
-> switch to `ToDoubleFunction<T>`),
-> but your solution must still run using the provided accumulator as the starting point.
+> You are allowed to extend the accumulator (e.g., improve `reset()`, add better validation, or switch to `ToDoubleFunction<T>`), but your solution must still run using the provided accumulator as the starting point.
 
 ### Correctness requirement
 
 - Your stats must be correct for the data you accept (count/min/max/mean/std dev).
-- **Bonus**: improve standard deviation to a mathematically robust streaming method (e.g.,
-  Welford) and document the change.
+- **Bonus**: improve standard deviation to a mathematically robust streaming method (e.g., Welford) and document the change.
 
 ---
 
@@ -132,27 +125,21 @@ You may use additional collections where appropriate (e.g., `Set<String>` for de
 
 ## Functional interface requirements
 
-Your solution must include all of the following. The aim is that your program reads like a
-**pipeline**:
+Your solution must include all of the following. The aim is that your program reads like a **pipeline**:
 
-**events** then (Predicates decide) then (Consumers react) then (measurements extracted) then
-(accumulated) then (summarised) then (sorted via Comparator strategy)
+**events** then (Predicates decide) then (Consumers react) then (measurements extracted) then (accumulated) then (summarised) then (sorted via Comparator strategy)
 
-Keep each piece small and named. If a method is doing “filter + measure + accumulate + print”
-all at once, it’s too big.
+Keep each piece small and named. If a method is doing “filter + measure + accumulate + print” all at once, it’s too big.
 
 ### 1) Predicates as rules
 
 Create at least **3** rules using `Predicate<TelemetryEvent>`.
 
-A *rule* is a reusable boolean decision: **include** vs **exclude** (or **accept** vs **discard**).
-Rules should be:
+A *rule* is a reusable boolean decision: **include** vs **exclude** (or **accept** vs **discard**). Rules should be:
 
 - **Pure**: no mutation, no printing, no counters changing
-- **Combinable**: you should be able to build bigger rules from smaller rules using
-  `.and(...)`, `.or(...)`, and `.negate()`
-- **Readable**: the variable names should describe intent (e.g. `isFiniteValue`, `hasValidId`,
-  `isSupportedCategory`)
+- **Combinable**: you should be able to build bigger rules from smaller rules using `.and(...)`, `.or(...)`, and `.negate()`
+- **Readable**: the variable names should describe intent (e.g. `isFiniteValue`, `hasValidId`, `isSupportedCategory`)
 
 Examples of rule ideas (choose at least three):
 
@@ -162,18 +149,13 @@ Examples of rule ideas (choose at least three):
 - ignore events older than X
 - ignore events with negative values (for selected categories)
 
-> Hint: keep “domain rules” separate from “data hygiene rules”.
-> Data hygiene: blank strings, NaN, infinities.
-> Domain rules: negative ping doesn’t make sense, FPS can’t be zero for “running samples”, etc.
+> Hint: keep “domain rules” separate from “data hygiene rules”. Data hygiene: blank strings, NaN, infinities. Domain rules: negative ping doesn’t make sense, FPS can’t be zero for “running samples”, etc.
 
 ### 2) Measurement strategy
 
-Use `ToDoubleFunction<TelemetryEvent>` (or `Function<TelemetryEvent, Double>`) to extract the
-number you accumulate.
+Use `ToDoubleFunction<TelemetryEvent>` (or `Function<TelemetryEvent, Double>`) to extract the number you accumulate.
 
-The accumulator should not “know” what an event means. Instead, a **measurement function**
-tells it *what number to pull out*.
-This is the Strategy Pattern in a lightweight form.
+The accumulator should not “know” what an event means. Instead, a **measurement function** tells it *what number to pull out*. This is the Strategy Pattern in a lightweight form.
 
 Your measurement can be:
 
@@ -210,18 +192,13 @@ Keep console output minimal (no spam). A good pattern is:
 - print *only the first 3 discarded events*, then print a summary count
 - or print one short line per category at the end, not per event
 
-> Rule of thumb:
-> Predicates decide **what** happens.
-> Consumers do **something** once the decision has been made.
+> Rule of thumb: Predicates decide **what** happens. Consumers do **something** once the decision has been made.
 
 ### 4) Comparator factory
 
-Create a small **comparator factory** that returns a `Comparator<SummaryRow>` (see next
-section) based on a mode.
+Create a small **comparator factory** that returns a `Comparator<SummaryRow>` (see next section) based on a mode.
 
-The purpose is to show that sorting is also a strategy: you can swap it without rewriting your
-reporting code.
-The factory should:
+The purpose is to show that sorting is also a strategy: you can swap it without rewriting your reporting code. The factory should:
 
 - take a **mode** (string/enum) and return the appropriate comparator
 - be the only place you encode the “sort rules”
@@ -307,13 +284,10 @@ Your `run()` (or `main`) must:
 
 Two sample datasets are provided alongside this brief:
 
-- [ce06_telemetry_10](ce06_telemetry_10.csv) — small dataset for quick testing (includes a
-  couple of discard candidates)
-- [ce06_telemetry_100](ce06_telemetry_100.csv) — larger dataset for more realistic output
-  (includes multiple discard candidates)
+- [ce06_telemetry_10](ce06_telemetry_10.csv) — small dataset for quick testing (includes a couple of discard candidates)
+- [ce06_telemetry_100](ce06_telemetry_100.csv) — larger dataset for more realistic output (includes multiple discard candidates)
 
-Place either file in your chosen `data/` folder (or update the `Path.of(...)` accordingly),
-then load with:
+Place either file in your chosen `data/` folder (or update the `Path.of(...)` accordingly), then load with:
 
 ```java
 List<TelemetryEvent> events =
@@ -329,11 +303,9 @@ List<TelemetryEvent> events =
 
 Use this helper to load telemetry events from a **CSV file** into a `List<TelemetryEvent>`.
 
-This keeps your `run()` clean and helps you demonstrate the **IO + defensive coding** habits
-from earlier topics, while still focusing the challenge on **functional interfaces**.
+This keeps your `run()` clean and helps you demonstrate the **IO + defensive coding** habits from earlier topics, while still focusing the challenge on **functional interfaces**.
 
-> If you named your event class `Telemetry` instead of `TelemetryEvent`, update the types
-> accordingly.
+> If you named your event class `Telemetry` instead of `TelemetryEvent`, update the types accordingly.
 
 ### CSV format (required)
 
@@ -358,9 +330,7 @@ s-001,1700000010,server,response_time,240.0,ms,GET /api/items
 bad-005,1700000025,game,ping,-10.0,ms,Negative ping
 ```
 
-> Keep it simple: for this module, we assume `notes` does **not** contain commas.
-> If you want to support commas in notes, you must implement quoted CSV parsing (optional
-> extension).
+> Keep it simple: for this module, we assume `notes` does **not** contain commas. If you want to support commas in notes, you must implement quoted CSV parsing (optional extension).
 
 ### TelemetryHelper.java
 
@@ -482,9 +452,7 @@ System.out.println("Loaded: " + events.size());
 
 Copy this class into: `src/main/java/org/example/Accumulator.java`
 
-> This is the **starter** accumulator that measures **string length** only.
-> Your job in the main exercise is to evolve the idea into a **GenericAccumulator** driven by
-> functional interfaces.
+> This is the **starter** accumulator that measures **string length** only. Your job in the main exercise is to evolve the idea into a **GenericAccumulator** driven by functional interfaces.
 
 ```java
 package org.example;

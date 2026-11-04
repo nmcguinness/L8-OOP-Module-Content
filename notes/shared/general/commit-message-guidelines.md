@@ -16,15 +16,11 @@ file_name: commit-message-guidelines.md
 
 ## Overview
 
-When you work on software projects — especially in pairs or teams — everyone needs to
-understand **what changed and why**.
+When you work on software projects — especially in pairs or teams — everyone needs to understand **what changed and why**.
 
-A clear, consistent commit message helps you **communicate intent**, **track progress**, and
-**debug issues later**.  It is not just about Git syntax; it’s about developing a professional
-mindset for collaboration, accountability, and traceability.
+A clear, consistent commit message helps you **communicate intent**, **track progress**, and **debug issues later**. It is not just about Git syntax; it’s about developing a professional mindset for collaboration, accountability, and traceability.
 
-You’ll directly apply these practices in your **OOP CA project**, where your GitHub commit
-history forms part of your assessment.
+You’ll directly apply these practices in your **OOP CA project**, where your GitHub commit history forms part of your assessment.
 
 ## Why Commit Messages Matter
 
@@ -87,12 +83,10 @@ Write your own commit message describing one of your Stage 1 CA milestones.
 
 ## Reflection
 
-How do clear commit messages improve teamwork and make debugging easier later?
-Write two sentences explaining how you’ll apply this habit during your OOP project.
+How do clear commit messages improve teamwork and make debugging easier later? Write two sentences explaining how you’ll apply this habit during your OOP project.
 
 ## Further reading
 
-- [FreeCodeCamp - How to Write Better Git Commit Messages – A Step-By-Step
-  Guide](https://www.freecodecamp.org/news/how-to-write-better-git-commit-messages/)
+- [FreeCodeCamp - How to Write Better Git Commit Messages – A Step-By-Step Guide](https://www.freecodecamp.org/news/how-to-write-better-git-commit-messages/)
 - [How to Write a Git Commit Message – Chris Beams](https://chris.beams.io/posts/git-commit/)
 - [Gitmoji – An emoji guide for your commit messages](https://gitmoji.dev/)

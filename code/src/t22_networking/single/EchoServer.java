@@ -2,31 +2,33 @@ package t22_networking.single;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 
 public class EchoServer {
 
     // === Fields ===
-    private int _port;
+    private final int port;
 
     // === Constructors ===
     // Creates: an echo server that will listen on the given port
     public EchoServer(int port) {
         if (port < 1_024 || port > 65_535)
             throw new IllegalArgumentException("port must be 1024-65535");
-        _port = port;
+        this.port = port;
     }
 
     // === Public API ===
     // Starts: the server - blocks waiting for one client, echoes each line, then exits
     public void start() throws IOException {
-        try (ServerSocket serverSocket = new ServerSocket(_port)) {
-            System.out.println("Echo server listening on port " + _port);
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
+            System.out.println("Echo server listening on port " + port);
 
             Socket clientSocket = serverSocket.accept();  // blocks until a client connects
             System.out.println("Client connected: " + clientSocket.getInetAddress());
 
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                 PrintWriter out  = new PrintWriter(clientSocket.getOutputStream(), true)) {
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), StandardCharsets.UTF_8));
+                 PrintWriter out = new PrintWriter(
+                      new OutputStreamWriter(clientSocket.getOutputStream(), StandardCharsets.UTF_8), true)) {
 
                 String line;
                 while ((line = in.readLine()) != null) {

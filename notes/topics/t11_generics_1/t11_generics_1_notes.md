@@ -4,7 +4,7 @@ subtitle: "COMP C8Z03 — Year 2 OOP"
 topic_code: t11_generics_1
 description: "Why generics exist, how to write generic classes and methods, and how generics make Java APIs safer and easier to reuse — week 1 of 2, before wildcards and PECS."
 created: 2026-01-22
-last_updated: 2026-04-14
+last_updated: 2026-11-04
 version: 1.0
 status: published
 authors: ["OOP Teaching Team"]
@@ -25,19 +25,24 @@ prerequisites:
 > - You can use `ArrayList` / `LinkedList` with loops
 > - You understand inheritance and interface references (polymorphism)
 
+---
+
 ## In this topic
 
 - [What you'll learn](#what-youll-learn)
 - [Why this matters](#why-this-matters)
 - [How this builds on previous content](#how-this-builds-on-previous-content)
+- [Key terms](#key-terms)
 - [Core Ideas / Concepts](#core-ideas--concepts)
 - [Progressive coding steps (A then B then C)](#progressive-coding-steps-a-then-b-then-c)
 - [Useful snippets (guards and helpers)](#useful-snippets-guards-and-helpers)
 - [Games Example — A type-safe inventory slot](#games-example--a-type-safe-inventory-slot)
-- [Software Development Example — A reusable repository result
-  wrapper](#software-development-example--a-reusable-repository-result-wrapper)
+- [Software Development Example — A reusable repository result wrapper](#software-development-example--a-reusable-repository-result-wrapper)
+- [Common mistakes](#common-mistakes)
 - [Debugging and pitfalls](#debugging-and-pitfalls)
+- [Practice tasks](#practice-tasks)
 - [Reflective questions](#reflective-questions)
+- [Further reading](#further-reading)
 
 ---
 
@@ -52,14 +57,14 @@ prerequisites:
 | Analyze | Recognise when you need a *bounded* type parameter (e.g., “must be comparable”). |
 | Debug | Interpret raw-type warnings and fix them by adding correct type arguments. |
 
+---
+
 ## Why this matters
 
 Most real programs need **reusable containers and reusable algorithms**.
 
-- In **games**, you might store things like: inventory items, pooled objects, UI widgets, event
-  payloads, path nodes, or AI “blackboard” values.
-- In **software**, you might store: database records, API responses, cached values, log
-  entries, or validation errors.
+- In **games**, you might store things like: inventory items, pooled objects, UI widgets, event payloads, path nodes, or AI “blackboard” values.
+- In **software**, you might store: database records, API responses, cached values, log entries, or validation errors.
 
 Without generics, you quickly end up with:
 - code that stores everything as `Object`
@@ -68,28 +73,49 @@ Without generics, you quickly end up with:
 
 Generics let you build **reusable** code that is also **type-safe**.
 
+---
+
 ## How this builds on previous content
 
-- From **Collections**, you learned that lists and maps store *many* objects. Generics let
-  those collections store objects **of a specific type** safely.
-- From **Inheritance / Interfaces**, you learned polymorphism. Generics let you write
-  containers and methods that work across *many* types while still being checked by the
-  compiler.
-- This topic prepares you for later work where libraries heavily use generics (e.g.,
-  `Comparator<T>`, `Optional<T>`, streams, test helpers).
+- From **Collections**, you learned that lists and maps store *many* objects. Generics let those collections store objects **of a specific type** safely.
+- From **Inheritance / Interfaces**, you learned polymorphism. Generics let you write containers and methods that work across *many* types while still being checked by the compiler.
+- This topic prepares you for later work where libraries heavily use generics (e.g., `Comparator<T>`, `Optional<T>`, streams, test helpers).
+
+---
+
+## Key terms
+
+### Type parameter
+
+A **type parameter**, such as `T`, is a placeholder for a type. You choose the real type when you use the class.
+
+### Generic method
+
+A **generic method** declares its own type parameters, written before its return type: `public static <T> T first(List<T> items)`.
+
+### Bounded type parameter
+
+A **bound** limits which types are allowed. `T extends Comparable<T>` means T must be comparable.
+
+### Raw type
+
+A **raw type** is a generic class used without its type argument, such as plain `List`. The compiler can no longer check it.
+
+### Type erasure
+
+**Type erasure** means the compiler removes type arguments after checking them, so a `List<String>` is just a `List` at run time.
+
+---
 
 ## Core Ideas / Concepts
 
-> For each core idea, we first explain the concept, then show a short code example, followed by
-> a brief explanation of how the example illustrates the idea.
+> For each core idea, we first explain the concept, then show a short code example, followed by a brief explanation of how the example illustrates the idea.
 
 ### Core Idea 1 — The “Object + cast” problem (why generics exist)
 
 #### Explanation
 
-Before generics (or when you avoid them), a common workaround is: “just store everything as
-`Object`”.
-That forces the caller to **cast** back to the expected type.
+Before generics (or when you avoid them), a common workaround is: “just store everything as `Object`”. That forces the caller to **cast** back to the expected type.
 
 ```java
  class BoxObject {
@@ -118,8 +144,7 @@ public static void demo() {
 
 #### Snippet explanation
 
-`BoxObject` can store anything, but the caller has no compile-time guarantee about what’s inside.
-The code compiles, but one wrong cast becomes a runtime crash.
+`BoxObject` can store anything, but the caller has no compile-time guarantee about what’s inside. The code compiles, but one wrong cast becomes a runtime crash.
 
 ### Core Idea 2 — Generic classes: `Box<T>` (type parameter = “hole you fill in later”)
 
@@ -157,8 +182,7 @@ public static void demo() {
 
 #### Snippet explanation
 
-`Box<String>` is a “box that holds Strings”. `Box<Integer>` is a “box that holds Integers”.
-If you try to put the wrong type in, the compiler stops you.
+`Box<String>` is a “box that holds Strings”. `Box<Integer>` is a “box that holds Integers”. If you try to put the wrong type in, the compiler stops you.
 
 ### Core Idea 3 — Generics in Collections (`List<T>`, `Map<K, V>`) and the diamond operator
 
@@ -191,8 +215,7 @@ System.out.println(z);
 
 #### Snippet explanation
 
-`names` can only contain strings, so you don’t need casts when looping.
-`scores` guarantees that keys are `String` and values are `Integer`.
+`names` can only contain strings, so you don’t need casts when looping. `scores` guarantees that keys are `String` and values are `Integer`.
 
 ### Core Idea 4 — Generic methods (write one algorithm, reuse for many types)
 
@@ -221,15 +244,13 @@ public static void demo() {
 
 #### Snippet explanation
 
-The same `first` method works for `List<String>`, `List<Integer>`, and any other `List<T>`.
-The caller gets back the correct type without casting.
+The same `first` method works for `List<String>`, `List<Integer>`, and any other `List<T>`. The caller gets back the correct type without casting.
 
 ### Core Idea 5 — Bounded type parameters (intro): “T must have a capability”
 
 #### Explanation
 
-Sometimes your algorithm needs the type to support a specific operation.
-Example: “find the max” requires comparing elements.
+Sometimes your algorithm needs the type to support a specific operation. Example: “find the max” requires comparing elements.
 
 You express that using `extends` in the type parameter:
 
@@ -252,18 +273,15 @@ public static <T extends Comparable<T>> T max(java.util.List<T> items) {
 
 #### Snippet explanation
 
-`T extends Comparable<T>` means: “T must be comparable to other Ts”.
-Now the compiler allows `compareTo` and prevents types that can’t be compared.
+`T extends Comparable<T>` means: “T must be comparable to other Ts”. Now the compiler allows `compareTo` and prevents types that can’t be compared.
 
-> Week 2 will expand this idea using **wildcards** (`? extends ...`, `? super ...`) for more
-> flexible APIs.
+> Week 2 will expand this idea using **wildcards** (`? extends ...`, `? super ...`) for more flexible APIs.
 
 ### Core Idea 6 — A practical mental model: generics are compile-time only (type erasure)
 
 #### Explanation
 
-In Java, generics are implemented using **type erasure**: type parameters don’t exist as real
-runtime types.
+In Java, generics are implemented using **type erasure**: type parameters don’t exist as real runtime types.
 
 This explains several rules you’ll meet in practice:
 - you can’t do `new T()`
@@ -278,22 +296,23 @@ This explains several rules you’ll meet in practice:
     // public T make() { return new T(); }
 
     // One common workaround is to pass in a supplier:
-    private java.util.function.Supplier<T> _supplier;
+    private java.util.function.Supplier<T> supplier;
 
     public Factory(java.util.function.Supplier<T> supplier) {
-        _supplier = supplier;
+        this.supplier = supplier;
     }
 
     public T make() {
-        return _supplier.get();
+        return supplier.get();
     }
 }
 ```
 
 #### Snippet explanation
 
-The generic parameter `T` is a compile-time guarantee, but you can’t “construct a T” unless you
-also provide a construction strategy (here, a `Supplier<T>`).
+The generic parameter `T` is a compile-time guarantee, but you can’t “construct a T” unless you also provide a construction strategy (here, a `Supplier<T>`).
+
+---
 
 ## Progressive coding steps (A then B then C)
 
@@ -340,8 +359,9 @@ System.out.println(max(words)); // zebra (lexicographic)
 
 #### Snippet explanation
 
-Step C shows how generics scale: you can write “max” once and reuse it across many types—*as
-long as* they meet the bound.
+Step C shows how generics scale: you can write “max” once and reuse it across many types—*as long as* they meet the bound.
+
+---
 
 ## Useful snippets (guards and helpers)
 
@@ -356,8 +376,7 @@ public static <T> T requireNotNull(T value, String message) {
 
 ### Snippet explanation
 
-This generic helper works for any reference type and returns the same type it receives.
-It’s a tiny example of how generics let you write one helper and reuse it everywhere.
+This generic helper works for any reference type and returns the same type it receives. It’s a tiny example of how generics let you write one helper and reuse it everywhere.
 
 ```java
 // Generic swap for arrays (note: arrays are reifiable; generics are erased)
@@ -372,10 +391,11 @@ public static <T> void swap(T[] arr, int i, int j) {
 
 `swap` works for `String[]`, `Integer[]`, and any `T[]`. The method never needs to know what T is.
 
+---
+
 ## Games Example — A type-safe inventory slot
 
-In a game, you often want an inventory slot that holds “one thing”, but that “thing” could be
-different kinds of items.
+In a game, you often want an inventory slot that holds “one thing”, but that “thing” could be different kinds of items.
 
 ```java
 interface Item {
@@ -383,41 +403,41 @@ interface Item {
 }
 
  class Potion implements Item {
-    private String _name;
+    private String name;
 
     public Potion(String name) {
-        _name = name;
+        this.name = name;
     }
 
     @Override
     public String name() {
-        return _name;
+        return name;
     }
 }
 
  class Sword implements Item {
-    private String _name;
+    private String name;
 
     public Sword(String name) {
-        _name = name;
+        this.name = name;
     }
 
     @Override
     public String name() {
-        return _name;
+        return name;
     }
 }
 
  class Slot<T extends Item> {
-    private T _item; // can be null for “empty”
+    private T item; // can be null for “empty”
 
     public void put(T item) {
-        _item = item;
+        this.item = item;
     }
 
     public T take() {
-        T out = _item;
-        _item = null;
+        T out = item;
+        item = null;
         return out;
     }
 }
@@ -435,8 +455,9 @@ public static void demo() {
 
 ### Snippet explanation
 
-`Slot<Potion>` guarantees that only potions can be put into that slot.
-This removes an entire category of bugs (“wrong item type”) without any runtime checks.
+`Slot<Potion>` guarantees that only potions can be put into that slot. This removes an entire category of bugs (“wrong item type”) without any runtime checks.
+
+---
 
 ## Software Development Example — A reusable repository result wrapper
 
@@ -444,12 +465,12 @@ In software systems, you often return “a result + maybe an error” from many 
 
 ```java
  class Result<T> {
-    private T _value;
-    private String _error;
+    private T value;
+    private String error;
 
     private Result(T value, String error) {
-        _value = value;
-        _error = error;
+        this.value = value;
+        this.error = error;
     }
 
     public static <T> Result<T> ok(T value) {
@@ -461,15 +482,15 @@ In software systems, you often return “a result + maybe an error” from many 
     }
 
     public boolean isOk() {
-        return _error == null;
+        return error == null;
     }
 
     public T value() {
-        return _value;
+        return value;
     }
 
     public String error() {
-        return _error;
+        return error;
     }
 }
 
@@ -482,9 +503,20 @@ public static void demo() {
 
 ### Snippet explanation
 
-`Result<T>` is a pattern you can reuse across dozens of methods.
-The caller gets strong typing for the success value (`T`) while still having a place for an
-error message.
+`Result<T>` is a pattern you can reuse across dozens of methods. The caller gets strong typing for the success value (`T`) while still having a place for an error message.
+
+---
+
+## Common mistakes
+
+| Mistake | What happens | Fix |
+| :- | :- | :- |
+| Making a class generic when it only ever holds one type | Extra complexity with no benefit | Write the plain class, and generalise when a second type appears |
+| Using `Object` "to keep it flexible" | Every caller must cast, and a wrong cast fails at run time | Use a type parameter |
+| Ignoring an "unchecked" compiler warning | A wrong type can get in and crash far from the real mistake | Find the raw type or cast causing it and fix that |
+| Reusing one letter for two different types | The class can only hold one type where you wanted two | Declare two parameters: `Pair<A, B>` |
+
+---
 
 ## Debugging and pitfalls
 
@@ -497,12 +529,23 @@ error message.
 | Confusing bounds syntax (`extends` used for interfaces too) | In generics, `extends` means “is a subtype of” | Remember: `T extends Runnable` is valid even though `Runnable` is an interface. |
 | “Why won’t `List<Enemy>` fit where `List<Entity>` is expected?” | Generic types are invariant in Java | Week 2 covers wildcards (`? extends ...`) to model “read-only” vs “write-only” lists. |
 
+---
+
+## Practice tasks
+
+1. Write `Pair<A, B>` with two getters. Create a `Pair<String, Integer>` and print both values with no cast.
+2. Write `static <T extends Comparable<T>> T max(List<T> items)`. Try calling it with a list of a class that is not comparable, and read the error.
+3. Write `List list = new ArrayList();`, add a `String`, and read it back into an `Integer`. When does the program fail? Now add `<String>` and compare.
+
+For step-by-step practice with worked solutions, see the [t11 exercises](exercises/t11_generics_1_exercises.md).
+
+---
+
 ## Reflective questions
 
 - Where in your current projects do you still use `Object` and casts? Could generics remove them?
 - Why is the compiler refusing `Box<Integer> c = new Box<>("oops")`? What bug did it prevent?
-- If you were designing an API for students, what generic types would you expose, and what
-  would you hide?
+- If you were designing an API for students, what generic types would you expose, and what would you hide?
 
 <details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
 padding:0.9rem 1rem; margin:1rem 0;">
@@ -511,54 +554,40 @@ padding:0.9rem 1rem; margin:1rem 0;">
   </summary>
 
 **Where `Object` and casts still lurk.**
-Look for three signatures: a field or collection declared as `Object` (or a raw `List` with no
-type argument), a method returning `Object` that every caller immediately casts, and any
-`(Cast)` paired with an `instanceof` check. All three are the same smell — the type was known
-when the value went in, thrown away in the middle, and reconstructed by hand on the way out.
+Look for three signatures: a field or collection declared as `Object` (or a raw `List` with no type argument), a method returning `Object` that every caller immediately casts, and any `(Cast)` paired with an `instanceof` check. All three are the same smell — the type was known when the value went in, thrown away in the middle, and reconstructed by hand on the way out.
 
-Generics remove them in the common case, because the type parameter carries that knowledge
-through for you. They are *not* a fit when the type genuinely varies per element and is unknown
-at compile time — reading heterogeneous JSON, or reflection. There, `Object` plus `instanceof`
-is honest; the modern form is pattern matching, `if (o instanceof String s)`, which at least
-fuses the test and the cast so they cannot disagree.
+Generics remove them in the common case, because the type parameter carries that knowledge through for you. They are *not* a fit when the type genuinely varies per element and is unknown at compile time — reading heterogeneous JSON, or reflection. There, `Object` plus `instanceof` is honest; the modern form is pattern matching, `if (o instanceof String s)`, which at least fuses the test and the cast so they cannot disagree.
 
 **Why `Box<Integer> c = new Box<>("oops")` is rejected.**
-`Box<Integer>` promises the box holds `Integer`s, and the diamond `<>` infers its argument from
-that declared type — so the constructor is `Box<Integer>(Integer)` and a `String` does not fit.
-The compiler is enforcing the promise at the point the object is built.
+`Box<Integer>` promises the box holds `Integer`s, and the diamond `<>` infers its argument from that declared type — so the constructor is `Box<Integer>(Integer)` and a `String` does not fit. The compiler is enforcing the promise at the point the object is built.
 
-The bug it prevents is a `ClassCastException` **later, somewhere else**. Without generics the
-`String` goes in happily and the failure surfaces at the eventual `(Integer) box.get()` —
-possibly in different code, written by someone else, long after the mistake. That is the whole
-argument for generics: the same bug, moved from a runtime crash at an arbitrary location to a
-compile error at the exact line that is wrong. Compile-time failures are cheap; production
-`ClassCastException`s are not.
+The bug it prevents is a `ClassCastException` **later, somewhere else**. Without generics the `String` goes in happily and the failure surfaces at the eventual `(Integer) box.get()` — possibly in different code, written by someone else, long after the mistake. That is the whole argument for generics: the same bug, moved from a runtime crash at an arbitrary location to a compile error at the exact line that is wrong. Compile-time failures are cheap; production `ClassCastException`s are not.
 
 **Designing a generic API: what to expose, what to hide.**
-Expose a type parameter when the **caller's type genuinely flows through** your API and they
-would otherwise have to cast. `Repository<T>`, `Response<T>`, `Cache<K, V>` — the caller gets
-`Task` back from a `Repository<Task>` with no cast, and passing the wrong type is a compile
-error.
+Expose a type parameter when the **caller's type genuinely flows through** your API and they would otherwise have to cast. `Repository<T>`, `ServerResponse<T>`, `Cache<K, V>` — the caller gets `Task` back from a `Repository<Task>` with no cast, and passing the wrong type is a compile error.
 
-Hide it when the type is an **internal implementation detail**. If a class stores results in a
-`HashMap<String, List<Task>>` internally, callers should see `List<Task>
-findByCategory(String)`, not the map's parameters — otherwise the storage choice becomes part
-of your public contract and you can never change it.
+Hide it when the type is an **internal implementation detail**. If a class stores results in a `HashMap<String, List<Task>>` internally, callers should see `List<Task> findByCategory(String)`, not the map's parameters — otherwise the storage choice becomes part of your public contract and you can never change it.
 
 Two design rules worth stating explicitly:
 
-- **Be liberal in what you accept, specific in what you return.** Take `Collection<? extends
-  T>` as a parameter so any subtype collection works; return a concrete `List<T>` so the caller
-  needs no wildcard gymnastics. That asymmetry is PECS, developed in
-  [t12](../t12_generics_2/t12_generics_2_notes.md).
-- **Bound a parameter only when you use the capability.** Write `<T extends Comparable<T>>` if
-  you call `compareTo`; leaving it unbounded when you need ordering forces a cast back, and
-  bounding it when you do not need it needlessly narrows who can use your API.
+- **Be liberal in what you accept, specific in what you return.** Take `Collection<? extends T>` as a parameter so any subtype collection works; return a concrete `List<T>` so the caller needs no wildcard gymnastics. That asymmetry is PECS, developed in [t12](../t12_generics_2/t12_generics_2_notes.md).
+- **Bound a parameter only when you use the capability.** Write `<T extends Comparable<T>>` if you call `compareTo`; leaving it unbounded when you need ordering forces a cast back, and bounding it when you do not need it needlessly narrows who can use your API.
 
-Keep the number of parameters small. `Cache<K, V>` is readable; `Handler<T, R, E, C>` is a sign
-the class is doing too much.
+Keep the number of parameters small. `Cache<K, V>` is readable; `Handler<T, R, E, C>` is a sign the class is doing too much.
 
 </details>
+
+---
+
+## Further reading
+
+- **Oracle Java Tutorials: Generics**
+  <https://docs.oracle.com/javase/tutorial/java/generics/index.html>
+  A full tour of generic types and methods.
+
+- **Oracle Java Tutorials: Bounded Type Parameters**
+  <https://docs.oracle.com/javase/tutorial/java/generics/bounded.html>
+  More on `extends` in a type parameter.
 
 ---
 

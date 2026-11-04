@@ -1,29 +1,39 @@
 package t20_json_1_jackson_basics.exercises.ex03;
 
-import java.util.Arrays;
-import java.util.Optional;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import t20_json_1_jackson_basics.exercises.ex01.Player;
 
 public class Exercise {
 
-    private static final String URL     = "jdbc:mysql://localhost:3306/game_assets_db";
-    private static final String DB_USER = "root";
-    private static final String DB_PASS = "";
+    static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public static void main(String[] args) throws Exception {
+    public static <T> String toJson(ServerResponse<T> response, ObjectMapper mapper)
+            throws JsonProcessingException {
+        if (response == null || mapper == null) {
+            throw new IllegalArgumentException("response and mapper are required");
+        }
+        return mapper.writeValueAsString(response);
+    }
 
-        GameAssetDao dao = new JdbcGameAssetDao(URL, DB_USER, DB_PASS);
+    // Without the TypeReference, data would come back as a LinkedHashMap, not a Player
+    static ServerResponse<Player> fromJson(String json) throws JsonProcessingException {
+        return MAPPER.readValue(json, new TypeReference<ServerResponse<Player>>() { });
+    }
 
-        byte[] original = new byte[]{10, 20, 30, 40, 50};
-        GameAsset asset = new GameAsset(0, "test_sprite.bin", "application/octet-stream", original.length, original);
+    public static void run() throws JsonProcessingException {
+        ServerResponse<Player> response = ServerResponse.ok("Player found", new Player("Alice", 95));
 
-        int id = dao.insert(asset);
-        System.out.println("Inserted asset with id=" + id);
+        String json = toJson(response, MAPPER);
+        System.out.println("JSON: " + json);
 
-        Optional<GameAsset> found = dao.findById(id);
-        boolean ok = found.isPresent() && Arrays.equals(original, found.get().getAssetData());
-        System.out.println("Round-trip OK: " + ok);
+        ServerResponse<Player> back = fromJson(json);
+        System.out.println("Status: " + back.getStatus());
+        System.out.println("Name: " + back.getData().getName());
+    }
 
-        System.out.println("Deleted: " + dao.deleteById(id));
-
+    public static void main(String[] args) throws JsonProcessingException {
+        run();
     }
 }

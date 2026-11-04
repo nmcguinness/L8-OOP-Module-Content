@@ -7,11 +7,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DisplayName("t13 ex06 - Command plus Strategy in a ticket dispatcher")
+@DisplayName("t13 ex06 - café tickets: policies, commands and a queue")
 class ExerciseTest {
 
     private static String capture(Runnable action) {
@@ -25,41 +25,6 @@ class ExerciseTest {
         }
         return buffer.toString(StandardCharsets.UTF_8);
     }
-
-    // ---------- policy selection ----------
-
-    @Test
-    void select_ordinaryTicket_choosesImmediateProcessing() {
-        OrderTicket t = new OrderTicket(201, "1 cappuccino", 7.80, 2);
-        assertInstanceOf(ImmediateProcess.class, new ProcessingPolicySelector().select(t));
-    }
-
-    @Test
-    void select_trainingInTheDescription_winsOverEveryOtherRule() {
-        // Large and item-heavy, but "training" is checked first.
-        OrderTicket t = new OrderTicket(203, "training: 8 lattes", 99.00, 20);
-        assertInstanceOf(DryRunTraining.class, new ProcessingPolicySelector().select(t));
-    }
-
-    @Test
-    void select_highValueTicket_choosesValidatedProcessing() {
-        OrderTicket t = new OrderTicket(204, "8 americanos", 42.00, 2);
-        assertInstanceOf(ValidatedProcess.class, new ProcessingPolicySelector().select(t));
-    }
-
-    @Test
-    void select_manyItems_choosesValidatedProcessing() {
-        OrderTicket t = new OrderTicket(205, "6 teas", 9.00, 6);
-        assertInstanceOf(ValidatedProcess.class, new ProcessingPolicySelector().select(t));
-    }
-
-    @Test
-    void select_justBelowBothThresholds_staysImmediate() {
-        OrderTicket t = new OrderTicket(206, "5 teas", 29.99, 5);
-        assertInstanceOf(ImmediateProcess.class, new ProcessingPolicySelector().select(t));
-    }
-
-    // ---------- ticket validity ----------
 
     @Test
     void isValid_blankDescription_isFalse() {
@@ -78,7 +43,11 @@ class ExerciseTest {
         assertTrue(new OrderTicket(4, "coffee", 5.00, 1).isValid());
     }
 
-    // ---------- queue behaviour ----------
+    @Test
+    void summary_showsIdDescriptionAndTwoDecimalPlaces() {
+        assertEquals("201 1 cappuccino (€7.80)",
+                new OrderTicket(201, "1 cappuccino", 7.8, 2).summary());
+    }
 
     @Test
     void validatedProcess_rejectsAnInvalidTicket() {
@@ -88,19 +57,37 @@ class ExerciseTest {
     }
 
     @Test
+    void dryRunTraining_neverMakesTheOrder() {
+        OrderTicket t = new OrderTicket(203, "2 lattes", 12.50, 2);
+        String out = capture(() -> new DryRunTraining().process(t));
+        assertTrue(out.startsWith("TRAINING"), out);
+        assertFalse(out.contains("MAKE"), out);
+    }
+
+    @Test
     void processAll_runsTicketsInFifoOrderThenEmpties() {
         TicketQueue queue = new TicketQueue();
-        ProcessingPolicySelector selector = new ProcessingPolicySelector();
-
-        OrderTicket first = new OrderTicket(201, "1 cappuccino", 7.80, 2);
-        OrderTicket second = new OrderTicket(203, "training: 2 lattes", 12.50, 3);
-
-        queue.add(new ProcessTicketCommand(first, selector.select(first)));
-        queue.add(new ProcessTicketCommand(second, selector.select(second)));
+        queue.add(new ProcessTicketCommand(
+                new OrderTicket(201, "1 cappuccino", 7.80, 2), new ImmediateProcess()));
+        queue.add(new ProcessTicketCommand(
+                new OrderTicket(203, "2 lattes", 12.50, 3), new DryRunTraining()));
 
         String out = capture(queue::processAll);
 
-        assertTrue(out.indexOf("IMMEDIATE MAKE 201") < out.indexOf("TRAINING 203"), out);
-        assertTrue(capture(queue::processAll).isEmpty(), "the queue must be drained");
+        assertTrue(out.indexOf("IMMEDIATE MAKE 201") < out.indexOf("TRAINING"), out);
+        assertEquals(0, queue.size());
+    }
+
+    @Test
+    void processAll_keepsGoingAfterARejectedTicket() {
+        TicketQueue queue = new TicketQueue();
+        OrderTicket blank = new OrderTicket(1, "", 5.00, 1);
+        OrderTicket tea = new OrderTicket(2, "tea", 3.00, 1);
+        queue.add(new ProcessTicketCommand(blank, new ValidatedProcess()));
+        queue.add(new ProcessTicketCommand(tea, new ImmediateProcess()));
+
+        String out = capture(queue::processAll);
+
+        assertTrue(out.contains("REJECT 1") && out.contains("IMMEDIATE MAKE 2"), out);
     }
 }

@@ -1,0 +1,5 @@
+# Copy this file to db.properties in this folder, then fill in your own settings.
+# db.properties is listed in .gitignore, so your password never reaches Git.
+db.url=jdbc:mysql://localhost:3306/car_rental
+db.user=root
+db.password=

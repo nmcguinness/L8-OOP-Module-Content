@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.util.InputMismatchException;
 
 public class Main {
     public static void main(String[] args) {
@@ -21,26 +20,31 @@ public class Main {
             System.out.println("  3.  t04 - Equality & Hashing");
             System.out.println("  4.  t05 - Collections I (ArrayList)");
             System.out.println("  5.  t06 - Collections II (LinkedList)");
-            System.out.println("  6.  t08 - Inheritance");
-            System.out.println("  7.  t09 - Interfaces");
-            System.out.println("  8.  t11 - Generics I");
-            System.out.println("  9.  t12 - Generics II");
-            System.out.println(" 10.  t13 - Design Patterns I");
-            System.out.println(" 11.  t14 - Design Patterns II");
-            System.out.println(" 12.  t15 - DB Connectivity / DAO");
-            System.out.println(" 13.  t16 - Functional Interfaces");
-            System.out.println(" 14.  t19 - Concurrency I");
-            System.out.println(" 15.  t24 - Pathfinding (BFS, Dijkstra, A*)");
+            System.out.println("  6.  t07 - Collections III (Set, Map)");
+            System.out.println("  7.  t08 - Inheritance");
+            System.out.println("  8.  t09 - Interfaces");
+            System.out.println("  9.  t10 - Exception Handling");
+            System.out.println(" 10.  t11 - Generics I");
+            System.out.println(" 11.  t12 - Generics II");
+            System.out.println(" 12.  t13 - Design Patterns I");
+            System.out.println(" 13.  t14 - Design Patterns II");
+            System.out.println(" 14.  t15 - DB Connectivity / DAO");
+            System.out.println(" 15.  t16 - Functional Interfaces");
+            System.out.println(" 16.  t17 - Streams API");
+            System.out.println(" 17.  t18 - Java I/O");
+            System.out.println(" 18.  t19 - Concurrency I");
+            System.out.println(" 19.  t24 - Pathfinding (BFS, Dijkstra, A*)");
             System.out.println("=====================================================");
             System.out.println("  Menu numbers are just list positions; tNN is the");
             System.out.println("  topic code used in notes/topics and code/src.");
-            System.out.println("  t20 (JSON) and t22 (Networking) are client-server");
-            System.out.println("  topics: run their server and client classes by hand.");
+            System.out.println("  t20, t21 (JSON) and t22 (Networking) are not listed:");
+            System.out.println("  call an exercise's Exercise.run() yourself. Start a");
+            System.out.println("  t22 demo's server class first, then its client class.");
             System.out.println("=====================================================");
             System.out.print("Select topic (0 to exit): ");
 
             if (!scanner.hasNextInt()) {
-                System.out.println("Invalid input. Enter a number between 0 and 14.");
+                System.out.println("Invalid input. Enter a number between 0 and 19.");
                 scanner.next();
                 continue;
             }
@@ -63,51 +67,61 @@ public class Main {
                     break;
 
                 case 3:
-                    System.out.println("\n******************** Topic:t05 - Collections I (ArrayList) ********************\n");
-                    run_t05_Collections1();
-                    break;
-
-                case 4:
-                    System.out.println("\n******************** Topic:t06 - Collections II (LinkedList) ********************\n");
-                    run_t06_Collections2();
-                    break;
-
-                case 5:
                     System.out.println("\n******************** Topic:t04 - Equality & Hashing ********************\n");
                     run_t04_EqualityHashing();
                     break;
 
+                case 4:
+                    System.out.println("\n******************** Topic:t05 - Collections I (ArrayList) ********************\n");
+                    run_t05_Collections1();
+                    break;
+
+                case 5:
+                    System.out.println("\n******************** Topic:t06 - Collections II (LinkedList) ********************\n");
+                    run_t06_Collections2();
+                    break;
+
                 case 6:
+                    System.out.println("\n******************** Topic:t07 - Collections III (Set, Map, PriorityQueue) ********************\n");
+                    run_t07_Collections3();
+                    break;
+
+                case 7:
                     System.out.println("\n******************** Topic:t08 - Inheritance ********************\n");
                     run_t08_Inheritance();
                     break;
 
-                case 7:
+                case 8:
                     System.out.println("\n******************** Topic:t09 - Interfaces ********************\n");
                     run_t09_Interface();
                     break;
 
-                case 8:
+                case 9:
+                    System.out.println("\n******************** Topic:t10 - Exception Handling ********************\n");
+                    run_t10_ExceptionHandling();
+                    break;
+
+                case 10:
                     System.out.println("\n******************** Topic:t11 - Generics I ********************\n");
                     run_t11_Generics1();
                     break;
 
-                case 9:
+                case 11:
                     System.out.println("\n******************** Topic:t12 - Generics II ********************\n");
                     run_t12_Generics2();
                     break;
 
-                case 10:
+                case 12:
                     System.out.println("\n******************** Topic:t13 - Design Patterns I ********************\n");
                     run_t13_DesignPatterns1();
                     break;
 
-                case 11:
+                case 13:
                     System.out.println("\n******************** Topic:t14 - Design Patterns II ********************\n");
                     run_t14_DesignPatterns2();
                     break;
 
-                case 12:
+                case 14:
                     System.out.println("\n******************** Topic:t15 - DB Connectivity / DAO ********************\n");
                     System.out.println("NOTE: These exercises require a MySQL database.");
                     System.out.println("      Before running, create the 'car_rental' database in phpMyAdmin");
@@ -116,23 +130,33 @@ public class Main {
                     run_t15_Dao();
                     break;
 
-                case 13:
+                case 15:
                     System.out.println("\n******************** Topic:t16 - Functional Interfaces ********************\n");
                     run_t16_FunctionalInterfaces();
                     break;
 
-                case 14:
+                case 16:
+                    System.out.println("\n******************** Topic:t17 - Streams API ********************\n");
+                    run_t17_StreamsApi();
+                    break;
+
+                case 17:
+                    System.out.println("\n******************** Topic:t18 - Java I/O ********************\n");
+                    run_t18_Io();
+                    break;
+
+                case 18:
                     System.out.println("\n******************** Topic:t19 - Concurrency I ********************\n");
                     run_t19_Concurrency();
                     break;
 
-                case 15:
+                case 19:
                     System.out.println("\n******************** Topic:t24 - Pathfinding ********************\n");
                     run_t24_Pathfinding();
                     break;
 
                 default:
-                    System.out.println("Invalid selection. Enter a number between 0 and 15.");
+                    System.out.println("Invalid selection. Enter a number between 0 and 19.");
                     break;
             }
         }
@@ -146,6 +170,28 @@ public class Main {
 
         System.out.println("\n********** Demo 02 - compare BFS, Dijkstra and A* **********\n");
         t24_pathfinding.demos.de02.Demo.run();
+
+        System.out.println("\n********** Exercise 01 - Read the map **********\n");
+        t24_pathfinding.exercises.ex01.Exercise.run();
+
+        System.out.println("\n********** Exercise 02 - Neighbours and bounds **********\n");
+        t24_pathfinding.exercises.ex02.Exercise.run();
+
+        System.out.println("\n********** Exercise 04 - Dijkstra against breadth-first **********\n");
+        t24_pathfinding.exercises.ex04.Exercise.run();
+
+        System.out.println("\n********** Exercise 05 - A* with and without a heuristic **********\n");
+        t24_pathfinding.exercises.ex05.Exercise.run();
+
+        System.out.println("\n********** Exercise 07 - Break the heuristic on purpose **********\n");
+        t24_pathfinding.exercises.ex07.Exercise.run();
+
+        System.out.println("\n********** Exercise 08 (d) - Load a map from a file **********\n");
+        try {
+            t24_pathfinding.exercises.ex08.Exercise.run();
+        } catch (java.io.IOException e) {
+            System.out.println("Could not write the demo map files: " + e.getMessage());
+        }
     }
 
     public void runChallengeExercises() {
@@ -325,6 +371,125 @@ public class Main {
         t04_equality_hashing.exercises.ex08.Exercise.run();
     }
 
+    public void run_t07_Collections3() {
+        System.out.println("\n********** Demo 01 - hashing and ordering surprises **********\n");
+        t07_collections_3_set_map.demos.de01.Demo.run();
+
+        System.out.println("\n********** Exercise 01 - Unique visitors **********\n");
+        t07_collections_3_set_map.exercises.ex01.Exercise.run();
+
+        System.out.println("\n********** Exercise 02 - Word frequency **********\n");
+        t07_collections_3_set_map.exercises.ex02.Exercise.run();
+
+        System.out.println("\n********** Exercise 03 - Ranked leaderboard **********\n");
+        t07_collections_3_set_map.exercises.ex03.Exercise.run();
+
+        System.out.println("\n********** Exercise 04 - Group by first letter **********\n");
+        t07_collections_3_set_map.exercises.ex04.Exercise.run();
+
+        System.out.println("\n********** Exercise 05 - Set intersection **********\n");
+        t07_collections_3_set_map.exercises.ex05.Exercise.run();
+
+        System.out.println("\n********** Exercise 06 - Least-recently-used cache **********\n");
+        t07_collections_3_set_map.exercises.ex06.Exercise.run();
+
+        System.out.println("\n********** Exercise 07 - Fix the broken set **********\n");
+        t07_collections_3_set_map.exercises.ex07.Exercise.run();
+
+        System.out.println("\n********** Exercise 08 - Grade bands with TreeMap **********\n");
+        t07_collections_3_set_map.exercises.ex08.Exercise.run();
+
+        System.out.println("\n********** Exercise 09 - Loot by rarity with EnumMap **********\n");
+        t07_collections_3_set_map.exercises.ex09.Exercise.run();
+    }
+
+    public void run_t10_ExceptionHandling() {
+        System.out.println("\n********** Exercise 01 - Safe integer parsing **********\n");
+        t10_exception_handling.exercises.ex01.Exercise.run();
+
+        System.out.println("\n********** Exercise 02 - Custom unchecked exception **********\n");
+        t10_exception_handling.exercises.ex02.Exercise.run();
+
+        System.out.println("\n********** Exercise 03 - Optional or exception? **********\n");
+        t10_exception_handling.exercises.ex03.Exercise.run();
+
+        System.out.println("\n********** Exercise 04 - Try-with-resources file reading **********\n");
+        t10_exception_handling.exercises.ex04.Exercise.run();
+
+        System.out.println("\n********** Exercise 05 - Exception hierarchy **********\n");
+        t10_exception_handling.exercises.ex05.Exercise.run();
+
+        System.out.println("\n********** Exercise 06 - Exception translation **********\n");
+        t10_exception_handling.exercises.ex06.Exercise.run();
+
+        System.out.println("\n********** Exercise 07 - Your own AutoCloseable **********\n");
+        t10_exception_handling.exercises.ex07.Exercise.run();
+
+        System.out.println("\n********** Exercise 08 - Fix the anti-patterns **********\n");
+        t10_exception_handling.exercises.ex08.Exercise.run();
+    }
+
+    public void run_t17_StreamsApi() {
+        System.out.println("\n********** Exercise 01 - Long names **********\n");
+        t17_streams_api.exercises.ex01.Exercise.run();
+
+        System.out.println("\n********** Exercise 02 - Shout and join **********\n");
+        t17_streams_api.exercises.ex02.Exercise.run();
+
+        System.out.println("\n********** Exercise 03 - Unique tags **********\n");
+        t17_streams_api.exercises.ex03.Exercise.run();
+
+        System.out.println("\n********** Exercise 04 - Group by length **********\n");
+        t17_streams_api.exercises.ex04.Exercise.run();
+
+        System.out.println("\n********** Exercise 05 - Score statistics **********\n");
+        t17_streams_api.exercises.ex05.Exercise.run();
+
+        System.out.println("\n********** Exercise 06 - Student report **********\n");
+        t17_streams_api.exercises.ex06.Exercise.run();
+    }
+
+    public void run_t18_Io() {
+        System.out.println("\n********** Exercise 01 - Count lines **********\n");
+        try {
+            t18_io.exercises.ex01.Exercise.run();
+        } catch (java.io.IOException e) {
+            System.out.println("I/O error: " + e.getMessage());
+        }
+
+        System.out.println("\n********** Exercise 02 - Write a list **********\n");
+        // Exercise 02 handles its own IOException: that is the point of the exercise
+        t18_io.exercises.ex02.Exercise.run();
+
+        System.out.println("\n********** Exercise 03 - Simple logger **********\n");
+        try {
+            t18_io.exercises.ex03.Exercise.run();
+        } catch (java.io.IOException e) {
+            System.out.println("I/O error: " + e.getMessage());
+        }
+
+        System.out.println("\n********** Exercise 04 - CSV parser **********\n");
+        try {
+            t18_io.exercises.ex04.Exercise.run();
+        } catch (java.io.IOException e) {
+            System.out.println("I/O error: " + e.getMessage());
+        }
+
+        System.out.println("\n********** Exercise 05 - Binary copy **********\n");
+        try {
+            t18_io.exercises.ex05.Exercise.run();
+        } catch (java.io.IOException e) {
+            System.out.println("I/O error: " + e.getMessage());
+        }
+
+        System.out.println("\n********** Exercise 06 - Config loader **********\n");
+        try {
+            t18_io.exercises.ex06.Exercise.run();
+        } catch (java.io.IOException e) {
+            System.out.println("I/O error: " + e.getMessage());
+        }
+    }
+
     public void run_t08_Inheritance() 
     {
         System.out.println("\n********** Exercise 01 - is-a vs has-a & AdminUser **********\n");
@@ -344,6 +509,15 @@ public class Main {
 
         System.out.println("\n********** Exercise 06 - Overriding vs overloading (Formatter) **********\n");
         t08_inheritance.exercises.ex06.Exercise.run();
+
+        System.out.println("\n********** Exercise 07 - Sealed shapes and instanceof **********\n");
+        t08_inheritance.exercises.ex07.Exercise.run();
+
+        System.out.println("\n********** Exercise 08 - Composition: Hero has a Weapon **********\n");
+        t08_inheritance.exercises.ex08.Exercise.run();
+
+        System.out.println("\n********** Exercise 09 - equals across a hierarchy **********\n");
+        t08_inheritance.exercises.ex09.Exercise.run();
     }
 
     private void run_t09_Interface() {
@@ -356,9 +530,11 @@ public class Main {
         System.out.println("\n********** Exercise 02 - Interactable interface with doors, chests, and NPCs + interaction range **********\n");
         t09_interface.exercises.ex02.Exercise.run();
 
-        System.out.println("\n********** (NOT IMPLEMENTED AS QUITE STRAIGHTFORWARD) Exercise 03 - Multiple interfaces (Moveable, Damageable) with Player and Enemy **********\n");
+        System.out.println("\n********** Exercise 03 - Multiple interfaces (Moveable, Damageable) with Player and Enemy **********\n");
+        t09_interface.exercises.ex03.Exercise.run();
 
-        System.out.println("\n********** (NOT IMPLEMENTED AS QUITE STRAIGHTFORWARD) Exercise 04 - Strategy pattern for enemy attacks (swap melee/ranged behaviour) **********\n");
+        System.out.println("\n********** Exercise 04 - Strategy pattern for enemy attacks (swap melee/ranged behaviour) **********\n");
+        t09_interface.exercises.ex04.Exercise.run();
 
         System.out.println("\n********** Exercise 05 - Named interface with Comparators for sorting by name and length **********\n");
         t09_interface.exercises.ex05.Exercise.run();
@@ -447,8 +623,11 @@ public class Main {
         System.out.println("\n********** Exercise 05 - Undoable commands (undo stack) **********\n");
         t13_design_patterns_1.exercises.ex05.Exercise.run();
 
-        System.out.println("\n********** Exercise 06 - Cafe order tickets dispatcher (Command + Strategy) **********\n");
+        System.out.println("\n********** Exercise 06 - Cafe tickets: policies and a queue **********\n");
         t13_design_patterns_1.exercises.ex06.Exercise.run();
+
+        System.out.println("\n********** Exercise 07 - Cafe tickets: choosing the policy **********\n");
+        t13_design_patterns_1.exercises.ex07.Exercise.run();
     }
 
     private void run_t14_DesignPatterns2(){
@@ -488,7 +667,7 @@ public class Main {
             System.out.println("\n********** Exercise 05 - Paging, search, and countByStatus **********\n");
             t15_dao.exercises.ex05.Exercise.run();
         } catch (Exception e) {
-            System.out.println("t12 exercise failed: " + e.getMessage());
+            System.out.println("t15 exercise failed: " + e.getMessage());
         }
     }
 
@@ -512,8 +691,8 @@ public class Main {
 
             System.out.println("\n********** Exercise 05 - Full dispatch simulation **********\n");
             t19_concurrency.exercises.ex05.Exercise.run();
-        } catch (Exception e) {
-            System.out.println("t14 exercise failed: " + e.getMessage());
+        } catch (InterruptedException | java.util.concurrent.ExecutionException e) {
+            System.out.println("t19 exercise failed: " + e.getMessage());
         }
     }
 }

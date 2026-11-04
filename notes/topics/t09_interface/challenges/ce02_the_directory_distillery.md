@@ -2,13 +2,9 @@
 
 ## Scenario
 
-Your organisation has a long-standing data quality problem.
-Over the years, different departments—**HR**, **IT**, **Sales**, and **Management**—have
-maintained their own contact spreadsheets, each with slightly different formatting styles,
-typos, spacing, missing fields, and even conflicting versions of the same person’s details.
+Your organisation has a long-standing data quality problem. Over the years, different departments—**HR**, **IT**, **Sales**, and **Management**—have maintained their own contact spreadsheets, each with slightly different formatting styles, typos, spacing, missing fields, and even conflicting versions of the same person’s details.
 
-Now the company wants to retire these old spreadsheets and replace them with a **single unified
-directory**.
+Now the company wants to retire these old spreadsheets and replace them with a **single unified directory**.
 
 You have been asked to produce a prototype **Contact Consolidation Tool** that can:
 
@@ -28,8 +24,7 @@ You have been asked to produce a prototype **Contact Consolidation Tool** that c
 
 ### **1. Model a Contact**
 
-Create a `Contact` class with the usual identity, formatting, and validation responsibilities.
-Think carefully about:
+Create a `Contact` class with the usual identity, formatting, and validation responsibilities. Think carefully about:
 
 - How to normalise emails
 - Which field(s) form the identity (for equality & hashing)
@@ -39,16 +34,13 @@ Think carefully about:
 
 ### **2. Load All CSV Files**
 
-Read all files into memory and convert every record into a `Contact`.
-Expect inconsistent formatting (spacing, casing, punctuation).
-Your loader should be defensive and resilient.
+Read all files into memory and convert every record into a `Contact`. Expect inconsistent formatting (spacing, casing, punctuation). Your loader should be defensive and resilient.
 
 ---
 
 ### **3. De-dupe Using Correct Identity Logic**
 
-Merge all contacts into a single list, then de-duplicate into a `HashSet`.
-Print summary counts for:
+Merge all contacts into a single list, then de-duplicate into a `HashSet`. Print summary counts for:
 
 - Raw contacts
 - Unique contacts
@@ -96,8 +88,7 @@ Ordering matters — think like a designer of a rendering pipeline.
 
 ### **6. Sort the Contacts**
 
-Sort by department, by surname, or by any sensible comparator.
-Your sorted list goes into the HTML file.
+Sort by department, by surname, or by any sensible comparator. Your sorted list goes into the HTML file.
 
 ---
 
@@ -181,12 +172,9 @@ public static String avatarForDepartment(String dept) {
 
 ## Appendix D — Regular Expressions for Contact Fields
 
-Regular expressions can help you **validate** and **recognise patterns** in your input data
-before turning it into `Contact` objects.
-Below are some example patterns you can adapt.
+Regular expressions can help you **validate** and **recognise patterns** in your input data before turning it into `Contact` objects. Below are some example patterns you can adapt.
 
-> These are simplified and are **not** production-grade validators.
-> They are good enough for this exercise.
+> These are simplified and are **not** production-grade validators. They are good enough for this exercise.
 
 ---
 
@@ -279,5 +267,4 @@ You can use this to:
 
 ---
 
-> **Tip:** You can keep these regex strings together in a small `RegexUtils` class
-> and reuse them across loaders, validators, and formatters.
+> **Tip:** You can keep these regex strings together in a small `RegexUtils` class and reuse them across loaders, validators, and formatters.

@@ -1,35 +1,17 @@
 package t12_generics_2.exercises.ex11;
 
-// Optional challenge: merge two producers into one consumer
-
-class Merge {
-    public static <T> void merge(java.util.List<? extends T> a,
-                                 java.util.List<? extends T> b,
-                                 java.util.List<? super T> out) {
-
-        if (out == null)
-            throw new NullPointerException("out must not be null");
-
-        if (a != null) {
-            for (T x : a)
-                out.add(x);
-        }
-
-        if (b != null) {
-            for (T x : b)
-                out.add(x);
-        }
-    }
-}
+import java.util.ArrayList;
+import java.util.List;
 
 public class Exercise {
+
     public static void run() {
-        java.util.List<Integer> a = java.util.List.of(1, 2);
-        java.util.List<Integer> b = java.util.List.of(3);
+        List<Number> out = new ArrayList<>();
+        Merge.merge(List.of(1, 2), List.of(3), out);
+        System.out.println("Merged: " + out);
 
-        java.util.ArrayList<Number> out = new java.util.ArrayList<>();
-        Merge.merge(a, b, out);
-
-        System.out.println(out); // [1, 2, 3]
+        List<Number> partial = new ArrayList<>();
+        Merge.merge(null, List.of(2.5), partial);
+        System.out.println("With a null first list: " + partial);
     }
 }

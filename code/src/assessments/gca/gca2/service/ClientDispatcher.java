@@ -21,19 +21,22 @@ import java.util.Optional;
 public class ClientDispatcher {
 
     // === Fields ===
-    private TaskDAO _taskDAO;
+    private final TaskDAO taskDAO;
 
     // === Constructors ===
 
     // Creates: a ClientDispatcher that routes all requests to the given TaskDAO
     public ClientDispatcher(TaskDAO taskDAO) {
-        _taskDAO = taskDAO;
+        this.taskDAO = taskDAO;
     }
 
     // === Public API ===
 
     // Handles: routing the request to the correct handler method; unknown types return an error
     public ServerResponse<?> dispatch(ClientRequest request) {
+        if (request.getRequestType() == null) {
+            return ServerResponse.error("Request has no requestType");
+        }
         switch (request.getRequestType()) {
             case "INSERT":       return handleInsert(request);
             case "FIND_BY_ID":   return handleFindById(request);
@@ -55,7 +58,7 @@ public class ClientDispatcher {
                 request.getString("description"),
                 request.getBoolean("completed")
             );
-            Task saved = _taskDAO.insert(task);
+            Task saved = taskDAO.insert(task);
             return ServerResponse.ok("Task inserted with id " + saved.getTaskId(), saved);
         }
         catch (Exception e) {
@@ -67,7 +70,7 @@ public class ClientDispatcher {
     private ServerResponse<Task> handleFindById(ClientRequest request) {
         try {
             int id = request.getInt("taskId");
-            Optional<Task> result = _taskDAO.findById(id);
+            Optional<Task> result = taskDAO.findById(id);
             if (result.isPresent())
                 return ServerResponse.ok("Task found", result.get());
             return ServerResponse.error("No task found with id " + id);
@@ -80,7 +83,7 @@ public class ClientDispatcher {
     // Handles: LIST - returns all tasks
     private ServerResponse<List<Task>> handleList() {
         try {
-            List<Task> tasks = _taskDAO.findAll();
+            List<Task> tasks = taskDAO.findAll();
             return ServerResponse.ok("Retrieved " + tasks.size() + " task(s)", tasks);
         }
         catch (Exception e) {
@@ -92,7 +95,7 @@ public class ClientDispatcher {
     private ServerResponse<Boolean> handleDeleteById(ClientRequest request) {
         try {
             int id = request.getInt("taskId");
-            boolean deleted = _taskDAO.deleteById(id);
+            boolean deleted = taskDAO.deleteById(id);
             if (deleted)
                 return ServerResponse.ok("Task " + id + " deleted", true);
             return ServerResponse.error("No task found with id " + id);

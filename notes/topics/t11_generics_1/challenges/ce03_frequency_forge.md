@@ -14,14 +14,9 @@ prerequisites:
 
 ## Scenario
 
-You are working as a junior developer on a mixed **software and games development** team.
-Your team has been asked to build a small analysis tool that can **count and report how often
-certain items appear in a dataset**.
+You are working as a junior developer on a mixed **software and games development** team. Your team has been asked to build a small analysis tool that can **count and report how often certain items appear in a dataset**.
 
-At first, the data is tiny — just a short list of country codes used for testing a new feature.
-But very quickly, the requirements grow. The same logic is needed to process **real datasets**
-coming from files, including a **CSV export** and an **XML inventory** from a game factory
-system that tracks weapon production.
+At first, the data is tiny — just a short list of country codes used for testing a new feature. But very quickly, the requirements grow. The same logic is needed to process **real datasets** coming from files, including a **CSV export** and an **XML inventory** from a game factory system that tracks weapon production.
 
 Your task is not just to make the code *work*, but to **improve it step by step**:
 - start with a simple, brute-force solution,
@@ -30,15 +25,13 @@ Your task is not just to make the code *work*, but to **improve it step by step*
 - generalise the logic so it can be reused,
 - and finally test it against realistic data while measuring performance.
 
-This mirrors how real systems evolve: quick prototypes first, then cleaner, faster, more
-reusable designs as requirements and data scale up.
+This mirrors how real systems evolve: quick prototypes first, then cleaner, faster, more reusable designs as requirements and data scale up.
 
 ## Overview
 
 This challenge starts small and grows on purpose.
 
-You will begin with a **tiny list of 12 country codes** and a deliberately **naive** approach.
-Then you will progressively improve the solution until you end up with:
+You will begin with a **tiny list of 12 country codes** and a deliberately **naive** approach. Then you will progressively improve the solution until you end up with:
 
 - A clean **Map-based** frequency counter (fast + readable)
 - A reusable **generic** frequency counter (one algorithm, many data types)
@@ -80,8 +73,7 @@ List<String> codes = List.of(
 );
 ```
 
-Write code, in any way you see fit, to count the frequency of occurence of each country code
-and output the frequencies in alphabetical order.
+Write code, in any way you see fit, to count the frequency of occurence of each country code and output the frequencies in alphabetical order.
 
 Your output should look like:
 
@@ -109,13 +101,11 @@ This works fine for 12 values, but becomes slow as the dataset grows.
    - count how many times it appears (nested loops)
    - print one line per code
 
-3. Ensure you do **not** print duplicates (you can use an extra `List<String>` to remember what
-   you've already printed).
+3. Ensure you do **not** print duplicates (you can use an extra `List<String>` to remember what you've already printed).
 
 ### Use case
 
-In a small prototype (or a quick “hack day” script), brute force counting might be acceptable.
-But once your data grows (log files, analytics, player telemetry), you need better tools.
+In a small prototype (or a quick “hack day” script), brute force counting might be acceptable. But once your data grows (log files, analytics, player telemetry), you need better tools.
 
 ---
 
@@ -162,15 +152,13 @@ Instead of hard-coding `String`, you will accept:
 - a list of items `T`
 - a way to extract a key `K` from each item
 
-This is where generics provide huge value: one method can count country codes, weapon names,
-enemy types, achievements, etc.
+This is where generics provide huge value: one method can count country codes, weapon names, enemy types, achievements, etc.
 
 ### Tasks
 
 1. Implement:
 
-   - `public static <T, K> Map<K, Integer> countByKey(Iterable<T> items, Function<T, K>
-     keySelector)`
+   - `public static <T, K> Map<K, Integer> countByKey(Iterable<T> items, Function<T, K> keySelector)`
 
 2. Use it for country codes by using `s -> s` as the key selector.
 
@@ -198,8 +186,7 @@ You are given:
 
 - [country_codes](https://github.com/nmcguinness/L8---OOP---Module-Content/blob/main/code/data/ce03/country_codes.csv)
 
-**Important:** this file contains codes separated by commas (often on one line), so your CSV
-reading must collect **every token**, not just the first column.
+**Important:** this file contains codes separated by commas (often on one line), so your CSV reading must collect **every token**, not just the first column.
 
 ### Dataset B (XML): Weapon inventory
 
@@ -231,8 +218,7 @@ For both datasets:
 
 ### Use case
 
-Benchmarking is how you validate performance claims.
-Even simple counters can become bottlenecks when:
+Benchmarking is how you validate performance claims. Even simple counters can become bottlenecks when:
 - you run them every frame
 - you process big datasets
 - you perform repeated queries
@@ -241,8 +227,7 @@ Even simple counters can become bottlenecks when:
 
 ## Provided Classes
 
-You are provided with the following helper and model classes.
-You should **not modify** these files.
+You are provided with the following helper and model classes. You should **not modify** these files.
 
 <details>
 <summary><strong>Weapon</strong></summary>

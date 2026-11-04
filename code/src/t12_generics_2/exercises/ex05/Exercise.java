@@ -1,29 +1,19 @@
 package t12_generics_2.exercises.ex05;
 
-class Copier {
-    public static <T> void copy(java.util.List<? extends T> src, java.util.List<? super T> dst) {
-        if (src == null)
-            throw new NullPointerException("src must not be null");
-
-        if (dst == null)
-            throw new NullPointerException("dst must not be null");
-
-        for (T item : src)
-            dst.add(item);
-    }
-}
+import java.util.ArrayList;
+import java.util.List;
 
 public class Exercise {
+
     public static void run() {
-        java.util.List<Integer> src = java.util.List.of(1, 2, 3);
+        List<Integer> source = List.of(1, 2, 3);
 
-        java.util.ArrayList<Number> dst1 = new java.util.ArrayList<>();
-        java.util.ArrayList<Object> dst2 = new java.util.ArrayList<>();
+        List<Number> numbers = new ArrayList<>(List.of(0.5));
+        Copier.copy(source, numbers);
+        System.out.println("Numbers: " + numbers);
 
-        Copier.copy(src, dst1);
-        Copier.copy(src, dst2);
-
-        System.out.println(dst1); // [1, 2, 3]
-        System.out.println(dst2); // [1, 2, 3]
+        List<Object> objects = new ArrayList<>(List.of("start"));
+        Copier.copy(source, objects);
+        System.out.println("Objects: " + objects);
     }
 }

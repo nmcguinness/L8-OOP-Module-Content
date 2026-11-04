@@ -61,13 +61,9 @@ prerequisites:
 
 ## Why this matters
 
-Some data is **recursive by nature** — a directory containing directories, a tree of
-comments, a grid region that spreads. Code that mirrors the shape of its data is shorter
-and easier to reason about than code that fakes it with an explicit stack.
+Some data is **recursive by nature** — a directory containing directories, a tree of comments, a grid region that spreads. Code that mirrors the shape of its data is shorter and easier to reason about than code that fakes it with an explicit stack.
 
-Recursion is also where the **call stack** stops being an abstraction. Understanding that
-each call has its own copy of the parameters, and that the work often happens on the way
-back up, is what makes stack traces readable for the rest of your career.
+Recursion is also where the **call stack** stops being an abstraction. Understanding that each call has its own copy of the parameters, and that the work often happens on the way back up, is what makes stack traces readable for the rest of your career.
 
 ---
 
@@ -79,13 +75,9 @@ back up, is what makes stack traces readable for the rest of your career.
 | [t01 Guards](../t01_arrays/t01_arrays_notes.md) | The `null`/empty check is still needed — usually in a public wrapper around the recursive helper |
 | [t00 OOP Fundamentals](../t00_oop_fundamentals/t00_oop_fundamentals_notes.md) | Method calls, parameters and return values — recursion is just a method calling itself |
 
-The genuinely new idea is the **call stack**: many copies of the same method alive at once,
-each with its own parameter values. Everything else is machinery you already have.
+The genuinely new idea is the **call stack**: many copies of the same method alive at once, each with its own parameter values. Everything else is machinery you already have.
 
-Where this goes next: recursion reappears whenever the data is itself recursive — walking a
-directory tree in [t18 Java I/O](../t18_io/t18_io_notes.md), and traversing the sorted
-structures behind `TreeMap` in [t07 Collections
-III](../t07_collections_3_set_map/t07_collections_3_set_map_notes.md).
+Where this goes next: recursion reappears whenever the data is itself recursive — walking a directory tree in [t18 Java I/O](../t18_io/t18_io_notes.md), and traversing the sorted structures behind `TreeMap` in [t07 Collections III](../t07_collections_3_set_map/t07_collections_3_set_map_notes.md).
 
 ---
 
@@ -144,8 +136,7 @@ case vs recursive case" -->
 
 ## Call-stack model
 
-When `factorial(4)` runs, Java pushes one stack frame per call. The activation bars below show
-each frame on the stack; the arrows on the way back up are the return values unwinding:
+When `factorial(4)` runs, Java pushes one stack frame per call. The activation bars below show each frame on the stack; the arrows on the way back up are the return values unwinding:
 
 <details>
 <summary>Diagram markdown</summary>
@@ -225,11 +216,9 @@ static int fib(int n) {
 // fib(7) = 13
 ```
 
-> Naïve Fibonacci is **exponential** — `fib(40)` makes ~330 million calls. For large `n`, use
-> memoisation or a loop.
+> Naïve Fibonacci is **exponential** — `fib(40)` makes ~330 million calls. For large `n`, use memoisation or a loop.
 
-The call tree for `fib(4)` shows why: every non-leaf node spawns **two** sub-calls, and
-sub-trees are recomputed repeatedly (green nodes are base cases):
+The call tree for `fib(4)` shows why: every non-leaf node spawns **two** sub-calls, and sub-trees are recomputed repeatedly (green nodes are base cases):
 
 <details>
 <summary>Diagram markdown</summary>
@@ -347,8 +336,7 @@ static String reverse(String s) {
 
 ## Games example — Flood fill (paint-bucket)
 
-A grid cell is either empty (`0`) or a wall (`1`). Starting from `(row, col)`, fill all
-reachable empty cells with a target colour.
+A grid cell is either empty (`0`) or a wall (`1`). Starting from `(row, col)`, fill all reachable empty cells with a target colour.
 
 ```java
 static void fill(int[][] grid, int row, int col, int colour) {
@@ -387,8 +375,7 @@ IPO breakdown:
 
 ## Software example — Directory size walker
 
-Walk a file-system tree and count total bytes. The tree structure is inherently recursive: a
-directory contains files and sub-directories.
+Walk a file-system tree and count total bytes. The tree structure is inherently recursive: a directory contains files and sub-directories.
 
 ```java
 import java.io.File;
@@ -411,9 +398,7 @@ File root = new File("src");
 System.out.println("Total bytes: " + totalSize(root));
 ```
 
-Why recursion fits: the structure is a tree. Each sub-directory is the same kind of thing as
-the root. A loop cannot naturally handle arbitrary depth without a stack data structure —
-recursion provides that stack implicitly.
+Why recursion fits: the structure is a tree. Each sub-directory is the same kind of thing as the root. A loop cannot naturally handle arbitrary depth without a stack data structure — recursion provides that stack implicitly.
 
 ---
 
@@ -499,14 +484,10 @@ System.out.println(isPalindrome(""));        // true
 
 1. What are the two mandatory parts of any recursive method? What happens if either is missing?
 2. Draw the call-stack diagram for `factorial(4)`. At which point does the stack start unwinding?
-3. Why is naïve Fibonacci slow? What would you change to fix it, and what trade-off does that
-   introduce?
-4. For the flood-fill example, what plays the role of the "base case" and what plays the role
-   of "making the problem smaller"?
-5. You need to search a file system for all `.java` files. Would you use recursion or a loop?
-   Justify your answer.
-6. A classmate's recursive method throws `StackOverflowError` after a few seconds. List two
-   possible causes and one diagnostic step for each.
+3. Why is naïve Fibonacci slow? What would you change to fix it, and what trade-off does that introduce?
+4. For the flood-fill example, what plays the role of the "base case" and what plays the role of "making the problem smaller"?
+5. You need to search a file system for all `.java` files. Would you use recursion or a loop? Justify your answer.
+6. A classmate's recursive method throws `StackOverflowError` after a few seconds. List two possible causes and one diagnostic step for each.
 
 <details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px;
 padding:0.9rem 1rem; margin:1rem 0;">
@@ -515,11 +496,7 @@ padding:0.9rem 1rem; margin:1rem 0;">
   </summary>
 
 **1. The two mandatory parts.**
-A **base case** that returns without recursing, and a **recursive case** that calls the method
-on a *strictly smaller* input. Missing base case then infinite descent then
-`StackOverflowError`. Missing progress toward the base case (e.g. calling `f(n)` instead of
-`f(n-1)`) then same crash, even though a base case exists. Both parts must be present *and* the
-second must actually approach the first.
+A **base case** that returns without recursing, and a **recursive case** that calls the method on a *strictly smaller* input. Missing base case then infinite descent then `StackOverflowError`. Missing progress toward the base case (e.g. calling `f(n)` instead of `f(n-1)`) then same crash, even though a base case exists. Both parts must be present *and* the second must actually approach the first.
 
 **2. Call stack for `factorial(4)`.**
 Frames pile up on the way down and nothing is multiplied yet:
@@ -531,38 +508,19 @@ factorial(4) -> 4 * factorial(3)
       factorial(1) -> 1          <- base case reached
 ```
 
-Unwinding starts the instant the base case returns: `1`, then `2*1=2`, then `3*2=6`, then
-`4*6=24`. The key insight is that the multiplications happen on the way *back up*, not on the
-way down.
+Unwinding starts the instant the base case returns: `1`, then `2*1=2`, then `3*2=6`, then `4*6=24`. The key insight is that the multiplications happen on the way *back up*, not on the way down.
 
 **3. Why naïve Fibonacci is slow.**
-`fib(n)` calls `fib(n-1)` and `fib(n-2)`, and those overlap enormously — `fib(35)` computes
-`fib(30)` hundreds of thousands of times. The cost is roughly O(2ⁿ). Fix it by **memoising**:
-keep a `Map<Integer, Long>` (or an array) of answers already computed and return the stored
-value on a repeat call. That drops it to O(n). The trade-off is O(n) extra memory, plus a cache
-that must be managed — you have bought time with space.
+`fib(n)` calls `fib(n-1)` and `fib(n-2)`, and those overlap enormously — `fib(35)` computes `fib(30)` hundreds of thousands of times. The cost is roughly O(2ⁿ). Fix it by **memoising**: keep a `Map<Integer, Long>` (or an array) of answers already computed and return the stored value on a repeat call. That drops it to O(n). The trade-off is O(n) extra memory, plus a cache that must be managed — you have bought time with space.
 
 **4. Flood fill.**
-The *base case* is "stop": the cell is off the grid, is not the target colour, or has already
-been filled. "Making the problem smaller" is recursing into the four neighbours after
-repainting the current cell — each repaint permanently shrinks the set of cells still matching
-the target colour, which is what guarantees termination.
+The *base case* is "stop": the cell is off the grid, is not the target colour, or has already been filled. "Making the problem smaller" is recursing into the four neighbours after repainting the current cell — each repaint permanently shrinks the set of cells still matching the target colour, which is what guarantees termination.
 
 **5. Searching a file system.**
-Recursion, and the reason is structural: a directory tree is *itself* recursive (a directory
-contains directories), and depth is small — a few dozen levels at most, nowhere near the stack
-limit. Recursive code here mirrors the shape of the data and is far shorter. A loop would need
-you to hand-maintain an explicit stack of directories still to visit, which is just recursion
-written out longhand. Prefer a loop only when depth could be large or unbounded.
+Recursion, and the reason is structural: a directory tree is *itself* recursive (a directory contains directories), and depth is small — a few dozen levels at most, nowhere near the stack limit. Recursive code here mirrors the shape of the data and is far shorter. A loop would need you to hand-maintain an explicit stack of directories still to visit, which is just recursion written out longhand. Prefer a loop only when depth could be large or unbounded.
 
 **6. `StackOverflowError` after a few seconds.**
-*Cause A — no reachable base case* (condition never true, or the argument does not shrink).
-Diagnostic: print the argument on entry; if the values do not march steadily toward the base
-case, that is your bug.
-*Cause B — legitimate recursion that is simply too deep* (e.g. a 100 000-element list, or a
-symlink loop in a directory walk). Diagnostic: print the recursion depth as a counter; if it
-climbs past a few thousand while values *are* shrinking correctly, the algorithm is right but
-needs to be rewritten iteratively — or, for a directory walk, needs cycle detection.
+*Cause A — no reachable base case* (condition never true, or the argument does not shrink). Diagnostic: print the argument on entry; if the values do not march steadily toward the base case, that is your bug. *Cause B — legitimate recursion that is simply too deep* (e.g. a 100 000-element list, or a symlink loop in a directory walk). Diagnostic: print the recursion depth as a counter; if it climbs past a few thousand while values *are* shrinking correctly, the algorithm is right but needs to be rewritten iteratively — or, for a directory walk, needs cycle detection.
 
 </details>
 

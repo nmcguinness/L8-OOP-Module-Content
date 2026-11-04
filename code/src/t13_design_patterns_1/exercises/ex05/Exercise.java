@@ -48,39 +48,39 @@ interface UndoableCommand
 
 class AddNumberCommand implements UndoableCommand
 {
-    private Counter _counter;
-    private int _amount;
+    private final Counter counter;
+    private final int amount;
 
     public AddNumberCommand(Counter counter, int amount)
     {
-        _counter = counter;
-        _amount = amount;
+        this.counter = counter;
+        this.amount = amount;
     }
 
     @Override
     public void execute()
     {
-        _counter.add(_amount);
+        counter.add(amount);
     }
 
     @Override
     public void undo()
     {
-        _counter.add(-_amount);
+        counter.add(-amount);
     }
 }
 
 class Counter
 {
-    private int _value;
+    private int value;
 
     public void add(int amount)
     {
-        _value += amount;
+        value += amount;
     }
 
     public int getValue()
     {
-        return _value;
+        return value;
     }
 }
