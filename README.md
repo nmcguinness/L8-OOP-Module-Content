@@ -162,9 +162,6 @@ flowchart TD
     linkStyle default stroke:#64748B,stroke-width:1.5px
 ```
 
-**Diagram description**
-Everything starts at t00, then t01. t02 branches off t01 and leads nowhere further. The other foundations lead through t03 and t04, and through t05 and t06, into t07, then on to t08 and t09. t09 is the main branching point: t10, t11, t13, t15, t16 and t19 all build on it directly. From there, t11 leads to t12, t13 to t14, and t16 to t17 and then t18. t15 also needs t10, and leads to t20 and then t21. t22 needs t15, t19 and t21. t23 needs t15, t21 and t22, and t25 needs t15 and t22. t24 is supplementary material and draws on t01, t07, t13 and t14.
-
 ---
 
 ## 2. Topic Map — Difficulty vs OOP Transferability
@@ -214,15 +211,6 @@ quadrantChart
     t24 Pathfinding: [0.66, 0.72]
     t25 Documenting a Project: [0.32, 0.68]
 ```
-
-**[Open the topic map on its own page](notes/shared/mind%20maps/topic_map.svg)** for a larger view. Ctrl-click the link to open it in a new tab or window, then use your browser's zoom.
-
-**Diagram description**
-Reading the extremes rather than every point: the topics that cost the most effort *and* transfer furthest beyond Java are **Design Patterns I and II**, **Interfaces**, **Inheritance** and **Unit Testing** - these repay the work in any object-oriented language. **OOP Fundamentals** transfers just as well but is far easier, which is why it comes first.
-
-At the other end, **Arrays**, **Collections I and II** and **Streams** are comparatively Java-specific: essential for this module and for the CAs, but less portable as ideas. **Generics II**, **Concurrency** and **Networking** are the hardest on the difficulty axis.
-
-The full ordering is in the [module content table](#1-module-content); the chart only shows where each topic sits on those two axes.
 
 ---
 
