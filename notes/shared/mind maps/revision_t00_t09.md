@@ -50,13 +50,21 @@ mindmap
       n4["`Each object has
       independent state`"]
 
-    Anatomy of a class
-      Fields hold the state
-      n5["`Constructors
-      build and validate`"]
-      Methods expose behaviour
-      n6["`Naming convention
-      makes fields obvious`"]
+    Constructors
+      n17["`One constructor
+      does the real work`"]
+      n18["`Others delegate with
+      this dot dot dot`"]
+      n19["`Never duplicate guards
+      across constructors`"]
+
+    Access modifiers
+      private this class only
+      public any class
+      n11["`protected subclasses
+      and same package`"]
+      n12["`no modifier same
+      package only`"]
 
     Encapsulation
       n7["`Fields are
@@ -69,14 +77,6 @@ mindmap
       later without
       breaking callers`"]
 
-    Access modifiers
-      private this class only
-      public any class
-      n11["`protected subclasses
-      and same package`"]
-      n12["`no modifier same
-      package only`"]
-
     Guard clauses
       n13["`Validate at the top
       of the constructor`"]
@@ -87,14 +87,6 @@ mindmap
       on bad input`"]
       n16["`All preconditions
       visible in one glance`"]
-
-    Constructors
-      n17["`One constructor
-      does the real work`"]
-      n18["`Others delegate with
-      this dot dot dot`"]
-      n19["`Never duplicate guards
-      across constructors`"]
 
     References and aliasing
       n20["`Variables hold
@@ -112,6 +104,14 @@ mindmap
       n25["`Validating too
       late instead of
       in the constructor`"]
+
+    Anatomy of a class
+      Fields hold the state
+      n5["`Constructors
+      build and validate`"]
+      Methods expose behaviour
+      n6["`Naming convention
+      makes fields obvious`"]
 ```
 
 ### Code Snippets
@@ -309,25 +309,6 @@ accDescr: "Mind map of Recursion. Branches: Two mandatory parts; Call stack mode
 %%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Recursion))
-    Two mandatory parts
-      n1["`Base case returns
-      without recursing`"]
-      n2["`Recursive case
-      shrinks the problem`"]
-      n3["`Both required or
-      it never terminates`"]
-      n4["`Shrinking must actually
-      approach the base case`"]
-
-    Call stack model
-      Each call adds a frame
-      n5["`Frames pile up
-      on the way down`"]
-      n6["`Work often happens
-      on the way back up`"]
-      n7["`Stack unwinds when
-      base case returns`"]
-
     Common patterns
       n8["`Number recursion
       such as factorial`"]
@@ -340,14 +321,14 @@ mindmap
       n12["`Grid recursion
       such as flood fill`"]
 
-    Efficiency trap
-      n13["`Naive Fibonacci
-      recomputes subproblems`"]
-      n14["`Cost is roughly
-      two to the power n`"]
-      n15["`Memoisation caches
-      results for order n`"]
-      Trade time for memory
+    Call stack model
+      Each call adds a frame
+      n5["`Frames pile up
+      on the way down`"]
+      n6["`Work often happens
+      on the way back up`"]
+      n7["`Stack unwinds when
+      base case returns`"]
 
     When not to recurse
       n16["`Depth could
@@ -358,6 +339,16 @@ mindmap
       n18["`Rewrite iteratively
       with an explicit stack`"]
 
+    Two mandatory parts
+      n1["`Base case returns
+      without recursing`"]
+      n2["`Recursive case
+      shrinks the problem`"]
+      n3["`Both required or
+      it never terminates`"]
+      n4["`Shrinking must actually
+      approach the base case`"]
+
     Debugging
       n19["`Print the
       argument on entry`"]
@@ -367,6 +358,15 @@ mindmap
       thousands means too deep`"]
       n22["`Watch for cycles
       such as symlinks`"]
+
+    Efficiency trap
+      n13["`Naive Fibonacci
+      recomputes subproblems`"]
+      n14["`Cost is roughly
+      two to the power n`"]
+      n15["`Memoisation caches
+      results for order n`"]
+      Trade time for memory
 ```
 
 ### Code Snippets
@@ -594,6 +594,14 @@ mindmap
         n12["`Use stable fields
         that do not change`"]
 
+    Mistakes to avoid
+      n15["`Implementing equals
+      but not hashCode`"]
+      n16["`Using mutable fields
+      for equality or hashing`"]
+      n17["`Changing key fields after
+      adding to set or map`"]
+
     Hash-based collections
       HashSet
         Stores unique elements
@@ -604,14 +612,6 @@ mindmap
         Stores key value pairs
         n14["`Uses **equals** and
         **hashCode** on keys`"]
-
-    Mistakes to avoid
-      n15["`Implementing equals
-      but not hashCode`"]
-      n16["`Using mutable fields
-      for equality or hashing`"]
-      n17["`Changing key fields after
-      adding to set or map`"]
 ```
 
 ### Code Snippets
@@ -685,13 +685,6 @@ accDescr: "Mind map of ArrayList. Branches: What it is; Core operations; Iterati
 %%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((ArrayList))
-    What it is
-      n1["`Resizable list that
-      grows automatically`"]
-      Keeps elements in order
-      n2["`Allows random
-      access by index`"]
-
     Core operations
       Add
         Add at end of list
@@ -711,6 +704,26 @@ mindmap
         n6["`Find index of
         first match`"]
 
+    What it is
+      n1["`Resizable list that
+      grows automatically`"]
+      Keeps elements in order
+      n2["`Allows random
+      access by index`"]
+
+    Common errors
+      n11["`Concurrent modification
+      exception when removing
+      in **enhanced for** loop`"]
+      n12["`Index out of range when
+      list is small or empty`"]
+
+    Performance notes
+      Fast access by index
+      Fast add at end
+      n10["`Slower insert or
+      remove in the middle`"]
+
     Iteration patterns
       Index loop
         n7["`Good when you
@@ -722,19 +735,6 @@ mindmap
       Iterator
         n9["`Allows safe removal
         while looping`"]
-
-    Performance notes
-      Fast access by index
-      Fast add at end
-      n10["`Slower insert or
-      remove in the middle`"]
-
-    Common errors
-      n11["`Concurrent modification
-      exception when removing
-      in **enhanced for** loop`"]
-      n12["`Index out of range when
-      list is small or empty`"]
 ```
 
 ### Code Snippets
@@ -929,55 +929,6 @@ accDescr: "Mind map of Set Map and PriorityQueue. Branches: Set unique elements;
 %%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Set Map and PriorityQueue))
-    Set unique elements
-      n1["`HashSet fast no
-      order guarantee`"]
-      n2["`LinkedHashSet keeps
-      insertion order`"]
-      n3["`TreeSet sorted
-      order costs log n`"]
-      n4["`add returns false
-      if already present`"]
-
-    Map keyed lookup
-      n5["`HashMap fast average
-      constant time`"]
-      n6["`LinkedHashMap keeps
-      insertion order`"]
-      n7["`TreeMap sorted keys
-      and range queries`"]
-      n8["`Keys unique
-      values may repeat`"]
-
-    Depends on t04
-      n9["`hashCode picks
-      the bucket`"]
-      n10["`equals compares
-      within the bucket`"]
-      n11["`Both must be
-      overridden together`"]
-      n12["`Key fields must
-      be immutable`"]
-
-    Compute patterns
-      merge for counting
-      n13["`computeIfAbsent
-      for grouping`"]
-      n14["`getOrDefault
-      for a safe read`"]
-      n15["`putIfAbsent to fill
-      only when missing`"]
-
-    PriorityQueue
-      n16["`Head is always
-      the smallest`"]
-      n17["`Comparator can
-      reverse or customise`"]
-      n18["`poll removes
-      the smallest`"]
-      n19["`Iteration order
-      is NOT sorted`"]
-
     Choosing a collection
       n20["`Need uniqueness
       choose a Set`"]
@@ -987,6 +938,15 @@ mindmap
       choose TreeMap`"]
       n23["`Need insertion order
       choose LinkedHash variants`"]
+
+    Compute patterns
+      merge for counting
+      n13["`computeIfAbsent
+      for grouping`"]
+      n14["`getOrDefault
+      for a safe read`"]
+      n15["`putIfAbsent to fill
+      only when missing`"]
 
     Common mistakes
       n24["`Mutating a key
@@ -998,6 +958,46 @@ mindmap
       expecting sorted output`"]
       n27["`get returns null and
       causes NullPointerException`"]
+
+    Map keyed lookup
+      n5["`HashMap fast average
+      constant time`"]
+      n6["`LinkedHashMap keeps
+      insertion order`"]
+      n7["`TreeMap sorted keys
+      and range queries`"]
+      n8["`Keys unique
+      values may repeat`"]
+
+    Set unique elements
+      n1["`HashSet fast no
+      order guarantee`"]
+      n2["`LinkedHashSet keeps
+      insertion order`"]
+      n3["`TreeSet sorted
+      order costs log n`"]
+      n4["`add returns false
+      if already present`"]
+
+    Depends on t04
+      n9["`hashCode picks
+      the bucket`"]
+      n10["`equals compares
+      within the bucket`"]
+      n11["`Both must be
+      overridden together`"]
+      n12["`Key fields must
+      be immutable`"]
+
+    PriorityQueue
+      n16["`Head is always
+      the smallest`"]
+      n17["`Comparator can
+      reverse or customise`"]
+      n18["`poll removes
+      the smallest`"]
+      n19["`Iteration order
+      is NOT sorted`"]
 ```
 
 ### Code Snippets
@@ -1070,13 +1070,6 @@ accDescr: "Mind map of Inheritance. Branches: What it is; Extends keyword; Metho
 %%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Inheritance))
-    What it is
-      n1["`Share code between
-      related classes`"]
-      n2["`Subclass is a more
-      specific version
-      of superclass`"]
-
     Extends keyword
       n3["`Subclass inherits
       **public** and **protected**
@@ -1087,14 +1080,16 @@ mindmap
       call **super** as
       first statement`"]
 
-    Method overriding
-      n6["`Subclass may **override**
-      inherited methods`"]
-      n7["`Use **override** annotation
-      to catch mistakes`"]
-      n8["`Polymorphism chooses
-      method based on
-      actual object type`"]
+    Common mistakes
+      n16["`Confusing **overloading**
+      with **overriding**`"]
+      n17["`Forgetting to call
+      **super** constructor
+      when needed`"]
+      n18["`Putting too many
+      common fields or
+      methods into subclasses
+      instead of base class`"]
 
     Abstract classes
       n9["`Can not create
@@ -1120,16 +1115,21 @@ mindmap
       correct overridden method
       in the subclass runs`"]
 
-    Common mistakes
-      n16["`Confusing **overloading**
-      with **overriding**`"]
-      n17["`Forgetting to call
-      **super** constructor
-      when needed`"]
-      n18["`Putting too many
-      common fields or
-      methods into subclasses
-      instead of base class`"]
+    What it is
+      n1["`Share code between
+      related classes`"]
+      n2["`Subclass is a more
+      specific version
+      of superclass`"]
+
+    Method overriding
+      n6["`Subclass may **override**
+      inherited methods`"]
+      n7["`Use **override** annotation
+      to catch mistakes`"]
+      n8["`Polymorphism chooses
+      method based on
+      actual object type`"]
 ```
 
 ### Code Snippets
@@ -1220,17 +1220,6 @@ accDescr: "Mind map of Interfaces. Branches: What it is; Why use interfaces; Fea
 %%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Interfaces))
-    What it is
-      n1["`Describe behaviour that
-      a class must provide`"]
-      n2["`Contain method
-      **signatures** but no
-      **instance** fields`"]
-      n3["`Used as capability
-      labels on classes (i.e.
-      this class implements
-      Interactable)`"]
-
     Why use interfaces
       n4["`Different classes can
       share the same behaviour`"]
@@ -1239,6 +1228,13 @@ mindmap
       share a superclass`"]
       n6["`Helps design flexible
       and testable code`"]
+
+    Common uses
+      n14["`Lists of mixed types
+      using one shared interface`"]
+      n15["`Separating interface
+      from implementation
+      in large systems`"]
 
     Features
       Methods
@@ -1252,23 +1248,6 @@ mindmap
         n10["`**public static final**
         values shared by all`"]
 
-    Using interfaces
-      n11["`Class declares that
-      it implements one
-      or many interfaces`"]
-      n12["`Objects can be referenced
-      by interface type`"]
-      n13["`Example Door and
-      CokeMachine both
-      implement Interactable`"]
-
-    Common uses
-      n14["`Lists of mixed types
-      using one shared interface`"]
-      n15["`Separating interface
-      from implementation
-      in large systems`"]
-
     Common mistakes
       n16["`Trying to store per
       object state in interface
@@ -1279,6 +1258,27 @@ mindmap
       clear purpose`"]
       n18["`Forgetting to implement
       all required methods`"]
+
+    What it is
+      n1["`Describe behaviour that
+      a class must provide`"]
+      n2["`Contain method
+      **signatures** but no
+      **instance** fields`"]
+      n3["`Used as capability
+      labels on classes (i.e.
+      this class implements
+      Interactable)`"]
+
+    Using interfaces
+      n11["`Class declares that
+      it implements one
+      or many interfaces`"]
+      n12["`Objects can be referenced
+      by interface type`"]
+      n13["`Example Door and
+      CokeMachine both
+      implement Interactable`"]
 ```
 
 ### Code Snippets

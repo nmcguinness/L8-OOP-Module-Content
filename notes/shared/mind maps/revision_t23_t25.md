@@ -33,14 +33,6 @@ accDescr: "Mind map of Unit Testing. Branches: Anatomy of a good test; Naming co
 %%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Unit Testing))
-    Anatomy of a good test
-      n1["`Arrange the
-      inputs and objects`"]
-      Act by calling one thing
-      n2["`Assert the
-      expected outcome`"]
-      One test one scenario
-
     Naming convention
       n3["`Pattern:
       method_scenario_expectedBehaviour`"]
@@ -49,15 +41,6 @@ mindmap
       without opening the file`"]
       n5["`testOne tells
       you nothing`"]
-
-    Worthless tests
-      n6["`assertNotNull
-      on a new object`"]
-      Testing a plain getter
-      n7["`Calling a method and
-      asserting nothing`"]
-      n8["`Inflates coverage
-      proves nothing`"]
 
     Unit versus integration
       n9["`Unit touches one class
@@ -69,6 +52,23 @@ mindmap
       n12["`Keep the fast
       ones separate`"]
 
+    Worthless tests
+      n6["`assertNotNull
+      on a new object`"]
+      Testing a plain getter
+      n7["`Calling a method and
+      asserting nothing`"]
+      n8["`Inflates coverage
+      proves nothing`"]
+
+    Anatomy of a good test
+      n1["`Arrange the
+      inputs and objects`"]
+      Act by calling one thing
+      n2["`Assert the
+      expected outcome`"]
+      One test one scenario
+
     DAO testing
       n13["`Use a dedicated
       test database`"]
@@ -78,24 +78,6 @@ mindmap
       at development data`"]
       n16["`Tests must be independent
       and repeatable`"]
-
-    What to test
-      n17["`Guard clauses
-      reject invalid input`"]
-      n18["`Found and not
-      found paths`"]
-      Empty collection results
-      Boundary values
-
-    Round trip tests
-      n19["`Serialise then
-      deserialise`"]
-      n20["`Assert equal
-      to the original`"]
-      n21["`Requires a
-      correct equals`"]
-      n22["`Catches missing
-      getters and setters`"]
 
     Coverage
       n23["`Measures lines executed
@@ -115,6 +97,24 @@ mindmap
       needs no socket`"]
       n30["`Split the class
       rather than fight it`"]
+
+    Round trip tests
+      n19["`Serialise then
+      deserialise`"]
+      n20["`Assert equal
+      to the original`"]
+      n21["`Requires a
+      correct equals`"]
+      n22["`Catches missing
+      getters and setters`"]
+
+    What to test
+      n17["`Guard clauses
+      reject invalid input`"]
+      n18["`Found and not
+      found paths`"]
+      Empty collection results
+      Boundary values
 ```
 
 ### Code Snippets
@@ -340,6 +340,31 @@ accDescr: "Mind map of Documenting a Project. Branches: Javadoc basics; Common t
 %%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Documenting a Project))
+    Architecture diagram
+      n26["`Tiers and their
+      dependencies`"]
+      n27["`Presentation
+      service DAO database`"]
+      Belongs in the README
+
+    Sequence diagram
+      n23["`Participants
+      across the top`"]
+      Messages in time order
+      n24["`Shows a full
+      request cycle`"]
+      n25["`Client server DAO
+      database and back`"]
+
+    Common mistakes
+      n28["`Javadoc that repeats
+      the signature`"]
+      n29["`Diagrams that
+      contradict the code`"]
+      n30["`Documentation kept
+      outside version control`"]
+      No README entry point
+
     Javadoc basics
       n1["`Slash star star
       above the member`"]
@@ -350,6 +375,14 @@ mindmap
       n4["`Extracted into
       browsable HTML`"]
 
+    ER diagram
+      n18["`Entities
+      attributes and keys`"]
+      n19["`Cardinality
+      between tables`"]
+      n20["`Documents the
+      database schema`"]
+
     Common tags
       param for each parameter
       n5["`return for the
@@ -358,23 +391,6 @@ mindmap
       failure condition`"]
       n7["`author and version
       at class level`"]
-
-    What to document
-      n8["`Constructors with
-      guard clauses`"]
-      n9["`Methods that can
-      return null or empty`"]
-      Anything that throws
-      n10["`Non obvious
-      constraints and units`"]
-
-    What not to document
-      n11["`Plain getters
-      and setters`"]
-      n12["`Comments restating
-      the method name`"]
-      n13["`Code that already
-      reads clearly`"]
 
     Mermaid advantages
       n14["`Plain text so it
@@ -386,44 +402,28 @@ mindmap
       n17["`Cannot silently go
       stale like an image`"]
 
-    ER diagram
-      n18["`Entities
-      attributes and keys`"]
-      n19["`Cardinality
-      between tables`"]
-      n20["`Documents the
-      database schema`"]
-
     Flowchart
       n21["`Decision and
       process flow`"]
       n22["`Good for an algorithm
       or a pipeline`"]
 
-    Sequence diagram
-      n23["`Participants
-      across the top`"]
-      Messages in time order
-      n24["`Shows a full
-      request cycle`"]
-      n25["`Client server DAO
-      database and back`"]
+    What not to document
+      n11["`Plain getters
+      and setters`"]
+      n12["`Comments restating
+      the method name`"]
+      n13["`Code that already
+      reads clearly`"]
 
-    Architecture diagram
-      n26["`Tiers and their
-      dependencies`"]
-      n27["`Presentation
-      service DAO database`"]
-      Belongs in the README
-
-    Common mistakes
-      n28["`Javadoc that repeats
-      the signature`"]
-      n29["`Diagrams that
-      contradict the code`"]
-      n30["`Documentation kept
-      outside version control`"]
-      No README entry point
+    What to document
+      n8["`Constructors with
+      guard clauses`"]
+      n9["`Methods that can
+      return null or empty`"]
+      Anything that throws
+      n10["`Non obvious
+      constraints and units`"]
 ```
 
 ### Code Snippets

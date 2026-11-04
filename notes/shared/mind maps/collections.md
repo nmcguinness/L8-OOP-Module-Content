@@ -60,6 +60,24 @@ accDescr: "Mind map of Collections. Branches: List ordered allows duplicates; Se
 %%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Collections))
+    What drives the choice
+      n10["`Uniqueness needed
+      choose a Set`"]
+      n11["`Lookup by key
+      choose a Map`"]
+      n12["`Order matters choose
+      Tree or LinkedHash`"]
+      Otherwise ArrayList
+
+    Set unique elements
+      HashSet fastest no order
+      n2["`LinkedHashSet keeps
+      insertion order`"]
+      n3["`TreeSet sorted
+      costs log n`"]
+      n4["`Needs equals
+      and hashCode`"]
+
     n1["`List ordered
     allows duplicates`"]
       ArrayList the default
@@ -71,14 +89,13 @@ mindmap
         Slow to reach an index
         Use as a Deque
 
-    Set unique elements
-      HashSet fastest no order
-      n2["`LinkedHashSet keeps
-      insertion order`"]
-      n3["`TreeSet sorted
-      costs log n`"]
-      n4["`Needs equals
-      and hashCode`"]
+    Queue and Deque
+      n8["`ArrayDeque for
+      stack or queue`"]
+      n9["`PriorityQueue
+      smallest first`"]
+      push pop for LIFO
+      offer poll for FIFO
 
     Map key to value
       HashMap the default
@@ -88,23 +105,6 @@ mindmap
       keys and ranges`"]
       n7["`Keys unique
       values may repeat`"]
-
-    Queue and Deque
-      n8["`ArrayDeque for
-      stack or queue`"]
-      n9["`PriorityQueue
-      smallest first`"]
-      push pop for LIFO
-      offer poll for FIFO
-
-    What drives the choice
-      n10["`Uniqueness needed
-      choose a Set`"]
-      n11["`Lookup by key
-      choose a Map`"]
-      n12["`Order matters choose
-      Tree or LinkedHash`"]
-      Otherwise ArrayList
 ```
 
 ## Cost at a glance

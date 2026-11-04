@@ -43,32 +43,6 @@ accDescr: "Mind map of Exception Handling. Branches: The hierarchy; Checked exce
 %%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Exception Handling))
-    The hierarchy
-      Throwable at the top
-      n1["`Error is JVM
-      level never catch`"]
-      n2["`Exception is
-      checked by default`"]
-      n3["`RuntimeException
-      is unchecked`"]
-
-    Checked exceptions
-      n4["`Compiler forces
-      catch or declare`"]
-      n5["`Failure outside the
-      program's control`"]
-      n6["`IOException and
-      SQLException`"]
-      n7["`Caller can
-      reasonably respond`"]
-
-    Unchecked exceptions
-      No compiler obligation
-      n8["`Signals a bug
-      to be fixed`"]
-      IllegalArgumentException
-      NullPointerException
-
     try catch finally
       n9["`catch the narrowest
       useful type`"]
@@ -78,16 +52,6 @@ mindmap
       every exit path`"]
       n12["`Multi catch with a
       pipe for siblings`"]
-
-    try with resources
-      n13["`Resource must
-      implement AutoCloseable`"]
-      n14["`Closed automatically
-      on every path`"]
-      n15["`Original exception
-      preserved`"]
-      n16["`Close failure
-      attached as suppressed`"]
 
     Custom exceptions
       n17["`Use when the failure
@@ -99,13 +63,31 @@ mindmap
       n20["`Do not reinvent
       standard exceptions`"]
 
-    Throw or return Optional
-      n21["`Not found is a normal
-      outcome use Optional`"]
-      n22["`Genuine failure
-      should still throw`"]
-      n23["`Do not use exceptions
-      for control flow`"]
+    try with resources
+      n13["`Resource must
+      implement AutoCloseable`"]
+      n14["`Closed automatically
+      on every path`"]
+      n15["`Original exception
+      preserved`"]
+      n16["`Close failure
+      attached as suppressed`"]
+
+    The hierarchy
+      Throwable at the top
+      n1["`Error is JVM
+      level never catch`"]
+      n2["`Exception is
+      checked by default`"]
+      n3["`RuntimeException
+      is unchecked`"]
+
+    Unchecked exceptions
+      No compiler obligation
+      n8["`Signals a bug
+      to be fixed`"]
+      IllegalArgumentException
+      NullPointerException
 
     Common mistakes
       n24["`Empty catch block
@@ -116,6 +98,24 @@ mindmap
       by not passing e`"]
       n27["`Supertype catch
       placed first`"]
+
+    Checked exceptions
+      n4["`Compiler forces
+      catch or declare`"]
+      n5["`Failure outside the
+      program's control`"]
+      n6["`IOException and
+      SQLException`"]
+      n7["`Caller can
+      reasonably respond`"]
+
+    Throw or return Optional
+      n21["`Not found is a normal
+      outcome use Optional`"]
+      n22["`Genuine failure
+      should still throw`"]
+      n23["`Do not use exceptions
+      for control flow`"]
 ```
 
 ### Code Snippets
@@ -199,14 +199,6 @@ accDescr: "Mind map of Generics I. Branches: What it is; Generic classes; Generi
 %%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Generics I))
-    What it is
-      n1["`Parameterise a class
-      or method by type`"]
-      n2["`Compiler enforces
-      type safety`"]
-      n3["`No casting needed
-      at call site`"]
-
     Generic classes
       n4["`Declare type parameter
       in angle brackets`"]
@@ -230,6 +222,14 @@ mindmap
       Comparable allows comparison`"]
       n12["`Example T extends Number
       allows numeric ops`"]
+
+    What it is
+      n1["`Parameterise a class
+      or method by type`"]
+      n2["`Compiler enforces
+      type safety`"]
+      n3["`No casting needed
+      at call site`"]
 
     Type erasure
       n13["`Compiler removes
@@ -310,6 +310,22 @@ accDescr: "Mind map of Generics II. Branches: Invariance problem; Unbounded wild
 %%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Generics II))
+    Wildcard capture
+      n13["`Cannot call methods that
+      depend on unknown type`"]
+      n14["`Introduce private
+      generic helper method`"]
+      n15["`Helper gives
+      unknown type a name`"]
+
+    Upper bounded wildcard
+      n7["`List extends T
+      written as producer`"]
+      Can read elements as T
+      Cannot add elements
+      n8["`Use when reading
+      from a collection`"]
+
     Invariance problem
       n1["`List of Dog cannot be
       assigned to List of Animal`"]
@@ -327,13 +343,11 @@ mindmap
       n6["`Use when type
       does not matter`"]
 
-    Upper bounded wildcard
-      n7["`List extends T
-      written as producer`"]
-      Can read elements as T
-      Cannot add elements
-      n8["`Use when reading
-      from a collection`"]
+    PECS rule
+      Producer uses Extends
+      Consumer uses Super
+      n12["`Apply when designing
+      flexible API methods`"]
 
     Lower bounded wildcard
       n9["`List super T
@@ -343,20 +357,6 @@ mindmap
       Can only read as Object
       n11["`Use when writing
       to a collection`"]
-
-    PECS rule
-      Producer uses Extends
-      Consumer uses Super
-      n12["`Apply when designing
-      flexible API methods`"]
-
-    Wildcard capture
-      n13["`Cannot call methods that
-      depend on unknown type`"]
-      n14["`Introduce private
-      generic helper method`"]
-      n15["`Helper gives
-      unknown type a name`"]
 ```
 
 ### Code Snippets
@@ -628,6 +628,17 @@ mindmap
         notifies ConsoleDisplay
         and OverheatAlarm`"]
 
+    Common mistakes
+      n21["`Factory returning null
+      instead of throwing
+      on unknown type`"]
+      n22["`Observer keeping
+      stale references to
+      removed listeners`"]
+      n23["`Adapter doing too much
+      business logic instead
+      of just translating`"]
+
     Adapter pattern
       Intent
         n14["`Make an incompatible
@@ -648,17 +659,6 @@ mindmap
         old logMessage method`"]
         n20["`GatewayCheckoutAdapter
         converts cents to euros`"]
-
-    Common mistakes
-      n21["`Factory returning null
-      instead of throwing
-      on unknown type`"]
-      n22["`Observer keeping
-      stale references to
-      removed listeners`"]
-      n23["`Adapter doing too much
-      business logic instead
-      of just translating`"]
 ```
 
 ### Code Snippets
@@ -1029,6 +1029,21 @@ accDescr: "Mind map of Streams API. Branches: Pipeline model; Intermediate opera
 %%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Streams API))
+    Laziness
+      n13["`Elements pulled
+      one at a time`"]
+      n14["`Short circuiting
+      stops early`"]
+      n15["`Expensive map skipped
+      for unreached elements`"]
+      n16["`peek alone
+      prints nothing`"]
+
+    Primitive streams
+      IntStream avoids boxing
+      mapToInt to convert
+      sum average max built in
+
     Pipeline model
       n1["`Source such as a
       collection or array`"]
@@ -1050,31 +1065,15 @@ mindmap
       limit skip`"]
       All return a new stream
 
-    Terminal operations
-      n9["`collect and toList
-      gather results`"]
-      count reduce findFirst
-      n10["`anyMatch allMatch
-      noneMatch`"]
-      forEach for side effects
-
-    Collectors
-      toList and toSet
-      joining for strings
-      n11["`groupingBy for
-      a map of groups`"]
-      n12["`counting and summingInt
-      as downstream`"]
-
-    Laziness
-      n13["`Elements pulled
-      one at a time`"]
-      n14["`Short circuiting
-      stops early`"]
-      n15["`Expensive map skipped
-      for unreached elements`"]
-      n16["`peek alone
-      prints nothing`"]
+    Common mistakes
+      n21["`Forgetting the
+      terminal operation`"]
+      n22["`map where flatMap
+      was needed`"]
+      n23["`Side effects in
+      filter or map`"]
+      n24["`Mutating a shared
+      list in forEach`"]
 
     Single use
       n17["`A stream is
@@ -1086,20 +1085,21 @@ mindmap
       n20["`Never store a
       Stream in a field`"]
 
-    Primitive streams
-      IntStream avoids boxing
-      mapToInt to convert
-      sum average max built in
+    Collectors
+      toList and toSet
+      joining for strings
+      n11["`groupingBy for
+      a map of groups`"]
+      n12["`counting and summingInt
+      as downstream`"]
 
-    Common mistakes
-      n21["`Forgetting the
-      terminal operation`"]
-      n22["`map where flatMap
-      was needed`"]
-      n23["`Side effects in
-      filter or map`"]
-      n24["`Mutating a shared
-      list in forEach`"]
+    Terminal operations
+      n9["`collect and toList
+      gather results`"]
+      count reduce findFirst
+      n10["`anyMatch allMatch
+      noneMatch`"]
+      forEach for side effects
 ```
 
 ### Code Snippets
@@ -1184,6 +1184,15 @@ mindmap
       n4["`NIO2 replaces the
       old File class`"]
 
+    CSV parsing
+      split on the delimiter
+      n21["`Trailing empty
+      fields are dropped`"]
+      n22["`Use a negative
+      limit to keep them`"]
+      n23["`Guard against
+      missing columns`"]
+
     Reading text
       n5["`readAllLines loads
       everything at once`"]
@@ -1194,31 +1203,6 @@ mindmap
       n8["`Choose based
       on file size`"]
 
-    Writing text
-      n9["`Files.write for a
-      whole collection`"]
-      n10["`newBufferedWriter for
-      incremental writing`"]
-      n11["`Always inside try
-      with resources`"]
-
-    Open options
-      n12["`CREATE makes
-      it if absent`"]
-      n13["`CREATE_NEW fails if
-      it already exists`"]
-      APPEND adds to the end
-      n14["`TRUNCATE_EXISTING
-      clears first`"]
-
-    Why CREATE_NEW
-      n15["`Test and create
-      are atomic`"]
-      n16["`exists then write
-      is a race condition`"]
-      n17["`Throws
-      FileAlreadyExistsException`"]
-
     Checked exceptions
       n18["`IOException must be
       caught or declared`"]
@@ -1227,14 +1211,21 @@ mindmap
       n20["`Permissions disk
       space network share`"]
 
-    CSV parsing
-      split on the delimiter
-      n21["`Trailing empty
-      fields are dropped`"]
-      n22["`Use a negative
-      limit to keep them`"]
-      n23["`Guard against
-      missing columns`"]
+    Writing text
+      n9["`Files.write for a
+      whole collection`"]
+      n10["`newBufferedWriter for
+      incremental writing`"]
+      n11["`Always inside try
+      with resources`"]
+
+    Why CREATE_NEW
+      n15["`Test and create
+      are atomic`"]
+      n16["`exists then write
+      is a race condition`"]
+      n17["`Throws
+      FileAlreadyExistsException`"]
 
     Common mistakes
       n24["`Forgetting try with
@@ -1245,6 +1236,15 @@ mindmap
       trailing empties`"]
       n27["`Hard coded platform
       specific separators`"]
+
+    Open options
+      n12["`CREATE makes
+      it if absent`"]
+      n13["`CREATE_NEW fails if
+      it already exists`"]
+      APPEND adds to the end
+      n14["`TRUNCATE_EXISTING
+      clears first`"]
 ```
 
 ### Code Snippets
@@ -1310,16 +1310,6 @@ accDescr: "Mind map of Concurrency. Branches: Runnable and Thread; ExecutorServi
 %%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Concurrency))
-    Runnable and Thread
-      n1["`Runnable describes a
-      task with no return value`"]
-      n2["`Thread wraps a
-      Runnable and runs it`"]
-      n3["`Call **start** not run
-      to create a new thread`"]
-      n4["`Call **run** directly
-      means no new thread`"]
-
     ExecutorService
       n5["`Manages a pool of
       reusable threads`"]
@@ -1334,16 +1324,6 @@ mindmap
       n10["`newCachedThreadPool
       grows as needed`"]
 
-    Callable and Future
-      n11["`Callable describes a
-      task that returns a value`"]
-      n12["`Can throw checked
-      exceptions unlike Runnable`"]
-      n13["`Future holds the
-      eventual result`"]
-      n14["`future.get blocks
-      until result is ready`"]
-
     Race conditions
       n15["`Multiple threads read
       and modify shared state`"]
@@ -1354,6 +1334,16 @@ mindmap
       method or block`"]
       n18["`Only one thread can
       hold the lock at a time`"]
+
+    Callable and Future
+      n11["`Callable describes a
+      task that returns a value`"]
+      n12["`Can throw checked
+      exceptions unlike Runnable`"]
+      n13["`Future holds the
+      eventual result`"]
+      n14["`future.get blocks
+      until result is ready`"]
 
     Common mistakes
       n19["`Calling run instead
@@ -1366,6 +1356,16 @@ mindmap
       loses updates`"]
       n22["`Calling future.get too
       early blocks all progress`"]
+
+    Runnable and Thread
+      n1["`Runnable describes a
+      task with no return value`"]
+      n2["`Thread wraps a
+      Runnable and runs it`"]
+      n3["`Call **start** not run
+      to create a new thread`"]
+      n4["`Call **run** directly
+      means no new thread`"]
 ```
 
 ### Code Snippets
@@ -1450,23 +1450,23 @@ accDescr: "Mind map of Jackson Basics. Branches: What JSON is; ObjectMapper; Wha
 %%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Jackson Basics))
-    What JSON is
-      n1["`Text format of
-      objects and arrays`"]
-      n2["`Keys are always
-      quoted strings`"]
-      n3["`Values are string
-      number boolean
-      null object array`"]
-      Language independent
+    Generic wrappers
+      n18["`Response of T
+      wraps any payload`"]
+      n19["`Serialises with no
+      special handling`"]
+      n20["`Deserialising
+      needs TypeReference`"]
 
-    ObjectMapper
-      The single entry point
-      n4["`writeValueAsString
-      object to JSON`"]
-      readValue JSON to object
-      n5["`Reuse one instance
-      it is thread safe`"]
+    Type erasure problem
+      n14["`List.class loses
+      the element type`"]
+      n15["`Elements come back
+      as LinkedHashMap`"]
+      n16["`ClassCastException
+      on first use`"]
+      n17["`TypeReference
+      preserves the full type`"]
 
     What Jackson needs
       n6["`Public getters
@@ -1488,23 +1488,23 @@ mindmap
       n13["`JsonIgnoreProperties
       tolerates unknown keys`"]
 
-    Type erasure problem
-      n14["`List.class loses
-      the element type`"]
-      n15["`Elements come back
-      as LinkedHashMap`"]
-      n16["`ClassCastException
-      on first use`"]
-      n17["`TypeReference
-      preserves the full type`"]
+    ObjectMapper
+      The single entry point
+      n4["`writeValueAsString
+      object to JSON`"]
+      readValue JSON to object
+      n5["`Reuse one instance
+      it is thread safe`"]
 
-    Generic wrappers
-      n18["`Response of T
-      wraps any payload`"]
-      n19["`Serialises with no
-      special handling`"]
-      n20["`Deserialising
-      needs TypeReference`"]
+    What JSON is
+      n1["`Text format of
+      objects and arrays`"]
+      n2["`Keys are always
+      quoted strings`"]
+      n3["`Values are string
+      number boolean
+      null object array`"]
+      Language independent
 
     Common mistakes
       n21["`Missing no-arg
@@ -1581,30 +1581,6 @@ accDescr: "Mind map of Protocol Base64 and BLOBs. Branches: Request envelope; Ro
 %%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Protocol Base64 and BLOBs))
-    Request envelope
-      type names the request
-      payload carries the data
-      One JSON object per line
-      n1["`Response wrapper
-      reports status`"]
-
-    Routing safely
-      Map of type to handler
-      Whitelist not reflection
-      n2["`Unknown type returns
-      a clean error`"]
-      n3["`Adding a type
-      registers an entry`"]
-
-    Reading a payload
-      Check has before get
-      n4["`get returns
-      null when absent`"]
-      n5["`asInt returns
-      zero for bad input`"]
-      n6["`Validate then
-      reply with an error`"]
-
     Base64 in JSON
       n7["`Raw bytes are
       not valid text`"]
@@ -1615,13 +1591,13 @@ mindmap
       n10["`Decode on the
       receiving side`"]
 
-    When Base64 is wrong
-      n11["`Large files
-      blow up memory`"]
-      n12["`Prefer a separate
-      binary channel`"]
-      n13["`Keep JSON for
-      the metadata`"]
+    Routing safely
+      Map of type to handler
+      Whitelist not reflection
+      n2["`Unknown type returns
+      a clean error`"]
+      n3["`Adding a type
+      registers an entry`"]
 
     BLOB storage in JDBC
       n14["`MEDIUMBLOB holds
@@ -1631,6 +1607,23 @@ mindmap
       getBytes reads it back
       n16["`Database stores
       bytes not Base64`"]
+
+    When Base64 is wrong
+      n11["`Large files
+      blow up memory`"]
+      n12["`Prefer a separate
+      binary channel`"]
+      n13["`Keep JSON for
+      the metadata`"]
+
+    Reading a payload
+      Check has before get
+      n4["`get returns
+      null when absent`"]
+      n5["`asInt returns
+      zero for bad input`"]
+      n6["`Validate then
+      reply with an error`"]
 
     Metadata only queries
       n17["`Never select the
@@ -1651,6 +1644,13 @@ mindmap
       correct equals`"]
       n24["`Catches missing
       getters and setters`"]
+
+    Request envelope
+      type names the request
+      payload carries the data
+      One JSON object per line
+      n1["`Response wrapper
+      reports status`"]
 ```
 
 ### Code Snippets
@@ -1741,6 +1741,31 @@ accDescr: "Mind map of Networking. Branches: TCP basics; Single client server; M
 %%{init: { "theme": "forest", "markdownAutoWrap": false, "mindmap": { "maxNodeWidth": 300 } }}%%
 mindmap
   root((Networking))
+    Common mistakes
+      n17["`Forgetting to flush
+      PrintWriter delays
+      or blocks response`"]
+      n18["`Not closing socket
+      on exception leaks
+      file descriptors`"]
+      n19["`Blocking accept on
+      main thread while
+      handling client`"]
+      n20["`Not handling client
+      disconnect causes
+      server thread to hang`"]
+
+    JSON protocol
+      n13["`Requests and responses
+      formatted as JSON strings`"]
+      n14["`ObjectMapper serialises
+      Java objects to JSON`"]
+      n15["`ObjectMapper
+      deserialises JSON
+      back to Java objects`"]
+      n16["`Newline delimited
+      messages over the stream`"]
+
     TCP basics
       n1["`Reliable ordered
       byte stream between
@@ -1772,31 +1797,6 @@ mindmap
       needs synchronization`"]
       n12["`ExecutorService can
       replace raw thread creation`"]
-
-    JSON protocol
-      n13["`Requests and responses
-      formatted as JSON strings`"]
-      n14["`ObjectMapper serialises
-      Java objects to JSON`"]
-      n15["`ObjectMapper
-      deserialises JSON
-      back to Java objects`"]
-      n16["`Newline delimited
-      messages over the stream`"]
-
-    Common mistakes
-      n17["`Forgetting to flush
-      PrintWriter delays
-      or blocks response`"]
-      n18["`Not closing socket
-      on exception leaks
-      file descriptors`"]
-      n19["`Blocking accept on
-      main thread while
-      handling client`"]
-      n20["`Not handling client
-      disconnect causes
-      server thread to hang`"]
 ```
 
 ### Code Snippets
