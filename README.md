@@ -8,17 +8,17 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 
 - [COMP C8Z03 — Object-Oriented Programming](#comp-c8z03--object-oriented-programming)
   - [Contents](#contents)
-  - [1. Module Content](#1-module-content)
+  - [Module Content](#module-content)
     - [Topic dependencies](#topic-dependencies)
-  - [2. Topic Map — Difficulty vs OOP Transferability](#2-topic-map--difficulty-vs-oop-transferability)
-  - [3. Continuous Assessment Briefs](#3-continuous-assessment-briefs)
-  - [4. Getting Started](#4-getting-started)
-  - [5. How to Use This Repo](#5-how-to-use-this-repo)
-  - [6. Running Exercises from `Main`](#6-running-exercises-from-main)
-  - [7. Folder Map](#7-folder-map)
-  - [8. Cheatsheets](#8-cheatsheets)
-  - [9. Mindmaps](#9-mindmaps)
-  - [10. General Directions to Improve as a Programmer](#10-general-directions-to-improve-as-a-programmer)
+    - [Topic Map — Difficulty vs OOP Transferability](#topic-map--difficulty-vs-oop-transferability)
+  - [Continuous Assessment Briefs](#continuous-assessment-briefs)
+  - [Getting Started](#getting-started)
+  - [How to Use This Repo](#how-to-use-this-repo)
+    - [Running Exercises from `Main`](#running-exercises-from-main)
+    - [Folder Map](#folder-map)
+    - [Cheatsheets](#cheatsheets)
+    - [Mindmaps](#mindmaps)
+  - [General Directions to Improve as a Programmer](#general-directions-to-improve-as-a-programmer)
     - [Practise in the way that actually builds skill](#practise-in-the-way-that-actually-builds-skill)
     - [Get unstuck without losing a day](#get-unstuck-without-losing-a-day)
     - [Write code someone else can read](#write-code-someone-else-can-read)
@@ -26,7 +26,7 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 
 ---
 
-## 1. Module Content
+## Module Content
 
 | Topic | Description | Requires | Notes | Exercises | Challenge Exercises |
 |:--|:--|:--|:--|:--|:--|
@@ -163,7 +163,7 @@ flowchart TD
 
 ---
 
-## 2. Topic Map — Difficulty vs OOP Transferability
+### Topic Map — Difficulty vs OOP Transferability
 
 The chart below positions each topic on two axes:
 - **X — Difficulty**: how much new syntax and mental model is required
@@ -213,13 +213,13 @@ quadrantChart
 
 ---
 
-## 3. Continuous Assessment Briefs
+## Continuous Assessment Briefs
 
 > **2026/27 briefs are not published yet.**
 
 ---
 
-## 4. Getting Started
+## Getting Started
 
 - Install **JDK 25 or newer** and select it in your IDE. The build sets `maven.compiler.release` to 25, so an older JDK will not compile the code.
 - Open `code/` as a Maven project in IntelliJ: right-click `code/pom.xml` then **Add as Maven Project**. IntelliJ will download all dependencies automatically.
@@ -227,7 +227,7 @@ quadrantChart
 
 ---
 
-## 5. How to Use This Repo
+## How to Use This Repo
 
 - Start with the official [module descriptor](https://courses.dkit.ie/index.cfm/page/module/moduleId/55497/deliveryperiodid/1066) to understand *what* we cover in this module.
 - See [section 3](#3-continuous-assessment-briefs) for the CA briefs. The 2026/27 briefs are not published yet; they will appear there and on Moodle.
@@ -238,7 +238,7 @@ quadrantChart
 
 ---
 
-## 6. Running Exercises from `Main`
+### Running Exercises from `Main`
 
 Run `Main.java`. A menu appears:
 
@@ -294,7 +294,7 @@ t01_arrays.challenges.ce01.Exercise.run();
 
 ---
 
-## 7. Folder Map
+### Folder Map
 
 - `/` — repo root (L8---OOP---Module-Content)
 - `README.md` — this file
@@ -343,7 +343,7 @@ t01_arrays.challenges.ce01.Exercise.run();
 
 ---
 
-## 8. Cheatsheets
+### Cheatsheets
 
 | Topic | Description |
 |:--|:--|
@@ -352,7 +352,7 @@ t01_arrays.challenges.ce01.Exercise.run();
 
 ---
 
-## 9. Mindmaps
+### Mindmaps
 
 Every section has a Mermaid mindmap, code snippets, and self-assessment prompts, and each part opens with a contents table linking to the full notes.
 
@@ -365,7 +365,7 @@ Every section has a Mermaid mindmap, code snippets, and self-assessment prompts,
 
 ---
 
-## 10. General Directions to Improve as a Programmer
+## General Directions to Improve as a Programmer
 
 Roughly ranked by how much difference each makes. The first group is where most marks are won and lost.
 
