@@ -34,31 +34,65 @@ prerequisites:
 
 ## In this topic
 
-- [What you'll learn](#what-youll-learn)
-- [Why this matters](#why-this-matters)
-- [How this builds on previous content](#how-this-builds-on-previous-content)
-- [Key terms](#key-terms)
-- [Overview: What is a DAO and why use it?](#overview-what-is-a-dao-and-why-use-it)
-- [Local setup: MySQL + phpMyAdmin](#local-setup-mysql--phpmyadmin)
-- [Step 1 — Create a database in phpMyAdmin](#step-1--create-a-database-in-phpmyadmin)
-- [Step 2 — Create a user (recommended)](#step-2--create-a-user-recommended)
-- [Step 3 — Create the table (schema)](#step-3--create-the-table-schema)
-- [Step 4 — Add the MySQL JDBC driver to your project](#step-4--add-the-mysql-jdbc-driver-to-your-project)
-- [Step 5 — Your MySQL connection string](#step-5--your-mysql-connection-string)
-- [Step 6 — Keep credentials out of your code](#step-6--keep-credentials-out-of-your-code)
-- [Step 7 — Connection smoke test](#step-7--connection-smoke-test)
-- [Building the DAO](#building-the-dao)
-- [Step 8 — Domain class: `Task`](#step-8--domain-class-task)
-- [Step 9 — DAO exception and interface](#step-9--dao-exception-and-interface)
-- [Step 10 — JDBC implementation: `JdbcTaskDao`](#step-10--jdbc-implementation-jdbctaskdao)
-- [Step 11 — Service layer: `TaskService`](#step-11--service-layer-taskservice)
-- [Step 12 — Presentation layer: console demo](#step-12--presentation-layer-console-demo)
-- [Domain objects and DTOs](#domain-objects-and-dtos)
-- [Patterns used in this topic (and why)](#patterns-used-in-this-topic-and-why)
-- [Common mistakes](#common-mistakes)
-- [Practice tasks](#practice-tasks)
-- [Reflective questions](#reflective-questions)
-- [Further reading](#further-reading)
+- [DB Connectivity I — JDBC + DAO (Data Access Object)](#db-connectivity-i--jdbc--dao-data-access-object)
+  - [In this topic](#in-this-topic)
+  - [What you'll learn](#what-youll-learn)
+  - [Why this matters](#why-this-matters)
+  - [How this builds on previous content](#how-this-builds-on-previous-content)
+  - [Key terms](#key-terms)
+    - [Database](#database)
+    - [SQL](#sql)
+    - [Table, row, column](#table-row-column)
+    - [Schema](#schema)
+    - [JDBC](#jdbc)
+    - [Driver](#driver)
+    - [Placeholder](#placeholder)
+    - [Mapping](#mapping)
+    - [DTO](#dto)
+  - [Overview: What is a DAO and why use it?](#overview-what-is-a-dao-and-why-use-it)
+    - [What “DAO” means](#what-dao-means)
+    - [What problem DAO solves](#what-problem-dao-solves)
+    - [Where DAO fits in an N-tier structure](#where-dao-fits-in-an-n-tier-structure)
+  - [Local setup: MySQL + phpMyAdmin](#local-setup-mysql--phpmyadmin)
+  - [Step 1 — Create a database in phpMyAdmin](#step-1--create-a-database-in-phpmyadmin)
+  - [Step 2 — Create a user (recommended)](#step-2--create-a-user-recommended)
+  - [Step 3 — Create the table (schema)](#step-3--create-the-table-schema)
+  - [Step 4 — Add the MySQL JDBC driver to your project](#step-4--add-the-mysql-jdbc-driver-to-your-project)
+    - [Maven dependency](#maven-dependency)
+  - [Step 5 — Your MySQL connection string](#step-5--your-mysql-connection-string)
+  - [Step 6 — Keep credentials out of your code](#step-6--keep-credentials-out-of-your-code)
+    - [Snippet explanation](#snippet-explanation)
+  - [Step 7 — Connection smoke test](#step-7--connection-smoke-test)
+  - [Building the DAO](#building-the-dao)
+  - [Step 8 — Domain class: `Task`](#step-8--domain-class-task)
+    - [Snippet explanation](#snippet-explanation-1)
+    - [Patterns you should know](#patterns-you-should-know)
+      - [Pattern A — `isPresent()` / `get()` (simple, but not the nicest)](#pattern-a--ispresent--get-simple-but-not-the-nicest)
+      - [Pattern B — `orElse(...)` (use a default value)](#pattern-b--orelse-use-a-default-value)
+      - [Pattern C — `orElseThrow(...)` (treat “missing” as an error)](#pattern-c--orelsethrow-treat-missing-as-an-error)
+      - [Pattern D — `ifPresentOrElse(...)` (clean and readable)](#pattern-d--ifpresentorelse-clean-and-readable)
+    - [When you should NOT use `Optional`](#when-you-should-not-use-optional)
+  - [Step 9 — DAO exception and interface](#step-9--dao-exception-and-interface)
+    - [Snippet explanation](#snippet-explanation-2)
+  - [Step 10 — JDBC implementation: `JdbcTaskDao`](#step-10--jdbc-implementation-jdbctaskdao)
+    - [Snippet explanation](#snippet-explanation-3)
+  - [Step 11 — Service layer: `TaskService`](#step-11--service-layer-taskservice)
+    - [Snippet explanation](#snippet-explanation-4)
+  - [Step 12 — Presentation layer: console demo](#step-12--presentation-layer-console-demo)
+    - [Snippet explanation](#snippet-explanation-5)
+  - [Domain objects and DTOs](#domain-objects-and-dtos)
+    - [Snippet explanation](#snippet-explanation-6)
+  - [Patterns used in this topic (and why)](#patterns-used-in-this-topic-and-why)
+    - [1) Layered Architecture (N-tier)](#1-layered-architecture-n-tier)
+    - [2) DAO (Data Access Object)](#2-dao-data-access-object)
+    - [3) Strategy-like swapping (interface-driven design)](#3-strategy-like-swapping-interface-driven-design)
+    - [4) Exception translation](#4-exception-translation)
+    - [5) Factory Method (likely next step)](#5-factory-method-likely-next-step)
+  - [Common mistakes](#common-mistakes)
+  - [Practice tasks](#practice-tasks)
+  - [Reflective questions](#reflective-questions)
+  - [Further reading](#further-reading)
+  - [Lesson Context](#lesson-context)
 
 ---
 
@@ -194,13 +228,10 @@ A DAO solves this by creating a single, consistent place where persistence happe
 flowchart LR
   accTitle: N-tier layering from UI to database
   accDescr: Four layers in a straight line. The presentation layer calls the service layer, which calls the data access layer, which calls the MySQL database. Each layer talks only to the next one along.
-  UI["Presentation layer\nConsole / UI"] --> S["Service layer\nRules + orchestration"]
-  S --> D["Data access layer\nDAO (JDBC + SQL)"]
+  UI["Presentation layer\nConsole / UI"] --> S["Service layer\nRules\n+\norchestration"]
+  S --> D["Data access layer\nDAO\n(JDBC + SQL)"]
   D --> DB["MySQL database\nTables + rows"]
 ```
-
-**Diagram description**
-Four layers in a straight line: the presentation layer calls the service layer, which calls the data access layer, which calls the MySQL database. Each layer talks only to the next one along — the UI never reaches past the service layer to the DAO or the database.
 
 Rule of thumb:
 - **UI** should never contain SQL.

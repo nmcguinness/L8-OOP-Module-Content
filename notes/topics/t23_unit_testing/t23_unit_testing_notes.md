@@ -846,7 +846,7 @@ flowchart TD
     accTitle: Recommended order for writing your project tests
     accDescr: Seven steps in order. Test the database connection, then the DAOs, then JSON round-trips, then Base64 encoding, then that the client connects, then that the socket closes cleanly, and finally full CRUD over the socket. Then run coverage and commit the screenshot.
     A(["Start"])
-    A   --> B["1. Test DB Connection\nDriverManager.getConnection to test database"]
+    A   --> B["1. Test DB Connection\nDriverManager.getConnection\nto test database"]
     B   --> C["2. Test DAOs\nfindAll · findById · insert · update · deleteById · findByFilter"]
     C   --> D["3. Test to/from JSON\nentity serialise → deserialise round-trip\nServerResponse · ClientRequest"]
     D   --> E["4. Test to/from Base64\nencode → decode → assertArrayEquals"]

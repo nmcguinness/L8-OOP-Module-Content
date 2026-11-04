@@ -548,24 +548,24 @@ flowchart TD
     accTitle: Choosing a Java collection
     accDescr: A decision flow. Keyed lookup leads to a Map; uniqueness leads to a Set; processing by priority leads to PriorityQueue; first-in first-out or stack use leads to ArrayDeque; otherwise use ArrayList. Within Map and Set, enum keys lead to the Enum version, sorted order to the Tree version, insertion order to the Linked version, and otherwise the Hash version.
     Q1{Look up a value by a key?}
-    Q1 -->|Yes| M{Keys are enum constants?}
+    Q1 -->|Yes| M{Keys are enum</br>constants?}
     M -->|Yes| EM[EnumMap]
-    M -->|No| MS{Need keys sorted or range queries?}
+    M -->|No| MS{Need keys</br>sorted</br>or range queries?}
     MS -->|Yes| TM[TreeMap]
     MS -->|No| MI{Need insertion order?}
     MI -->|Yes| LHM[LinkedHashMap]
     MI -->|No| HM[HashMap]
-    Q1 -->|No| Q2{Must elements be unique?}
-    Q2 -->|Yes| S{Elements are enum constants?}
+    Q1 -->|No| Q2{Must elements</br>be unique?}
+    Q2 -->|Yes| S{Elements are</br>enum constants?}
     S -->|Yes| ES[EnumSet]
-    S -->|No| SS{Need sorted order?}
+    S -->|No| SS{Need sorted</br>order?}
     SS -->|Yes| TS[TreeSet]
-    SS -->|No| SI{Need insertion order?}
+    SS -->|No| SI{Need insertion</br>order?}
     SI -->|Yes| LHS[LinkedHashSet]
     SI -->|No| HS[HashSet]
-    Q2 -->|No| Q3{Always take the highest priority next?}
+    Q2 -->|No| Q3{Always take the</br>highest priority</br>next?}
     Q3 -->|Yes| PQ[PriorityQueue]
-    Q3 -->|No| Q4{Add and remove only at the ends?}
+    Q3 -->|No| Q4{Add and remove</br>only at the ends?}
     Q4 -->|Yes| AD[ArrayDeque]
     Q4 -->|No| AL[ArrayList]
 ```

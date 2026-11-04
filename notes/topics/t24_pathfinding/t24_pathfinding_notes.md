@@ -25,20 +25,42 @@ prerequisites:
 
 ## In this topic
 
-- [What you'll learn](#what-youll-learn)
-- [Why this matters](#why-this-matters)
-- [How this builds on previous content](#how-this-builds-on-previous-content)
-- [Key terms](#key-terms)
-- [Part 1 — The grid and the shape of a search](#part-1--the-grid-and-the-shape-of-a-search)
-- [Part 2 — Breadth-first search](#part-2--breadth-first-search)
-- [Part 3 — Dijkstra's algorithm](#part-3--dijkstras-algorithm)
-- [Part 4 — A\* search](#part-4--a-search)
-- [Part 5 — Watching a search work](#part-5--watching-a-search-work)
-- [Part 6 — Measuring the difference](#part-6--measuring-the-difference)
-- [Common mistakes](#common-mistakes)
-- [Practice tasks](#practice-tasks)
-- [Reflective questions](#reflective-questions)
-- [Further reading](#further-reading)
+- [Pathfinding — Search That Knows Where It Is Going](#pathfinding--search-that-knows-where-it-is-going)
+  - [In this topic](#in-this-topic)
+  - [What you'll learn](#what-youll-learn)
+  - [Why this matters](#why-this-matters)
+  - [How this builds on previous content](#how-this-builds-on-previous-content)
+  - [Key terms](#key-terms)
+    - [Frontier](#frontier)
+    - [Expanded](#expanded)
+    - [Steps versus cost](#steps-versus-cost)
+    - [Heuristic](#heuristic)
+    - [Admissible](#admissible)
+  - [Part 1 — The grid and the shape of a search](#part-1--the-grid-and-the-shape-of-a-search)
+    - [Representing the map](#representing-the-map)
+      - [Snippet explanation](#snippet-explanation)
+    - [The shape every search shares](#the-shape-every-search-shares)
+    - [Reporting without printing](#reporting-without-printing)
+      - [Snippet explanation](#snippet-explanation-1)
+  - [Part 2 — Breadth-first search](#part-2--breadth-first-search)
+    - [A FIFO frontier](#a-fifo-frontier)
+      - [Snippet explanation](#snippet-explanation-2)
+    - [Where it goes wrong](#where-it-goes-wrong)
+  - [Part 3 — Dijkstra's algorithm](#part-3--dijkstras-algorithm)
+    - [Order by cost, not by steps](#order-by-cost-not-by-steps)
+      - [Snippet explanation](#snippet-explanation-3)
+    - [Re-finding a cheaper route](#re-finding-a-cheaper-route)
+      - [Snippet explanation](#snippet-explanation-4)
+  - [Part 4 — A\* search](#part-4--a-search)
+    - [f = g + h](#f--g--h)
+    - [Admissibility, and what breaking it costs](#admissibility-and-what-breaking-it-costs)
+  - [Part 5 — Watching a search work](#part-5--watching-a-search-work)
+  - [Part 6 — Measuring the difference](#part-6--measuring-the-difference)
+  - [Common mistakes](#common-mistakes)
+  - [Practice tasks](#practice-tasks)
+  - [Reflective questions](#reflective-questions)
+  - [Further reading](#further-reading)
+  - [Lesson Context](#lesson-context)
 
 ---
 
@@ -278,10 +300,10 @@ flowchart TD
     A["Take a cell off the frontier"] --> B{"Ordered how?"}
     B -->|"FIFO: first in, first out"| C["Breadth-first<br/>fewest steps"]
     B -->|"smallest g<br/>(cost so far)"| D["Dijkstra<br/>cheapest path"]
-    B -->|"smallest g + h<br/>(cost so far + estimate)"| E["A*<br/>cheapest path, less work"]
-    C --> F["Optimal only if<br/>every move costs 1"]
+    B -->|"smallest g + h<br/>(cost so far + estimate)"| E["A*<br/>cheapest path,<br/>less work"]
+    C --> F["Optimal only if<br/>every move <br/>costs 1"]
     D --> G["Optimal with<br/>varying costs"]
-    E --> H["Optimal if h never<br/>over-estimates"]
+    E --> H["Optimal if h<br/>never<br/>over-estimates"]
 ```
 
 **Diagram description**
