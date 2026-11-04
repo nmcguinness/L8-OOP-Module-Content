@@ -4,10 +4,10 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 
 ---
 
-## Contents
+## Table of Contents
 
 - [COMP C8Z03 — Object-Oriented Programming](#comp-c8z03--object-oriented-programming)
-  - [Contents](#contents)
+  - [Table of Contents](#table-of-contents)
   - [Module Content](#module-content)
     - [Topic dependencies](#topic-dependencies)
     - [Topic Map — Difficulty vs OOP Transferability](#topic-map--difficulty-vs-oop-transferability)
