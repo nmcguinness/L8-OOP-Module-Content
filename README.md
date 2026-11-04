@@ -18,8 +18,7 @@ This space holds your weekly topics, exercises, shared resources, and assessment
   - [7. Folder Map](#7-folder-map)
   - [8. Cheatsheets](#8-cheatsheets)
   - [9. Mindmaps](#9-mindmaps)
-  - [10. Self-Assessment Quizzes](#10-self-assessment-quizzes)
-  - [11. General Directions to Improve as a Programmer](#11-general-directions-to-improve-as-a-programmer)
+  - [10. General Directions to Improve as a Programmer](#10-general-directions-to-improve-as-a-programmer)
     - [Practise in the way that actually builds skill](#practise-in-the-way-that-actually-builds-skill)
     - [Get unstuck without losing a day](#get-unstuck-without-losing-a-day)
     - [Write code someone else can read](#write-code-someone-else-can-read)
@@ -366,21 +365,7 @@ Every section has a Mermaid mindmap, code snippets, and self-assessment prompts,
 
 ---
 
-## 10. Self-Assessment Quizzes
-
-Use them **weekly, straight after each topic**, rather than only before an exam.
-
-| What | Link |
-|:--|:--|
-| How to use them, and how to add questions | [Self-assessment README](notes/assessments/self-assessments/README.md) |
-| One topic at a time (weekly self-test) | [topics/](notes/assessments/self-assessments/topics/) |
-| All topics in one Moodle import | [oop_self_assessment_mcq.gift](notes/assessments/self-assessments/oop_self_assessment_mcq.gift) |
-
-Every topic's notes also have **Reflective Questions**, followed by a collapsible *"Check your thinking"* panel containing model answers — attempt the questions before opening it.
-
----
-
-## 11. General Directions to Improve as a Programmer
+## 10. General Directions to Improve as a Programmer
 
 Roughly ranked by how much difference each makes. The first group is where most marks are won and lost.
 
@@ -388,7 +373,7 @@ Roughly ranked by how much difference each makes. The first group is where most 
 
 - **Attempt before you read.** Worked solutions sit beside the exercises in [`code/src/`](code/src/). Reading one feels *exactly* like understanding it — this is the most common way to reach week 10 feeling confident and being unable to write anything unaided. Struggle first, even badly, then compare.
 - **Re-implement from scratch.** Once an example makes sense, close it and rebuild it from an empty file. If you cannot, you have not learned it yet — and now you know.
-- **Test yourself instead of re-reading.** Every topic has **Reflective Questions** and a *"Check your thinking"* panel, and each has a [self-assessment quiz](#10-self-assessment-quizzes). Answer *before* opening either — retrieval beats re-reading by a wide margin.
+- **Test yourself instead of re-reading.** Every topic has **Reflective Questions** and a *"Check your thinking"* panel. Answer *before* opening the panel — retrieval beats re-reading by a wide margin.
 - **Space it out.** Twenty minutes on four days beats two hours the night before, and the gap is not small. Revisit last week's topic briefly while learning this week's.
 - **Keep structured notes.** A dated log of *what you learned* and *what still confuses you*, with short snippets and diagrams — especially for ideas like references vs values.
 

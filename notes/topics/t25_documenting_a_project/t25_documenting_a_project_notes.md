@@ -343,8 +343,6 @@ Two rules for writing the description:
 >   root((Collections))
 > ```
 
-The full house rules are in the [accessibility style guide](../../shared/general/accessibility-style-guide.md).
-
 ---
 
 ## Part 3 — ER Diagrams

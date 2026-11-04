@@ -4,42 +4,14 @@ The house style for every piece of Java in this repository: notes, exercise shee
 
 ## Contents
 
-- [Markdown prose](#markdown-prose)
-- [Naming](#naming)
-- [Layout](#layout)
-- [Class member order](#class-member-order)
+- [Style Guide](#style-guide)
+  - [Contents](#contents)
+  - [Naming](#naming)
+  - [Layout](#layout)
+  - [Class member order](#class-member-order)
+  - [Regions](#regions)
 - [Comments](#comments)
-- [Exceptions](#exceptions)
-- [Shared names across topics](#shared-names-across-topics)
-- [Exercises and solutions](#exercises-and-solutions)
-
-## Markdown prose
-
-**Never break a line inside a paragraph or list item.** Write each paragraph, and each list item, as one unbroken line in the source, however long it is. The editor or browser wraps it to fit the window.
-
-A line break typed into prose looks jagged, especially next to a long link: the text stops early, and the next line starts somewhere unrelated. Those breaks also go stale, because every edit to a sentence leaves the lines around it uneven.
-
-This is wrong:
-
-```markdown
-- Start with the official [module
-  descriptor](https://example.com/a/very/long/link) to
-  understand what we cover.
-```
-
-This is right:
-
-```markdown
-- Start with the official [module descriptor](https://example.com/a/very/long/link) to understand what we cover.
-```
-
-Keep line breaks only where they carry meaning:
-
-- code blocks, Mermaid diagrams, tables and frontmatter;
-- a bold label on its own line above its text, such as `**Diagram description**`;
-- consecutive labelled lines, such as `**Solution:**` followed by `**Tests:**`.
-
-To separate paragraphs, use a blank line. To show a set of items, use a list. In VS Code, turn on **View > Word Wrap** to read long lines comfortably.
+  - [Exceptions](#exceptions)
 
 ## Naming
 
@@ -93,12 +65,58 @@ Following Oracle's order:
 4. Methods, grouped by what they do rather than by access level
 5. Nested types
 
-Short section comments such as `// === Fields ===` are allowed but not required.
+## Regions
+
+Use regions to group the members of a class, so that a reader can fold away what they do not need. IntelliJ shows a fold arrow beside each one. To add a region, select the code, press **Ctrl+Alt+T**, and choose **region...endregion Comments**.
+
+```java
+public class Player {
+
+    //region Constants
+    private static final int MAX_SCORE = 100;
+    //endregion
+
+    //region Fields
+    private final String name;
+    private int score;
+    //endregion
+
+    //region Constructors
+    public Player(String name) {
+        this.name = name;
+    }
+    //endregion
+
+    //region Public API
+    public int getScore() {
+        return score;
+    }
+
+    public void addScore(int points) {
+        score = Math.min(MAX_SCORE, score + points);
+    }
+    //endregion
+
+    //region Overrides
+    @Override
+    public String toString() {
+        return name + ": " + score;
+    }
+    //endregion
+}
+```
+
+- Use these names, in this order, leaving out any you do not need: `Constants`, `Fields`, `Constructors`, `Public API`, `Helpers`, `Overrides`.
+- Close every `//region` with an `//endregion`. Do not nest regions, and do not put one inside a method.
+- Skip regions in a small class. If a record or a class with two short methods fits on one screen, they only add noise.
+- A class that needs many regions may be doing too many jobs. Consider splitting it.
+
+Code supplied with the module, such as demos and worked solutions, may use section comments such as `// === Fields ===`, or no sections at all. Use regions in the code you write.
 
 ## Comments
 
 - Use Javadoc (`/** ... */`) on public classes and on public methods whose purpose is not obvious from the name. See [t25 Documenting a Project](../../topics/t25_documenting_a_project/t25_documenting_a_project_notes.md).
-- Put a comment on the line **above** the code it explains, never at the end of the line (accessibility rule R6).
+- Put a comment on the line **above** the code it explains, never at the end of the line.
 - Explain *why*, not *what*. Do not comment a getter.
 
 ## Exceptions
@@ -108,28 +126,3 @@ Short section comments such as `// === Fields ===` are allowed but not required.
 - Never write `catch (Exception e)` except at the top of a thread or request handler, and then log the exception object.
 - When translating an exception, pass the original as the cause: `throw new DaoException("...", e)`.
 
-## Shared names across topics
-
-Use the same name for the same idea in every topic:
-
-| Idea | Name |
-|:-|:-|
-| Response wrapper sent by a server | `ServerResponse<T>`: `status` is `"OK"` or `"ERROR"`, plus `message` and `data` |
-| Request DTO received by a server | `ClientRequest`: `requestType` and `payload` |
-| Kinds of request | `RequestType` enum |
-| One handler per request type | `RequestHandler` |
-| Routing table from type to handler | `RequestDispatcher` |
-| Checked exception for storage failures | `DaoException` |
-| Database settings loaded from a file | `DbConfig` |
-
-## Exercises and solutions
-
-- Each exercise lives in `code/src/<topic>/exercises/exNN/`, with its tests in `code/test/<topic>/exercises/exNN/`. Demos use `deNN` and challenges use `ceNN`.
-- The worked solution exists **only** in `code/src`. An exercise sheet never pastes a copy of the solution code. It ends each exercise with a link:
-
-  ```markdown
-  **Solution:** [t15 exercise 02 solution code](../../../../code/src/t15_dao/exercises/ex02/).
-  **Tests:** [t15 exercise 02 tests](../../../../code/test/t15_dao/exercises/ex02/).
-  ```
-
-- A written answer to a question, with no code, may stay in the sheet inside a collapsible "Answer" box.
