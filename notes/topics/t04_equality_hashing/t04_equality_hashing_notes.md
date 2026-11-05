@@ -4,7 +4,7 @@ subtitle: "COMP C8Z03 — Year 2 OOP"
 topic_code: t04_equality_hashing
 description: "A practical introduction to identity vs value equality, the equals/hashCode contract, and how hashing works — without using collection types yet."
 created: 2025-10-06
-last_updated: 2026-04-14
+last_updated: 2026-11-05
 version: 1.0
 status: published
 authors: ["OOP Teaching Team"]
@@ -107,6 +107,35 @@ System.out.println(a.equals(b)); // true (same characters)
 ```
 
 Use `equals` when “sameness” is about data, not the instance.
+
+> [!NOTE]
+> **Aside: why `==` can seem to work on strings**
+>
+> Write the same strings as literals, without `new`, and `==` gives a different answer:
+>
+> ```java
+> String s = "hello";
+> String t = "hello";
+> String a = new String("hello");
+>
+> System.out.println(s == t);      // true (one shared object)
+> System.out.println(s == a);      // false (different objects)
+> System.out.println(s.equals(a)); // true (same characters)
+> ```
+>
+> `==` is still checking identity here. Java keeps string literals in the **string pool**, and identical literals share one object, so `s` and `t` hold the same reference. This sharing is safe because a `String` cannot change. `new` always creates a separate object, even when the pool already holds the same characters.
+>
+> Strings built while the program runs are normally not pooled either, so `==` can return `false` for strings with the same characters. This code is an example:
+>
+> ```java
+> String greeting = "hel";
+> String built = greeting + "lo";
+>
+> System.out.println(built == s);      // false (built at runtime)
+> System.out.println(built.equals(s)); // true (same characters)
+> ```
+>
+> Always compare strings with `equals`. A `==` check that passes on literals in a small test can then fail on real input, such as text read from a user or a file.
 
 ---
 
@@ -294,6 +323,23 @@ public int hashCode() {
 }
 ```
 
+> [!NOTE]
+> **Aside: why the hand-crafted `hashCode` is structured this way**
+>
+> This is the [field-combining pattern](#object-to-number-combining-field-hashes) from earlier, written in Java. Each part has a job:
+>
+> - **The `null` check.** Calling `hashCode()` on a `null` reference throws a `NullPointerException`, so a `null` field counts as `0` instead.
+> - **The running `result`.** Each field is folded into the total so far, so every field affects the final value. A third field needs only one more `result = 31 * result + ...` line.
+> - **Multiplying before adding.** A plain sum ignores field order. If the two field hashes are 120 and 121, then `120 + 121` and `121 + 120` both give 241, so swapped values collide. With the multiplier, `31 * 120 + 121` is 3841 and `31 * 121 + 120` is 3871.
+> - **An odd multiplier.** Multiplying by 2 moves every bit one place left, and bits pushed past the top of the 32-bit `int` are lost. Repeat that across enough fields and an earlier field can stop affecting the result. An odd multiplier does not lose information this way.
+> - **The value 31.** It is an odd prime, but nothing is special about it: 37 would also work. It is the convention because `String.hashCode()` uses it too.
+>
+> The multiplication can overflow, and that is fine. Java `int` arithmetic wraps around without an error, and the method gives the same answer each time for the same field values. The result can be negative, which is why [Appendix A](#java-specifics-sign-of-result) uses `Math.floorMod` to get a bucket index.
+>
+> This example assumes `equals` compares both `id` and `email`. The `Customer` class [above](#classes-override-both-consistently) compares only `id`, so its `hashCode` must use only `id`. Including `email` there would break the contract: two equal customers with different emails would get different hash codes.
+>
+> `Objects.hash(id, email)` uses the same pattern, including the `null` handling, but it starts `result` at 1. The values differ from this method, but both are correct. Prefer `Objects.hash` unless profiling shows that its small extra cost matters.
+
 ---
 
 ## Pitfalls to avoid
@@ -411,8 +457,6 @@ The performance argument is the point: scanning a `List` for a match is O(n) per
 
 - **Range:** `0 = (a mod m) < m` for positive `a` and `m>0`.
 - **Congruence:** If `a mod m == b mod m`, then `a` and `b` fall in the **same bucket** (same remainder).
-- **Add/multiply:**
-  `(a + b) mod m = ((a mod m) + (b mod m)) mod m` `(a × b) mod m = ((a mod m) × (b mod m)) mod m`
 
 ### Java specifics (sign of result)
 
