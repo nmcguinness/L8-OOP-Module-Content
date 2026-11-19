@@ -8,10 +8,10 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 
 - [COMP C8Z03 — Object-Oriented Programming](#comp-c8z03--object-oriented-programming)
   - [Table of Contents](#table-of-contents)
+  - [Continuous Assessment Briefs](#continuous-assessment-briefs)
   - [Module Content](#module-content)
     - [Topic dependencies](#topic-dependencies)
     - [Topic Map — Difficulty vs Transferability](#topic-map--difficulty-vs-transferability)
-  - [Continuous Assessment Briefs](#continuous-assessment-briefs)
   - [How to Use This Repo](#how-to-use-this-repo)
     - [Getting Started](#getting-started)
     - [Running Exercises from `Main`](#running-exercises-from-main)
@@ -23,6 +23,15 @@ This space holds your weekly topics, exercises, shared resources, and assessment
     - [Get unstuck without losing a day](#get-unstuck-without-losing-a-day)
     - [Write code someone else can read](#write-code-someone-else-can-read)
     - [Sustain it](#sustain-it)
+
+
+---
+
+## Continuous Assessment Briefs
+
+| Assessment | Weight | Brief | Starter code |
+|:--|:--|:--|:--|
+| ICA2 - Individual Project: Help Desk | 20% | [ICA2 brief](notes/assessments/briefs/2026-27/ica2/2026-27-l8-s1-oop-ica2.md) | [ica2_starter](notes/assessments/briefs/2026-27/ica2/ica2_starter/) |
 
 ---
 
@@ -56,6 +65,8 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 | t23 | **Unit Testing** — JUnit 5, AAA pattern, naming conventions, DAO integration tests, coverage | [t15](notes/topics/t15_dao/t15_dao_notes.md), [t21](notes/topics/t21_json_2_jackson_advanced/t21_json_2_jackson_advanced_notes.md), [t22](notes/topics/t22_networking/t22_networking_notes.md) | [Notes](notes/topics/t23_unit_testing/t23_unit_testing_notes.md) | [Exercises](notes/topics/t23_unit_testing/exercises/t23_unit_testing_exercises.md) | — |
 | t24 | **Pathfinding** — breadth-first search, Dijkstra and A\* over a grid, with a console visualisation | [t01](notes/topics/t01_arrays/t01_arrays_notes.md), [t07](notes/topics/t07_collections_3_set_map/t07_collections_3_set_map_notes.md), [t13](notes/topics/t13_design_patterns_1/t13_design_patterns_1_notes.md), [t14](notes/topics/t14_design_patterns_2/t14_design_patterns_2_notes.md) | [Notes](notes/topics/t24_pathfinding/t24_pathfinding_notes.md) | [Exercises](notes/topics/t24_pathfinding/exercises/t24_pathfinding_exercises.md) | — |
 | t25 | **Documenting a Project** — Javadoc tags, ER/flowchart/sequence/architecture diagrams with Mermaid | [t15](notes/topics/t15_dao/t15_dao_notes.md), [t22](notes/topics/t22_networking/t22_networking_notes.md) | [Notes](notes/topics/t25_documenting_a_project/t25_documenting_a_project_notes.md) | [Exercises](notes/topics/t25_documenting_a_project/exercises/t25_documenting_a_project_exercises.md) | — |
+
+---
 
 ### Topic dependencies
 
@@ -210,14 +221,6 @@ quadrantChart
     t24 Pathfinding: [0.70, 0.86]
     t25 Documenting a Project: [0.32, 0.68]
 ```
-
----
-
-## Continuous Assessment Briefs
-
-| Assessment | Weight | Brief | Starter code |
-|:--|:--|:--|:--|
-| ICA2 - Individual Project: Help Desk | 20% | [ICA2 brief](notes/assessments/briefs/2026-27/ica2/2026-27-l8-s1-oop-ica2.md) | [ica2_starter](notes/assessments/briefs/2026-27/ica2/ica2_starter/) |
 
 ---
 
