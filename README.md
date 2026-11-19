@@ -215,14 +215,16 @@ quadrantChart
 
 ## Continuous Assessment Briefs
 
-> **2026/27 briefs are not published yet.**
+| Assessment | Weight | Brief | Starter code |
+|:--|:--|:--|:--|
+| ICA2 - Individual Project: Help Desk | 20% | [ICA2 brief](notes/assessments/briefs/2026-27/ica2/2026-27-l8-s1-oop-ica2.md) | [ica2_starter](notes/assessments/briefs/2026-27/ica2/ica2_starter/) |
 
 ---
 
 ## How to Use This Repo
 
 - Start with the official [module descriptor](https://courses.dkit.ie/index.cfm/page/module/moduleId/55497/deliveryperiodid/1066) to understand *what* we cover in this module.
-- See [section 3](#3-continuous-assessment-briefs) for the CA briefs. The 2026/27 briefs are not published yet; they will appear there and on Moodle.
+- See [Continuous Assessment Briefs](#continuous-assessment-briefs) for the CA briefs. Each brief is also on Moodle.
 - Each week, open the matching folder in **topics/** (e.g. `t02_recursion/`):
   - Read the **notes**, then work through **exercises/** (core skills), then try **challenges/** (apply + extend).
   - Attempt each exercise before opening the worked version in [`code/src/`](code/src/) — reading a solution feels like understanding, but only writing the code builds it.
@@ -326,7 +328,7 @@ t01_arrays.challenges.ce01.Exercise.run();
   - `applied/` — applied case studies (e.g. TaskHub)
     - `taskhub/`
   - `assessments/`
-    - `briefs/` — CA briefs (2026/27 briefs not yet published)
+    - `briefs/` — CA briefs and starter code, one folder per year (e.g. `2026-27/ica2/`)
     - `self-assessments/` — MCQ bank, GIFT format (208 questions)
       - `topics/` — one file per topic, 8 questions each
       - `build_bank.sh` — validates topics/, rebuilds combined file
