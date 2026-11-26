@@ -100,6 +100,8 @@ That is a rare thing to be able to show rather than assert.
 
 If `Cell` did not implement `equals` and `hashCode` correctly, none of this would work — a `HashSet<Cell>` would never recognise a cell it had already seen, and every search would run forever. This topic is where the t04 contract stops being abstract.
 
+> `Cell` is a record, `record Cell(int row, int col)`, in [common/Cell.java](../../../code/src/t24_pathfinding/common/Cell.java).
+
 ---
 
 ## Key terms

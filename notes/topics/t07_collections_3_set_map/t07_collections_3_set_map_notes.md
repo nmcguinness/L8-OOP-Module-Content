@@ -270,7 +270,34 @@ The two points are `equals`, but each has a different identity hash code, so the
 
 **Failure 2: changing a key after you put it in.**
 
+> `MutableKey` is a nested class in [the t07 demo](../../../code/src/t07_collections_3_set_map/demos/de01/Demo.java#L60-L82).
+
 ```java
+// A mutable key: its hash changes when its field changes
+final class MutableKey {
+    private String name;
+
+    MutableKey(String name) {
+        this.name = name;
+    }
+
+    void rename(String newName) {
+        name = newName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MutableKey other)) return false;
+        return name.equals(other.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+}
+
 Map<MutableKey, Integer> scores = new HashMap<>();
 MutableKey key = new MutableKey("ana");
 scores.put(key, 90);

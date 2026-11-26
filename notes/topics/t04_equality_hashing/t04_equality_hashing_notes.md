@@ -420,6 +420,33 @@ Only the fields that make the object *that* object — usually a natural or surr
 They should be **immutable**, and this matters more than students expect. A hashed collection files an object into a bucket using `hashCode()` *at the moment you insert it*. Mutate a field used by `hashCode` afterwards and the object is now sitting in the wrong bucket — `contains(x)` returns `false` for an object that is demonstrably in the set, and you cannot remove it:
 
 ```java
+// A mutable Player: equals and hashCode use id, and setId changes it
+final class Player {
+    private int id;
+    private final String name;
+
+    Player(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Player other)) return false;
+        return id == other.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);
+    }
+}
+
 Set<Player> set = new HashSet<>();
 Player p = new Player(1, "Ana");
 set.add(p);
