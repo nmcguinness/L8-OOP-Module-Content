@@ -2,6 +2,7 @@ package t05_collections_1.demos.de01;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
+import common.ProjectPaths;
 
 /**
  * Demo class for profiling different "prettify" implementations
@@ -41,7 +42,7 @@ public class Demo {
     private void start() {
         // Load the original list of names once.
         ArrayList<String> master = FileUtils.readDelimitedFile(
-                "first_names_10001.csv",
+                ProjectPaths.path("first_names_10001.csv"),
                 ',');
 
         if (master == null || master.isEmpty()) {

@@ -23,17 +23,18 @@ public class Main {
             System.out.println("  6.  t07 - Collections III (Set, Map)");
             System.out.println("  7.  t08 - Inheritance");
             System.out.println("  8.  t09 - Interfaces");
-            System.out.println("  9.  t10 - Exception Handling");
-            System.out.println(" 10.  t11 - Generics I");
-            System.out.println(" 11.  t12 - Generics II");
-            System.out.println(" 12.  t13 - Design Patterns I");
-            System.out.println(" 13.  t14 - Design Patterns II");
-            System.out.println(" 14.  t15 - DB Connectivity / DAO");
-            System.out.println(" 15.  t16 - Functional Interfaces");
-            System.out.println(" 16.  t17 - Streams API");
-            System.out.println(" 17.  t18 - Java I/O");
-            System.out.println(" 18.  t19 - Concurrency I");
-            System.out.println(" 19.  t24 - Pathfinding (BFS, Dijkstra, A*)");
+            System.out.println("  9.  t09s - Image Filters (t09 supplement)");
+            System.out.println(" 10.  t10 - Exception Handling");
+            System.out.println(" 11.  t11 - Generics I");
+            System.out.println(" 12.  t12 - Generics II");
+            System.out.println(" 13.  t13 - Design Patterns I");
+            System.out.println(" 14.  t14 - Design Patterns II");
+            System.out.println(" 15.  t15 - DB Connectivity / DAO");
+            System.out.println(" 16.  t16 - Functional Interfaces");
+            System.out.println(" 17.  t17 - Streams API");
+            System.out.println(" 18.  t18 - Java I/O");
+            System.out.println(" 19.  t19 - Concurrency I");
+            System.out.println(" 20.  t24 - Pathfinding (BFS, Dijkstra, A*)");
             System.out.println("=====================================================");
             System.out.println("  Menu numbers are just list positions; tNN is the");
             System.out.println("  topic code used in notes/topics and code/src.");
@@ -44,7 +45,7 @@ public class Main {
             System.out.print("Select topic (0 to exit): ");
 
             if (!scanner.hasNextInt()) {
-                System.out.println("Invalid input. Enter a number between 0 and 19.");
+                System.out.println("Invalid input. Enter a number between 0 and 20.");
                 scanner.next();
                 continue;
             }
@@ -97,31 +98,36 @@ public class Main {
                     break;
 
                 case 9:
+                    System.out.println("\n******************** Topic:t09s - Image Filters (t09 supplement) ********************\n");
+                    run_t09s_ImageFilters();
+                    break;
+
+                case 10:
                     System.out.println("\n******************** Topic:t10 - Exception Handling ********************\n");
                     run_t10_ExceptionHandling();
                     break;
 
-                case 10:
+                case 11:
                     System.out.println("\n******************** Topic:t11 - Generics I ********************\n");
                     run_t11_Generics1();
                     break;
 
-                case 11:
+                case 12:
                     System.out.println("\n******************** Topic:t12 - Generics II ********************\n");
                     run_t12_Generics2();
                     break;
 
-                case 12:
+                case 13:
                     System.out.println("\n******************** Topic:t13 - Design Patterns I ********************\n");
                     run_t13_DesignPatterns1();
                     break;
 
-                case 13:
+                case 14:
                     System.out.println("\n******************** Topic:t14 - Design Patterns II ********************\n");
                     run_t14_DesignPatterns2();
                     break;
 
-                case 14:
+                case 15:
                     System.out.println("\n******************** Topic:t15 - DB Connectivity / DAO ********************\n");
                     System.out.println("NOTE: These exercises require a MySQL database.");
                     System.out.println("      Before running, create the 'car_rental' database in phpMyAdmin");
@@ -130,33 +136,33 @@ public class Main {
                     run_t15_Dao();
                     break;
 
-                case 15:
+                case 16:
                     System.out.println("\n******************** Topic:t16 - Functional Interfaces ********************\n");
                     run_t16_FunctionalInterfaces();
                     break;
 
-                case 16:
+                case 17:
                     System.out.println("\n******************** Topic:t17 - Streams API ********************\n");
                     run_t17_StreamsApi();
                     break;
 
-                case 17:
+                case 18:
                     System.out.println("\n******************** Topic:t18 - Java I/O ********************\n");
                     run_t18_Io();
                     break;
 
-                case 18:
+                case 19:
                     System.out.println("\n******************** Topic:t19 - Concurrency I ********************\n");
                     run_t19_Concurrency();
                     break;
 
-                case 19:
+                case 20:
                     System.out.println("\n******************** Topic:t24 - Pathfinding ********************\n");
                     run_t24_Pathfinding();
                     break;
 
                 default:
-                    System.out.println("Invalid selection. Enter a number between 0 and 19.");
+                    System.out.println("Invalid selection. Enter a number between 0 and 20.");
                     break;
             }
         }
@@ -550,6 +556,38 @@ public class Main {
 
         System.out.println("\n********** Exercise 09 - TextFilter pipeline with profanity blacklist from CSV **********\n");
         t09_interface.exercises.ex09.Exercise.run();
+    }
+
+    private void run_t09s_ImageFilters() {
+        System.out.println("\n********** Demo 01 - Image filters: one filter per image, then two in series **********\n");
+        t09_interface.demos.de01.Demo.run();
+
+        System.out.println("\n********** Exercise 10 - InvertFilter **********\n");
+        t09_interface.exercises.ex10.Exercise.run();
+
+        System.out.println("\n********** Exercise 11 - ThresholdFilter after Sobel edges **********\n");
+        t09_interface.exercises.ex11.Exercise.run();
+
+        System.out.println("\n********** Exercise 12 - FlipHorizontalFilter **********\n");
+        t09_interface.exercises.ex12.Exercise.run();
+
+        System.out.println("\n********** Exercise 13 - SepiaFilter with clamping **********\n");
+        t09_interface.exercises.ex13.Exercise.run();
+
+        System.out.println("\n********** Exercise 14 - Filter order: same filters, two orders **********\n");
+        t09_interface.exercises.ex14.Exercise.run();
+
+        System.out.println("\n********** Exercise 16 - PixelateFilter **********\n");
+        t09_interface.exercises.ex16.Exercise.run();
+
+        System.out.println("\n********** Exercise 17 - Rotate90Filter **********\n");
+        t09_interface.exercises.ex17.Exercise.run();
+
+        System.out.println("\n********** Exercise 18 - BrightnessFilter **********\n");
+        t09_interface.exercises.ex18.Exercise.run();
+
+        System.out.println("\n********** Exercise 19 - PosterizeFilter **********\n");
+        t09_interface.exercises.ex19.Exercise.run();
     }
 
     private void run_t11_Generics1() {

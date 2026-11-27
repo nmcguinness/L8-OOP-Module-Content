@@ -26,7 +26,7 @@ public class Exercise {
 
 //    public void runStringTest()
 //    {
-//        String filePath = "code/data/ce03/country_codes.csv";
+//        String filePath = common.ProjectPaths.path("data/ce03/country_codes.csv");
 //        Path csvPath = Path.of(filePath);
 //
 //        List<String> codes;
@@ -54,7 +54,7 @@ public class Exercise {
 //    }
 //
 //    public void runXMLTest(){
-//        String filePath = "code/data/ce03/weapon_inventory.xml";
+//        String filePath = common.ProjectPaths.path("data/ce03/weapon_inventory.xml");
 //        Path xmlPath = Path.of(filePath);
 //
 //        List<t11_generics_1.challenges.ce03.Weapon> weapons;

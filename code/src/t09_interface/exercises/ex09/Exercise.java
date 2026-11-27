@@ -7,6 +7,7 @@ import t09_interface.exercises.ex08.TrimFilter;
 
 import java.util.LinkedList;
 import java.util.List;
+import common.ProjectPaths;
 
 public class Exercise {
 
@@ -14,7 +15,7 @@ public class Exercise {
 
         // Load data from CSV
         System.out.println("Put your data file in: " + System.getProperty("user.dir"));
-        String filePath = "data/exercises/";
+        String filePath = ProjectPaths.path("data/exercises/");
 
         List<String> badWords = ProfanityLoader.loadFromCsv(filePath + "profane_words.csv");
         TextFilter blacklistFilter = new ProfanityFilter(badWords);

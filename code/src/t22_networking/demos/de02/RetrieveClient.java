@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.sql.*;
 import java.util.*;
+import common.ProjectPaths;
 
 public class RetrieveClient {
 
@@ -37,7 +38,7 @@ public class RetrieveClient {
             byte[] downloaded = Base64.getDecoder().decode((String) data.get("fileData"));
 
             Files.createDirectories(Path.of("data"));
-            Files.write(Path.of("data/retrieved_test.bin"), downloaded);
+            Files.write(ProjectPaths.resolve("data/retrieved_test.bin"), downloaded);
 
             System.out.println("Retrieved: " + data.get("fileName") + " (" + downloaded.length + " bytes)");
         }

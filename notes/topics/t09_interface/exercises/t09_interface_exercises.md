@@ -2,9 +2,9 @@
 title: "Interfaces — Exercises"
 subtitle: "COMP C8Z03 — Year 2 OOP"
 topic_code: t09_interface
-description: "Nine step-by-step interface exercises: behaviour contracts, default methods, multiple interfaces, strategy, comparator factories, command history, simple XML, and a file-backed filter pipeline."
+description: "Nine step-by-step interface exercises: behaviour contracts, default methods, multiple interfaces, strategy, comparator factories, command history, simple XML, and a file-backed filter pipeline. Exercises 10 to 19, on image filters, are on a separate supplement sheet."
 created: 2026-05-29
-last_updated: 2026-11-03
+last_updated: 2026-11-27
 version: 1.2
 status: published
 authors: ["OOP Teaching Team"]
@@ -27,6 +27,18 @@ Every exercise follows the same layout: a goal, the steps, a worked example, the
 | 07 Saving as XML | an interface for saving, string parsing | Intermediate |
 | 08 A text filter pipeline | chaining objects through one interface | Intermediate |
 | 09 Filtering words from a file | `Iterable<String>`, reading a file | Stretch |
+| [10 Invert](t09_interface_supplement_image_filters_exercises.md#exercise-10--invert) | implementing `IImageFilter`, reading and packing channels | Foundation |
+| [11 Threshold](t09_interface_supplement_image_filters_exercises.md#exercise-11--threshold) | a filter with a constructor setting, a three-filter pipeline | Foundation |
+| [12 Flip](t09_interface_supplement_image_filters_exercises.md#exercise-12--flip) | working out which input pixel each output pixel copies | Intermediate |
+| [13 Sepia](t09_interface_supplement_image_filters_exercises.md#exercise-13--sepia) | weighted sums of channels, clamping | Intermediate |
+| [14 Filter order](t09_interface_supplement_image_filters_exercises.md#exercise-14--filter-order) | the same filters in a different order | Intermediate |
+| [15 Testing a filter](t09_interface_supplement_image_filters_exercises.md#exercise-15--testing-a-filter) | a JUnit test on a tiny image | Stretch |
+| [16 Pixelate](t09_interface_supplement_image_filters_exercises.md#exercise-16--pixelate) | loops that step by a block, partial blocks at the edges | Intermediate |
+| [17 Rotate](t09_interface_supplement_image_filters_exercises.md#exercise-17--rotate) | an index formula, a result with width and height swapped | Stretch |
+| [18 Brightness](t09_interface_supplement_image_filters_exercises.md#exercise-18--brightness) | a signed constructor setting, clamping at both ends | Foundation |
+| [19 Posterize](t09_interface_supplement_image_filters_exercises.md#exercise-19--posterize) | rounding with `double`, counting colours with a `HashSet` | Intermediate |
+
+Exercises 10 to 19 practise the [image filters supplement](../t09_interface_supplement_image_filters.md). They are on their own [image filters exercise sheet](t09_interface_supplement_image_filters_exercises.md).
 
 ## How to run
 

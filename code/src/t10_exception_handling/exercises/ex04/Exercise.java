@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import common.ProjectPaths;
 
 public class Exercise {
 
@@ -28,7 +29,8 @@ public class Exercise {
 
     public static void run() {
         // Paths are relative to the working directory, which is code/ when run from Main
-        String[] paths = {"data/exercises/profane_words.csv", "no/such/file.txt"};
+        String[] paths = {ProjectPaths.path("data/exercises/profane_words.csv"),
+            "no/such/file.txt"};
         for (String p : paths) {
             try {
                 System.out.println(p + ": " + readLines(p).size() + " lines");

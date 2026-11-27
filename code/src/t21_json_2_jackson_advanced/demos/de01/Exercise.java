@@ -1,6 +1,7 @@
 package t21_json_2_jackson_advanced.demos.de01;
 
 import java.util.Arrays;
+import common.ProjectPaths;
 
 public class Exercise {
 
@@ -9,12 +10,12 @@ public class Exercise {
         byte[] synthetic = new byte[256];
         for (int i = 0; i < synthetic.length; i++)
             synthetic[i] = (byte) i;
-        BinaryFileUtil.writeFile("data/test_asset.bin", synthetic);
+        BinaryFileUtil.writeFile(ProjectPaths.path("data/test_asset.bin"), synthetic);
 
         // Round-trip test
-        byte[] original = BinaryFileUtil.readFile("data/test_asset.bin");
-        BinaryFileUtil.writeFile("data/test_asset_copy.bin", original);
-        byte[] copy = BinaryFileUtil.readFile("data/test_asset_copy.bin");
+        byte[] original = BinaryFileUtil.readFile(ProjectPaths.path("data/test_asset.bin"));
+        BinaryFileUtil.writeFile(ProjectPaths.path("data/test_asset_copy.bin"), original);
+        byte[] copy = BinaryFileUtil.readFile(ProjectPaths.path("data/test_asset_copy.bin"));
 
         System.out.println("File size: " + original.length + " bytes");
         System.out.println("Round-trip OK: " + Arrays.equals(original, copy));

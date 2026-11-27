@@ -584,6 +584,8 @@ Implementers write only `log`; callers get the shorter `info` and `error` for fr
 
 For step-by-step practice with worked solutions, see the [t09 exercises](exercises/t09_interface_exercises.md).
 
+For more practice on images, read the [image filters supplement](t09_interface_supplement_image_filters.md), then try exercises 10 to 19 on the [image filters exercise sheet](exercises/t09_interface_supplement_image_filters_exercises.md). You write invert, threshold, flip, sepia, pixelate, rotate, brightness and posterize filters that implement one `IImageFilter` interface. You also compare filter orders and write a JUnit test for a filter.
+
 ---
 
 ## Reflective questions
@@ -632,6 +634,10 @@ A new **abstract** method breaks all ten classes: none of them compiles until ea
 ---
 
 ## Further reading
+
+- **Supplement: Image Filters Behind One Interface**
+  [t09_interface_supplement_image_filters.md](t09_interface_supplement_image_filters.md)
+  Greyscale, blur, edge detection and scale filters behind one `IImageFilter` interface, run from a `List` over a PNG.
 
 - **Oracle Java Tutorials: Interfaces**
   <https://docs.oracle.com/javase/tutorial/java/IandI/createinterface.html>

@@ -5,14 +5,15 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
+import common.ProjectPaths;
 
 /**
  * Database settings, read from a file that is kept out of Git.
  */
 public record DbConfig(String url, String user, String password) {
 
-    /** Relative to the folder the program runs in, which is {@code code}. */
-    public static final Path DEFAULT_FILE = Path.of("config", "db.properties");
+    /** {@code code/config/db.properties}, found from the project root or the code folder. */
+    public static final Path DEFAULT_FILE = ProjectPaths.resolve("config/db.properties");
 
     public static DbConfig load(Path file) throws IOException {
         Properties props = new Properties();

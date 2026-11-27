@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.sql.*;
 import java.util.*;
+import common.ProjectPaths;
 
 public class UploadClient {
 
@@ -20,7 +21,7 @@ public class UploadClient {
         for (int i = 0; i < original.length; i++) original[i] = (byte)(i % 200);
 
         Files.createDirectories(Path.of("data"));
-        Files.write(Path.of("data/upload_test.bin"), original);
+        Files.write(ProjectPaths.resolve("data/upload_test.bin"), original);
 
         // Base64-encode the file and send an UPLOAD_FILE request
         int storedId;

@@ -49,6 +49,7 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 | t07 | **Collections III** — HashSet, TreeSet, HashMap, TreeMap, EnumMap, PriorityQueue, Optional; choosing the right collection | [t04](notes/topics/t04_equality_hashing/t04_equality_hashing_notes.md), [t06](notes/topics/t06_collections_2/t06_collections_2_notes.md) | [Notes](notes/topics/t07_collections_3_set_map/t07_collections_3_set_map_notes.md) | [Exercises](notes/topics/t07_collections_3_set_map/exercises/t07_collections_3_set_map_exercises.md) | — |
 | t08 | **Inheritance** — extend classes, override methods, model hierarchies with abstract and sealed types; composition as the alternative | [t07](notes/topics/t07_collections_3_set_map/t07_collections_3_set_map_notes.md) | [Notes](notes/topics/t08_inheritance/t08_inheritance_notes.md) | [Exercises](notes/topics/t08_inheritance/exercises/t08_inheritance_exercises.md) | — |
 | t09 | **Interfaces** — define shared behaviour contracts; default and static methods; functional interfaces; polymorphism without inheritance | [t08](notes/topics/t08_inheritance/t08_inheritance_notes.md) | [Notes](notes/topics/t09_interface/t09_interface_notes.md) | [Exercises](notes/topics/t09_interface/exercises/t09_interface_exercises.md) | [Directory Distillery](notes/topics/t09_interface/challenges/ce02_the_directory_distillery.md) |
+| t09s | **Image Filters** (t09 supplement) — load a PNG into a 2D array and run greyscale, blur, edge-detection and scale filters through one `IImageFilter` interface | [t01](notes/topics/t01_arrays/t01_arrays_notes.md), [t09](notes/topics/t09_interface/t09_interface_notes.md) | [Notes](notes/topics/t09_interface/t09_interface_supplement_image_filters.md) | [Exercises](notes/topics/t09_interface/exercises/t09_interface_supplement_image_filters_exercises.md) | — |
 | t10 | **Exception Handling** — checked vs unchecked exceptions, try/catch/finally, try-with-resources, custom exception types, chaining a cause | [t07](notes/topics/t07_collections_3_set_map/t07_collections_3_set_map_notes.md), [t09](notes/topics/t09_interface/t09_interface_notes.md) | [Notes](notes/topics/t10_exception_handling/t10_exception_handling_notes.md) | [Exercises](notes/topics/t10_exception_handling/exercises/t10_exception_handling_exercises.md) | — |
 | t11 | **Generics I** — write type-safe reusable classes and methods using type parameters | [t09](notes/topics/t09_interface/t09_interface_notes.md) | [Notes](notes/topics/t11_generics_1/t11_generics_1_notes.md) | [Exercises](notes/topics/t11_generics_1/exercises/t11_generics_1_exercises.md) | [Frequency Forge](notes/topics/t11_generics_1/challenges/ce03_frequency_forge.md), [Cargo Manifest](notes/topics/t11_generics_1/challenges/ce04_cargo_manifest.md) |
 | t12 | **Generics II** — use wildcards (`? extends` / `? super`) and apply the PECS rule | [t11](notes/topics/t11_generics_1/t11_generics_1_notes.md) | [Notes](notes/topics/t12_generics_2/t12_generics_2_notes.md) | [Exercises](notes/topics/t12_generics_2/exercises/t12_generics_2_exercises.md) | — |
@@ -114,6 +115,7 @@ flowchart TD
     end
     subgraph supplementary ["`**Supplementary material**`"]
         t24["#nbsp;#nbsp;#nbsp;#nbsp;#nbsp;#nbsp;#nbsp;#nbsp;#nbsp;#nbsp;#nbsp;#nbsp;t24 Pathfinding#nbsp;#nbsp;#nbsp;#nbsp;#nbsp;#nbsp;#nbsp;#nbsp;#nbsp;#nbsp;#nbsp;#nbsp;"]
+        t09s["t09 Supplement: Image Filters"]
     end
     t00 --> t01
     t01 --> t02
@@ -149,6 +151,8 @@ flowchart TD
     t07 --> t24
     t13 --> t24
     t14 --> t24
+    t01 --> t09s
+    t09 --> t09s
     t15 --> t25
     t22 --> t25
     classDef foundationsNode fill:#D6E6F7,stroke:#7FA8D1,color:#1F2937
@@ -167,7 +171,7 @@ flowchart TD
     style systems fill:#FDF3EA,stroke:#D9A06F,color:#1F2937
     class t23,t25 projectNode
     style project fill:#FDF9E7,stroke:#C9AE4F,color:#1F2937
-    class t24 supplementaryNode
+    class t24,t09s supplementaryNode
     style supplementary fill:#FCEFF3,stroke:#CF8FA6,color:#1F2937
     linkStyle default stroke:#64748B,stroke-width:1.5px
 ```
@@ -204,6 +208,7 @@ quadrantChart
     t07 Collections III: [0.44, 0.60]
     t08 Inheritance: [0.38, 0.88]
     t09 Interfaces: [0.44, 0.92]
+    t09s Image Filters: [0.47, 0.80]
     t10 Exception Handling: [0.30, 0.75]
     t11 Generics I: [0.51, 0.68]
     t12 Generics II: [0.72, 0.35]
@@ -260,26 +265,30 @@ Run `Main.java`. A menu appears:
   6.  t07 - Collections III (Set, Map)
   7.  t08 - Inheritance
   8.  t09 - Interfaces
-  9.  t10 - Exception Handling
- 10.  t11 - Generics I
- 11.  t12 - Generics II
- 12.  t13 - Design Patterns I
- 13.  t14 - Design Patterns II
- 14.  t15 - DB Connectivity / DAO
- 15.  t16 - Functional Interfaces
- 16.  t17 - Streams API
- 17.  t18 - Java I/O
- 18.  t19 - Concurrency I
- 19.  t24 - Pathfinding (BFS, Dijkstra, A*)
+  9.  t09s - Image Filters (t09 supplement)
+ 10.  t10 - Exception Handling
+ 11.  t11 - Generics I
+ 12.  t12 - Generics II
+ 13.  t13 - Design Patterns I
+ 14.  t14 - Design Patterns II
+ 15.  t15 - DB Connectivity / DAO
+ 16.  t16 - Functional Interfaces
+ 17.  t17 - Streams API
+ 18.  t18 - Java I/O
+ 19.  t19 - Concurrency I
+ 20.  t24 - Pathfinding (BFS, Dijkstra, A*)
 =====================================================
 Select topic (0 to exit):
 ```
 
 Enter a number to run all exercises for that topic. Enter `0` to exit. The menu loops until you exit.
 
+IntelliJ runs `Main` from the repo root, while a terminal or Maven usually runs it from `code/`. Either works: code that reads or writes files in `code/data/` or `code/config/` builds its paths with `common.ProjectPaths`, which finds the `code` folder from both places.
+
 The **menu number on the left is just a list position**; the `tNN` code is the topic code shared by `notes/topics/` and `code/src/`. They deliberately differ, because not every topic is on the menu:
 
 - **No code folder:** t00, t02 (Recursion), t23 (Unit Testing) and t25 (Documenting). The worked t23 tests are in `code/test/assessments/gca/gca2/`.
+- **Supplement on the menu:** t09s (Image Filters) is a supplement to t09, not a topic of its own, so it has the `t09s` code and its own menu number. Its code is in the t09 folders: `t09_interface.demos.de01` and `t09_interface.exercises.ex10` to `ex19`.
 - **Not on the menu:** t20 (JSON I), t21 (JSON II) and t22 (Networking). Call an exercise's `Exercise.run()` yourself. The t22 demos and its `single` server are different: start the server class first, then run the matching client class.
 
 Every exercise package contains a single entry point:
@@ -294,6 +303,8 @@ t01_arrays.challenges.ce01.Exercise.run();
 //    (a topic's folder name is the same in notes/topics and code/src)
 //  - Multiple Exercise classes are fine because packages make them unique
 //  - Shared helpers live in package 'common', e.g. common.FileUtils
+//  - Build paths to files in code/data with common.ProjectPaths.path("data/..."),
+//    so they work from the repo root (IntelliJ) and from code/ (terminal, Maven)
 //  - t15 (DAO) exercises need a running MySQL instance and config/db.properties
 ```
 
@@ -307,16 +318,20 @@ t01_arrays.challenges.ce01.Exercise.run();
 - `code/` — all runnable Java (Maven project)
   - `pom.xml` — Maven build — Jackson, JUnit Jupiter, MySQL connector
   - `config/` — database settings: copy `db.properties.example` to `db.properties`, which Git ignores
-  - `data/` — static data files used by exercises (CSV, XML, HTML)
+  - `data/` — static data files used by exercises (CSV, XML, HTML, PNG)
     - `ce01/` — data for challenge exercise 01
     - `ce02/` — data for challenge exercise 02 (contacts CSVs)
     - `ce03/` — data for challenge exercise 03 (weapon XML, country CSV)
     - `exercises/` — shared exercise data (e.g. profane_words.csv)
+    - `t09_image_filters/` — data for the t09 image filters supplement
+      - `input.png` — drawn test image used by exercises 10 to 19
+      - `images/` — PNG photos the demo processes; add your own here. `SOURCES.md` gives each image's source and copyright
+      - `output/` — filtered images written by the demo and exercises (Git ignores it)
   - `test/` — JUnit 5 tests (test source root; mirrors src/ packages)
     - `tNN_topic/exercises/exNN/ExerciseTest.java`
   - `src/`
     - `Main.java` — entry point — interactive menu to run any topic
-    - `common/` — shared helpers (FileUtils, etc.)
+    - `common/` — shared helpers: `FileUtils`, and `ProjectPaths`, which finds files in `code/` from the repo root or from `code/`
     - `assessments/` — assessment sample code
       - `gca/`
         - `gca2/` — GCA2 N-tier reference: Task, TaskDAO, Server, Client
@@ -327,6 +342,7 @@ t01_arrays.challenges.ce01.Exercise.run();
         - `deNN/Demo.java`
       - `exercises/` — standard exercise solutions
         - `exNN/Exercise.java` — each has a static run() entry point
+        - `exNN/README.md` — a flowchart of the algorithm, in some solution folders (t09 exercises 10 to 13 and 16 to 19)
 - `notes/` — student-facing learning material (Markdown, non-runnable)
   - `applied/` — applied case studies (e.g. TaskHub)
     - `taskhub/`
@@ -342,6 +358,7 @@ t01_arrays.challenges.ce01.Exercise.run();
   - `topics/` — one folder per topic (t00–t25)
     - `tNN_topic/`
       - `tNN_topic_notes.md` — main notes file
+      - `tNN_topic_supplement_*.md` — supplementary notes, in some topics (e.g. t09 image filters, t22 DAO registry)
       - `challenges/` — challenge exercise briefs
       - `exercises/` — standard exercise briefs
         - `tNN_topic_exercises.md`

@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import common.ProjectPaths;
 
 /**
  * Steps:
@@ -22,7 +23,7 @@ public class Exercise {
 
         // 1. Load contacts from CSV
         System.out.println("Put your data file in: " + System.getProperty("user.dir"));
-        String filePath = "data/ce02/";
+        String filePath = ProjectPaths.path("data/ce02/");
 
         List<Contact> allContacts = new ArrayList<Contact>();
         allContacts.addAll(ContactUtility.readContactsCsv(filePath + "contacts_hr.csv"));

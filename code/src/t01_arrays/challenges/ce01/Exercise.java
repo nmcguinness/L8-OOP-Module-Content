@@ -1,6 +1,7 @@
 package t01_arrays.challenges.ce01;
 
 import common.FileUtils;
+import common.ProjectPaths;
 
 import java.util.ArrayList;
 
@@ -9,13 +10,14 @@ public class Exercise {
     public static void run()
     {
             //helper to tell you what directory to put your data file in
-            System.out.println("Put your data file in: " + System.getProperty("user.dir"));
+            System.out.println("Put your data file in: "
+                    + ProjectPaths.resolve("data/ce01/").toAbsolutePath());
 
             long startTimeNS = System.nanoTime();
 
             //read all file contents
             char dataDelimiter = ',';
-            String filePath = "data/ce01/ce01_data.txt";
+            String filePath = ProjectPaths.path("data/ce01/ce01_data.txt");
             ArrayList<String> rawLicensePlateList = FileUtils.readDelimitedFile(filePath, dataDelimiter);
 
             //exit if fail
